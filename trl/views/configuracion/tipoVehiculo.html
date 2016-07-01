@@ -1,0 +1,63 @@
+<div ng-controller="tipoVehiculoController"  class="container-fluid">
+    <div class="row">
+        <div class="col-xs-4">            
+            <form name="frmTipoVehiuclo" id="frmTipoVehiculo" novalidate>
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="form-group">
+                            <label for="txtTipoVehiculo">Descripción *</label>
+                            <input type="text" class="form-control" ng-model="TipoVehiculo.tvDescripcion" id="txtTipoVehiculo" placeholder="Tipo Vehiculo">
+                        </div>
+                    </div>
+                    
+                    <div class="col-xs-12">
+                        <div class="form-group">
+                            <label for="txtEstado">Estado *</label>
+                            <select type="text" class="form-control" ng-model="TipoVehiculo.tvEstado" id="txtEstado" placeholder="Estado">
+                                <option value="ACTIVO">ACTIVO</option>
+                                <option value="INACTIVO">INACTIVO</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="col-xs-6">
+                        <button type="button" class="btn btn-info" ng-click="Guardar()" style="margin-top:15%" >Guardar</button>
+                    </div>
+                    
+                </div>                                
+            </form>
+        </div>
+        
+        <div class="col-xs-8">
+            <div class="row">
+                <div class="col-xs-12">
+                    <table border="0" cellspacing="0" class="table table-striped" >
+                        <thead>
+                            <tr>
+                                <th class="center">CODIGO</th>                                
+                                <th>DESCRIPCIÓN</th>
+                                <th>ESTADO</th>
+                                <th width="12%">ACCION</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <tr data-ng-repeat="items in TipoVehiculos">
+                                <td class="center">{{ items.tvCodigo}}</td>
+                                <td>{{ items.tvDescripcion }}</td>
+                                <td>{{ items.tvEstado}}</td>
+                                <td>
+                                    <center>
+                                        <a data-ng-click="get(items)" style="float: left; margin-left: 3px;" href="javascript:;"  title="Editar"><i class="small small mdi-image-edit teal-text  darken-1"></i></a>
+                                        <a ng-click="Desactivar(items.idCategoria, 'Borrado')"  style="float: left; margin-left: 3px;" href="javascript:;"  title="Eliminar"><i class="small mdi-action-delete red-text text-deep-orange darken-1"></i></a>
+                                    </center>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>                            
+            </div>
+        
+    </div>
+</div>
+

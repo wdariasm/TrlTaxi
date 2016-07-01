@@ -18,6 +18,14 @@ var app;
                 templateUrl: 'views/configuracion/marca.html'
             })
 
+            .when("/0/tipoVehiculo",{
+                templateUrl: 'views/configuracion/tipoVehiculo.html'
+            })
+            
+            .when("/0/servicio",{
+                templateUrl: 'views/configuracion/servicio.html'
+            })
+
             .otherwise({
                 redirectTo:"/"               
             });
