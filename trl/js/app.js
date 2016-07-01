@@ -9,6 +9,10 @@ var app;
             .when("/0/configuracion",{
                 templateUrl: 'views/configuracion/config.html'
             })
+            
+            .when("/0/vehiculo",{
+                templateUrl: 'views/configuracion/vehiculo.html'
+            })
 
             .otherwise({
                 redirectTo:"/"               
