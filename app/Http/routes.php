@@ -15,3 +15,5 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+include 'Routes/routesMarca.php';
+

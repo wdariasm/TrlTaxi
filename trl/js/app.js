@@ -13,6 +13,10 @@ var app;
             .when("/0/vehiculo",{
                 templateUrl: 'views/configuracion/vehiculo.html'
             })
+            
+            .when("/0/marca",{
+                templateUrl: 'views/configuracion/marca.html'
+            })
 
             .otherwise({
                 redirectTo:"/"               
