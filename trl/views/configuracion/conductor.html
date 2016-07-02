@@ -1,73 +1,102 @@
 <div ng-controller="conductorController"  class="container-fluid">
     <div class="row">
-        <div class="col-xs-4">            
+        <div class="col-xs-12">            
             <form name="frmConductor" id="frmConductor" novalidate>
                 <div class="row">
-                    <div class="col-xs-12">
+                    <div class="col-xs-2">
                         <div class="form-group">
-                            <label for="txtCedula">Cedula *</label>
-                            <input type="text" class="form-control" ng-model="Conductor.Cedula" id="txtCedula" placeholder="Cédula">
+                           <label for="txtCedula">Cédula *</label>
+                          <div class="input-group">    
+                            <div class="input-group-addon"><i class="fa fa-hashtag"></i></div>
+                            <input type="text" class="form-control" ng-model="Conductor.Cedula" id="txtCedula" placeholder="Identification">
+                          </div> 
                         </div>
                     </div>
                     
-                     <div class="col-xs-12">
+                     <div class="col-xs-6">
                         <div class="form-group">
                             <label for="txtNombre">Nombres *</label>
-                            <input type="text" class="form-control" ng-model="Conductor.Nombre" id="txtNombre" placeholder="Nombre Completo">
+                             <div class="input-group">    
+                                <div class="input-group-addon"><i class="fa fa-user"></i></div>
+                                <input type="text" class="form-control" ng-model="Conductor.Nombre" id="txtNombre" placeholder="Nombre Completo">
+                            </div>
                         </div>
                     </div>
                     
-                    
-                    <div class="col-xs-12">
+                      <div class="col-xs-3">
                         <div class="form-group">
-                            <label for="txtDireccion">Direccion *</label>
-                            <input type="text" class="form-control" ng-model="Conductor.Direccion" id="txtDireccion" placeholder="Dirección">
+                            <label for="txtTelefonoPpal">Teléfono Principal *</label>
+                             <div class="input-group">    
+                                <div class="input-group-addon"><i class="fa fa-mobile"></i></div>
+                                <input type="text" class="form-control" ng-model="Conductor.TelefonoPpal" id="txtTelefonoPpal" placeholder="Main Phone">
+                     
+                             </div>
+                        </div>
+                    </div>
+                    
+
+                    <div class="col-xs-5">
+                        <div class="form-group">
+                            <label for="txtDireccion">Dirección *</label>
+                            <div class="input-group">    
+                                <div class="input-group-addon"><i class="fa fa-globe"></i></div>
+                                <input type="text" class="form-control" ng-model="Conductor.Direccion" id="txtDireccion" placeholder="Address">
+                        
+                            </div>
                         </div>
                     </div> 
                     
                     
-                    <div class="col-xs-12">
+                    <div class="col-xs-3">
                         <div class="form-group">
-                            <label for="txtTelefonoPpal">Telefono Principal *</label>
-                            <input type="text" class="form-control" ng-model="Conductor.TelefonoPpal" id="txtTelefonoPpal" placeholder="Telefono Principal">
+                            <label for="txtTelefono2">Móvil</label>
+                             <div class="input-group">    
+                                <div class="input-group-addon"><i class="fa fa-phone"></i></div>
+                                <input type="text" class="form-control" ng-model="Conductor.TelefonoDos" id="txtTelefonoDos" placeholder="Mobile">
+                             </div>
                         </div>
                     </div> 
                     
                     
-                    <div class="col-xs-12">
+                    <div class="col-xs-3">
                         <div class="form-group">
-                            <label for="txtTelefono2">Telefono Dos</label>
-                            <input type="text" class="form-control" ng-model="Conductor.TelefonoDos" id="txtTelefonoDos" placeholder="Telefono Dos">
+                            <label for="txtTelefono3">Teléfono</label>
+                            <div class="input-group">    
+                               <div class="input-group-addon"><i class="fa fa-phone"></i></div>
+                               <input type="text" class="form-control" ng-model="Conductor.TelefonoTres" id="txtTelefonoTres" placeholder="Phone">
+                            </div>
                         </div>
                     </div> 
                     
                     
-                    <div class="col-xs-12">
+                      <div class="col-xs-5">
                         <div class="form-group">
-                            <label for="txtTelefono3">Telefono Tres</label>
-                            <input type="text" class="form-control" ng-model="Conductor.TelefonoTres" id="txtTelefonoTres" placeholder="Telefono Tres">
+                            <label for="txtEmail">E-mail</label>
+                             <div class="input-group">    
+                                <div class="input-group-addon"><i class="fa fa-envelope"></i></div>
+                                <input type="email" class="form-control" ng-model="Conductor.Email" id="txtEmail" placeholder="E-mail">
+                        
+                             </div>
                         </div>
                     </div> 
                     
                     
-                      <div class="col-xs-12">
-                        <div class="form-group">
-                            <label for="txtEmail">Email</label>
-                            <input type="email" class="form-control" ng-model="Conductor.Email" id="txtEmail" placeholder="Email">
-                        </div>
-                    </div> 
-                    
-                    
-                    <div class="col-xs-12">
+                    <div class="col-xs-3">
                         <div class="form-group">
                             <label for="txtFechaNacimiento">Fecha Nacimiento *</label>
-                            <input type="date" class="form-control" ng-model="Conductor.FechaNacimiento" id="txtFechaNacimiento" placeholder="Fecha Nacimiento">
+                             <div class="input-group">    
+                                <div class="input-group-addon"><i class="fa fa-calendar-o"></i></div>
+                                <input type="date" class="form-control" ng-model="Conductor.FechaNacimiento" id="txtFechaNacimiento" placeholder="Birth Date">
+                       
+                             </div>
                         </div>
                     </div> 
                     
-                    <div class="col-xs-12">
+                    <div class="col-xs-3">
                         <div class="form-group">
                             <label for="txtEscolaridad">Escolaridad *</label>
+                            <div class="input-group">    
+                                <div class="input-group-addon"><i class="fa fa-list-ol"></i></div>
                             <select type="text" class="form-control" ng-model="Conductor.Escolaridad" id="txtEscolaridad" placeholder="Escolaridad">
                                 <option value="BACHILLER">BACHILLER</option>
                                 <option value="TECNICO">TECNICO</option>
@@ -76,46 +105,59 @@
                                 <option value="UNIVERSIDAD">UNIVERSIDAD</option>
                                 
                             </select>
+                           </div>
                         </div>
                     </div>
                
                
-                    <div class="col-xs-12">
+                    <div class="col-xs-3">
                         <div class="form-group">
                             <label for="txtFechaIngreso">Fecha Ingreso*</label>
-                            <input type="date" class="form-control" ng-model="Conductor.FechaIngreso" id="txtFechaIngreso" placeholder="Fecha Ingreso">
+                             <div class="input-group">    
+                               <div class="input-group-addon"><i class="fa fa-calendar-check-o"></i></div>
+                               <input type="date" class="form-control" ng-model="Conductor.FechaIngreso" id="txtFechaIngreso" placeholder="Fecha Ingreso">
+                        
+                             </div>
                         </div>
                     </div> 
                     
                     
                     
-                    <div class="col-xs-12">
+                    <div class="col-xs-3">
                         <div class="form-group">
                             <label for="txtEstado">Estado *</label>
+                             <div class="input-group">    
+                             <div class="input-group-addon"><i class="fa fa-list-ul"></i></div>
                             <select type="text" class="form-control" ng-model="Conductor.Estado" id="txtEstado" placeholder="Estado">
                                 <option value="ACTIVO">ACTIVO</option>
                                 <option value="EN RPOCESO">EN RPOCESO</option>
                                 <option value="RETIRADO">RETIRADO</option>
                             </select>
+                       
+                             </div>
                         </div>
                     </div>
                     
-                    <div class="col-xs-12">
+                    <div class="col-xs-2">
                         <div class="form-group">
                             <label for="txtClave">Clave *</label>
-                            <input type="password" class="form-control" ng-model="Conductor.Clave" id="txtClave" placeholder="Clave">
+                             <div class="input-group">    
+                                 <div class="input-group-addon"><i class="fa fa-key"></i></div>
+                                 <input type="password" class="form-control" ng-model="Conductor.Clave" id="txtClave" placeholder="Key">
+                        
+                             </div>
                         </div>
                     </div> 
                     
                     
                     <div class="col-xs-6">
-                        <button type="button" class="btn btn-info" ng-click="Guardar()" style="margin-top:15%" >Guardar</button>
+                        <button type="button" class="btn btn-info" ng-click="Guardar()" style="margin-top:5%" >Guardar</button>
                     </div>
                     
                 </div>                                
             </form>
         </div>
-        
+    <!--    
         <div class="col-xs-8">
             <div class="row">
                 <div class="col-xs-12">
@@ -146,7 +188,8 @@
                     </table>
                 </div>                            
             </div>
-        
+        -->
     </div>
+   
 </div>
     

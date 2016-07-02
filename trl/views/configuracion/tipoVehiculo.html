@@ -6,17 +6,25 @@
                     <div class="col-xs-12">
                         <div class="form-group">
                             <label for="txtTipoVehiculo">Descripción *</label>
-                            <input type="text" class="form-control" ng-model="TipoVehiculo.tvDescripcion" id="txtTipoVehiculo" placeholder="Tipo Vehiculo">
+                               <div class="input-group">    
+                                 <div class="input-group-addon"><i class="fa fa-automobile"></i></div>
+                                 <input type="text" class="form-control" ng-model="TipoVehiculo.tvDescripcion" id="txtTipoVehiculo" placeholder="Tipo Vehiculo">
+                       
+                               </div>
                         </div>
                     </div>
                     
                     <div class="col-xs-12">
                         <div class="form-group">
                             <label for="txtEstado">Estado *</label>
+                             <div class="input-group">    
+                                 <div class="input-group-addon"><i class="fa fa-list-ul"></i></div>
                             <select type="text" class="form-control" ng-model="TipoVehiculo.tvEstado" id="txtEstado" placeholder="Estado">
                                 <option value="ACTIVO">ACTIVO</option>
                                 <option value="INACTIVO">INACTIVO</option>
                             </select>
+                       
+                             </div>
                         </div>
                     </div>
                     
@@ -37,7 +45,7 @@
                                 <th class="center">CODIGO</th>                                
                                 <th>DESCRIPCIÓN</th>
                                 <th>ESTADO</th>
-                                <th width="12%">ACCION</th>
+                                <th width="12%">ACCIÓN</th>
                             </tr>
                         </thead>
 
