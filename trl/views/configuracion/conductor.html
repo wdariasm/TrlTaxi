@@ -1,0 +1,152 @@
+<div ng-controller="conductorController"  class="container-fluid">
+    <div class="row">
+        <div class="col-xs-4">            
+            <form name="frmConductor" id="frmConductor" novalidate>
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="form-group">
+                            <label for="txtCedula">Cedula *</label>
+                            <input type="text" class="form-control" ng-model="Conductor.Cedula" id="txtCedula" placeholder="Cédula">
+                        </div>
+                    </div>
+                    
+                     <div class="col-xs-12">
+                        <div class="form-group">
+                            <label for="txtNombre">Nombres *</label>
+                            <input type="text" class="form-control" ng-model="Conductor.Nombre" id="txtNombre" placeholder="Nombre Completo">
+                        </div>
+                    </div>
+                    
+                    
+                    <div class="col-xs-12">
+                        <div class="form-group">
+                            <label for="txtDireccion">Direccion *</label>
+                            <input type="text" class="form-control" ng-model="Conductor.Direccion" id="txtDireccion" placeholder="Dirección">
+                        </div>
+                    </div> 
+                    
+                    
+                    <div class="col-xs-12">
+                        <div class="form-group">
+                            <label for="txtTelefonoPpal">Telefono Principal *</label>
+                            <input type="text" class="form-control" ng-model="Conductor.TelefonoPpal" id="txtTelefonoPpal" placeholder="Telefono Principal">
+                        </div>
+                    </div> 
+                    
+                    
+                    <div class="col-xs-12">
+                        <div class="form-group">
+                            <label for="txtTelefono2">Telefono Dos</label>
+                            <input type="text" class="form-control" ng-model="Conductor.TelefonoDos" id="txtTelefonoDos" placeholder="Telefono Dos">
+                        </div>
+                    </div> 
+                    
+                    
+                    <div class="col-xs-12">
+                        <div class="form-group">
+                            <label for="txtTelefono3">Telefono Tres</label>
+                            <input type="text" class="form-control" ng-model="Conductor.TelefonoTres" id="txtTelefonoTres" placeholder="Telefono Tres">
+                        </div>
+                    </div> 
+                    
+                    
+                      <div class="col-xs-12">
+                        <div class="form-group">
+                            <label for="txtEmail">Email</label>
+                            <input type="email" class="form-control" ng-model="Conductor.Email" id="txtEmail" placeholder="Email">
+                        </div>
+                    </div> 
+                    
+                    
+                    <div class="col-xs-12">
+                        <div class="form-group">
+                            <label for="txtFechaNacimiento">Fecha Nacimiento *</label>
+                            <input type="date" class="form-control" ng-model="Conductor.FechaNacimiento" id="txtFechaNacimiento" placeholder="Fecha Nacimiento">
+                        </div>
+                    </div> 
+                    
+                    <div class="col-xs-12">
+                        <div class="form-group">
+                            <label for="txtEscolaridad">Escolaridad *</label>
+                            <select type="text" class="form-control" ng-model="Conductor.Escolaridad" id="txtEscolaridad" placeholder="Escolaridad">
+                                <option value="BACHILLER">BACHILLER</option>
+                                <option value="TECNICO">TECNICO</option>
+                                <option value="PRIMARIA">PRIMARIA</option>
+                                <option value="SECUNADARIA">SECUNADARIA</option>
+                                <option value="UNIVERSIDAD">UNIVERSIDAD</option>
+                                
+                            </select>
+                        </div>
+                    </div>
+               
+               
+                    <div class="col-xs-12">
+                        <div class="form-group">
+                            <label for="txtFechaIngreso">Fecha Ingreso*</label>
+                            <input type="date" class="form-control" ng-model="Conductor.FechaIngreso" id="txtFechaIngreso" placeholder="Fecha Ingreso">
+                        </div>
+                    </div> 
+                    
+                    
+                    
+                    <div class="col-xs-12">
+                        <div class="form-group">
+                            <label for="txtEstado">Estado *</label>
+                            <select type="text" class="form-control" ng-model="Conductor.Estado" id="txtEstado" placeholder="Estado">
+                                <option value="ACTIVO">ACTIVO</option>
+                                <option value="EN RPOCESO">EN RPOCESO</option>
+                                <option value="RETIRADO">RETIRADO</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="col-xs-12">
+                        <div class="form-group">
+                            <label for="txtClave">Clave *</label>
+                            <input type="password" class="form-control" ng-model="Conductor.Clave" id="txtClave" placeholder="Clave">
+                        </div>
+                    </div> 
+                    
+                    
+                    <div class="col-xs-6">
+                        <button type="button" class="btn btn-info" ng-click="Guardar()" style="margin-top:15%" >Guardar</button>
+                    </div>
+                    
+                </div>                                
+            </form>
+        </div>
+        
+        <div class="col-xs-8">
+            <div class="row">
+                <div class="col-xs-12">
+                    <table border="0" cellspacing="0" class="table table-striped" >
+                        <thead>
+                            <tr>
+                                <th class="center">CEDULA</th>                                
+                                <th>NOMBRE</th>
+                                <th>DIRECCION</th>
+                                <th>TELEFONO PRINCIPAL</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <tr data-ng-repeat="items in Conductores">
+                                <td class="center">{{ items.Cedula}}</td>
+                                <td>{{ items.Nombre}}</td>
+                                <td>{{ items.Direccion}}</td>
+                                <td>{{ items.TelefonoPpal}}</td>
+                                <td>
+                                    <center>
+                                        <a data-ng-click="get(items)" style="float: left; margin-left: 3px;" href="javascript:;"  title="Editar"><i class="small small mdi-image-edit teal-text  darken-1"></i></a>
+                                        <a ng-click="Desactivar(items.idCategoria, 'Borrado')"  style="float: left; margin-left: 3px;" href="javascript:;"  title="Eliminar"><i class="small mdi-action-delete red-text text-deep-orange darken-1"></i></a>
+                                    </center>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>                            
+            </div>
+        
+    </div>
+</div>
+    

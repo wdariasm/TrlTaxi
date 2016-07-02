@@ -25,6 +25,11 @@ var app;
             .when("/0/servicio",{
                 templateUrl: 'views/configuracion/servicio.html'
             })
+            
+            
+            .when("/0/conductor",{
+                templateUrl: 'views/configuracion/conductor.html'
+            })
 
             .otherwise({
                 redirectTo:"/"               

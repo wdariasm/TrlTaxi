@@ -18,3 +18,4 @@ Route::get('/', function () {
 include 'Routes/routesMarca.php';
 include 'Routes/routesTipoVehiculo.php';
 include 'Routes/routesServicio.php';
+include 'Routes/routesConductor.php';
