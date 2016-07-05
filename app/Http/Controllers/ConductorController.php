@@ -36,6 +36,11 @@ class ConductorController extends Controller
             $conductor->FechaIngreso = $data["FechaIngreso"]; 
             $conductor->Estado = $data["Estado"]; 
             $conductor->Clave = $data["Clave"]; 
+            $conductor->TipoDocumento = $data["TipoDocumento"]; 
+            $conductor->NumeroCuenta = $data["NumeroCuenta"]; 
+            $conductor->CdPlaca = $data["CdPlaca"]; 
+            $conductor->Observacion = $data["Observacion"]; 
+            
             $conductor->save();
             
             return JsonResponse::create(array('message' => "Conductor  guardado correctamente", "request" =>json_encode($conductor->IdConductor)), 200);

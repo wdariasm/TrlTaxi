@@ -1,8 +1,25 @@
 <div ng-controller="conductorController"  class="container-fluid">
     <div class="row">
-        <div class="col-xs-12">            
+        <div class="col-xs-14">            
             <form name="frmConductor" id="frmConductor" novalidate>
                 <div class="row">
+                    
+                    <div class="col-xs-3">
+                        <div class="form-group">
+                            <label for="txtTipoDocumento">Tipo Documento *</label>
+                             <div class="input-group">    
+                             <div class="input-group-addon"><i class="fa fa-cc"></i></div>
+                            <select type="text" class="form-control" ng-model="Conductor.TipoDocumento" id="txtTipoDocumento" placeholder="Tipo Documento">
+                                <option value="C.C">CÉDULA DE CIUDADANIA</option>
+                                <option value="T.I">TARGETA DE IDENTIDAD</option>
+                                <option value="R.C">R.C</option>
+                            </select>
+                       
+                             </div>
+                        </div>
+                    </div>
+                    
+                    
                     <div class="col-xs-2">
                         <div class="form-group">
                            <label for="txtCedula">Cédula *</label>
@@ -148,6 +165,44 @@
                              </div>
                         </div>
                     </div> 
+                    
+                    
+                    
+                     
+                    
+                     <div class="col-xs-3">
+                        <div class="form-group">
+                            <label for="txtNumeroCuenta">Numero de Cuenta *</label>
+                            <div class="input-group">    
+                               <div class="input-group-addon"><i class="fa fa-hashtag"></i></div>
+                               <input type="text" class="form-control" ng-model="Conductor.NumeroCuenta" id="txtNumeroCuenta" placeholder="Account Number">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    
+                     <div class="col-xs-2">
+                        <div class="form-group">
+                            <label for="txtCdPlaca">Placa *</label>
+                            <div class="input-group">    
+                               <div class="input-group-addon"><i class="fa fa-eraser"></i></div>
+                               <input type="text" class="form-control" ng-model="Conductor.CdPlaca" id="txtCdPlaca" placeholder="License plate">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    
+                    
+                      <div class="col-xs-6">
+                        <div class="form-group">
+                            <label for="Observacion">Observacion</label>
+                            <div class="input-group">    
+                               <div class="input-group-addon"><i class="fa fa-book"></i></div>
+                               <input type="text" class="form-control" ng-model="Conductor.Observacion" id="txtObservacion" placeholder="Observation">
+                            </div>
+                        </div>
+                    </div>
+                    
                     
                     
                     <div class="col-xs-6">
