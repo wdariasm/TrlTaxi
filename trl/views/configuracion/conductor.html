@@ -23,8 +23,11 @@
                                     </tr>
                                 </thead>
                                  <tbody>
-                                    <tr>
-                                        
+                                 <tr data-ng-repeat="items in Conductores">
+                                <td class="center">{{ items.Cedula}}</td>
+                                <td>{{ items.Nombre }}</td>
+                                <td>{{ items.TelefonoPpal}}</td> 
+                               <td>{{ items.Direccion}}</td> 
                                     </tr>
                                 </tbody>
                             </table>
