@@ -1,6 +1,36 @@
 <div ng-controller="conductorController"  class="container-fluid">
     <div class="row">
-        <div class="col-xs-14">            
+        <div class="col-xs-12">  
+             <div class="tabbable-line">
+                    <ul class="nav nav-tabs nav-justified" id="tabPanels">
+                        <li class="active"> <a href="#tabListado" data-toggle="tab">Listado de Conductores </a></li>
+                        <li><a href="#tabRegistro" data-toggle="tab">Registrar Conductor </a></li>
+                        <li><a href="#tabNovedad" data-toggle="tab">Novedades</a></li>
+                    </ul>
+             </div>
+            <div class="tab-content">
+                 <br/>
+                        <div class="tab-pane active" id="tabListado">
+                            <table class="table table-condensed">
+                                <thead>
+                                    <tr>
+                                        <th>CEDULA</th>
+                                        <th>NOMBRE</th>                                        
+                                        <th>TELEFONO</th>
+                                        <th>DIRECCION</th>
+                                        <th>ESCOLARIDAD</th>
+                                        <th>ESTADO</th>
+                                    </tr>
+                                </thead>
+                                 <tbody>
+                                    <tr>
+                                        
+                                    </tr>
+                                </tbody>
+                            </table>
+                     </div>
+                
+                <div class="tab-pane" id="tabRegistro">
             <form name="frmConductor" id="frmConductor" novalidate>
                 <div class="row">
                     
@@ -12,7 +42,7 @@
                             <select type="text" class="form-control" ng-model="Conductor.TipoDocumento" id="txtTipoDocumento" placeholder="Tipo Documento">
                                 <option value="C.C">CÉDULA DE CIUDADANIA</option>
                                 <option value="T.I">TARGETA DE IDENTIDAD</option>
-                                <option value="R.C">R.C</option>
+                                <option value="R.C">REGISTRO CIVIL</option>
                             </select>
                        
                              </div>
@@ -88,7 +118,7 @@
                     
                       <div class="col-xs-5">
                         <div class="form-group">
-                            <label for="txtEmail">E-mail</label>
+                            <label for="txtEmail">E-mail *</label>
                              <div class="input-group">    
                                 <div class="input-group-addon"><i class="fa fa-envelope"></i></div>
                                 <input type="email" class="form-control" ng-model="Conductor.Email" id="txtEmail" placeholder="E-mail">
@@ -211,27 +241,66 @@
                     
                 </div>                                
             </form>
-        </div>
-    <!--    
-        <div class="col-xs-8">
+                 
+                </div>
+                 
+                 
+                 <div class="tab-pane" id="tabNovedad">
+                      <form name="frmNovedad" id="frmNovedad" novalidate>
+                <div class="row">
+                    <div class="col-xs-3">
+                        <div class="form-group">
+                            <label for="txtEstado">Tipo *</label>
+                             <div class="input-group">    
+                                 <div class="input-group-addon"><i class="fa fa-list-ul"></i></div>
+                            <select type="text" class="form-control" ng-model="Novedad.nvTipo" id="txtEstado" placeholder="Tipo">
+                                <option value="CONTRALORIA">CONTRALORIA</option>
+                                <option value="PROCURADURIA">PROCURADURIA</option>
+                                <option value="POLICIA NACIONAL">POLICIA NACIONAL</option>
+                                <option value="SIMIT">SIMIT</option>
+                                <option value="EPS">EPS</option>
+                                <option value="ARL">ARL</option>
+                                <option value="FONDO PENSIONES">FONDO PENSIONES</option>
+                            </select>
+                       
+                             </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-xs-6">
+                        <div class="form-group">
+                            <label for="txtNovedad">Descripción *</label>
+                            <textarea class="form-control"  ng-model="Novedad.nvDescripcion" id="txtNovedad" placeholder="Descripción"></textarea>
+                        </div>
+                    </div>
+                    
+                    
+                    
+                    <div class="col-xs-2">
+                         <div class="form-group">
+                        <button type="button" class="btn btn-info" ng-click="AgregarNovedad()" style="margin-top:20%" >Agregar</button>
+                         </div>
+                    </div>
+                    
+                </div>                                
+            </form>
+                     
+                       <div class="col-xs-12">
             <div class="row">
                 <div class="col-xs-12">
                     <table border="0" cellspacing="0" class="table table-striped" >
                         <thead>
                             <tr>
-                                <th class="center">CEDULA</th>                                
-                                <th>NOMBRE</th>
-                                <th>DIRECCION</th>
-                                <th>TELEFONO PRINCIPAL</th>
+                                <th class="center">TIPO</th>                                
+                                <th>DESCRIPCIÓN</th>  
+                                <th width="12%">ACCIÓN</th>
                             </tr>
                         </thead>
 
                         <tbody>
-                            <tr data-ng-repeat="items in Conductores">
-                                <td class="center">{{ items.Cedula}}</td>
-                                <td>{{ items.Nombre}}</td>
-                                <td>{{ items.Direccion}}</td>
-                                <td>{{ items.TelefonoPpal}}</td>
+                            <tr data-ng-repeat="items in Novedades">
+                                <td class="center">{{ items.nvTipo}}</td>
+                                <td>{{ items.nvDescripcion }}</td>
                                 <td>
                                     <center>
                                         <a data-ng-click="get(items)" style="float: left; margin-left: 3px;" href="javascript:;"  title="Editar"><i class="small small mdi-image-edit teal-text  darken-1"></i></a>
@@ -243,8 +312,24 @@
                     </table>
                 </div>                            
             </div>
-        -->
+    </div>
+                     
+                 </div>
+                 
+            </div>
+        </div>
+    
     </div>
    
 </div>
+
+<script>
+    $('#tabPanels a').click(function (e) {
+        e.preventDefault();
+        $(this).tab('show');
+        
+    });
+    
+    $('#tabPanels a[href="#tabRegistro"]').tab('show');
+</script>
     

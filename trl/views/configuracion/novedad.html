@@ -1,0 +1,74 @@
+<div ng-controller="novedadController"  class="container-fluid">
+    <div class="row">
+        <div class="col-xs-12">            
+            <form name="frmNovedad" id="frmNovedad" novalidate>
+                <div class="row">
+                    
+                    <div class="col-xs-3">
+                        <div class="form-group">
+                            <label for="txtEstado">Tipo *</label>
+                             <div class="input-group">    
+                                 <div class="input-group-addon"><i class="fa fa-list-ul"></i></div>
+                            <select type="text" class="form-control" ng-model="Novedad.nvTipo" id="txtEstado" placeholder="Tipo">
+                                <option value="CONTRALORIA">CONTRALORIA</option>
+                                <option value="PROCURADURIA">PROCURADURIA</option>
+                                <option value="POLICIA NACIONAL">POLICIA NACIONAL</option>
+                                <option value="SIMIT">SIMIT</option>
+                                <option value="EPS">EPS</option>
+                                <option value="ARL">ARL</option>
+                                <option value="FONDO PENSIONES">FONDO PENSIONES</option>
+                            </select>
+                       
+                             </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-xs-6">
+                        <div class="form-group">
+                            <label for="txtNovedad">Descripción *</label>
+                            <textarea class="form-control"  ng-model="Novedad.nvDescripcion" id="txtNovedad" placeholder="Descripción"></textarea>
+                        </div>
+                    </div>
+                    
+                    
+                    
+                    <div class="col-xs-4">
+                         <div class="form-group">
+                        <button type="button" class="btn btn-info" ng-click="Agregar()" style="margin-top:1%" >Agregar</button>
+                         </div>
+                    </div>
+                    
+                </div>                                
+            </form>
+        </div>
+        
+        <div class="col-xs-8">
+            <div class="row">
+                <div class="col-xs-12">
+                    <table border="0" cellspacing="0" class="table table-striped" >
+                        <thead>
+                            <tr>
+                                <th class="center">TIPO</th>                                
+                                <th>DESCRIPCIÓN</th>  
+                                <th width="12%">ACCIÓN</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <tr data-ng-repeat="items in Novedades">
+                                <td class="center">{{ items.nvTipo}}</td>
+                                <td>{{ items.nvDescripcion }}</td>
+                                <td>
+                                    <center>
+                                        <a data-ng-click="get(items)" style="float: left; margin-left: 3px;" href="javascript:;"  title="Editar"><i class="small small mdi-image-edit teal-text  darken-1"></i></a>
+                                        <a ng-click="Desactivar(items.idCategoria, 'Borrado')"  style="float: left; margin-left: 3px;" href="javascript:;"  title="Eliminar"><i class="small mdi-action-delete red-text text-deep-orange darken-1"></i></a>
+                                    </center>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>                            
+            </div>
+        
+    </div>
+</div>

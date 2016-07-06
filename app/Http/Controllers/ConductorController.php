@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Conductor;
+use App\Novedad;
 use Illuminate\Http\JsonResponse;
 
 class ConductorController extends Controller
@@ -40,14 +41,31 @@ class ConductorController extends Controller
             $conductor->NumeroCuenta = $data["NumeroCuenta"]; 
             $conductor->CdPlaca = $data["CdPlaca"]; 
             $conductor->Observacion = $data["Observacion"]; 
-            
             $conductor->save();
+            
+            $novedad = $data["Novedades"];
+            foreach ($novedad as $n){
+                $insert = new Novedad();
+                $insert->nvConductor=$conductor->IdConductor;
+                $insert->nvTipo=$n["nvTipo"];
+                $insert->nvDescripcion=$n["nvDescripcion"];
+                $insert->nvEstado="ACTIVA";
+                
+                $insert->save();
+                        
+            }
+                
+            
             
             return JsonResponse::create(array('message' => "Conductor  guardado correctamente", "request" =>json_encode($conductor->IdConductor)), 200);
         } catch (Exception $exc) {    
             return JsonResponse::create(array('message' => "No se pudo guardar", "request" =>json_encode($exc->getMessage())), 401);
         }
     }
+    
+    
+    
+   
 
     /**
      * Display the specified resource.

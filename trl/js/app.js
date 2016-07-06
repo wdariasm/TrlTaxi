@@ -30,6 +30,10 @@ var app;
             .when("/0/conductor",{
                 templateUrl: 'views/configuracion/conductor.html'
             })
+            
+            .when("/0/novedad",{
+                templateUrl: 'views/configuracion/novedad.html'
+            })
 
             .otherwise({
                 redirectTo:"/"               
