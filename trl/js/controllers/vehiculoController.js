@@ -1,6 +1,7 @@
-app.controller("vehiculoController", ["$scope", "vehiculoService", function ($scope, vehiculoService) {
+app.controller("vehiculoController", ["$scope", "vehiculoService", "marcaService", function ($scope, vehiculoService, marcaService) {
    $scope.Vehiculo = {};
    $scope.Vehiculos = [];
+   $scope.Marcas = [];
    $scope.editMode = false;
    
     function loadVehiculo (){
@@ -12,6 +13,20 @@ app.controller("vehiculoController", ["$scope", "vehiculoService", function ($sc
                 console.log("Some Error Occured " + JSON.stringify(err));
         }); 
     }
+    
+    function loadMarcas (){
+        var promise = marcaService.getAll();
+        promise.then(function(d) {                        
+            $scope.Marcas = d.data;
+        }, function(err) {           
+                alert("ERROR AL PROCESAR SOLICITUD");           
+                console.log("Some Error Occured " + JSON.stringify(err));
+        }); 
+    }
+    
+    loadMarcas();
+    
+    
    
    
    $scope.Guardar = function (){

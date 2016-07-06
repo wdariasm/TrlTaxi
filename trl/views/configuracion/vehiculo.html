@@ -1,12 +1,162 @@
-<div  class="container-fluid">
-    <div class="row">
-        <div class="col-xs-12">
-            <form name="frmVehiculo" id="frmVehiculo" novalidate>
-                <div class="row">
-                    
-                </div>
-                   
-            </form>
-        </div>
-    </div>
+<div ng-controller="vehiculoController">
+    <div  class="container-fluid">
+        <div class="row">
+            <div class="col-xs-12">                
+                <div class="tabbable-line">
+                    <ul class="nav nav-tabs nav-justified" id="tabPanels">
+                        <li class="active"> <a href="#tabListado" data-toggle="tab">Listado de Vehículos </a></li>
+                        <li><a href="#tabRegistro" data-toggle="tab">Nuevo Vehículo </a></li>
+                        <li><a href="#tabNovedad" data-toggle="tab">Novedades</a></li>
+                    </ul>
+                    <div class="tab-content">
+                        <br/>
+                        <div class="tab-pane active" id="tabListado">
+                            <table class="table table-condensed">
+                                <thead>
+                                    <tr>
+                                        <th>PLACA</th>
+                                        <th>MARCA</th>                                        
+                                        <th>TIPO</th>
+                                        <th>CAPACIDAD</th>
+                                        <th>ESTADO</th>
+                                        <th>ACCION</th>
+                                    </tr>
+                                </thead>
+                                
+                                <tbody>
+                                    <tr>
+                                        
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <div class="tab-pane" id="tabRegistro">
+                               <form class="col s12" name="frmVehiculo" id="frmVehiculo"  novalidate>
+                                <br/>
+                                <div class="row">
+                                    
+                                    <div class="col-xs-2">
+                                        <div class="form-group">
+                                            <label  for="txtPlaca">Placa *</label>
+                                            <div class="input-group">    
+                                                <div class="input-group-addon"><i class="fa fa-hashtag"></i></div>
+                                                <input class="form-control" ng-model="Vehiculo.Placa"  id="txtPlaca" name="txtPlaca" type="text"  required  ng-blur="validarPlaca()" maxlength="6" >                                            
+                                                <div class="error" ng-show="frmVehiculo.txtPlaca.$dirty && frmVehiculo.txtPlaca.$invalid">
+                                                    <small ng-show="frmVehiculo.txtPlaca.$error.required">Placa es Requerida</small>
+                                                </div>
+                                                <div class="error">
+                                                   <small  ng-show="valPlaca">Placa, Registrada</small>
+                                                </div>
+                                            </div> 
+                                        </div>   
+                                    </div>
+                                    
+                                     <div class="col-xs-3">
+                                        <div class="form-group">
+                                            <label  for="cboMarca">Marca *</label>
+                                            <div class="input-group">    
+                                                <div class="input-group-addon"><i class="fa fa-hashtag"></i></div>
+                                                <select ng-model="Vehiculo.Marca" name="cboMarca" id="cboMarca" style="width: 105%" class="form-control"  required >
+                                                    <option ng-repeat="itemc in Marcas" value="{{itemc.maCodigo}}"> {{itemc.maDescripcion}}</option>
+                                                </select>                                                
+                                            </div> 
+                                        </div>   
+                                    </div>
+                                </div>
+
+                               
+                                    <div class="input-field col s11">
+                                        <input id="txtMarca" type="text"  ng-model="Vehiculo.marca" name="txtMarca" required  maxlength="20">
+                                        <label for="" class="{{active}}">MARCA *</label>                                       
+                                    </div>
+                                    
+                                    
+                                    
+                                
+
+                                <div class="row">
+                                    <div class="input-field col s11">
+                                        <input id="txtModelo" type="text"  ng-model="Vehiculo.modelo" name="txtModelo" required  maxlength="4">
+                                        <label for="" class="{{active}}">MODELO *</label>
+                                        <div class="error" ng-show="frmVehiculo.txtModelo.$dirty && frmVehiculo.txtModelo.$invalid">
+                                            <small ng-show="frmVehiculo.txtModelo.$error.required">Modelo es Requerido</small>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="input-field col s11">
+                                        <input id="txtMovil" type="text"  ng-model="Vehiculo.movil" name="txtMovil" required ng-pattern="/^[0-9]{2,4}$/" maxlength="4">
+                                        <label for="" class="{{active}}">MOVIL *</label>
+                                        <div class="error" ng-show="frmVehiculo.txtMovil.$dirty && frmVehiculo.txtMovil.$invalid">
+                                            <small ng-show="frmVehiculo.txtMovil.$error.required">Movil es Requerido</small>
+                                            <small  ng-show="frmVehiculo.txtMovil.$error.pattern">Solo Numeros</small>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <div class="row">
+                                    <div class="input-field col s11">
+                                        <select ng-model="Vehiculo.categoria" name="cboCategoria"  id="cboCategoria"  style="width: 104%; display: block" class="browser-default" required >
+                                            <option value="" disabled selected>Seleccionar</option>
+                                            <option ng-repeat="cat in Categorias" value="{{cat.idCategoria}}"> {{cat.Nombre}}</option>
+                                        </select>
+                                        <label class="active" for="cboCategoria">CATEGORIA *</label>
+                                    </div>
+                                </div>
+
+
+                                <div class="row">
+                                    <div class="input-field col s11">
+                                        <input id="txtImei" type="text"  ng-model="Vehiculo.imei" name="txtImei" required  maxlength="25">
+                                        <label for="" class="{{active}}">IMEI *</label>
+                                        <div class="error" ng-show="frmVehiculo.txtImei.$dirty && frmVehiculo.txtImei.$invalid">
+                                            <small ng-show="frmVehiculo.txtImei.$error.required">Imei es Requerido</small>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="input-field col s11">
+                                        <select ng-model="Vehiculo.estado" class="browser-default" style="width: 104%" required>
+                                            <option value="Activo">ACTIVO</option>
+                                            <option value="Inactivo" >INACTIVO</option>
+                                        </select>
+                                        <label for="" class="active">ESTADO *</label>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col s11">
+                                        <button ng-disabled="frmVehiculo.$invalid"  class="btn waves-effect waves-light teal" style="width: 103%"  type="button" title="Registrar Vehiculo" ng-click="guardar()">
+                                                <i class="mdi-content-send right"></i>REGISTRAR
+                                        </button>
+                                    </div>
+                                </div>
+
+
+                            </form>
+                        </div>
+                        
+                        <div class="tab-pane" id="tabNovedad">
+                            
+                        </div>
+                    </div>
+                </div>			
+            </div>
+        </div>                
+    </div>        
 </div>
+
+<script>
+    $('#tabPanels a').click(function (e) {
+        e.preventDefault();
+        $(this).tab('show');
+        
+    });
+    
+    $('#tabPanels a[href="#tabRegistro"]').tab('show');
+</script>
+
