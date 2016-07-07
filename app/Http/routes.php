@@ -20,3 +20,6 @@ include 'Routes/routesTipoVehiculo.php';
 include 'Routes/routesServicio.php';
 include 'Routes/routesConductor.php';
 include 'Routes/routesVehiculo.php';
+include 'Routes/routesEscolaridad.php';
+include 'Routes/routesTipoDocumento.php';
+

@@ -1,0 +1,83 @@
+<div ng-controller="escolaridadController"  class="container-fluid">
+    <div class="row">
+        <div class="col-xs-4">            
+            <form name="frmEscolaridad" id="frmEscolaridad" novalidate>
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="form-group">
+                            <label for="txtEscolaridad">Codigo *</label>
+                             <div class="input-group">    
+                                 <div class="input-group-addon"><i class="fa fa-hashtag"></i></div>
+                            <input type="text" class="form-control" ng-model="Escolaridad.esCodigo" id="txtEscolaridad" placeholder="codigo">
+                       
+                             </div>
+                        </div>
+                    </div>
+                    
+                     <div class="col-xs-12">
+                        <div class="form-group">
+                            <label for="txtEscolaridad">Descripción *</label>
+                             <div class="input-group">    
+                                 <div class="input-group-addon"><i class="fa fa-mortar-board"></i></div>
+                            <input type="text" class="form-control" ng-model="Escolaridad.esDescripcion" id="txtEscolaridad" placeholder="Descripción">
+                       
+                             </div>
+                        </div>
+                    </div>
+                    
+                    
+                    <div class="col-xs-12">
+                        <div class="form-group">
+                            <label for="txtEstado">Estado *</label>
+                             <div class="input-group">    
+                                 <div class="input-group-addon"><i class="fa fa-list-ul"></i></div>
+                            <select type="text" class="form-control" ng-model="Escolaridad.esEstado" id="txtEstado" placeholder="Estado">
+                                <option value="ACTIVO">ACTIVO</option>
+                                <option value="INACTIVO">INACTIVO</option>
+                            </select>
+                       
+                             </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-xs-6">
+                        <button type="button" class="btn btn-info" ng-click="Guardar()" style="margin-top:15%" >Guardar</button>
+                    </div>
+                    
+                </div>                                
+            </form>
+        </div>
+        
+        <div class="col-xs-8">
+            <div class="row">
+                <div class="col-xs-12">
+                    <table border="0" cellspacing="0" class="table table-striped" >
+                        <thead>
+                            <tr>
+                                <th class="center">CODIGO</th>                                
+                                <th>DESCRIPCIÓN</th>
+                                <th>ESTADO</th>
+                                <th width="12%">ACCIÓN</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <tr data-ng-repeat="items in Escolaridades">
+                                <td class="center">{{ items.esCodigo}}</td>
+                                <td>{{ items.esDescripcion }}</td>
+                                <td>{{ items.esEstado}}</td>
+                                <td>
+                                    <center>
+                                        <a data-ng-click="get(items)" style="float: left; margin-left: 3px;" href="javascript:;"  title="Editar"><i class="small small mdi-image-edit teal-text  darken-1"></i></a>
+                                        <a ng-click="Desactivar(items.idCategoria, 'Borrado')"  style="float: left; margin-left: 3px;" href="javascript:;"  title="Eliminar"><i class="small mdi-action-delete red-text text-deep-orange darken-1"></i></a>
+                                    </center>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>                            
+            </div>
+        </div>
+    </div>
+</div>
+

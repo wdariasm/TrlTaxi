@@ -34,6 +34,15 @@ var app;
             .when("/0/novedad",{
                 templateUrl: 'views/configuracion/novedad.html'
             })
+            
+             .when("/0/escolaridad",{
+                templateUrl: 'views/configuracion/escolaridad.html'
+            })
+            
+            
+            .when("/0/tipoDocumento",{
+                templateUrl: 'views/configuracion/tipoDocumento.html'
+            })
 
             .otherwise({
                 redirectTo:"/"               
