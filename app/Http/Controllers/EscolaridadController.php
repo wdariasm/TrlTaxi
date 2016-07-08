@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Escolaridad;
 use Illuminate\Http\JsonResponse;
-
+use DB;
 class EscolaridadController extends Controller
 {
     /**
@@ -15,7 +15,9 @@ class EscolaridadController extends Controller
      */
     public function index()
     {
-       return Escolaridad::all();
+      // return Escolaridad::all();
+         $resul = DB::select("Select * from escolaridad where  esEstado<>'BORRADO' ");
+        return $resul;
     }
 
     /**

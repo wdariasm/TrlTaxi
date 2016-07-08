@@ -1,8 +1,10 @@
-app.controller("conductorController", ["$scope", "conductorService", function ($scope, conductorService) {
+app.controller("conductorController", ["$scope", "conductorService", "tipoDocumentoService", "escolaridadService", function ($scope, conductorService,tipoDocumentoService,escolaridadService) {
    $scope.Conductor = {};
    $scope.Conductores = [];
    $scope.Novedad={};
    $scope.Novedades=[];
+   $scope.TipoDocumentos=[];
+   $scope.Escolaridades=[];
    $scope.editMode = false;
   
    
@@ -15,6 +17,35 @@ app.controller("conductorController", ["$scope", "conductorService", function ($
                 console.log("Some Error Occured " + JSON.stringify(err));
         }); 
     }
+   
+    function loadEscolaridades (){
+        var promise = escolaridadService.getAll();
+        promise.then(function(d) {                        
+            $scope.Escolaridades = d.data;
+        }, function(err) {           
+                alert("ERROR AL PROCESAR SOLICITUD");           
+                console.log("Some Error Occured " + JSON.stringify(err));
+        }); 
+    }
+   loadEscolaridades();
+   
+   
+   
+     function loadTipoDocumentos (){
+        var promise = tipoDocumentoService.getAll();
+        promise.then(function(d) {                        
+            $scope.TipoDocumentos = d.data;
+        }, function(err) {           
+                alert("ERROR AL PROCESAR SOLICITUD");           
+                console.log("Some Error Occured " + JSON.stringify(err));
+        }); 
+    }
+   
+   loadTipoDocumentos ();
+   
+   
+   
+   
    
    
     $scope.Guardar = function (){

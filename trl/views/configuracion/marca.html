@@ -55,11 +55,11 @@
                                 <td>{{ items.maDescripcion }}</td>
                                 <td>{{ items.maEstado}}</td>
                                 <td>
-                                    <center>
-                                        <a data-ng-click="get(items)" style="float: left; margin-left: 3px;" href="javascript:;"  title="Editar"><i class="small small mdi-image-edit teal-text  darken-1"></i></a>
-                                        <a ng-click="Desactivar(items.idCategoria, 'Borrado')"  style="float: left; margin-left: 3px;" href="javascript:;"  title="Eliminar"><i class="small mdi-action-delete red-text text-deep-orange darken-1"></i></a>
-                                    </center>
-                                </td>
+                                        <center>
+                                            <a data-ng-click="get(items)" style="float: left; margin-left: 15px;" href="javascript:;"  title="Editar"><i class="fa fa-lg fa-pencil"></i></a>
+                                            <a ng-click="Desactivar(items.maCodigo, 'BORRADO')"  style="float: left; margin-left: 15px;" href="javascript:;"  title="Eliminar"><i class="fa fa-lg fa-trash"></i></a>
+                                        </center>
+                                    </td> 
                             </tr>
                         </tbody>
                     </table>

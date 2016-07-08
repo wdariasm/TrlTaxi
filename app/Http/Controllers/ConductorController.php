@@ -19,7 +19,12 @@ class ConductorController extends Controller
         return Conductor::all();
     }
 
-   
+   public function validarEmail($email){
+       return Conductor::where("Email",$email)->select("Email")->first();
+    }
+    
+    
+    
     public function store(Request $request)
     {
         try{  
@@ -33,14 +38,13 @@ class ConductorController extends Controller
             $conductor->TelefonoTres = $data["TelefonoTres"]; 
             $conductor->Email = $data["Email"]; 
             $conductor->FechaNacimiento = $data["FechaNacimiento"]; 
-            $conductor->Escolaridad = $data["Escolaridad"]; 
             $conductor->FechaIngreso = $data["FechaIngreso"]; 
             $conductor->Estado = $data["Estado"]; 
-            $conductor->Clave = $data["Clave"]; 
-            $conductor->TipoDocumento = $data["TipoDocumento"]; 
             $conductor->NumeroCuenta = $data["NumeroCuenta"]; 
             $conductor->CdPlaca = $data["CdPlaca"]; 
             $conductor->Observacion = $data["Observacion"]; 
+            $conductor->Escolaridad = $data["Escolaridad"]; 
+            $conductor->TipoDocumento = $data["TipoDocumento"]; 
             $conductor->save();
             
             $novedad = $data["Novedades"];
@@ -98,7 +102,32 @@ class ConductorController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+       
+        try{
+            $data = $request->all();
+            $conductor = Conductor::find($idIdConductor);
+            $conductor->Nombre = $data["nombre"];
+            $conductor->Direccion = $data["direccion"];
+            $conductor->Telefono = $data["telefono"];
+            $conductor->Email = $data["email"];
+            $conductor->latitud = $data["latitud"];
+                $conductor->longitud = $data["longitud"];
+                $conductor->DireccionOP = $data["direccionOp"];
+                $conductor->dir0 = $data["dir0"];
+                $conductor->dir1 = $data["dir1"];
+                $conductor->dir2 = $data["dir2"];
+                $conductor->dir3 = $data["dir3"];
+                $conductor->dir4 = $data["dir4"];
+                $conductor->dir5 = $data["dir5"];
+            
+            $conductor->save();
+            return JsonResponse::create(array('message' => "Conductor Actualizado Correctamente", "request" =>json_encode($conductor->IdConductor)), 200);
+        } catch (Exception $exc) {
+            return JsonResponse::create(array('message' => "No se pudo guardar", "request" =>json_encode($exc->message)), 401);
+        }
+        
+        
+        
     }
 
     /**

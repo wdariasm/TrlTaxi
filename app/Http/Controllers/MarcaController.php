@@ -15,7 +15,9 @@ class MarcaController extends Controller
      */
     public function index()
     {
-      return Marca::all();
+     // return Marca::all();
+        return Marca::where('maEstado','<>','BORRADO')
+                ->get();
     }
 
   
@@ -44,10 +46,10 @@ class MarcaController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  int  $maCodigo
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($maCodigo)
     {
         //
     }
@@ -57,22 +59,46 @@ class MarcaController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  int  $maCodigo
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $maCodigo)
     {
-        //
+         try{
+            $data = $request->all();
+            $marca = Marca::find($maCodigo);
+            $marca->maDescripcion = $data["maDescripcion"];
+            $marca->maEstado = $data["maEstado"];
+            $marca->save();
+
+            return JsonResponse::create(array('message' => "Datos Actualizados correctamente", "request" =>json_encode($marca->maCodigo)), 200);
+        } catch (Exception $exc) {
+            return JsonResponse::create(array('message' => "No se pudo guardar", "request" =>json_encode($request)), 401);
+        }
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  int  $maCodigo
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($maCodigo)
     {
         //
+    }
+    
+    
+    //Actualiza el estado (Funcion eliminar)
+      public function updateEstado(Request $request, $maCodigo){
+        try {
+            $data = $request->all();
+            $marca = Marca::find($maCodigo);
+            $marca->maEstado = $data['maEstado'];
+            $marca->save();
+            return JsonResponse::create(array('message' => "Datos Actualizados Correctamente", "request" =>json_encode($maCodigo)), 200);
+        } catch (Exception $ex) {
+            return JsonResponse::create(array('message' => "No se pudo modificar el Taxista", "exception"=>$ex->getMessage(), "request" =>json_encode($maCodigo)), 401);
+        }
     }
 }

@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 
 use App\TipoDocumento;
 use Illuminate\Http\JsonResponse;
+use DB;
 
 class TipoDocumentoController extends Controller
 {
@@ -16,7 +17,10 @@ class TipoDocumentoController extends Controller
      */
     public function index()
     {
-        return TipoDocumento::all();
+        
+        $resul = DB::select("Select * from tipodocumento where  tdEstado<>'BORRADO' ");
+        return $resul;
+        //return TipoDocumento::select("tdCodigo", "tdDescripcion")->get();
     }
 
     /**
