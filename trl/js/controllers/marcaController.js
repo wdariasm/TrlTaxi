@@ -38,13 +38,14 @@ app.controller("marcaController", ["$scope", "marcaService", function ($scope, m
         $scope.editMode = true;
         $scope.title = "EDITAR BAHIA"; 
         $scope.active = "active";
-       console.log(item);        
+       
     };
     
     //Funcion que elimina
      $scope.Desactivar = function(maCodigo,  maEstado) {
-        
-        var r = confirm("¿Está seguro de Ejecutar esta Acción? ("+maEstado+")");
+            confirm("jajja");
+       
+        var r = confirm("¿Está seguro de Ejecutar esta Acción?");
         if (r == true) {
             var objetc = {
             maEstado : maEstado

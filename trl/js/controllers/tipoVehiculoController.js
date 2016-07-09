@@ -33,6 +33,39 @@ app.controller("tipoVehiculoController", ["$scope", "tipoVehiculoService", funct
         });       
    };
    
+    //edita la Tipo vehiculo
+    $scope.get = function(item) {
+        $scope.TipoVehiculo=item;
+        $scope.editMode = true;
+        $scope.title = "EDITAR BAHIA"; 
+        $scope.active = "active";
+       console.log(item);        
+    };
+    
+    //Funcion que elimina
+     $scope.Desactivar = function(tvCodigo,  tvEstado) {
+        
+        var r = confirm("¿Está seguro de Ejecutar esta Acción? ("+tvEstado+")");
+        if (r == true) {
+            var objetc = {
+            tvEstado : tvEstado
+        };
+            var promisePut  = tipoVehiculoService.updateEstado(tvCodigo, objetc);        
+                promisePut.then(function (d) {                
+               // Materialize.toast(d.data.message, 4000, 'rounded');                
+                loadTipoVehiculo();
+            }, function (err) {                              
+                    alert("ERROR AL PROCESAR DESACTIVAR / ACTIVAR");
+                    console.log("Some Error Occured "+ JSON.stringify(err));
+            }); 
+        }        
+    };
+   
+   
+   
+   
+   
+   
     loadTipoVehiculo();
 }]);
 

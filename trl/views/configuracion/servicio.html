@@ -22,6 +22,7 @@
                             <select type="text" class="form-control" ng-model="Servicio.svEstado" id="txtEstado" placeholder="Estado">
                                 <option value="ACTIVO">ACTIVO</option>
                                 <option value="INACTIVO">INACTIVO</option>
+                                <option value="BORRADO">BORRADO</option>
                             </select>
                              </div>
                         </div>
@@ -54,10 +55,10 @@
                                 <td>{{ items.svDescripcion }}</td>
                                 <td>{{ items.svEstado}}</td>
                                 <td>
-                                    <center>
-                                        <a data-ng-click="get(items)" style="float: left; margin-left: 3px;" href="javascript:;"  title="Editar"><i class="small small mdi-image-edit teal-text  darken-1"></i></a>
-                                        <a ng-click="Desactivar(items.idCategoria, 'Borrado')"  style="float: left; margin-left: 3px;" href="javascript:;"  title="Eliminar"><i class="small mdi-action-delete red-text text-deep-orange darken-1"></i></a>
-                                    </center>
+                                     <center>
+                                            <a data-ng-click="get(items)" style="float: left; margin-left: 15px;" href="javascript:;"  title="Editar"><i class="fa fa-lg fa-pencil"></i></a>
+                                            <a ng-click="Desactivar(items.svCodigo, 'BORRADO')"  style="float: left; margin-left: 15px;" href="javascript:;"  title="Eliminar"><i class="fa fa-lg fa-trash"></i></a>
+                                        </center>
                                 </td>
                             </tr>
                         </tbody>

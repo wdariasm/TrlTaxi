@@ -15,7 +15,9 @@ class ServicioController extends Controller
      */
     public function index()
     {
-       return Servicio::all();
+       //return Servicio::all();
+         return Servicio::where('svEstado','<>','BORRADO')
+                ->get();
     }
 
     /**
@@ -52,10 +54,10 @@ class ServicioController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  int  $svCodigo
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($svCodigo)
     {
         //
     }
@@ -63,10 +65,10 @@ class ServicioController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  int  $svCodigo
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit($svCodigo)
     {
         //
     }
@@ -75,22 +77,47 @@ class ServicioController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  int  $svCodigo
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $svCodigo)
     {
-        //
+       try{
+            $data = $request->all();
+            $marca = Marca::find($svCodigo);
+            $marca->svDescripcion = $data["svDescripcion"];
+            $marca->svEstado = $data["svEstado"];
+            $marca->save();
+
+            return JsonResponse::create(array('message' => "Datos Actualizados correctamente", "request" =>json_encode($marca->svCodigo)), 200);
+        } catch (Exception $exc) {
+            return JsonResponse::create(array('message' => "No se pudo guardar", "request" =>json_encode($request)), 401);
+        }
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  int  $svCodigo
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($svCodigo)
     {
         //
+    }
+    
+    
+    
+     //Actualiza el estado (Funcion eliminar)
+      public function updateEstado(Request $request, $svCodigo){
+        try {
+            $data = $request->all();
+            $marca = Servicio::find($svCodigo);
+            $marca->svEstado = $data['svEstado'];
+            $marca->save();
+            return JsonResponse::create(array('message' => "Datos Actualizados Correctamente", "request" =>json_encode($svCodigo)), 200);
+        } catch (Exception $ex) {
+            return JsonResponse::create(array('message' => "No se pudo modificar el Taxista", "exception"=>$ex->getMessage(), "request" =>json_encode($svCodigo)), 401);
+        }
     }
 }

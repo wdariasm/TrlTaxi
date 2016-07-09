@@ -84,9 +84,19 @@ class TipoDocumentoController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $tdCodigo)
     {
-        //
+        try{
+            $data = $request->all();
+            $tipoDocumento= TipoDocumento::find($tdCodigo);
+            $tipoDocumento->tdDescripcion = $data["tdDescripcion"];
+            $tipoDocumento->tdEstado = $data["tdEstado"];
+            $tipoDocumento->save();
+
+            return JsonResponse::create(array('message' => "Datos Actualizados correctamente", "request" =>json_encode($tipoDocumento->tdCodigo)), 200);
+        } catch (Exception $exc) {
+            return JsonResponse::create(array('message' => "No se pudo guardar", "request" =>json_encode($request)), 401);
+        }
     }
 
     /**
@@ -98,5 +108,20 @@ class TipoDocumentoController extends Controller
     public function destroy($id)
     {
         //
+    }
+    
+    
+    
+     //Actualiza el estado (Funcion eliminar)
+      public function updateEstado(Request $request, $tdCodigo){
+        try {
+            $data = $request->all();
+            $tipoDocumento = TipoDocumento::find($tdCodigo);
+            $tipoDocumento->tdEstado = $data['tdEstado'];
+            $tipoDocumento->save();
+            return JsonResponse::create(array('message' => "Datos Actualizados Correctamente", "request" =>json_encode($tdCodigo)), 200);
+        } catch (Exception $ex) {
+            return JsonResponse::create(array('message' => "No se pudo modificar el Taxista", "exception"=>$ex->getMessage(), "request" =>json_encode($tdCodigo)), 401);
+        }
     }
 }

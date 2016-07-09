@@ -33,6 +33,41 @@ app.controller("escolaridadController", ["$scope", "escolaridadService", functio
         });       
    };
    
+   //edita la marca
+    $scope.get = function(item) {
+        $scope.Escolaridad=item;
+        $scope.editMode = true;
+        $scope.title = "EDITAR BAHIA"; 
+        $scope.active = "active";
+       console.log(item);        
+    };
+    
+    //Funcion que elimina
+     $scope.Desactivar = function(esCodigo,  esEstado) {
+        
+        var r = confirm("¿Está seguro de Ejecutar esta Acción? ("+esEstado+")");
+        if (r == true) {
+            var objetc = {
+            esEstado : esEstado
+        };
+            var promisePut  = escolaridadService.updateEstado(esCodigo, objetc);        
+                promisePut.then(function (d) {                
+               // Materialize.toast(d.data.message, 4000, 'rounded');                
+                loadEscolaridad();
+            }, function (err) {                              
+                    alert("ERROR AL PROCESAR DESACTIVAR / ACTIVAR");
+                    console.log("Some Error Occured "+ JSON.stringify(err));
+            }); 
+        }        
+    };
+   
+   
+   
+   
+   
+   
+   
+   
     loadEscolaridad();
 }]);
 

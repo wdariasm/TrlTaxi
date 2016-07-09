@@ -33,6 +33,39 @@ app.controller("tipoDocumentoController", ["$scope", "tipoDocumentoService", fun
         });       
    };
    
+    //edita la tipoDocumento
+    $scope.get = function(item) {
+        $scope.TipoDocumento=item;
+        $scope.editMode = true;
+        $scope.title = "EDITAR BAHIA"; 
+        $scope.active = "active";
+       
+    };
+    
+    //Funcion que elimina
+     $scope.Desactivar = function(tdCodigo,  tdEstado) {
+            confirm("jajja");
+       
+        var r = confirm("¿Está seguro de Ejecutar esta Acción?");
+        if (r == true) {
+            var objetc = {
+            tdEstado : tdEstado
+        };
+            var promisePut  = tipoDocumentoService.updateEstado(tdCodigo, objetc);        
+                promisePut.then(function (d) {                
+               // Materialize.toast(d.data.message, 4000, 'rounded');                
+                loadTipoDocumento();
+            }, function (err) {                              
+                    alert("ERROR AL PROCESAR DESACTIVAR / ACTIVAR");
+                    console.log("Some Error Occured "+ JSON.stringify(err));
+            }); 
+        }        
+    };
+   
+   
+   
+   
+   
     loadTipoDocumento();
 }]);
 

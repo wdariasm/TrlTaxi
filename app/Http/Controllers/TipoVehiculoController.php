@@ -16,7 +16,9 @@ class TipoVehiculoController extends Controller
      */
     public function index()
     {
-         return TipoVehiculo::all();
+         //return TipoVehiculo::all();
+          return TipoVehiculo::where('tvEstado','<>','BORRADO')
+                ->get();
     }
 
     /**
@@ -79,9 +81,19 @@ class TipoVehiculoController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $tvCodigo)
     {
-        //
+        try{
+            $data = $request->all();
+            $tipoVehiculo = TipoVehiculo::find($tvCodigo);
+            $tipoVehiculo->tvDescripcion = $data["tvDescripcion"];
+            $tipoVehiculo->tvEstado = $data["tvEstado"];
+            $tipoVehiculo->save();
+
+            return JsonResponse::create(array('message' => "Datos Actualizados correctamente", "request" =>json_encode($tipoVehiculo->tvCodigo)), 200);
+        } catch (Exception $exc) {
+            return JsonResponse::create(array('message' => "No se pudo guardar", "request" =>json_encode($request)), 401);
+        }
     }
 
     /**
@@ -93,5 +105,20 @@ class TipoVehiculoController extends Controller
     public function destroy($id)
     {
         //
+    }
+    
+    
+    
+    //Actualiza el estado (Funcion eliminar)
+      public function updateEstado(Request $request, $tvCodigo){
+        try {
+            $data = $request->all();
+            $marca = TipoVehiculo::find($tvCodigo);
+            $marca->tvEstado = $data['tvEstado'];
+            $marca->save();
+            return JsonResponse::create(array('message' => "Datos Actualizados Correctamente", "request" =>json_encode($tvCodigo)), 200);
+        } catch (Exception $ex) {
+            return JsonResponse::create(array('message' => "No se pudo modificar el Taxista", "exception"=>$ex->getMessage(), "request" =>json_encode($tvCodigo)), 401);
+        }
     }
 }

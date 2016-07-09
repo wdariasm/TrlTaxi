@@ -18,6 +18,8 @@ class EscolaridadController extends Controller
       // return Escolaridad::all();
          $resul = DB::select("Select * from escolaridad where  esEstado<>'BORRADO' ");
         return $resul;
+        
+        
     }
 
     /**
@@ -81,9 +83,19 @@ class EscolaridadController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $esCodigo)
     {
-        //
+        try{
+            $data = $request->all();
+            $escolaridad = Escolaridad::find($esCodigo);
+            $escolaridad->esDescripcion = $data["esDescripcion"];
+            $escolaridad->esEstado = $data["esEstado"];
+            $escolaridad->save();
+
+            return JsonResponse::create(array('message' => "Datos Actualizados correctamente", "request" =>json_encode($escolaridad->esCodigo)), 200);
+        } catch (Exception $exc) {
+            return JsonResponse::create(array('message' => "No se pudo guardar", "request" =>json_encode($request)), 401);
+        }
     }
 
     /**
