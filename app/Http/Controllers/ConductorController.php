@@ -140,4 +140,20 @@ class ConductorController extends Controller
     {
         //
     }
+    
+    
+       //Actualiza el estado (Funcion eliminar)
+      public function updateEstado(Request $request, $IdConductor){
+        try {
+            $data = $request->all();
+            $marca = Marca::find($maCodigo);
+            $marca->maEstado = $data['maEstado'];
+            $marca->save();
+            return JsonResponse::create(array('message' => "Datos Actualizados Correctamente", "request" =>json_encode($maCodigo)), 200);
+        } catch (Exception $ex) {
+            return JsonResponse::create(array('message' => "No se pudo modificar el Taxista", "exception"=>$ex->getMessage(), "request" =>json_encode($maCodigo)), 401);
+        }
+    }
+
+    
 }
