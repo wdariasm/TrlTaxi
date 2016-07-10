@@ -15,7 +15,8 @@ app.controller("marcaController", ["$scope", "marcaService", function ($scope, m
    
    
    $scope.Guardar = function (){
-       
+        $scope.Marca.maDescripcion = $scope.Marca.maDescripcion.toUpperCase();
+        $scope.Marca.maEstado=$scope.Marca.maEstado.toUpperCase();
         var promise;
         if($scope.editMode){            
             promise = marcaService.put($scope.Marca.maCodigo, $scope.Marca);
@@ -36,7 +37,7 @@ app.controller("marcaController", ["$scope", "marcaService", function ($scope, m
     $scope.get = function(item) {
         $scope.Marca=item;
         $scope.editMode = true;
-        $scope.title = "EDITAR BAHIA"; 
+        $scope.title = "EDITAR MARCA"; 
         $scope.active = "active";
        
     };

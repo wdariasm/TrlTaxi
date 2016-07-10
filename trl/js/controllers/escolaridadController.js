@@ -15,7 +15,9 @@ app.controller("escolaridadController", ["$scope", "escolaridadService", functio
    
    
    $scope.Guardar = function (){
-       
+        $scope.Escolaridad.esDescripcion = $scope.Escolaridad.esDescripcion.toUpperCase();
+        $scope.Escolaridad.esEstado=$scope.Escolaridad.esEstado.toUpperCase();
+
         var promise;
         if($scope.editMode){            
             promise = escolaridadService.put($scope.Escolaridad.esCodigo, $scope.Escolaridad);
@@ -37,7 +39,7 @@ app.controller("escolaridadController", ["$scope", "escolaridadService", functio
     $scope.get = function(item) {
         $scope.Escolaridad=item;
         $scope.editMode = true;
-        $scope.title = "EDITAR BAHIA"; 
+        $scope.title = "EDITAR ESCOLARIDAD"; 
         $scope.active = "active";
        console.log(item);        
     };

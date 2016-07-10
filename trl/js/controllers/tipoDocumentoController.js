@@ -16,6 +16,12 @@ app.controller("tipoDocumentoController", ["$scope", "tipoDocumentoService", fun
    
    $scope.Guardar = function (){
        
+       $scope.TipoDocumento.tdDescripcion = $scope.TipoDocumento.tdDescripcion.toUpperCase();
+       $scope.TipoDocumento.tdEstado=$scope.TipoDocumento.tdEstado.toUpperCase();
+       
+       
+       
+       
         var promise;
         if($scope.editMode){            
             promise = tipoDocumentoService.put($scope.TipoDocumento.tdCodigo, $scope.TipoDocumento);
@@ -37,7 +43,7 @@ app.controller("tipoDocumentoController", ["$scope", "tipoDocumentoService", fun
     $scope.get = function(item) {
         $scope.TipoDocumento=item;
         $scope.editMode = true;
-        $scope.title = "EDITAR BAHIA"; 
+        $scope.title = "EDITAR TIPO DOCUMENTO"; 
         $scope.active = "active";
        
     };

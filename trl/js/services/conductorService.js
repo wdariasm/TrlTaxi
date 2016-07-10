@@ -28,6 +28,11 @@ app.service("conductorService",[ '$http', function ($http) {
         var req = $http.get(uri+'/api/conductores');
         return req;
     };
+    
+     this.validarIdentificacion = function(Cedula){
+        var req = $http.get(uri+'/api/conductor/' + Cedula +'/validar');
+        return req;	
+    };
 }]);
 
 

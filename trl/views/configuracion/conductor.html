@@ -21,6 +21,7 @@
                                         <th>DIRECCION</th>
                                         <th>ESCOLARIDAD</th>
                                         <th>ESTADO</th>
+                                        <th>ACCION</th>
                                        
                                         
                                     </tr>
@@ -33,7 +34,13 @@
                                 <td>{{ items.Direccion}}</td> 
                                 <td>{{ items.Escolaridad}}</td> 
                                 <td>{{ items.Estado}}</td> 
-                                    </tr>
+                                <td>
+                                        <center>
+                                            <a data-ng-click="get(items)" style="float: left; margin-left: 15px;" href="javascript:;"  title="Editar"><i class="fa fa-lg fa-pencil"></i></a>
+                                            <a data-ng-click="Desactivar(items.IdConductor, 'RETIRADO')"  style="float: left; margin-left: 15px;" href="javascript:;"  title="Eliminar"><i class="fa fa-lg fa-trash"></i></a>
+                                        </center>
+                                </td>
+                                  </tr>
 
                                 </tbody>
                             </table>
@@ -61,11 +68,14 @@
                 
                     <div class="col-xs-2">
                         <div class="form-group">
-                           <label for="txtCedula">Cédula *</label>
+                           <label  for="txtCedula" >Cédula *</label>
                           <div class="input-group">    
                             <div class="input-group-addon"><i class="fa fa-hashtag"></i></div>
-                            <input type="text" class="form-control" ng-model="Conductor.Cedula" id="txtCedula" placeholder="Identification">
+                            <input type="text" class="form-control" ng-model="Conductor.Cedula" id="txtCedula" placeholder="Identification" ng-blur="validarIdentificacion()">
                           </div> 
+                            <div class="error">
+                                <small  ng-show="valCedula">N° de Identificación, Ya Existe</small>
+                            </div> 
                         </div>
                     </div>
                     
@@ -341,5 +351,6 @@
     });
     
     $('#tabPanels a[href="#tabRegistro"]').tab('show');
+
 </script>
     

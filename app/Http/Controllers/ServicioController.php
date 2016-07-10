@@ -84,7 +84,7 @@ class ServicioController extends Controller
     {
        try{
             $data = $request->all();
-            $marca = Marca::find($svCodigo);
+            $marca = Servicio::find($svCodigo);
             $marca->svDescripcion = $data["svDescripcion"];
             $marca->svEstado = $data["svEstado"];
             $marca->save();

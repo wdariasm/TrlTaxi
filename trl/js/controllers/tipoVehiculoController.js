@@ -16,6 +16,12 @@ app.controller("tipoVehiculoController", ["$scope", "tipoVehiculoService", funct
    
    $scope.Guardar = function (){
        
+       $scope.TipoVehiculo.tvDescripcion = $scope.TipoVehiculo.tvDescripcion.toUpperCase();
+       $scope.TipoVehiculo.tvEstado=$scope.TipoVehiculo.tvEstado.toUpperCase();
+       
+       
+       
+       
         var promise;
         if($scope.editMode){            
             promise = tipoVehiculoService.put($scope.TipoVehiculo.tvCodigo, $scope.TipoVehiculo);
@@ -37,7 +43,7 @@ app.controller("tipoVehiculoController", ["$scope", "tipoVehiculoService", funct
     $scope.get = function(item) {
         $scope.TipoVehiculo=item;
         $scope.editMode = true;
-        $scope.title = "EDITAR BAHIA"; 
+        $scope.title = "EDITAR TIPO VEHICULO"; 
         $scope.active = "active";
        console.log(item);        
     };

@@ -16,6 +16,10 @@ app.controller("servicioController", ["$scope", "servicioService", function ($sc
    
    $scope.Guardar = function (){
        
+       $scope.Servicio.svDescripcion = $scope.Servicio.svDescripcion.toUpperCase();
+       $scope.Servicio.svEstado=$scope.Servicio.svEstado.toUpperCase();
+       
+       
         var promise;
         if($scope.editMode){            
             promise = servicioService.put($scope.Servicio.svCodigo, $scope.Servicio);
@@ -36,7 +40,7 @@ app.controller("servicioController", ["$scope", "servicioService", function ($sc
     $scope.get = function(item) {
         $scope.Servicio=item;
         $scope.editMode = true;
-        $scope.title = "EDITAR BAHIA"; 
+        $scope.title = "EDITAR SERVICIO"; 
         $scope.active = "active";
        console.log(item);        
     };

@@ -15,7 +15,10 @@ app.controller("novedadController", ["$scope", "novedadService", function ($scop
    
    
    $scope.Guardar = function (){
-       
+        $scope.Novedad.nvDescripcion = $scope.Novedad.nvDescripcion.toUpperCase();
+        $scope.Novedad.nvTipo=$scope.Novedad.nvTipo.toUpperCase();
+        $scope.Novedad.nvEstado=$scope.Novedad.nvEstado.toUpperCase();
+        
         var promise;
         if($scope.editMode){            
             promise = novedadService.put($scope.Novedad.nvCodigo, $scope.Novedad);

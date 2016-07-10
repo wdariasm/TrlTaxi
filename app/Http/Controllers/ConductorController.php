@@ -16,14 +16,19 @@ class ConductorController extends Controller
      */
     public function index()
     {
-        return Conductor::all();
+        //return Conductor::all();
+        
+        return Conductor::where('Estado','<>','RETIRADO')
+                ->get();
     }
 
-   public function validarEmail($email){
+   public function validIdConductorarEmail($email){
        return Conductor::where("Email",$email)->select("Email")->first();
     }
     
-    
+    public function validarIdentificacion($Cedula){
+        return Conductor::where("Cedula",$Cedula)->select("Cedula")->first();
+    }
     
     public function store(Request $request)
     {
@@ -74,10 +79,10 @@ class ConductorController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  int  $IdConductor
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($IdConductor)
     {
         //
     }
@@ -85,10 +90,10 @@ class ConductorController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  int  $IdConductor
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit($IdConductor)
     {
         //
     }
@@ -97,29 +102,29 @@ class ConductorController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  int  $idIdConductor
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $IdConductor)
     {
        
         try{
             $data = $request->all();
-            $conductor = Conductor::find($idIdConductor);
-            $conductor->Nombre = $data["nombre"];
-            $conductor->Direccion = $data["direccion"];
-            $conductor->Telefono = $data["telefono"];
-            $conductor->Email = $data["email"];
-            $conductor->latitud = $data["latitud"];
-                $conductor->longitud = $data["longitud"];
-                $conductor->DireccionOP = $data["direccionOp"];
-                $conductor->dir0 = $data["dir0"];
-                $conductor->dir1 = $data["dir1"];
-                $conductor->dir2 = $data["dir2"];
-                $conductor->dir3 = $data["dir3"];
-                $conductor->dir4 = $data["dir4"];
-                $conductor->dir5 = $data["dir5"];
-            
+            $conductor = Conductor::find($IdConductor);
+            $conductor->Nombre = $data["Nombre"]; 
+            $conductor->Direccion = $data["Direccion"]; 
+            $conductor->TelefonoPpal = $data["TelefonoPpal"]; 
+            $conductor->TelefonoDos = $data["TelefonoDos"]; 
+            $conductor->TelefonoTres = $data["TelefonoTres"]; 
+            $conductor->Email = $data["Email"]; 
+            $conductor->FechaNacimiento = $data["FechaNacimiento"]; 
+            $conductor->FechaIngreso = $data["FechaIngreso"]; 
+            $conductor->Estado = $data["Estado"]; 
+            $conductor->NumeroCuenta = $data["NumeroCuenta"]; 
+            $conductor->CdPlaca = $data["CdPlaca"]; 
+            $conductor->Observacion = $data["Observacion"]; 
+            $conductor->Escolaridad = $data["Escolaridad"]; 
+            $conductor->TipoDocumento = $data["TipoDocumento"]; 
             $conductor->save();
             return JsonResponse::create(array('message' => "Conductor Actualizado Correctamente", "request" =>json_encode($conductor->IdConductor)), 200);
         } catch (Exception $exc) {
@@ -133,10 +138,10 @@ class ConductorController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  int  $idIdConductor
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($idIdConductor)
     {
         //
     }
@@ -146,12 +151,12 @@ class ConductorController extends Controller
       public function updateEstado(Request $request, $IdConductor){
         try {
             $data = $request->all();
-            $marca = Marca::find($maCodigo);
-            $marca->maEstado = $data['maEstado'];
-            $marca->save();
-            return JsonResponse::create(array('message' => "Datos Actualizados Correctamente", "request" =>json_encode($maCodigo)), 200);
+            $conductor = Conductor::find($IdConductor);
+            $conductor->Estado = $data['Estado'];
+            $conductor->save();
+            return JsonResponse::create(array('message' => "Datos Actualizados Correctamente", "request" =>json_encode($IdConductor)), 200);
         } catch (Exception $ex) {
-            return JsonResponse::create(array('message' => "No se pudo modificar el Taxista", "exception"=>$ex->getMessage(), "request" =>json_encode($maCodigo)), 401);
+            return JsonResponse::create(array('message' => "No se pudo modificar el Taxista", "exception"=>$ex->getMessage(), "request" =>json_encode($IdConductor)), 401);
         }
     }
 
