@@ -15,7 +15,7 @@ class VehiculoController extends Controller
      */
     public function index()
     {
-        Vehiculo::all();
+        return Vehiculo::all();
     }
 
     /**
@@ -50,7 +50,7 @@ class VehiculoController extends Controller
             $vehiculo->Tipo = $data["Tipo"]; 
             $vehiculo->FechaArriendo = $data["FechaArriendo"]; 
             $vehiculo->NumPasajeros = $data["NumPasajeros"]; 
-            $vehiculo->TipoVehiculo = $data["TipoVehiculo"]; 
+            $vehiculo->ClaseVehiculo = $data["ClaseVehiculo"]; 
             $vehiculo->Runt = $data["Runt"]; 
             $vehiculo->FProxMantenimiento = $data["FProxMantenimiento"]; 
 

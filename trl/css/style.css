@@ -7,3 +7,16 @@
     box-shadow: none;
 }
 
+.btn-danger:focus{
+    background-color: #f3565d;
+    border: 1px solid #761c19;
+}
+
+.fa-1x{
+    font-size: 1.35em;
+}
+
+
+
+
+
