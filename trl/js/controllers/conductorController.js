@@ -7,10 +7,7 @@ app.controller("conductorController", ["$scope", "conductorService", "tipoDocume
    $scope.Escolaridades=[];
    $scope.valCedula = false;
    $scope.editMode = false;
-   
-   
-   
-   initialize();
+  
    function initialize() {
         $scope.Conductor = {
             IdConductor :"",
@@ -169,7 +166,7 @@ app.controller("conductorController", ["$scope", "conductorService", "tipoDocume
       
       
       
-      
+    initialize(); 
     loadConductor();
     
 }]);
