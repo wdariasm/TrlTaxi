@@ -1,5 +1,5 @@
-app.controller("vehiculoController", ["$scope", "vehiculoService", "marcaService", "tipoVehiculoService","ngTableParams",
-    function ($scope, vehiculoService, marcaService, tipoVehiculoService, ngTableParams) {
+app.controller("vehiculoController", ["$scope", "vehiculoService", "marcaService", "tipoVehiculoService","ngTableParams", "toaster",
+    function ($scope, vehiculoService, marcaService, tipoVehiculoService, ngTableParams, toaster) {
    $scope.Vehiculo = {};
    $scope.Vehiculos = [];
    $scope.Marcas = [];
@@ -11,7 +11,8 @@ app.controller("vehiculoController", ["$scope", "vehiculoService", "marcaService
    $scope.Novedades = [];
    $scope.Novedad = {};
    $scope.TablaNovedad = {};
-   
+   $scope.PlacaGlobal = "";
+   $scope.IdVehiculoGlobal = "";
    // Para Select
    $scope.MarcaSelect = {};
    $scope.ClaseSelect = {};
@@ -32,7 +33,9 @@ app.controller("vehiculoController", ["$scope", "vehiculoService", "marcaService
             FProxMantenimiento : moment().format('L'),
             Marca : ""
        };        
-       
+    } 
+    
+    function initNovedad  (){
         $scope.Novedad = {
             IdNovedad : 0,
             Codigo : "",
@@ -46,7 +49,7 @@ app.controller("vehiculoController", ["$scope", "vehiculoService", "marcaService
             Vehiculo : "",
             Tipo :"SOAT"
         };        
-    }           
+    }
    
     function loadVehiculo (){
         var promise = vehiculoService.getAll();
@@ -57,6 +60,7 @@ app.controller("vehiculoController", ["$scope", "vehiculoService", "marcaService
                 alert("ERROR AL PROCESAR SOLICITUD");           
                 console.log("Some Error Occured " + JSON.stringify(err));
         }); 
+            
     }
       loadVehiculo();
     
@@ -127,6 +131,12 @@ app.controller("vehiculoController", ["$scope", "vehiculoService", "marcaService
         $scope.editMode = false;
         $scope.Titulo = "Nuevo ";
     };
+    
+    $scope.VerNovedad = function (item){
+        $scope.Vehiculo = item;
+        initNovedad();
+        $('#tabPanels a[href="#tabNovedad"]').tab('show');
+    };
         
    
     $scope.Guardar = function (){                                        
@@ -143,11 +153,11 @@ app.controller("vehiculoController", ["$scope", "vehiculoService", "marcaService
         
         promise.then(function(d) {                        
             loadVehiculo();
-            alert(d.data.message);
+            toaster.pop('success', "Comtrol de Información", d.data.message);            
              
-        }, function(err) {           
-                alert("ERROR AL PROCESAR SOLICITUD");           
-                console.log("Some Error Occured " + JSON.stringify(err));
+        }, function(err) {          
+            toaster.pop('error', "Error", "ERROR AL PROCESAR SOLICITUD");                
+            console.log("Some Error Occured " + JSON.stringify(err));
         });       
    };
  
@@ -193,8 +203,9 @@ app.controller("vehiculoController", ["$scope", "vehiculoService", "marcaService
     $scope.AgregarNovedad = function (){                
         $scope.Novedades.push($scope.Novedad);
         $scope.TablaNovedad.reload();
-        init();
+        initNovedad();
     };
+        
    
 }]);
 

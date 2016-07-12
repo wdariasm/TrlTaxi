@@ -1,7 +1,7 @@
 var uri = "../public";
 var app;
 (function(){
-    app = angular.module("trlTransporte", ['ngRoute','ng-currency','ngTable']);
+    app = angular.module("trlTransporte", ['ngRoute','ng-currency','ngTable','toaster', 'ngAnimate']);
     
     app.config(['$routeProvider', '$locationProvider', function AppConfig($routeProvider, $locationProvider){                        
 

@@ -1,5 +1,6 @@
 <div ng-controller="vehiculoController">
-    <div  class="container-fluid">
+    
+    <div  class="container-fluid">        
         <div class="row">
             <div class="col-xs-12">
                 <div class="tabbable-line">
@@ -19,7 +20,7 @@
                                         <th>TIPO</th>
                                         <th>CAPACIDAD</th>
                                         <th>ESTADO</th>
-                                        <th>ACCION</th>
+                                        <th width="7%">ACCION</th>
                                     </tr>
                                 </thead>
 
@@ -33,8 +34,8 @@
                                         <td>
                                             <center>
                                                 <a ng-click="get(item)" style="float: left; margin-left: 3px;" href="javascript:;"  title="Editar"><i class="fa fa-pencil fa-1x text-success"></i></a>
-                                                <a ng-click="verPosicion(item.placa)" style="float: left; margin-left: 5px;" href="javascript:;"  title="Ver Posicion"><i class="fa fa-power-off fa-1x text-warning"></i></a>
-                                                <a ng-click="Desactivar(item.placa, 'Borrado')"  style="float: left; margin-left: 3px;" href="javascript:;"  title="Eliminar"><i class="small mdi-action-delete red-text text-deep-orange darken-1"></i></a>
+                                                <a ng-click="Desactivar(item.placa, 'Borrado')"  style="float: left; margin-left: 5px;" href="javascript:;"  title="Eliminar"><i class="fa fa-power-off fa-1x text-warning"></i></a>
+                                                <a  ng-click="VerNovedad(item)" style="float: left; margin-left: 5px;" href="javascript:;"  title="Novedades"><i class="fa fa-book text-danger fa-1x"></i></a>
                                             </center>
                                         </td>
                                     </tr>
@@ -214,7 +215,17 @@
 
                         <div class="tab-pane" id="tabNovedad">
                             <form class="col-xs-10 col-xs-offset-1" name="frmNovedad" id="frmNovedad"  >
-                                                                                                
+                                
+                                <div class="row">
+                                    <div class="col-xs-6 text-right">
+                                        <h4>Gestión de Novedades </h4> 
+                                    </div>
+                                    <div class="col-xs-3 text-left">
+                                        <h4 style="display: inline-block">{{Vehiculo.Placa}}</h4>
+                                    </div>
+                                </div>
+                                
+                                
                                 <div class="row">
                                     <div class="col-xs-4">
                                         <div class="form-group">
@@ -382,7 +393,7 @@
 
     });
 
-    $('#tabPanels a[href="#tabNovedad"]').tab('show');
+    //$('#tabPanels a[href="#tabNovedad"]').tab('show');
     
     $(function() {
         $('input[name="txtFechaMto"]').daterangepicker({
