@@ -6,6 +6,11 @@ app.controller("vehiculoController", ["$scope", "vehiculoService", "marcaService
    $scope.editMode = false;
    $scope.ClaseVehiculo = [];
    $scope.TablaVehiculo = {};
+   $scope.Titulo ="Nuevo";
+   
+   $scope.Novedades = [];
+   $scope.Novedad = {};
+   $scope.TablaNovedad = {};
    
    // Para Select
    $scope.MarcaSelect = {};
@@ -26,7 +31,21 @@ app.controller("vehiculoController", ["$scope", "vehiculoService", "marcaService
             Runt : "", 
             FProxMantenimiento : moment().format('L'),
             Marca : ""
-       };
+       };        
+       
+        $scope.Novedad = {
+            IdNovedad : 0,
+            Codigo : "",
+            FechaExpedicion : moment().format('L'),
+            FechaInicioVigencia : moment().format('L'),
+            FechaVencimiento : moment().add(1,'years').format('L'),
+            Entidad : "",
+            Estado : "VIGENTE",
+            ModServicio : "",
+            RadioAccion:  "",
+            Vehiculo : "",
+            Tipo :"SOAT"
+        };        
     }           
    
     function loadVehiculo (){
@@ -96,16 +115,23 @@ app.controller("vehiculoController", ["$scope", "vehiculoService", "marcaService
     
     $scope.get = function(item){
         $scope.Vehiculo = item;
+        $scope.Vehiculo.FechaArriendo = moment($scope.Vehiculo.FechaArriendo).format("L");
+        $scope.Vehiculo.FProxMantenimiento = moment($scope.Vehiculo.FProxMantenimiento).format("L");
         $scope.editMode = true;
+        $scope.Titulo = "Editando ";
         $('#tabPanels a[href="#tabRegistro"]').tab('show');
     };
-   
+    
+    $scope.Nuevo = function (){
+        init();
+        $scope.editMode = false;
+        $scope.Titulo = "Nuevo ";
+    };
+        
    
     $scope.Guardar = function (){                                        
         $scope.Vehiculo.Marca = $scope.MarcaSelect.maCodigo;
         $scope.Vehiculo.Placa = $scope.Vehiculo.Placa.toUpperCase();
-        $scope.Vehiculo.FProxMantenimiento = moment($scope.Vehiculo.FProxMantenimiento,'lll');
-        $scope.Vehiculo.FechaArriendo = moment($scope.Vehiculo.FechaArriendo, 'lll');
         console.log($scope.Vehiculo);
               
         var promise;
@@ -126,6 +152,50 @@ app.controller("vehiculoController", ["$scope", "vehiculoService", "marcaService
    };
  
     init();
+    
+    
+    // FUNCIONES PARA  NOVEDADES 
+    function loadNovedad (id){
+        var promise = vehiculoService.getAll();
+        promise.then(function(d) {                        
+            $scope.Novedades = d.data;
+              $scope.TablaNovedad.reload();
+        }, function(err) {           
+                alert("ERROR AL PROCESAR SOLICITUD");           
+                console.log("Some Error Occured " + JSON.stringify(err));
+        }); 
+    }
+            
+     function initTablaNovedad() {
+        $scope.TablaNovedad = new ngTableParams({
+            page: 1,
+            count: 10,
+            sorting: undefined
+        }, {
+            filterDelay: 50,
+            total: 1000,
+            counts : [],
+            getData: function (a, b) {
+                var c = b.filter().busqueda;
+                f = [];
+                c ? (c = c.toLowerCase(), f = $scope.Taxis.filter(function (a) {
+                    return a.Codigo.toLowerCase().indexOf(c) > -1 ||
+                           a.Estado.toLowerCase().indexOf(c) > -1 ||
+                           a.Tipo.toLowerCase().indexOf(c) > -1 ||
+                           a.FechaVencimiento.indexOf(c) > -1                                                       
+                })) : f = $scope.Novedades, f = b.sorting() ? f : f, b.total(f.length), a.resolve(f.slice((b.page() - 1) * b.count(), b.page() * b.count()))
+            }
+        });
+    };
+    
+    initTablaNovedad();
+    
+    $scope.AgregarNovedad = function (){                
+        $scope.Novedades.push($scope.Novedad);
+        $scope.TablaNovedad.reload();
+        init();
+    };
+   
 }]);
 
 
