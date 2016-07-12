@@ -1,0 +1,289 @@
+ <div ng-controller="clienteController"  class="container-fluid">
+<div class="row">
+        <div class="col-xs-12">  
+             <div class="tabbable-line">
+                    <ul class="nav nav-tabs nav-justified" id="tabPanels">
+                        <li class="active"> <a href="#tabListado" data-toggle="tab">Listado de Cliente </a></li>
+                        <li><a href="#tabRegistro" data-toggle="tab">Registrar Cliente </a></li>
+                        <li><a href="#tabRol" data-toggle="tab">Rol</a></li>
+                        <li><a href="#tabPermiso" data-toggle="tab">Permisos</a></li>
+                    </ul>
+             </div>
+            
+            <div class="tab-content">
+                 <br/>
+                        <div class="tab-pane active" id="tabListado">
+                            <table class="table table-condensed">
+                                <thead>
+                                    <tr>
+                                        <th>CEDULA</th>
+                                        <th>NOMBRE</th>  
+                                        <th>DIRECCION</th>
+                                        <th>TELEFONO</th>
+                                        <th>E-MAIL</th>
+                                        <th>ESTADO</th> 
+                                        <th>DIGITO VERIFICACIÓN</th>
+                                        <th>ACCÍON</th>
+                                    </tr>
+                                </thead>
+                                
+                                 <tbody>
+                                 <tr data-ng-repeat="items in Clientes">
+                                <td class="center">{{ items.Identificacion}}</td>
+                                <td>{{ items.Nombres }}</td>
+                                <td>{{ items.Direccion}}</td> 
+                                <td>{{ items.MovilPpal}}</td> 
+                                <td>{{ items.Correo}}</td> 
+                                <td>{{ items.DigitoVerificacion}}</td> 
+                                <td>{{ items.Estado}}</td> 
+                                <td>
+                                        <center>
+                                            <a data-ng-click="get(items)" style="float: left; margin-left: 15px;" href="javascript:;"  title="Editar"><i class="fa fa-lg fa-pencil"></i></a>
+                                            <a data-ng-click="Desactivar(items.IdCliente, 'RETIRADO')"  style="float: left; margin-left: 15px;" href="javascript:;"  title="Eliminar"><i class="fa fa-lg fa-trash"></i></a>
+                                        </center>
+                                </td>
+                                  </tr>
+
+                                </tbody>
+                              
+                            </table>
+                     </div>
+            
+                
+                <div class="tab-pane" id="tabRegistro">
+                    
+            <form name="frmCliente" id="frmCliente" novalidate>
+                <div class="row">
+                    
+                                <div class="col-xs-3">
+                                        <div class="form-group">
+                                            <label  for="cboTipoDocumento">Tipo Documento *</label>
+                                            <div class="input-group">    
+                                                <div class="input-group-addon"><i class="fa fa-cc"></i></div>
+                                                <select ng-model="Cliente.TipoDocumento" name="cboTipoDocumento" id="cboTipoDocumento" style="width: 105%" class="form-control"  required >
+                                                    <option ng-repeat="itemc in TipoDocumentos" value="{{itemc.tdCodigo}}"> {{itemc.tdCodigo}} - {{itemc.tdDescripcion }}</option>
+                                                </select>                                                
+                                            </div> 
+                                        </div>   
+                                    </div>
+                                
+                    
+                
+                    <div class="col-xs-2">
+                        <div class="form-group">
+                           <label  for="txtCedula" >Identificación *</label>
+                          <div class="input-group">    
+                            <div class="input-group-addon"><i class="fa fa-hashtag"></i></div>
+                            <input type="text" class="form-control" ng-model="Cliente.Identificacion" id="txtCedula" placeholder="Identificación" ng-blur="validarIdentificacion()">
+                          </div> 
+                           <!--
+                            <div class="error">
+                                <small  ng-show="valCedula">N° de Identificación, Ya Existe</small>
+                            </div> 
+                           -->
+                        </div>
+                    </div>
+                    
+                     <div class="col-xs-6">
+                        <div class="form-group">
+                            <label for="txtNombre">Nombres *</label>
+                             <div class="input-group">    
+                                <div class="input-group-addon"><i class="fa fa-user"></i></div>
+                                <input type="text" class="form-control" ng-model="Cliente.Nombres" id="txtNombre" placeholder="Nombre Completo">
+                            </div>
+                        </div>
+                    </div>
+                    
+                      <div class="col-xs-3">
+                        <div class="form-group">
+                            <label for="txtTelefonoPpal">Teléfono Principal *</label>
+                             <div class="input-group">    
+                                <div class="input-group-addon"><i class="fa fa-mobile"></i></div>
+                                <input type="text" class="form-control" ng-model="Cliente.MovilPpal" id="txtTelefonoPpal" placeholder="Teléfono Principal">
+                     
+                             </div>
+                        </div>
+                    </div>
+                    
+
+                    <div class="col-xs-5">
+                        <div class="form-group">
+                            <label for="txtDireccion">Dirección *</label>
+                            <div class="input-group">    
+                                <div class="input-group-addon"><i class="fa fa-globe"></i></div>
+                                <input type="text" class="form-control" ng-model="Cliente.Direccion" id="txtDireccion" placeholder="Dirección">
+                        
+                            </div>
+                        </div>
+                    </div> 
+                    
+                    
+                    <div class="col-xs-3">
+                        <div class="form-group">
+                            <label for="txtTelefono2">Móvil</label>
+                             <div class="input-group">    
+                                <div class="input-group-addon"><i class="fa fa-mobile"></i></div>
+                                <input type="text" class="form-control" ng-model="Cliente.MovilDos" id="txtTelefonoDos" placeholder="Móvil">
+                             </div>
+                        </div>
+                    </div> 
+                    
+                    
+                    <div class="col-xs-3">
+                        <div class="form-group">
+                            <label for="txtTelefono3">Teléfono</label>
+                            <div class="input-group">    
+                               <div class="input-group-addon"><i class="fa fa-phone"></i></div>
+                               <input type="text" class="form-control" ng-model="Cliente.MovilTres" id="txtTelefonoTres" placeholder="Teléfono">
+                            </div>
+                             <div class="error" ng-show="frmCliente.txtMovil.$dirty && frmCliente.txtMovil.$invalid">
+                                            <small ng-show="frmCliente.txtMovil.$error.required">Movil es Requerido</small>
+                                            <small  ng-show="frmCliente.txtMovil.$error.pattern">Solo Numeros</small>
+                             </div>
+                        </div>
+                    </div> 
+                    
+                    
+                      <div class="col-xs-5">
+                        <div class="form-group">
+                            <label for="txtEmail">E-mail *</label>
+                             <div class="input-group">    
+                                <div class="input-group-addon"><i class="fa fa-envelope"></i></div>
+                                <input type="email" class="form-control" ng-model="Cliente.Correo" id="txtEmail" placeholder="E-mail">
+                        
+                             </div>
+                        </div>
+                    </div> 
+                    
+
+                      <div class="col-xs-3">
+                        <div class="form-group">
+                            <label for="txtDigitoVerificacion">Digito Verificación  *</label>
+                             <div class="input-group">    
+                                <div class="input-group-addon"><i class="fa fa-hashtag"></i></div>
+                                <input type="text" class="form-control" ng-model="Cliente.DigitoVerificacion" id="txtEmail" placeholder="Digito Verificación">
+                        
+                             </div>
+                        </div>
+                    </div> 
+                
+                    
+                    <div class="col-xs-3">
+                        <div class="form-group">
+                            <label for="txtEstado">Estado *</label>
+                             <div class="input-group">    
+                             <div class="input-group-addon"><i class="fa fa-list-ul"></i></div>
+                            <select type="text" class="form-control" ng-model="Cliente.Estado" id="txtEstado" placeholder="Estado">
+                                <option value="ACTIVO">ACTIVO</option>
+                                <option value="INACTIVO">INACTIVO</option>
+                            </select>
+                       
+                             </div>
+                        </div>
+                    </div>
+                   
+               
+                    <div class="col-xs-6">
+                        <button type="button" class="btn btn-info" ng-click="Guardar()" style="margin-top:5%" >Guardar</button>
+                    </div>
+                    
+                </div>                                
+            </form>    
+         </div>
+                  
+                 
+                 <div class="tab-pane" id="tabRol">
+                      <form name="frmRol" id="frmRol" novalidate>
+                <div class="row">
+                   
+                    <div class="col-xs-4">
+                        <div class="form-group">
+                            <label for="txtRol">Descripción *</label>
+                           <div class="input-group">
+                             <div class="input-group-addon"><i class="fa fa-user"></i></div>
+                            <input type="text" class="form-control"  ng-model="Rol.Descripcion" id="txtRol" placeholder="Descripción">
+                           </div>
+                        </div>
+                    </div>
+                    
+                     <div class="col-xs-3">
+                        <div class="form-group">
+                            <label for="txtEstado">Estado *</label>
+                             <div class="input-group">    
+                                 <div class="input-group-addon"><i class="fa fa-list-ul"></i></div>
+                            <select type="text" class="form-control" ng-model="Rol.Estado" id="txtEstado" placeholder="Estado">
+                                <option value="ACTIVO">ACTIVO</option>
+                                <option value="INACTIVO">INACTIVO</option>
+                            </select>
+                       
+                             </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xs-2">
+                         <div class="form-group">
+                        <button type="button" class="btn btn-info" ng-click="AgregarRol()" style="margin-top:20%" >Agregar</button>
+                         </div>
+                    </div>
+                    
+                </div>                                
+            </form>
+                     
+                       <div class="col-xs-12">
+            <div class="row">
+                <div class="col-xs-12">
+                    <table border="0" cellspacing="0" class="table table-striped" >
+                        <thead>
+                            <tr>
+                                <th class="center">DESCRIPCIÓN</th>                                
+                                <th>ESTADO </th>  
+                                <th width="12%">ACCIÓN</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <tr data-ng-repeat="items in Roles">
+                                <td class="center">{{ items.nvTipo}}</td>
+                                <td>{{ items.nvDescripcion }}</td>
+                                <td>
+                                    <center>
+                                        <a data-ng-click="get(items)" style="float: left; margin-left: 3px;" href="javascript:;"  title="Editar"><i class="small small mdi-image-edit teal-text  darken-1"></i></a>
+                                        <a ng-click="Desactivar(items.idCategoria, 'Borrado')"  style="float: left; margin-left: 3px;" href="javascript:;"  title="Eliminar"><i class="small mdi-action-delete red-text text-deep-orange darken-1"></i></a>
+                                    </center>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>                            
+            </div>
+    </div>
+                     
+                 </div>
+                 
+                 
+                 
+                  <div class="tab-pane" id="tabPermiso">
+                      <form name="frmPermiso" id="frmPermiso" novalidate>
+                <div class="row">
+                   
+                </div>
+                      </form>
+                 
+            </div>
+         </div>
+    
+     </div>
+</div>
+ </div>
+
+     
+<script>
+    $('#tabPanels a').click(function (e) {
+        e.preventDefault();
+        $(this).tab('show');
+        
+    });
+    
+    $('#tabPanels a[href="#tabRegistro"]').tab('show');
+    
+</script>

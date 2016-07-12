@@ -44,6 +44,11 @@ var app;
                 templateUrl: 'views/configuracion/tipoDocumento.html'
             })
 
+
+            .when("/0/cliente",{
+                templateUrl: 'views/configuracion/cliente.html'
+            })
+            
             .otherwise({
                 redirectTo:"/"               
             });

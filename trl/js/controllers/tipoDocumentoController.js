@@ -15,7 +15,7 @@ app.controller("tipoDocumentoController", ["$scope", "tipoDocumentoService", fun
    
    
    $scope.Guardar = function (){
-       
+       $scope.TipoDocumento.tdCodigo = $scope.TipoDocumento.tdCodigo.toUpperCase();
        $scope.TipoDocumento.tdDescripcion = $scope.TipoDocumento.tdDescripcion.toUpperCase();
        $scope.TipoDocumento.tdEstado=$scope.TipoDocumento.tdEstado.toUpperCase();
        
