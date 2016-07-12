@@ -8,6 +8,7 @@ app.controller("conductorController", ["$scope", "conductorService", "tipoDocume
    $scope.valCedula = false;
    $scope.editMode = false;
   
+  initialize();
    function initialize() {
         $scope.Conductor = {
             IdConductor :"",
@@ -162,11 +163,7 @@ app.controller("conductorController", ["$scope", "conductorService", "tipoDocume
             console.log("Some Error Occured " + JSON.stringify(err));
         });
     };
-      
-      
-      
-      
-    initialize(); 
+ 
     loadConductor();
     
 }]);

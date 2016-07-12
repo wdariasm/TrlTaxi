@@ -1,4 +1,5 @@
- <div class="row">
+ <div ng-controller="clienteController"  class="container-fluid">
+<div class="row">
         <div class="col-xs-12">  
              <div class="tabbable-line">
                     <ul class="nav nav-tabs nav-justified" id="tabPanels">
@@ -20,16 +21,19 @@
                                         <th>DIRECCION</th>
                                         <th>TELEFONO</th>
                                         <th>E-MAIL</th>
-                                        <th>ESTADO</th>  
+                                        <th>ESTADO</th> 
+                                        <th>DIGITO VERIFICACIÓN</th>
+                                        <th>ACCÍON</th>
                                     </tr>
                                 </thead>
-                                <!--
+                                
                                  <tbody>
-                                 <tr data-ng-repeat="items in Clientees">
-                                <td class="center">{{ items.Cedula}}</td>
-                                <td>{{ items.Nombre }}</td>
-                                <td>{{ items.TelefonoPpal}}</td> 
+                                 <tr data-ng-repeat="items in Clientes">
+                                <td class="center">{{ items.Identificacion}}</td>
+                                <td>{{ items.Nombres }}</td>
                                 <td>{{ items.Direccion}}</td> 
+                                <td>{{ items.MovilPpal}}</td> 
+                                <td>{{ items.Correo}}</td> 
                                 <td>{{ items.DigitoVerificacion}}</td> 
                                 <td>{{ items.Estado}}</td> 
                                 <td>
@@ -41,7 +45,7 @@
                                   </tr>
 
                                 </tbody>
-                                -->
+                              
                             </table>
                      </div>
             
@@ -269,7 +273,10 @@
          </div>
     
      </div>
+</div>
+ </div>
 
+     
 <script>
     $('#tabPanels a').click(function (e) {
         e.preventDefault();
@@ -278,5 +285,5 @@
     });
     
     $('#tabPanels a[href="#tabRegistro"]').tab('show');
-
+    
 </script>
