@@ -11,18 +11,10 @@ class NovedadController extends Controller
     
     public function index()
     {
-        Novedad::all();
+        
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
+   
 
     /**
      * Store a newly created resource in storage.
@@ -32,7 +24,30 @@ class NovedadController extends Controller
      */
     public function store(Request $request)
     {
-        //
+         try{  
+            $data = $request->all(); 
+            $novedad= new Novedad();                        
+            $novedad->Vehiculo = $data["Vehiculo"];
+            $novedad->Codigo = $data["Codigo"]; 
+            $date1 = new \DateTime($data["FechaExpedicion"]);
+            $novedad->FechaExpedicion =  $date1->format('Y-m-d H:i:s');        
+            $novedad->Entidad = $data["Entidad"]; 
+            $novedad->Entidad = $data["Entidad"]; 
+            $novedad->ModServicio = $data["ModServicio"]; 
+            $novedad->RadioAccion = $data["RadioAccion"]; 
+            $novedad->Estado = $data["Estado"]; 
+            $novedad->Tipo = $data["Tipo"]; 
+            $date = new \DateTime($data["FechaInicioVigencia"]);
+            $novedad->FechaInicioVigencia = $date->format('Y-m-d H:i:s');            
+            $date2 = new \DateTime($data["FechaVencimiento"]);            
+            $novedad->FechaVencimiento = $date2->format('Y-m-d H:i:s');
+
+            $novedad->save();
+            
+            return JsonResponse::create(array('message' => "Novedad guardada correctamente", "request" =>json_encode($novedad->IdNovedad)), 200);
+        } catch (Exception $exc) {    
+            return JsonResponse::create(array('message' => "No se pudo guardar", "request" =>json_encode($exc->getMessage())), 401);
+        }
     }
 
     /**
@@ -43,18 +58,11 @@ class NovedadController extends Controller
      */
     public function show($id)
     {
-        //
+        return Novedad::find($id);
     }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
+    
+    public function GetNovedadByVehiculo($id){
+        return Novedad::where("Vehiculo",$id)->get();
     }
 
     /**
@@ -66,7 +74,27 @@ class NovedadController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        try{
+            $data = $request->all();
+            $novedad = Novedad::find($id);            
+            $novedad->Codigo = $data["Codigo"]; 
+            $date1 = new \DateTime($data["FechaExpedicion"]);
+            $novedad->FechaExpedicion =  $date1->format('Y-m-d H:i:s');                    
+            $novedad->Entidad = $data["Entidad"]; 
+            $novedad->ModServicio = $data["ModServicio"]; 
+            $novedad->RadioAccion = $data["RadioAccion"]; 
+            $novedad->Estado = $data["Estado"]; 
+            $novedad->Tipo = $data["Tipo"]; 
+            $date = new \DateTime($data["FechaInicioVigencia"]);
+            $novedad->FechaInicioVigencia = $date->format('Y-m-d H:i:s');            
+            $date2 = new \DateTime($data["FechaVencimiento"]);            
+            $novedad->FechaVencimiento = $date2->format('Y-m-d H:i:s');
+            $novedad->save();
+
+            return JsonResponse::create(array('message' => "Datos actualizados correctamente", "request" =>json_encode($novedad->IdNovedad)), 200);
+        } catch (Exception $exc) {
+            return JsonResponse::create(array('message' => "No se pudo guardar", "request" =>json_encode($exc->getMessage())), 401);
+        }
     }
 
     /**
@@ -77,6 +105,6 @@ class NovedadController extends Controller
      */
     public function destroy($id)
     {
-        //
+        
     }
 }

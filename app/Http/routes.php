@@ -24,6 +24,7 @@ include 'Routes/routesEscolaridad.php';
 include 'Routes/routesTipoDocumento.php';
 include 'Routes/routesCliente.php';
 include 'Routes/routesUsuario.php';
+include 'Routes/routesNovedad.php';
 
 
 

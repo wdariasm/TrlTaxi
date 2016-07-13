@@ -365,8 +365,8 @@
                                         <td>{{ item.Codigo}}</td>
                                         <td>{{ item.Tipo }}</td>
                                         <td>{{ item.Entidad}}</td>
-                                        <td>{{ item.FechaInicioVigencia}}</td>
-                                        <td>{{ item.FechaVencimiento}}</td>
+                                        <td>{{ item.FechaInicioVigencia | date: "dd/MM/yyyy" }}</td>
+                                        <td>{{ item.FechaVencimiento | date: 'dd/MM/yyyy' }}</td>
                                          <td>{{ item.Estado}}</td>
                                         <td>
                                             <center>

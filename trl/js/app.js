@@ -98,7 +98,7 @@ var app;
             link: function (scope, element, attr, ngModelCtrl) {
                 function fromUser(text) {
                     if (text) {
-                        var transformedInput = text.replace(/[^0-9a-zA-Z]/g, '');
+                        var transformedInput = text.replace(/[^0-9a-zA-Z\s]/g, '');
                         //var transformedInput = text.replace(/^([A-Za-z0-9 _])*$/g, '');
                         if (transformedInput !== text) {
                             ngModelCtrl.$setViewValue(transformedInput);
