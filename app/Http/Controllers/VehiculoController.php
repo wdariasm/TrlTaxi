@@ -14,8 +14,12 @@ class VehiculoController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {
-        return Vehiculo::all();
+    {        
+        
+        return Vehiculo::join('clasevehiculo', 'vehiculo.ClaseVehiculo', '=', 'clasevehiculo.tvCodigo')
+                ->select('vehiculo.*','clasevehiculo.tvDescripcion')
+                ->orderBy('vehiculo.IdVehiculo', 'desc')
+                ->get();
     }
 
     /**
@@ -48,12 +52,12 @@ class VehiculoController extends Controller
             $vehiculo->Movil = $data["Movil"]; 
             $vehiculo->Estado = $data["Estado"]; 
             $vehiculo->Tipo = $data["Tipo"]; 
-            $date = new \DateTime($data["FechaArriendo"]);
+            $date = new \DateTime(str_replace("/", "-", $data["FechaArriendo"]));
             $vehiculo->FechaArriendo = $date->format('Y-m-d H:i:s');
             $vehiculo->NumPasajeros = $data["NumPasajeros"]; 
             $vehiculo->ClaseVehiculo = $data["ClaseVehiculo"]; 
             $vehiculo->Runt = $data["Runt"]; 
-            $date2 = new \DateTime($data["FProxMantenimiento"]);            
+            $date2 = new \DateTime(str_replace("/", "-",$data["FProxMantenimiento"]));            
             $vehiculo->FProxMantenimiento = $date2->format('Y-m-d H:i:s');
 
             $vehiculo->save();

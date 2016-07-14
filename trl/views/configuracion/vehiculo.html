@@ -18,9 +18,11 @@
                                         <th>PLACA</th>
                                         <th>MOVIL</th>
                                         <th>TIPO</th>
-                                        <th>CAPACIDAD</th>
+                                        <th>CLASE</th>                                         
+                                        <th title="Número de Pasajeros">N° PASJ.</th>
+                                        <th>RUNT</th>
                                         <th>ESTADO</th>
-                                        <th width="7%">ACCION</th>
+                                        <th width="8%">ACCION</th>
                                     </tr>
                                 </thead>
 
@@ -28,8 +30,10 @@
                                     <tr ng-repeat="item in $data">
                                         <td>{{ item.Placa}}</td>
                                         <td>{{ item.Movil }}</td>
-                                        <td>{{ item.Marca}}</td>
-                                        <td>{{ item.NumPasajeros}}</td>
+                                        <td >{{ item.Tipo }}</td>
+                                        <td>{{ item.tvDescripcion}}</td>
+                                        <td title="Número de Pasajeros">{{ item.NumPasajeros}}</td>
+                                        <td>{{ item.Runt}}</td>
                                         <td>{{ item.Estado}}</td>
                                         <td>
                                             <center>

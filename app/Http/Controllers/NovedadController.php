@@ -29,7 +29,7 @@ class NovedadController extends Controller
             $novedad= new Novedad();                        
             $novedad->Vehiculo = $data["Vehiculo"];
             $novedad->Codigo = $data["Codigo"]; 
-            $date1 = new \DateTime($data["FechaExpedicion"]);
+            $date1 = new \DateTime( str_replace("/", "-",  $data["FechaExpedicion"]));
             $novedad->FechaExpedicion =  $date1->format('Y-m-d H:i:s');        
             $novedad->Entidad = $data["Entidad"]; 
             $novedad->Entidad = $data["Entidad"]; 
@@ -37,9 +37,9 @@ class NovedadController extends Controller
             $novedad->RadioAccion = $data["RadioAccion"]; 
             $novedad->Estado = $data["Estado"]; 
             $novedad->Tipo = $data["Tipo"]; 
-            $date = new \DateTime($data["FechaInicioVigencia"]);
+            $date = new \DateTime(str_replace("/", "-",  $data["FechaInicioVigencia"]));
             $novedad->FechaInicioVigencia = $date->format('Y-m-d H:i:s');            
-            $date2 = new \DateTime($data["FechaVencimiento"]);            
+            $date2 = new \DateTime(str_replace("/", "-",$data["FechaVencimiento"]));            
             $novedad->FechaVencimiento = $date2->format('Y-m-d H:i:s');
 
             $novedad->save();
