@@ -106,10 +106,10 @@ app.controller("vehiculoController", ["$scope", "vehiculoService", "marcaService
             getData: function (a, b) {
                 var c = b.filter().busqueda;
                 f = [];
-                c ? (c = c.toLowerCase(), f = $scope.Taxis.filter(function (a) {
+                c ? (c = c.toLowerCase(), f = $scope.Vehiculos.filter(function (a) {
                     return a.Placa.toLowerCase().indexOf(c) > -1 ||
                            a.Movil.toLowerCase().indexOf(c) > -1 ||
-                           a.Marca.toLowerCase().indexOf(c) > -1 ||
+                           a.Tipo.toLowerCase().indexOf(c) > -1 ||
                            a.Estado.toLowerCase().indexOf(c) > -1                                                       
                 })) : f = $scope.Vehiculos, f = b.sorting() ? f : f, b.total(f.length), a.resolve(f.slice((b.page() - 1) * b.count(), b.page() * b.count()))
             }
