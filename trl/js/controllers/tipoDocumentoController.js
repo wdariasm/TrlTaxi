@@ -1,7 +1,18 @@
-app.controller("tipoDocumentoController", ["$scope", "tipoDocumentoService", function ($scope, tipoDocumentoService) {
+app.controller("tipoDocumentoController", ["$scope", "tipoDocumentoService","toaster", 
+function ($scope, tipoDocumentoService,toaster) {
    $scope.TipoDocumento = {};
    $scope.TipoDocumentos = [];
    $scope.editMode = false;
+   
+   
+     initTipoDocumento();
+    function initTipoDocumento() {
+        $scope.TipoDocumento = {
+            tdCodigo:"",
+            tdDescripcion:"",
+            tdEstado:"ACTIVO"
+        };          
+    }
    
     function loadTipoDocumento (){
         var promise = tipoDocumentoService.getAll();
@@ -31,10 +42,10 @@ app.controller("tipoDocumentoController", ["$scope", "tipoDocumentoService", fun
         
         promise.then(function(d) {                        
             loadTipoDocumento();
-            alert(d.data.message);
+           toaster.pop('success', "Control de Información", d.data.message); 
              
         }, function(err) {           
-                alert("ERROR AL PROCESAR SOLICITUD");           
+                toaster.pop('error', "Error", "ERROR AL PROCESAR SOLICITUD");       
                 console.log("Some Error Occured " + JSON.stringify(err));
         });       
    };

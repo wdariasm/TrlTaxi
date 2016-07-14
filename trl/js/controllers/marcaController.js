@@ -1,7 +1,17 @@
-app.controller("marcaController", ["$scope", "marcaService", function ($scope, marcaService) {
+app.controller("marcaController", ["$scope", "marcaService","toaster",
+ function ($scope, marcaService,toaster) {
    $scope.Marca = {};
    $scope.Marcas = [];
    $scope.editMode = false;
+   
+    initMarca();
+    function initMarca() {
+        $scope.Marca = {
+            maDescripcion:"",
+            maEstado:"ACTIVO"
+        };          
+    }
+   
    
     function loadMarca (){
         var promise = marcaService.getAll();
@@ -26,10 +36,10 @@ app.controller("marcaController", ["$scope", "marcaService", function ($scope, m
         
         promise.then(function(d) {                        
             loadMarca();
-            alert(d.data.message);
+             toaster.pop('success', "Control de Información", d.data.message);
              
         }, function(err) {           
-                alert("ERROR AL PROCESAR SOLICITUD");           
+                 toaster.pop('error', "Error", "ERROR AL PROCESAR SOLICITUD");           
                 console.log("Some Error Occured " + JSON.stringify(err));
         });       
    };
@@ -56,14 +66,11 @@ app.controller("marcaController", ["$scope", "marcaService", function ($scope, m
                // Materialize.toast(d.data.message, 4000, 'rounded');                
                 loadMarca();
             }, function (err) {                              
-                    alert("ERROR AL PROCESAR DESACTIVAR / ACTIVAR");
+                     toaster.pop('error', "Error", "ERROR AL PROCESAR SOLICITUD"); ;
                     console.log("Some Error Occured "+ JSON.stringify(err));
             }); 
         }        
     };
-   
-   
-   
    
     loadMarca();
 }]);

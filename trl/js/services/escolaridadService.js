@@ -19,8 +19,8 @@ app.service("escolaridadService",[ '$http', function ($http) {
         return req;        
     };
         
-    this.updateEstado=function(id, escolaridad){
-        var req = $http.put(uri+'/api/escolaridad/updateEstado/' + id, escolaridad);
+    this.updateEstado=function(id, object){
+        var req = $http.put(uri+'/api/escolaridad/updateEstado/' + id, object);
         return req;
     };      
     

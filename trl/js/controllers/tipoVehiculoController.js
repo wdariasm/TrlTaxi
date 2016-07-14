@@ -1,8 +1,17 @@
-app.controller("tipoVehiculoController", ["$scope", "tipoVehiculoService", function ($scope, tipoVehiculoService) {
+app.controller("tipoVehiculoController", ["$scope", "tipoVehiculoService", "toaster",
+function ($scope, tipoVehiculoService,toaster) {
    $scope.TipoVehiculo= {};
    $scope.TipoVehiculos = [];
    $scope.editMode = false;
    
+     initTipoVehiculo();
+    function initTipoVehiculo() {
+        $scope.TipoVehiculo = {
+            tvDescripcion:"",
+            tvEstado:"ACTIVO"
+        };          
+    }
+
     function loadTipoVehiculo (){
         var promise = tipoVehiculoService.getAll();
         promise.then(function(d) {                        
@@ -31,10 +40,10 @@ app.controller("tipoVehiculoController", ["$scope", "tipoVehiculoService", funct
         
         promise.then(function(d) {                        
             loadTipoVehiculo();
-            alert(d.data.message);
+            toaster.pop('success', "Control de Información", d.data.message); 
              
         }, function(err) {           
-                alert("ERROR AL PROCESAR SOLICITUD");           
+                toaster.pop('error', "Error", "ERROR AL PROCESAR SOLICITUD");         
                 console.log("Some Error Occured " + JSON.stringify(err));
         });       
    };
@@ -66,12 +75,7 @@ app.controller("tipoVehiculoController", ["$scope", "tipoVehiculoService", funct
             }); 
         }        
     };
-   
-   
-   
-   
-   
-   
+
     loadTipoVehiculo();
 }]);
 

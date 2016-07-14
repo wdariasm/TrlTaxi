@@ -1,7 +1,16 @@
-app.controller("servicioController", ["$scope", "servicioService", function ($scope, servicioService) {
+app.controller("servicioController", ["$scope", "servicioService", "toaster",function ($scope, servicioService,toaster) {
    $scope.Servicio = {};
    $scope.Servicios = [];
    $scope.editMode = false;
+   
+   
+      initServicio();
+    function initServicio() {
+        $scope.Servicio = {
+	    svDescripcion:"",
+            svEstado:"ACTIVO"
+        };          
+    }
    
     function loadServicio (){
         var promise = servicioService.getAll();
@@ -29,10 +38,10 @@ app.controller("servicioController", ["$scope", "servicioService", function ($sc
         
         promise.then(function(d) {                        
             loadServicio();
-            alert(d.data.message);
+             toaster.pop('success', "Control de Información", d.data.message);
              
         }, function(err) {           
-                alert("ERROR AL PROCESAR SOLICITUD");           
+                toaster.pop('error', "Error", "ERROR AL PROCESAR SOLICITUD");         
                 console.log("Some Error Occured " + JSON.stringify(err));
         });       
    };
@@ -64,8 +73,6 @@ app.controller("servicioController", ["$scope", "servicioService", function ($sc
         }        
     };
   
-
-   
     loadServicio();
 }]);
 

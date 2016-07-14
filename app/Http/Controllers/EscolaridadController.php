@@ -108,4 +108,16 @@ class EscolaridadController extends Controller
     {
         //
     }
+	
+	  public function updateEstado(Request $request, $esCodigo){
+        try {
+            $data = $request->all();
+            $escolaridad = Escolaridad::find($esCodigo);
+            $escolaridad->esEstado = $data['esEstado'];
+            $escolaridad->save();
+            return JsonResponse::create(array('message' => "Datos Actualizados Correctamente", "request" =>json_encode($esCodigo)), 200);
+        } catch (Exception $ex) {
+            return JsonResponse::create(array('message' => "No se pudo modificar el Taxista", "exception"=>$ex->getMessage(), "request" =>json_encode($esCodigo)), 401);
+        }
+    }
 }

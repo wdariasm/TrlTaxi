@@ -1,4 +1,5 @@
-app.controller('usuarioController', ['$scope', 'usuarioService', function($scope, usuarioService) {
+app.controller('usuarioController', ['$scope', 'usuarioService', 'toaster',
+function($scope, usuarioService,toaster) {
     $scope.Usuario = {};  
     $scope.Usuarios = [];
     
@@ -86,8 +87,9 @@ app.controller('usuarioController', ['$scope', 'usuarioService', function($scope
             $scope.nuevo();
             loadUsuarios();
             //$('ul.tabs').tabs('select_tab', 'tabUsuario1');
+	       toaster.pop('success', "Control de Información", d.data.message);
         }, function(err) {           
-                alert("ERROR AL PROCESAR SOLICITUD");           
+               toaster.pop('error', "Error", "ERROR AL PROCESAR SOLICITUD");          
                 console.log("Some Error Occured " + JSON.stringify(err));
         });        
     };      
