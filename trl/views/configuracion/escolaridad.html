@@ -40,9 +40,10 @@
                         </div>
                     </div>
                     
-                    <div class="col-xs-6">
-                        <button type="button" class="btn btn-info" ng-click="Guardar()" style="margin-top:15%" >Guardar</button>
-                    </div>
+                   <div class="col-xs-5">
+                            <br/>
+                            <button   class="btn btn-primary btn-block"   type="button"  title="Registrar Escolaridad" ng-click="Guardar()">Guardar</button>
+                   </div>
                     
                 </div>                                
             </form>
@@ -69,7 +70,7 @@
                                 <td>
                                     <center>
                                             <a data-ng-click="get(items)" style="float: left; margin-left: 15px;" href="javascript:;"  title="Editar"><i class="fa fa-lg fa-pencil"></i></a>
-                                            <a ng-click="Desactivar(items.esCodigo, 'BORRADO')"  style="float: left; margin-left: 15px;" href="javascript:;"  title="Eliminar"><i class="fa fa-lg fa-trash"></i></a>
+                                            <a ng-click="Desactivar(items.esCodigo, 'BORRADO')"  style="float: left; margin-left: 15px;" href="javascript:;"  title="Eliminar"><i class="fa fa-lg fa-trash text-danger"></i></a>
                                     </center>
                                 </td>
                             </tr>

@@ -1,7 +1,18 @@
-app.controller("escolaridadController", ["$scope", "escolaridadService", function ($scope, escolaridadService) {
+app.controller("escolaridadController", ["$scope", "escolaridadService","toaster", function ($scope, escolaridadService, toaster) {
    $scope.Escolaridad = {};
    $scope.Escolaridades = [];
    $scope.editMode = false;
+   
+   initEscolaridad();
+    function initEscolaridad() {
+        $scope.Escolaridad = {
+            esCodigo:"",
+            esDescripcion:"",
+            esEstado:"ACTIVO"
+        };          
+    }
+  
+   
    
     function loadEscolaridad (){
         var promise = escolaridadService.getAll();
@@ -15,6 +26,7 @@ app.controller("escolaridadController", ["$scope", "escolaridadService", functio
    
    
    $scope.Guardar = function (){
+       
         $scope.Escolaridad.esDescripcion = $scope.Escolaridad.esDescripcion.toUpperCase();
         $scope.Escolaridad.esEstado=$scope.Escolaridad.esEstado.toUpperCase();
 
@@ -27,15 +39,16 @@ app.controller("escolaridadController", ["$scope", "escolaridadService", functio
         
         promise.then(function(d) {                        
             loadEscolaridad();
-            alert(d.data.message);
+            toaster.pop('success', "Control de Información", d.data.message); 
              
         }, function(err) {           
-                alert("ERROR AL PROCESAR SOLICITUD");           
+                toaster.pop('error', "Error", "ERROR AL PROCESAR SOLICITUD");         
                 console.log("Some Error Occured " + JSON.stringify(err));
-        });       
-   };
+        });    
+        initEscolaridad();
+   }; 
    
-   //edita la marca
+   //edita la escolaridad
     $scope.get = function(item) {
         $scope.Escolaridad=item;
         $scope.editMode = true;

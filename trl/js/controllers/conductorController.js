@@ -1,4 +1,4 @@
-app.controller("conductorController", ["$scope", "conductorService", "tipoDocumentoService", "escolaridadService", function ($scope, conductorService,tipoDocumentoService,escolaridadService) {
+app.controller("conductorController", ["$scope", "conductorService", "tipoDocumentoService", "escolaridadService","toaster", function ($scope, conductorService,tipoDocumentoService,escolaridadService,toaster) {
    $scope.Conductor = {};
    $scope.Conductores = [];
    $scope.Novedad={};
@@ -6,9 +6,13 @@ app.controller("conductorController", ["$scope", "conductorService", "tipoDocume
    $scope.TipoDocumentos=[];
    $scope.Escolaridades=[];
    $scope.valCedula = false;
+   
+   $scope.title="Registro Conductor";
+   $scope.TablaConductor = {};
    $scope.editMode = false;
-  
+   
   initialize();
+  initNovedad();
    function initialize() {
         $scope.Conductor = {
             IdConductor :"",
@@ -21,7 +25,7 @@ app.controller("conductorController", ["$scope", "conductorService", "tipoDocume
             Email: "",            
             FechaNacimiento:"",
             FechaIngreso:"",
-            Estado: "",
+            Estado: "ACTIVO",
             FechaReg:"",
             NumeroCuenta:"",
             CdPlaca:"",
@@ -31,12 +35,23 @@ app.controller("conductorController", ["$scope", "conductorService", "tipoDocume
         };        
         
     }
-  
-   
+    
+    
+    
+      function initNovedad() {
+        $scope.Novedad = {
+            nvDescripcion:"",
+            nvTipo:"CONTRALORIA"
+            
+        };        
+        
+    }
+
     function loadConductor (){
         var promise = conductorService.getAll();
         promise.then(function(d) {                        
             $scope.Conductores = d.data;
+			$scope.TablaConductor.reload();
         }, function(err) {           
                 alert("ERROR AL PROCESAR SOLICITUD");           
                 console.log("Some Error Occured " + JSON.stringify(err));
@@ -69,7 +84,29 @@ app.controller("conductorController", ["$scope", "conductorService", "tipoDocume
    loadTipoDocumentos ();
    
    
-   
+    function initTabla() {
+        $scope.TablaConductor = new ngTableParams({
+            page: 1,
+            count: 20,
+            sorting: undefined
+        }, {
+            filterDelay: 50,
+            total: 1000,
+            counts : [],
+            getData: function (a, b) {
+                var c = b.filter().busqueda;
+                f = [];
+                c ? (c = c.toLowerCase(), f = $scope.Conductores.filter(function (a) {
+                    return a.Cedula.toLowerCase().indexOf(c) > -1 ||
+                           a.Nombre.toLowerCase().indexOf(c) > -1 ||
+                           a.TelefonoPpal.toLowerCase().indexOf(c) > -1 ||
+                           a.Estado.toLowerCase().indexOf(c) > -1                                                       
+                })) : f = $scope.Conductores, f = b.sorting() ? f : f, b.total(f.length), a.resolve(f.slice((b.page() - 1) * b.count(), b.page() * b.count()))
+            }
+        });
+    };
+    
+    initTabla();
    
    
    
@@ -80,6 +117,11 @@ app.controller("conductorController", ["$scope", "conductorService", "tipoDocume
            $scope.Conductor.Observacion = $scope.Conductor.Observacion.toUpperCase();
            $scope.Conductor. Escolaridad = $scope.Conductor.Escolaridad.toUpperCase();
            $scope.Conductor. CdPlaca = $scope.Conductor.CdPlaca.toUpperCase();
+		   
+		    if ($scope.valIdentifiacion){
+            toaster.pop('info', "Info", "N° de Cédula ya existe "); 
+            return;
+        }
 
         var promise;
         if($scope.editMode){            
@@ -91,10 +133,10 @@ app.controller("conductorController", ["$scope", "conductorService", "tipoDocume
         
         promise.then(function(d) {                        
             loadConductor();
-            alert(d.data.message);
+           toaster.pop('success', "Control de Información", d.data.message); 
              
         }, function(err) {           
-                alert("ERROR AL PROCESAR SOLICITUD");           
+                toaster.pop('error', "Error", "ERROR AL PROCESAR SOLICITUD");         
                 console.log("Some Error Occured " + JSON.stringify(err));
         });       
    };
@@ -103,18 +145,25 @@ app.controller("conductorController", ["$scope", "conductorService", "tipoDocume
    
    $scope.AgregarNovedad = function (){
        if (!$scope.Novedad.nvTipo){
-            alert("ERROR AL PROCESAR SOLICITUD");  
+           toaster.pop('error', "Error", "ERROR AL PROCESAR SOLICITUD"); 
            return;
        } 
        
        if (!$scope.Novedad.nvDescripcion){
-            alert("ERROR AL PROCESAR SOLICITUD");  
+           toaster.pop('error', "Error", "ERROR AL PROCESAR SOLICITUD");
            return;
        }  
        
        $scope.Novedades.push($scope.Novedad);
        $scope.Novedad={};
    };
+   
+    $scope.Nuevo = function (){
+        initialize();
+        $scope.editMode = false;
+        $scope.title = "Nuevo Conductor";
+    };
+	
     //edita la Conductor
     $scope.get = function(item) {
         $scope.Conductor=item;
@@ -124,6 +173,14 @@ app.controller("conductorController", ["$scope", "conductorService", "tipoDocume
         $('#tabPanels a[href="#tabRegistro"]').tab('show');
 
     };
+	
+	 $scope.getNovedad = function(item) {
+        $scope.Novedad=item;
+        $scope.editMode = true;
+        $scope.title = "Editar Novedad"; 
+        $scope.active = "active";
+    };
+	
     
     //Funcion que elimina
      $scope.Desactivar = function(IdConductor,  Estado) {
@@ -138,7 +195,7 @@ app.controller("conductorController", ["$scope", "conductorService", "tipoDocume
                // Materialize.toast(d.data.message, 4000, 'rounded');                
                 loadConductor();
             }, function (err) {                              
-                    alert("ERROR AL PROCESAR DESACTIVAR / ACTIVAR");
+                    toaster.pop('error', "Error", "ERROR AL PROCESAR SOLICITUD");
                     console.log("Some Error Occured "+ JSON.stringify(err));
             }); 
         }        
@@ -155,11 +212,11 @@ app.controller("conductorController", ["$scope", "conductorService", "tipoDocume
         promisePost.then(function (d) {
             if (d.data.Cedula) {
                 $scope.valCedula = true;
-                alert("N° de Cedula, ya existe");
+                toaster.pop('Warning', "N° de Identificacion ya existe"); 
              //   Materialize.toast('N° de Identificacion, Ya Existe.. !!', 4000, 'rounded');
             }
         }, function (err) {
-            alert("ERROR AL VALIDAR IDENTIFICACION");
+           toaster.pop('error', "Error", "ERROR AL VALIDAR IDENTIFICACIÓN"); 
             console.log("Some Error Occured " + JSON.stringify(err));
         });
     };

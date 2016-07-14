@@ -1,4 +1,5 @@
-app.controller("clienteController", ["$scope", "clienteService", "tipoDocumentoService", function ($scope, clienteService, tipoDocumentoService) {
+app.controller("clienteController", ["$scope", "clienteService", "tipoDocumentoService","toaster", 
+function ($scope, clienteService, tipoDocumentoService,toaster) {
    $scope.Cliente = {};
    $scope.Clientes = [];
    
@@ -45,10 +46,10 @@ app.controller("clienteController", ["$scope", "clienteService", "tipoDocumentoS
         
         promise.then(function(d) {                        
             loadCliente();
-            alert(d.data.message);
+           toaster.pop('success', "Control de Información", d.data.message); 
              
         }, function(err) {           
-                alert("ERROR AL PROCESAR SOLICITUD");           
+                 toaster.pop('error', "Error", "ERROR AL PROCESAR SOLICITUD");            
                 console.log("Some Error Occured " + JSON.stringify(err));
         });       
    };
@@ -83,13 +84,7 @@ app.controller("clienteController", ["$scope", "clienteService", "tipoDocumentoS
             }); 
         }        
     };
-   
-   
-   
-   
-   
-   
-   
+  
    
     loadCliente();
 }]);
