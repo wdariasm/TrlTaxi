@@ -77,12 +77,6 @@ app.controller("escolaridadController", ["$scope", "escolaridadService","toaster
     };
    
    
-   
-   
-   
-   
-   
-   
     loadEscolaridad();
 }]);
 

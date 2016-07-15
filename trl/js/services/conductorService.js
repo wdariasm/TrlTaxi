@@ -22,7 +22,9 @@ app.service("conductorService",[ '$http', function ($http) {
     this.updateEstado=function(id, object){
         var req = $http.put(uri+'/api/conductor/updateEstado/' + id, object);
         return req;
-    };      
+    };  
+    
+   
     
     this.getByNombre = function () {
         var req = $http.get(uri+'/api/conductores');
@@ -32,6 +34,11 @@ app.service("conductorService",[ '$http', function ($http) {
      this.validarIdentificacion = function(Cedula){
         var req = $http.get(uri+'/api/conductor/' + Cedula +'/validar');
         return req;	
+    };
+    
+    this.getNovedad = function (id){
+        var req = $http.get(uri+'/api/conductor/'+ id + '/novedades' );
+        return req;
     };
 }]);
 

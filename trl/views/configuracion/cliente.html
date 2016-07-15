@@ -74,7 +74,7 @@
                            <label  for="txtCedula" >Identificación *</label>
                           <div class="input-group">    
                             <div class="input-group-addon"><i class="fa fa-hashtag"></i></div>
-                            <input type="text" class="form-control" ng-model="Cliente.Identificacion" id="txtCedula" placeholder="Identificación" ng-blur="validarIdentificacion()">
+                            <input type="text" class="form-control" ng-model="Cliente.Identificacion" maxlength="10" solo-numeros id="txtCedula" placeholder="Identificación" ng-blur="validarIdentificacion()">
                           </div> 
                            <!--
                             <div class="error">
@@ -89,7 +89,7 @@
                             <label for="txtNombre">Nombres *</label>
                              <div class="input-group">    
                                 <div class="input-group-addon"><i class="fa fa-user"></i></div>
-                                <input type="text" class="form-control" ng-model="Cliente.Nombres" id="txtNombre" placeholder="Nombre Completo">
+                                <input type="text" class="form-control" ng-model="Cliente.Nombres" maxlength="100" id="txtNombre" placeholder="Nombre Completo">
                             </div>
                         </div>
                     </div>
@@ -99,7 +99,7 @@
                             <label for="txtTelefonoPpal">Teléfono Principal *</label>
                              <div class="input-group">    
                                 <div class="input-group-addon"><i class="fa fa-mobile"></i></div>
-                                <input type="text" class="form-control" ng-model="Cliente.MovilPpal" id="txtTelefonoPpal" placeholder="Teléfono Principal">
+                                <input type="text" class="form-control" ng-model="Cliente.MovilPpal" maxlength="10" solo-numeros id="txtTelefonoPpal" placeholder="Teléfono Principal">
                      
                              </div>
                         </div>
@@ -111,7 +111,7 @@
                             <label for="txtDireccion">Dirección *</label>
                             <div class="input-group">    
                                 <div class="input-group-addon"><i class="fa fa-globe"></i></div>
-                                <input type="text" class="form-control" ng-model="Cliente.Direccion" id="txtDireccion" placeholder="Dirección">
+                                <input type="text" class="form-control" ng-model="Cliente.Direccion" maxlength="45" id="txtDireccion" placeholder="Dirección">
                         
                             </div>
                         </div>
@@ -123,7 +123,7 @@
                             <label for="txtTelefono2">Móvil</label>
                              <div class="input-group">    
                                 <div class="input-group-addon"><i class="fa fa-mobile"></i></div>
-                                <input type="text" class="form-control" ng-model="Cliente.MovilDos" id="txtTelefonoDos" placeholder="Móvil">
+                                <input type="text" class="form-control" ng-model="Cliente.MovilDos" maxlength="10" solo-numeros id="txtTelefonoDos" placeholder="Móvil">
                              </div>
                         </div>
                     </div> 
@@ -134,7 +134,7 @@
                             <label for="txtTelefono3">Teléfono</label>
                             <div class="input-group">    
                                <div class="input-group-addon"><i class="fa fa-phone"></i></div>
-                               <input type="text" class="form-control" ng-model="Cliente.MovilTres" id="txtTelefonoTres" placeholder="Teléfono">
+                               <input type="text" class="form-control" ng-model="Cliente.MovilTres" maxlength="10" solo-numeros id="txtTelefonoTres" placeholder="Teléfono">
                             </div>
                              <div class="error" ng-show="frmCliente.txtMovil.$dirty && frmCliente.txtMovil.$invalid">
                                             <small ng-show="frmCliente.txtMovil.$error.required">Movil es Requerido</small>
@@ -149,7 +149,7 @@
                             <label for="txtEmail">E-mail *</label>
                              <div class="input-group">    
                                 <div class="input-group-addon"><i class="fa fa-envelope"></i></div>
-                                <input type="email" class="form-control" ng-model="Cliente.Correo" id="txtEmail" placeholder="E-mail">
+                                <input type="email" class="form-control" ng-model="Cliente.Correo" maxlength="60" id="txtEmail" placeholder="E-mail">
                         
                              </div>
                         </div>

@@ -30,6 +30,10 @@ class ConductorController extends Controller
         return Conductor::where("Cedula",$Cedula)->select("Cedula")->first();
     }
     
+     public function GetNovedadByConductor($IdConductor){
+        return Novedad::where("nvConductor",$IdConductor)->get();
+    }
+    
     public function store(Request $request)
     {
         try{  
@@ -42,8 +46,10 @@ class ConductorController extends Controller
             $conductor->TelefonoDos = $data["TelefonoDos"]; 
             $conductor->TelefonoTres = $data["TelefonoTres"]; 
             $conductor->Email = $data["Email"]; 
-            $conductor->FechaNacimiento = $data["FechaNacimiento"]; 
-            $conductor->FechaIngreso = $data["FechaIngreso"]; 
+            $date = new \DateTime(str_replace("/", "-", $data["FechaNacimiento"]));
+            $conductor->FechaNacimiento = $date->format('Y-m-d H:i:s');
+            $date2 = new \DateTime(str_replace("/", "-",$data["FechaIngreso"]));            
+            $conductor->FechaIngreso = $date2->format('Y-m-d H:i:s');
             $conductor->Estado = $data["Estado"]; 
             $conductor->NumeroCuenta = $data["NumeroCuenta"]; 
             $conductor->CdPlaca = $data["CdPlaca"]; 
@@ -117,8 +123,10 @@ class ConductorController extends Controller
             $conductor->TelefonoDos = $data["TelefonoDos"]; 
             $conductor->TelefonoTres = $data["TelefonoTres"]; 
             $conductor->Email = $data["Email"]; 
-            $conductor->FechaNacimiento = $data["FechaNacimiento"]; 
-            $conductor->FechaIngreso = $data["FechaIngreso"]; 
+            $date = new \DateTime(str_replace("/", "-", $data["FechaNacimiento"]));
+            $conductor->FechaNacimiento = $date->format('Y-m-d H:i:s');
+            $date2 = new \DateTime(str_replace("/", "-",$data["FechaIngreso"]));            
+            $conductor->FechaIngreso = $date2->format('Y-m-d H:i:s');
             $conductor->Estado = $data["Estado"]; 
             $conductor->NumeroCuenta = $data["NumeroCuenta"]; 
             $conductor->CdPlaca = $data["CdPlaca"]; 
@@ -126,15 +134,17 @@ class ConductorController extends Controller
             $conductor->Escolaridad = $data["Escolaridad"]; 
             $conductor->TipoDocumento = $data["TipoDocumento"]; 
             $conductor->save();
+            
             return JsonResponse::create(array('message' => "Conductor Actualizado Correctamente", "request" =>json_encode($conductor->IdConductor)), 200);
         } catch (Exception $exc) {
             return JsonResponse::create(array('message' => "No se pudo guardar", "request" =>json_encode($exc->message)), 401);
         }
         
-        
-        
     }
 
+    public function updateNovedad(){
+        
+    }
     /**
      * Remove the specified resource from storage.
      *
@@ -160,5 +170,8 @@ class ConductorController extends Controller
         }
     }
 
+    
+   
+    
     
 }

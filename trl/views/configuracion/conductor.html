@@ -12,7 +12,7 @@
             <div class="tab-content">
                  <br/>
                         <div class="tab-pane active" id="tabListado">
-			    <div class="row">
+	        <div class="row">
                    <div class="col-xs-6">
                        <label  for="search">Filtro</label>
                         <div class="input-group">
@@ -40,7 +40,7 @@
                                     </tr>
                                 </thead>
                                  <tbody>
-                                 <tr data-ng-repeat="items in Conductores">
+                                 <tr data-ng-repeat="items in $data">
                                 <td class="center">{{ items.Cedula}}</td>
                                 <td>{{ items.Nombre }}</td>
                                 <td>{{ items.TelefonoPpal}}</td> 
@@ -49,8 +49,8 @@
                                 <td>{{ items.Estado}}</td> 
                                 <td>
                                         <center>
-                                            <a data-ng-click="get(items)" style="float: left; margin-left: 15px;" href="javascript:;"  title="Editar"><i class="fa fa-lg fa-pencil"></i></a>
-                                            <a data-ng-click="Desactivar(items.IdConductor, 'RETIRADO')"  style="float: left; margin-left: 15px;" href="javascript:;"  title="Eliminar"><i class="fa fa-lg fa-trash"></i></a>
+                                            <a data-ng-click="get(items)" style="float: left; margin-left: 15px;" href="javascript:;"  title="Editar"><i class="fa fa-lg fa-pencil text-success"></i></a>
+                                            <a data-ng-click="Desactivar(items.IdConductor, 'RETIRADO')"  style="float: left; margin-left: 15px;" href="javascript:;"  title="Eliminar"><i class="fa fa-lg fa-trash text-danger"></i></a>
                                         </center>
                                 </td>
                                   </tr>
@@ -84,11 +84,13 @@
                            <label  for="txtCedula" >Cédula *</label>
                           <div class="input-group">    
                             <div class="input-group-addon"><i class="fa fa-hashtag"></i></div>
-                            <input type="text" class="form-control" ng-model="Conductor.Cedula" id="txtCedula" placeholder="Identification" ng-blur="validarIdentificacion()">
+                            <input type="text" class="form-control" ng-model="Conductor.Cedula" id="txtCedula" placeholder="Identification"  maxlength="10" ng-blur="validarIdentificacion()" solo-numeros >
                           </div> 
+                           <!--
                             <div class="error">
                                 <small  ng-show="valCedula">N° de Identificación, Ya Existe</small>
                             </div> 
+                           -->
                         </div>
                     </div>
                     
@@ -107,7 +109,7 @@
                             <label for="txtTelefonoPpal">Teléfono Principal *</label>
                              <div class="input-group">    
                                 <div class="input-group-addon"><i class="fa fa-mobile"></i></div>
-                                <input type="text" class="form-control" ng-model="Conductor.TelefonoPpal" id="txtTelefonoPpal" placeholder="Main Phone">
+                                <input type="text" class="form-control" ng-model="Conductor.TelefonoPpal"  maxlength="10" id="txtTelefonoPpal" placeholder="Main Phone" solo-numeros>
                      
                              </div>
                         </div>
@@ -131,7 +133,7 @@
                             <label for="txtTelefono2">Móvil</label>
                              <div class="input-group">    
                                 <div class="input-group-addon"><i class="fa fa-phone"></i></div>
-                                <input type="text" class="form-control" ng-model="Conductor.TelefonoDos" id="txtTelefonoDos" placeholder="Mobile">
+                                <input type="text" class="form-control" maxlength="10" ng-model="Conductor.TelefonoDos" solo-numeros  id="txtTelefonoDos" placeholder="Mobile">
                              </div>
                         </div>
                     </div> 
@@ -142,7 +144,7 @@
                             <label for="txtTelefono3">Teléfono</label>
                             <div class="input-group">    
                                <div class="input-group-addon"><i class="fa fa-phone"></i></div>
-                               <input type="text" class="form-control" ng-model="Conductor.TelefonoTres" id="txtTelefonoTres" placeholder="Phone">
+                               <input type="text" class="form-control" maxlength="10" solo-numeros ng-model="Conductor.TelefonoTres" id="txtTelefonoTres" placeholder="Phone">
                             </div>
                              <div class="error" ng-show="frmConductor.txtMovil.$dirty && frmConductor.txtMovil.$invalid">
                                             <small ng-show="frmConductor.txtMovil.$error.required">Movil es Requerido</small>
@@ -169,8 +171,7 @@
                             <label for="txtFechaNacimiento">Fecha Nacimiento *</label>
                              <div class="input-group">    
                                 <div class="input-group-addon"><i class="fa fa-calendar-o"></i></div>
-                                <input type="date" class="form-control" ng-model="Conductor.FechaNacimiento" id="txtFechaNacimiento" placeholder="Birth Date">
-                       
+                                <input type="text" id="txtFechaNacimiento" ng-model="Conductor.FechaNacimiento"  name="txtFechaNacimiento" class="form-control" ng-change="Cambiarformato('FechaNacimiento')"  value=""  >
                              </div>
                         </div>
                     </div> 
@@ -196,7 +197,7 @@
                             <label for="txtFechaIngreso">Fecha Ingreso*</label>
                              <div class="input-group">    
                                <div class="input-group-addon"><i class="fa fa-calendar-check-o"></i></div>
-                               <input type="date" class="form-control" ng-model="Conductor.FechaIngreso" id="txtFechaIngreso" placeholder="Fecha Ingreso">
+                               <input type="text" class="form-control" ng-model="Conductor.FechaIngreso" id="txtFechaIngreso" name="txtFechaIngreso" placeholder="Fecha Ingreso" ng-change="Cambiarformato('FechaIngreso')">
                         
                              </div>
                         </div>
@@ -227,7 +228,7 @@
                             <label for="txtNumeroCuenta">Numero de Cuenta *</label>
                             <div class="input-group">    
                                <div class="input-group-addon"><i class="fa fa-hashtag"></i></div>
-                               <input type="text" class="form-control" ng-model="Conductor.NumeroCuenta" id="txtNumeroCuenta" placeholder="Account Number">
+                               <input type="text" class="form-control" ng-model="Conductor.NumeroCuenta" maxlength="45" id="txtNumeroCuenta" placeholder="Account Number">
                             </div>
                         </div>
                     </div>
@@ -238,7 +239,7 @@
                             <label for="txtCdPlaca">Placa *</label>
                             <div class="input-group">    
                                <div class="input-group-addon"><i class="fa fa-eraser"></i></div>
-                               <input type="text" class="form-control" ng-model="Conductor.CdPlaca" id="txtCdPlaca" placeholder="License plate">
+                               <input type="text" class="form-control" ng-model="Conductor.CdPlaca" maxlength="6" id="txtCdPlaca" placeholder="License plate">
                             </div>
                         </div>
                     </div>
@@ -250,7 +251,7 @@
                             <label for="Observacion">Observacion</label>
                             <div class="input-group">    
                                <div class="input-group-addon"><i class="fa fa-book"></i></div>
-                               <input type="text" class="form-control" ng-model="Conductor.Observacion" id="txtObservacion" placeholder="Observation">
+                               <input type="text" class="form-control" ng-model="Conductor.Observacion" maxlength="255" id="txtObservacion" placeholder="Observation">
                             </div>
                         </div>
                     </div>
@@ -307,7 +308,8 @@
                     
                      <div class="col-xs-3">
                          <div class="form-group">
-                        <button type="button" class="btn btn-primary" ng-click="AgregarNovedad()" style="margin-top:10%" >Agregar</button>
+                             <button type="button" ng-hide="editMode" class="btn btn-primary" ng-click="AgregarNovedad()" style="margin-top:10%" >Agregar</button>
+                             <button type="button" ng-show="editMode" class="btn btn-primary" ng-click="GuardarNovedad()" style="margin-top:10%" >Guardar</button>
                          </div>
                     </div>
                     
@@ -332,8 +334,8 @@
                                 <td>{{ items.nvDescripcion }}</td>
                                 <td>
                                     <center>
-                                        <a data-ng-click="get(items)" style="float: left; margin-left: 3px;" href="javascript:;"  title="Editar"><i class="small small mdi-image-edit teal-text  darken-1"></i></a>
-                                        <a ng-click="Desactivar(items.idCategoria, 'Borrado')"  style="float: left; margin-left: 3px;" href="javascript:;"  title="Eliminar"><i class="small mdi-action-delete red-text text-deep-orange darken-1"></i></a>
+                                        <a data-ng-click="getNovedad(items)" style="float: left; margin-left: 15px;" href="javascript:;"  title="Editar"><i class=" fa fa-1x fa-pencil text-success"></i></a>
+                                        <a ng-click="Cancelar(items.idCategoria,'INACTIVA')"  style="float: left; margin-left: 15px;" href="javascript:;"  title="Cancelar"><i class="fa fa-1x fa-ban text-warning"></i></a>
                                     </center>
                                 </td>
                             </tr>
@@ -360,6 +362,30 @@
     });
     
     $('#tabPanels a[href="#tabRegistro"]').tab('show');
+
+$(function() {
+    
+        $('input[name="txtFechaNacimiento"]').daterangepicker({
+            singleDatePicker: true,
+            showDropdowns: true,         
+            dateFormat: 'dd/mm/yyyy'
+        }, 
+        function(start, end, label) {            
+            $('#txtFechaNacimiento').val(end.format('DD/MM/YYYY'));         
+        });
+        
+        $('input[name="txtFechaIngreso"]').daterangepicker({
+            singleDatePicker: true,
+            showDropdowns: true,
+            format: 'DD/MM/YYYY'
+        }, 
+        function(start, end, label) {
+            $('#txtFechaIngreso').val(end.format('DD/MM/YYYY'));
+        });
+        
+        
+
+    });
 
 </script>
     
