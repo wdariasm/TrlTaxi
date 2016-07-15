@@ -226,6 +226,10 @@ app.controller("vehiculoController", ["$scope", "vehiculoService", "marcaService
             console.log("Some Error Occured " + JSON.stringify(err));
         });                          
     };
+    
+    $scope.CambiarFormato=function (variable){
+        $scope.Vehiculo[variable] = moment($scope.Vehiculo[variable]).format('L');
+    };
         
    
 }]);

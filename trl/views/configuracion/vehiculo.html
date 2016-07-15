@@ -183,7 +183,7 @@
                                             <label  for="txtFechaArriendo">Fecha Arriendo *</label>
                                             <div class="input-group">
                                                 <div class="input-group-addon"><i class="fa fa-calendar-times-o"></i></div>
-                                                <input type="text" id="txtFechaArriendo" name="txtFechaArriendo" ng-model="Vehiculo.FechaArriendo" class="form-control" value="" ng-disabled="Vehiculo.Tipo !='ARRENDADO'" data-date-format="DD/MM/yyyy">                                                                                            
+                                                <input type="text" id="txtFechaArriendo" name="txtFechaArriendo" ng-model="Vehiculo.FechaArriendo" class="form-control" value="" ng-disabled="Vehiculo.Tipo !='ARRENDADO'" ng-change="CambiarFormato('FechaArriendo')">                                                                                            
                                             </div>
                                         </div>
                                     </div>
@@ -193,7 +193,7 @@
                                             <label  for="txtFechaMto">Fecha Prox Mantenimiento</label>
                                             <div class="input-group">
                                                 <div class="input-group-addon"><i class="fa fa-calendar-check-o"></i></div>
-                                                <input type="text" id="txtFechaMto" ng-model="Vehiculo.FProxMantenimiento" name="txtFechaMto" class="form-control" value=""  data-date-format="DD/MM/yyyy">                                                                                            
+                                                <input type="text" id="txtFechaMto" ng-model="Vehiculo.FProxMantenimiento" name="txtFechaMto" class="form-control" value="" ng-change="CambiarFormato('FProxMantenimiento')" >                                                                                            
                                             </div>
                                         </div>
                                     </div>
