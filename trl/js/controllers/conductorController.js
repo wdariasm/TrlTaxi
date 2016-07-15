@@ -257,15 +257,14 @@ app.controller("conductorController", ["$scope", "conductorService", "tipoDocume
            toaster.pop('warning', "Ingresa la descripción");
            return;
        }  
-       
+        $scope.Novedad.nvDescripcion = $scope.Novedad.nvDescripcion.toUpperCase();
         $scope.Novedad.nvConductor = $scope.Conductor.IdConductor;
         
         var promise;
         if($scope.editNovedad){            
-            promise = conductorService.put($scope.Novedad.nvCodigo, $scope.Novedad);
-        }else {
-           
-            promise = conductorService.post($scope.Novedad);            
+            promise = conductorService.putNovedad($scope.Novedad.nvCodigo, $scope.Novedad);
+        }else {           
+            promise = conductorService.postNovedad($scope.Novedad);            
         }
         
         promise.then(function(d) {                        

@@ -78,25 +78,24 @@ class ConductorController extends Controller
         }
     }
     
-    
-    public function guardarNovedad(Request $request){
+    //guardarNovedad
+    public function GuardarNovedad(Request $request){
         try{  
                 $data = $request->all(); 
                 $insert = new Novedad();
-                $insert->nvConductor=$data->IdConductor;
+                $insert->nvConductor=$data["nvConductor"];
                 $insert->nvTipo=$data["nvTipo"];
                 $insert->nvDescripcion=$data["nvDescripcion"];
                 $insert->nvEstado="ACTIVA";
                 
                 $insert->save();
-            return JsonResponse::create(array('message' => "Conductor  guardado correctamente", "request" =>json_encode($insert->IdConductor)), 200);
+            return JsonResponse::create(array('message' => "Novedad  guardada correctamente", "request" =>json_encode($insert->nvCodigo)), 200);
         } catch (Exception $exc) {    
             return JsonResponse::create(array('message' => "No se pudo guardar", "request" =>json_encode($exc->getMessage())), 401);
         }
     }
 
-
-        /**
+    /**
      * Display the specified resource.
      *
      * @param  int  $IdConductor
@@ -156,8 +155,20 @@ class ConductorController extends Controller
         
     }
 
-    public function updateNovedad(){
-        
+   //Actualizar Novedad
+    public function updateNovedad(Request $request, $nvCodigo){
+       try{
+            $data = $request->all();
+            $novedad = Novedad::find($nvCodigo);
+            $novedad->nvDescripcion = $data["nvDescripcion"]; 
+            $novedad->nvTipo = $data["nvTipo"]; 
+            $novedad->nvEstado="ACTIVO"; 
+            $novedad->save();
+            
+            return JsonResponse::create(array('message' => " Novedad Actualizada Correctamente", "request" =>json_encode($novedad->nvCodigo)), 200);
+        } catch (Exception $exc) {
+            return JsonResponse::create(array('message' => "No se pudo guardar", "request" =>json_encode($exc->message)), 401);
+        } 
     }
     /**
      * Remove the specified resource from storage.
