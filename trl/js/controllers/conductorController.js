@@ -149,7 +149,7 @@ app.controller("conductorController", ["$scope", "conductorService", "tipoDocume
         $scope.title = "Editar Conductor"; 
         $scope.active = "active";
         $('#tabPanels a[href="#tabRegistro"]').tab('show');
-        loadNovedad(item.IdConductor)
+        loadNovedad(item.IdConductor);
     };
    
    

@@ -79,10 +79,24 @@ class ConductorController extends Controller
     }
     
     
-    
-   
+    public function guardarNovedad(Request $request){
+        try{  
+                $data = $request->all(); 
+                $insert = new Novedad();
+                $insert->nvConductor=$data->IdConductor;
+                $insert->nvTipo=$data["nvTipo"];
+                $insert->nvDescripcion=$data["nvDescripcion"];
+                $insert->nvEstado="ACTIVA";
+                
+                $insert->save();
+            return JsonResponse::create(array('message' => "Conductor  guardado correctamente", "request" =>json_encode($insert->IdConductor)), 200);
+        } catch (Exception $exc) {    
+            return JsonResponse::create(array('message' => "No se pudo guardar", "request" =>json_encode($exc->getMessage())), 401);
+        }
+    }
 
-    /**
+
+        /**
      * Display the specified resource.
      *
      * @param  int  $IdConductor

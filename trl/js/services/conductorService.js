@@ -18,11 +18,22 @@ app.service("conductorService",[ '$http', function ($http) {
         var req = $http.put(uri+'/api/conductor/' + id, conductor);
         return req;        
     };
+    
+    this.postNovedad =function(novedad){
+       var req = $http.post(uri+'/api/conductor/novedad' ,novedad);
+        return req;  
+    };
         
+    this.putNovedad = function (id,novedad) {        
+        var req = $http.put(uri+'/api/conductor/novedad/' + id, novedad);
+        return req;        
+    };
+    
     this.updateEstado=function(id, object){
         var req = $http.put(uri+'/api/conductor/updateEstado/' + id, object);
         return req;
     };  
+    
     
    
     
