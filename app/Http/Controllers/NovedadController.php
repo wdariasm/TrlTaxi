@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Novedad;
+use App\NovedadVehiculo;
 use Illuminate\Http\JsonResponse;
 
 class NovedadController extends Controller
@@ -26,7 +26,7 @@ class NovedadController extends Controller
     {
          try{  
             $data = $request->all(); 
-            $novedad= new Novedad();                        
+            $novedad= new NovedadVehiculo();                        
             $novedad->Vehiculo = $data["Vehiculo"];
             $novedad->Codigo = $data["Codigo"]; 
             $date1 = new \DateTime( str_replace("/", "-",  $data["FechaExpedicion"]));
@@ -58,11 +58,11 @@ class NovedadController extends Controller
      */
     public function show($id)
     {
-        return Novedad::find($id);
+        return NovedadVehiculo::find($id);
     }
     
     public function GetNovedadByVehiculo($id){
-        return Novedad::where("Vehiculo",$id)->get();
+        return NovedadVehiculo::where("Vehiculo",$id)->get();
     }
 
     /**
@@ -76,7 +76,7 @@ class NovedadController extends Controller
     {
         try{
             $data = $request->all();
-            $novedad = Novedad::find($id);            
+            $novedad = NovedadVehiculo::find($id);            
             $novedad->Codigo = $data["Codigo"]; 
             $date1 = new \DateTime($data["FechaExpedicion"]);
             $novedad->FechaExpedicion =  $date1->format('Y-m-d H:i:s');                    
