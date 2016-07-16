@@ -29,6 +29,11 @@ app.service("vehiculoService",[ '$http', function ($http) {
         return req;
     };      
     
+     this.validarPlaca = function(placa){
+        var req = $http.get(uri+'/api/vehiculo/' + placa +'/validar');
+        return req;	
+    };
+    
     
 }]);
 

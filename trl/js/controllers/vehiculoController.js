@@ -4,6 +4,7 @@ app.controller("vehiculoController", ["$scope", "vehiculoService", "marcaService
    $scope.Vehiculos = [];
    $scope.Marcas = [];
    $scope.editMode = false;
+   $scope.valPlaca = false;
    $scope.ClaseVehiculo = [];
    $scope.TablaVehiculo = {};
    $scope.Titulo ="Nuevo";
@@ -57,8 +58,8 @@ app.controller("vehiculoController", ["$scope", "vehiculoService", "marcaService
         promise.then(function(d) {                        
             $scope.Vehiculos = d.data;
               $scope.TablaVehiculo.reload();
-        }, function(err) {           
-                alert("ERROR AL PROCESAR SOLICITUD");           
+        }, function(err) {                        
+                toaster.pop('error', '¡Error!', 'Error al cargar Vehiculos');
                 console.log("Some Error Occured " + JSON.stringify(err));
         }); 
             
@@ -73,7 +74,7 @@ app.controller("vehiculoController", ["$scope", "vehiculoService", "marcaService
                 $scope.MarcaSelect = d.data[0];
             }           
         }, function(err) {           
-                alert("ERROR AL PROCESAR SOLICITUD");           
+                toaster.pop('error', '¡Error!', 'Error al cargar Marcas');
                 console.log("Some Error Occured " + JSON.stringify(err));
         }); 
     }
@@ -144,6 +145,12 @@ app.controller("vehiculoController", ["$scope", "vehiculoService", "marcaService
     $scope.Guardar = function (){                                        
         $scope.Vehiculo.Marca = $scope.MarcaSelect.maCodigo;
         $scope.Vehiculo.Placa = $scope.Vehiculo.Placa.toUpperCase();
+        
+        if($scope.valPlaca){
+            toaster.pop('error','¡Error!', 'Placa ya se encuentra registrada.');
+            return;
+        }
+        
         console.log($scope.Vehiculo);
               
         var promise;
@@ -155,10 +162,10 @@ app.controller("vehiculoController", ["$scope", "vehiculoService", "marcaService
         
         promise.then(function(d) {                        
             loadVehiculo();
-            toaster.pop('success', "Comtrol de Información", d.data.message);            
+            toaster.pop('success', "Control de Información", d.data.message);            
              
         }, function(err) {          
-            toaster.pop('error', "Error", "ERROR AL PROCESAR SOLICITUD");                
+            toaster.pop('error', "¡Error!", err.data.request);                
             console.log("Some Error Occured " + JSON.stringify(err));
         });       
    };
@@ -230,6 +237,45 @@ app.controller("vehiculoController", ["$scope", "vehiculoService", "marcaService
     $scope.CambiarFormato=function (variable){
         $scope.Vehiculo[variable] = moment($scope.Vehiculo[variable]).format('L');
     };
+    
+    
+    $scope.ValidarPlaca = function () {
+        $scope.valPlaca = false;
+        if (!$scope.Vehiculo.Placa || $scope.editMode) {
+            return;
+        }
+        var promiseGet = vehiculoService.validarPlaca($scope.Vehiculo.Placa);
+        promiseGet.then(function (d) {
+            if (d.data.Placa) {
+                $scope.valPlaca = true;
+                toaster.pop('info', '¡Alerta!', 'Placa ya se encuentra registrada.');
+            }
+        }, function (err) {
+            toaster.pop('error', '¡Error!', 'Error al validar placa.');
+            console.log("Some Error Occured " + JSON.stringify(err));
+        });
+    };
+    
+     $scope.VerDesactivar = function(id,  estado) {
+        $scope.Estado =estado;
+        $scope.IdVehiculoGlobal = id;
+        $('#mdConfirmacion').modal('show');         
+    };
+    $scope.Desactivar = function (){
+         var objetc = {
+                estado : $scope.Estado
+            };
+            $('#mdConfirmacion').modal('hide');   
+            var promisePut  = vehiculoService.updateEstado($scope.IdVehiculoGlobal, objetc);
+                promisePut.then(function (d) {
+                    toaster.pop('success', "Control de Información", d.data.message);                 
+                    loadVehiculo();
+            }, function (err) {
+                    toaster.pop('error', "¡Error!", err.data.request); 
+                    console.log("Some Error Occured "+ JSON.stringify(err));
+            });
+    };
+    
         
    
 }]);

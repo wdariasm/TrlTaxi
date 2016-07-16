@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Vehiculo;
 use Illuminate\Http\JsonResponse;
 
+
 class VehiculoController extends Controller
 {
     /**
@@ -14,23 +15,16 @@ class VehiculoController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {        
-        
+    {                
         return Vehiculo::join('clasevehiculo', 'vehiculo.ClaseVehiculo', '=', 'clasevehiculo.tvCodigo')
                 ->select('vehiculo.*','clasevehiculo.tvDescripcion')
                 ->orderBy('vehiculo.IdVehiculo', 'desc')
                 ->get();
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
+    public function ValidarPlaca($placa){
+        return Vehiculo::where("Placa",$placa)->select("Placa")->first();
+    }         
 
     /**
      * Store a newly created resource in storage.
@@ -63,7 +57,7 @@ class VehiculoController extends Controller
             $vehiculo->save();
             
             return JsonResponse::create(array('message' => "Vehiculo guardado correctamente", "request" =>json_encode($vehiculo->IdVehiculo)), 200);
-        } catch (Exception $exc) {    
+        } catch (\Exception $exc) {    
             return JsonResponse::create(array('message' => "No se pudo guardar", "request" =>json_encode($exc->getMessage())), 401);
         }
     }
@@ -78,17 +72,7 @@ class VehiculoController extends Controller
     {
         //
     }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
+   
 
     /**
      * Update the specified resource in storage.
@@ -100,6 +84,18 @@ class VehiculoController extends Controller
     public function update(Request $request, $id)
     {
         //
+    }
+    
+    public function UpdateEstado(Request $request, $id){
+        try {            
+            $data = $request->all();
+            $taxi = Vehiculo::find($id);
+            $taxi->Estado = $data['estado'];
+            $taxi->save();
+            return JsonResponse::create(array('message' => "Datos actualizados correctamente", "request" =>json_encode($id)), 200);
+        } catch (Exception $ex) {
+            return JsonResponse::create(array('message' => "No se pudo modificar el Vehiculo", "request" =>json_encode($ex->getMessage())), 401);
+        }
     }
 
     /**

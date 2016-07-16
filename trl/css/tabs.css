@@ -8,6 +8,7 @@ Licensed under MIT
 .tabbable-line > .nav-tabs {
   border: none;
   margin: 0px;
+  font-size: 16px;  
 }
 .tabbable-line > .nav-tabs > li {
   margin-right: 2px;

@@ -45,8 +45,8 @@ var app;
             })
 
 
-            .when("/0/cliente",{
-                templateUrl: 'views/configuracion/cliente.html'
+            .when("/0/usuario",{
+                templateUrl: 'views/configuracion/usuario.html'
             })
             
             .otherwise({
