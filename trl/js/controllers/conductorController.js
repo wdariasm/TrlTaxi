@@ -1,11 +1,13 @@
-app.controller("conductorController", ["$scope", "conductorService", "tipoDocumentoService", "escolaridadService","toaster", "ngTableParams",
-    function ($scope, conductorService,tipoDocumentoService,escolaridadService,toaster,ngTableParams) {
+app.controller("conductorController", ["$scope", "conductorService", "tipoDocumentoService", "escolaridadService","toaster", "ngTableParams", "vehiculoService",
+    function ($scope, conductorService,tipoDocumentoService,escolaridadService,toaster,ngTableParams,vehiculoService) {
    $scope.Conductor = {};
    $scope.Conductores = [];
    $scope.Novedad={};
    $scope.Novedades=[];
    $scope.TipoDocumentos=[];
    $scope.Escolaridades=[];
+   $scope.LicenciaConduccion={};
+   $scope.LicenciasConduccion=[];
    $scope.valCedula = false;
    
    $scope.title="Registro Conductor";
@@ -16,6 +18,7 @@ app.controller("conductorController", ["$scope", "conductorService", "tipoDocume
    
     initialize();
     initNovedad();
+    initLicencia();
    function initialize() {
         $scope.Conductor = {
             IdConductor :"",
@@ -117,8 +120,13 @@ app.controller("conductorController", ["$scope", "conductorService", "tipoDocume
         $scope.Conductor.CdPlaca = $scope.Conductor.CdPlaca.toUpperCase();
            //$scope.Novedad.nvDescripcion=$scope.Novedad.nvDescripcion.toUpperCase();
 		   
-            if ($scope.valIdentifiacion){
-            alert( "N° de Cédula ya existe "); 
+            if ($scope.valCedula){
+           toaster.pop('error','¡Error!', 'N° de Cedula ya existe'); 
+            return;
+             }
+             
+           if($scope.valPlaca){
+            toaster.pop('error','¡Error!', 'Placa no se encuentra registrada');
             return;
         }
 
@@ -276,9 +284,85 @@ app.controller("conductorController", ["$scope", "conductorService", "tipoDocume
                 console.log("Some Error Occured " + JSON.stringify(err));
         });    
     };
+  
+    $scope.ValidarPlaca = function () {
+        $scope.valPlaca = false;
+        if (!$scope.Conductor.CdPlaca|| $scope.editMode) {
+            return;
+        }
+        var promiseGet = vehiculoService.validarPlaca($scope.Conductor.CdPlaca);
+        promiseGet.then(function (d) {
+            if (!d.data.Placa) {
+                $scope.valPlaca = true;
+                toaster.pop('info', '¡Alerta!', 'Esta placa no existe');
+            }
+        }, function (err) {
+            toaster.pop('error', '¡Error!', 'Error al validar placa.');
+            console.log("Some Error Occured " + JSON.stringify(err));
+        });
+    };
     
-    loadConductor();
     
+    //LICENCIA DE CONDUCCION
+     function initLicencia() {
+        $scope.LicenciaConduccion = {
+            IdLicencia:"",
+            Numero: "",
+            OTLicencia: "",         
+            FechaExpedicion:moment().format('L'),
+            FechaVencimiento: moment().format('L'),
+            Estado: "ACTIVA",
+            Categoria:"",
+            FechaReg:"",
+            lcConductor:""
+        };         
+    }
+    
+     $scope.getLicencia = function(item) {
+        $scope.LicenciaConduccion=item;
+        $scope.editMode = true;
+        $scope.active = "active";
+    };
+    
+    function loadLicenciaConduccion (id){
+        var promise = conductorService.getLicencia(id);
+        promise.then(function(d) {                        
+            $scope.LicenciasConduccion = d.data;
+             // $scope.TablaNovedad.reload();
+        }, function(err) {           
+                toaster.pop('error','Error','No se pudo procesar la solicitud');
+                console.log("Some Error Occured " + JSON.stringify(err));
+        }); 
+    }
+    
+    
+     $scope.GuardarLicencia = function (){
+        
+        $scope.LicenciaConduccion.OTLicencia = $scope.LicenciaConduccion.OTLicencia.toUpperCase();
+        $scope.LicenciaConduccion.Categoria = $scope.LicenciaConduccion.Categoria.toUpperCase(); 
+
+        var promise;
+        if($scope.editMode){            
+            promise = conductorService.putLicencia($scope.LicenciaConduccion.IdLicencia, $scope.LicenciaConduccion);
+        }else {
+            promise = conductorService.postLicencia($scope.LicenciaConduccion);            
+        }
+        
+        promise.then(function(d) {                        
+            loadLicenciaConduccion();
+           toaster.pop('success', "Control de Información", d.data.message); 
+             
+        }, function(err) {           
+                toaster.pop('error', "Error", "ERROR AL PROCESAR SOLICITUD");         
+                console.log("Some Error Occured " + JSON.stringify(err));
+        });       
+   };
+   //cambia el formato de fecha licencia 
+    $scope.formatoLicencia= function (variable){
+        console.log(variable)
+        $scope.LicenciaConduccion[variable] = moment($scope.LicenciaConduccion[variable]).format('L');
+    };
+    loadConductor(); 
 }]);
 
 

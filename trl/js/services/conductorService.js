@@ -29,6 +29,19 @@ app.service("conductorService",[ '$http', function ($http) {
         return req;        
     };
     
+    
+     this.postLicencia =function(licencia){
+       var req = $http.post(uri+'/api/conductor/licenciaConduccion' ,licencia);
+        return req;  
+    };
+        
+    this.putLicencia = function (id,licencia) {        
+        var req = $http.put(uri+'/api/conductor/licenciaConduccion/' + id, licencia);
+        return req;        
+    };
+    
+    
+    
     this.updateEstado=function(id, object){
         var req = $http.put(uri+'/api/conductor/updateEstado/' + id, object);
         return req;

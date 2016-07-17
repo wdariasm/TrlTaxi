@@ -47,7 +47,8 @@ function ($scope, tipoDocumentoService,toaster) {
         }, function(err) {           
                 toaster.pop('error', "Error", "ERROR AL PROCESAR SOLICITUD");       
                 console.log("Some Error Occured " + JSON.stringify(err));
-        });       
+        }); 
+        initTipoDocumento();
    };
    
     //edita la tipoDocumento

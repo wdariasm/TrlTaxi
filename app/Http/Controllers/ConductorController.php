@@ -17,7 +17,6 @@ class ConductorController extends Controller
     public function index()
     {
         //return Conductor::all();
-        
         return Conductor::where('Estado','<>','RETIRADO')
                 ->get();
     }
@@ -33,7 +32,7 @@ class ConductorController extends Controller
      public function GetNovedadByConductor($IdConductor){
         return Novedad::where("nvConductor",$IdConductor)->get();
     }
-    
+
     public function store(Request $request)
     {
         try{  

@@ -39,7 +39,7 @@ class LicenciaConduccionController extends Controller
     {
         try{  
             $data = $request->all(); 
-            $licencia= new LicenciaConduccions();                        
+            $licencia= new LicenciaConduccion();                        
             $licencia->Numero = $data["Numero"];
             $licencia->OTLicencia = $data["OTLicencia"];  
             $date = new \DateTime(str_replace("/", "-", $data["FechaExpedicion"]));
@@ -86,9 +86,25 @@ class LicenciaConduccionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $IdLicencia)
     {
-        //
+        try{
+            $data = $request->all();
+            $licencia =  LicenciaConduccion::find($IdLicencia);
+             $licencia->Numero = $data["Numero"];
+            $licencia->OTLicencia = $data["OTLicencia"];  
+            $date = new \DateTime(str_replace("/", "-", $data["FechaExpedicion"]));
+            $licencia->FechaExpedicion = $date->format('Y-m-d H:i:s');
+            $date2 = new \DateTime(str_replace("/", "-",$data["FechaVencimiento"]));            
+            $licencia->FechaVencimiento= $date2->format('Y-m-d H:i:s');
+            $licencia->Categoria = $data["Categoria"];
+            $licencia->lcConductor = $data["lcConductor"];
+            $licencia->save();
+            
+            return JsonResponse::create(array('message' => "Conductor Actualizado Correctamente", "request" =>json_encode($licencia->IdLicencia)), 200);
+        } catch (Exception $exc) {
+            return JsonResponse::create(array('message' => "No se pudo guardar", "request" =>json_encode($exc->message)), 401);
+        }
     }
 
     /**

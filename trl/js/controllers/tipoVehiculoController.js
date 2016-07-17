@@ -45,7 +45,8 @@ function ($scope, tipoVehiculoService,toaster) {
         }, function(err) {           
                 toaster.pop('error', "Error", "ERROR AL PROCESAR SOLICITUD");         
                 console.log("Some Error Occured " + JSON.stringify(err));
-        });       
+        }); 
+        initTipoVehiculo();
    };
    
     //edita la Tipo vehiculo

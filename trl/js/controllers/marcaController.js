@@ -41,7 +41,8 @@ app.controller("marcaController", ["$scope", "marcaService","toaster",
         }, function(err) {           
                  toaster.pop('error', "Error", "ERROR AL PROCESAR SOLICITUD");           
                 console.log("Some Error Occured " + JSON.stringify(err));
-        });       
+        });  
+        initMarca();
    };
    //edita la marca
     $scope.get = function(item) {
