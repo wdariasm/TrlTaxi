@@ -17,7 +17,7 @@ class PersonaController extends Controller
      */
     public function index()
     {
-        //
+        return Persona::all();
     }
 
     /**

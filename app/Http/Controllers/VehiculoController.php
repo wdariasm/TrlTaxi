@@ -23,7 +23,7 @@ class VehiculoController extends Controller
     }
 
     public function ValidarPlaca($placa){
-        return Vehiculo::where("Placa",$placa)->select("Placa")->first();
+        return Vehiculo::where("Placa",$placa)->select("Placa","IdVehiculo")->first();
     }         
 
     /**

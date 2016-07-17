@@ -26,6 +26,7 @@ include 'Routes/routesCliente.php';
 include 'Routes/routesUsuario.php';
 include 'Routes/routesNovedad.php';
 include 'Routes/routesLicencia.php';
+include 'Routes/routesPersona.php';
 
 
 

@@ -1,5 +1,7 @@
 app.controller("homeController", ["$scope", function ($scope) {
         
+    $scope.Titulo = "BIENVENIDOS"; 
+        
     var click = 1;    
         
     $scope.mostrarOcultarMenu = function(){    
@@ -20,6 +22,11 @@ app.controller("homeController", ["$scope", function ($scope) {
             
             click = 1;
         }
+    };
+    
+    //ESTABLECER TITULO PRINCIPAL
+    $scope.SetTitulo = function (title){
+        $scope.Titulo = title;
     };
 }]);
 
