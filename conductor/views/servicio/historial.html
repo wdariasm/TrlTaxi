@@ -1,0 +1,95 @@
+<div ng-controller="historialController" class="contenedor">
+    <div class="row white">
+        <div class="col s12 z-depth-1">
+            <div class="row">
+                <div class="col s4">
+                    <br/>
+                    <h2>Mis Servicios</h2> 
+                </div>
+                <div class="input-field col s6">
+                    <i class="mdi-action-search prefix"></i>
+                    <input id="search" type="search" placeholder="" ng-model="filtro">
+                    <label for="search">Filtro</label>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col s12">
+                    <table border="0"  width="100%" id="tbTaxistas" cellspacing="0" class="striped bordered" >
+                        <thead>
+                            <tr>
+                                <th>N°</th>
+                                <th>DIRECCION</th>
+                                <th>ESTADO</th>
+                                <th>FECHA</th>
+                                <th>TAXISTA</th> 
+                                <th>PLACA</th>
+                                <th>MOVIL</th>                                
+                                <th width="9%">ACCION</th>                                
+                            </tr>
+
+                        </thead>
+
+                        <tbody>                       
+                            <tr data-ng-repeat="item in Servicios | filter:filtro">                                        
+                                <td>{{ item.idServicio}}</td>    
+                                <td>{{ item.direccion}}</td>                                    
+                                <td>{{ item.Estado}}</td>                                                                                                                         
+                                <td>{{ item.Fecha + " "+ item.Hora}}</td>                                  
+                                <td>{{ item.Nombre + " " + item.Apellidos  }}</td>  
+                                <td>{{ item.placa}}</td> 
+                                <td>{{ item.movil}}</td> 
+                                <td>
+                                    <center>
+                                        <!--<a data-ng-click="get(item.idPersona)" style="float: left; margin-left: 3px;" href="javascript:;"  title="Editar"><i class="small small mdi-image-edit teal-text  darken-1"></i></a>-->
+                                        <div ng-if="item.Estado !== 'Finalizado'">
+                                            <a ng-click="mostrarOpcion(item.idServicio, item.idPersona)" style="float: left; margin-left: 3px;" href="javascript:;"  title="Cancelar Servcio"><i class="small mdi-navigation-cancel red-text"></i></a>                                            
+                                        </div>
+                                        
+                                    </center>
+                                </td> 
+                            </tr>
+                            <tr ng-if="Servicios.length == 0">
+                                <td colspan="8" class="center"><span class="center red-text text-darken-4">No Se Encontraron Servicios ..</span></td>
+                            </tr>                            
+                            
+                        </tbody>
+                    </table>                        
+                </div>                                        
+            </div>
+            
+        </div> 
+    </div> 
+    
+    <div id="modalMotivo" class="modal modal-fixed-footer">            
+        <div class="modal-content">
+            <h2>Seleccione Motivo de Cancelación</h2>
+            <div class="row">
+                <form name="frmCancelar" class="col s12" novalidate>                        
+                    <div class="row">                            
+                        <div class="col m9">
+                            <div class="row">
+                                <div data-ng-repeat="items in Motivos">                                    
+                                    <input name="rbMotivo"  type="radio"  id="rbMv{{items.idCancelar}}" value="{{items.idCancelar}}" ng-model="Servicio.motivo"/>
+                                    <label for="rbMv{{items.idCancelar}}" class="black-text" style="font-size: 16px;">{{items.motivo}} </label> <br/>
+                                </div>                               
+                            </div>                               
+                        </div>
+                    </div>              
+                </form>
+            </div>
+        </div>            
+        <div class="modal-footer">                             
+            <button class="btn waves-effect waves-light green" type="button" ng-click="cancelar()" >Continuar</button>
+            <a href="javascript:;" class="modal-action modal-close waves-effect waves-light btn red" style="margin-right: 10px;">Salir</a> 
+       </div>            
+    </div>        
+</div>
+
+<script>
+    $(document).ready(function(){      
+        $('.modal-trigger').leanModal();        
+        //setInterval(function(){ },60000);
+    });
+</script>
+

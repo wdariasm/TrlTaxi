@@ -1,0 +1,47 @@
+<!--
+/* 
+    Created on : 26-dic-2015, 22:14:16
+    Author     : andyyairb@gmail.com
+*/
+-->
+
+  <div ng-controller="sesionController" class="row">
+        <div class="decoration-head"></div>
+        <div class="resplandor"></div>
+        <div id="logo" class="animated bounceIn"></div>
+        <div id="contenedor-login" class="animated bounceInLeft">
+             <center><h2></h2></center>
+            <form name="frmLogin" id="frmLogin" novalidate>
+                <table width="100%" align="center" border="0">
+       
+                    <tr>
+                        <td colspan="2"><input type="text" class="box-text user" id="txtUser" name="txtUser" placeholder="Usuario " ng-model="usuario.user" required>
+                            <div class="error" ng-show="frmLogin.txtUser.$dirty && frmLogin.txtUser.$invalid">
+                                <small  ng-show="frmLogin.txtUser.$error.required">Usuario es Requerido</small>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2"><input type="password" class="box-text pass" id="txtClave" name="txtClave" placeholder="Contraseña" ng-model="usuario.clave" required ng-enter="Iniciar()">
+                            <div class="error" ng-show="frmLogin.txtClave.$dirty && frmLogin.txtClave.$invalid">
+                                <small  ng-show="frmLogin.txtClave.$error.required">Contraseña es Requerida</small>
+                            </div>
+                        </td>                        
+                    </tr>
+                    
+                    <tr>
+                        <td colspan="2"><div class="error"  style="font-size: 16px; margin-top: 5px;">{{msjError}}</div></td>
+                    </tr>
+                    
+                    <tr>
+                        <td colspan="2"><button ng-disabled="frmLogin.$invalid"   class="btn-iniciar  z-depth-1" type="button" title="Iniciar Session"  ng-click="Iniciar()">INICIAR SESION</button></td>
+                    </tr>
+                                        
+                    <tr>
+                        <td width="50%" style="height: 60px;"><a  class="waves-effect waves-light btn red z-depth-1" href="#" style="display: block; width: auto">VER SERVICIO</a></td>
+                        <td width="50%"><a class="waves-effect waves-light btn green z-depth-1" href="#/login/cliente" style="display: block; width: auto">CLIENTE</a></td>
+                    </tr>                                     
+                </table>
+            </form>
+        </div>                         
+  </div>

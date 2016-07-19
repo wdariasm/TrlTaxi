@@ -1,0 +1,137 @@
+<div ng-controller="clienteController" class="contenedor">
+    <div class="row white">
+        <div class="col s12 z-depth-1">
+            <div class="row">
+                <div class="col s12">
+                    <br/>
+                    <h2>Mi Perfil</h2>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col s4">
+                    <form  name="frmPerfil" id="frmPerfil" novalidate>
+                    <div class="row">
+                        <div class="input-field col s12">
+                            <input id="nombres" type="text"  ng-model="Cliente.Nombre" name="txtNombre" required ng-pattern="/^[A-Za-záéíóúñ]{3,}/" maxlength="50" placeholder="Nombre Completo">
+                            <label for="" class="{{active}}">Nombres: *</label>
+                            <div class="error" ng-show="frmPerfil.txtNombre.$dirty && frmPerfil.txtNombre.$invalid">
+                                <small ng-show="frmPerfil.txtNombre.$error.required">Nombre es Requerido</small>
+                                <small  ng-show="frmPerfil.txtNombre.$error.pattern">Debe tener Mas de 2 Caracteres</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="input-field col s12">
+                            <input id="nombres" type="text"  ng-model="Cliente.Direccion" name="txtDireccion" required maxlength="30" placeholder="Dirección">
+                            <label for="" class="{{active}}">Direccion Principal: *</label>
+                            <div class="error" ng-show="frmPerfil.txtDireccion.$dirty && frmPerfil.txtDireccion.$invalid">
+                                <small ng-show="frmPerfil.txtDireccion.$error.required">Dirección es Requerida</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="input-field col s12">
+                            <input id="telefono" type="text"  ng-model="Cliente.Telefono" name="txtTelefono" required ng-pattern="/^[0-9]{6,20}$/" placeholder="Telefono">
+                            <label for="" class="{{active}}">Telefono *</label>
+                            <div class="error" ng-show="frmPerfil.txtTelefono.$dirty && frmPerfil.txtTelefono.$invalid">
+                                <small ng-show="frmPerfil.txtTelefono.$error.required">Telefono es Requerido</small>
+                                <small  ng-show="frmPerfil.txtTelefono.$error.pattern">Debe tener Mas de 5 Numeros</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="input-field col s12">
+                            <label for="" class="{{active}}">Email *</label>
+                            <input type="text" class="box-text email" id="txtCorreo" name="txtCorreo" placeholder="Correo " ng-model="Cliente.Email" required ng-pattern="/^([\da-zA-Z_\.-]+)@([\da-zA-Z\.-]+)\.([a-zA-Z\.]{2,6})$/">
+                            <div class="error" ng-show="frmPerfil.txtCorreo.$dirty && frmPerfil.txtCorreo.$invalid">
+                               <small  ng-show="frmPerfil.txtCorreo.$error.required">Email es Requerido</small>
+                               <small  ng-show="frmPerfil.txtCorreo.$error.pattern">Email No Valido</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col s12">
+                            <button type="button"  ng-disabled="frmPerfil.$invalid" class="btn waves-effect waves-light"  ng-click="actualizar()"  >
+                               <i class="mdi-content-send right"></i>ACTUALIZAR DATOS
+                            </button>
+                        </div>
+                    </div>
+                    </form>
+                </div>
+
+                <div class="col s7 offset-s1">
+                    <div class="row">
+                        <form class="col s6 offset-s3" name="frmCambiar" novalidate>
+                            <h2>Cambiar Contraseña</h2>
+                            <div class="row">
+                                <div class="input-field col s12">
+                                    <input ng-model="User.clave"  type="password" name="txtClave1"  maxlength="15" required ng-pattern="/(?=^.{5,}$)(?=.*\d)(?![.\n])(?=.*[a-zA-Z]).*$/">
+                                    <label  >Nueva Contraseña *</label>
+                                    <div class="error" ng-show="frmCambiar.txtClave1.$dirty && frmCambiar.txtClave1.$invalid">
+                                        <small ng-show="frmCambiar.txtClave1.$error.required">Contraseña es Requerida</small>
+                                        <small  ng-show="frmCambiar.txtClave1.$error.pattern">Minimo 6 Caracteres[Numeros y Letras]</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="input-field col s12">
+                                    <input ng-model="User.claveConf"  type="password" name="txtClave2"  maxlength="15" required ng-pattern="/(?=^.{5,}$)(?=.*\d)(?![.\n])(?=.*[a-zA-Z]).*$/" >
+                                    <label >Confirmar Nueva Contraseña *</label>
+                                    <div class="error" ng-show="frmCambiar.txtClave2.$dirty && frmCambiar.txtClave2.$invalid">
+                                        <small ng-show="frmCambiar.txtClave2.$error.required">Contraseña es Requerida</small>
+                                        <small  ng-show="frmCambiar.txtClave2.$error.pattern">Minimo 6 Caracteres[Numeros y Letras]</small>
+                                    </div>
+                                </div>
+                                <div class="error" style="margin-left: 10px">
+                                    <small  ng-show="valPass">Contreseñas, NO son Iguales</small>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col s12">
+                                    <button  ng-disabled="frmCambiar.$invalid" class=" btn waves-effect waves-light teal" type="button" title="Guardar Contraseña" ng-click="cambiarClave()">
+                                        <i class="mdi-content-save right"></i>Guardar Contraseña
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+
+                    </div>
+
+                    <div class="row">
+                        <h2>Mis Direcciones Favoritas</h2>
+                        <table cellspacing="0" class="striped bordered">
+                            <thead>
+                                <tr>
+                                    <th>N°</th>
+                                    <th>LUGAR</th>
+                                    <th>DIRECCION</th>
+                                    <th width="15%">ACCION</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr data-ng-repeat="item in Direcciones">
+                                    <td>{{ $index + 1}}</td>
+                                    <td>{{ item.drNombre}}</td>
+                                    <td>{{ item.drDireccion}}</td>
+                                    <td>
+                                        <center>
+                                            <a data-ng-click="get(item)" style="float: left; margin-left: 3px;" href="javascript:;"  title="Editar"><i class="small small mdi-image-edit teal-text  darken-1"></i></a>
+                                            <a ng-click="eliminar(item.drCodigo)"  style="float: left; margin-left: 3px;" href="javascript:;"  title="Eliminar"><i class="small mdi-action-delete red-text text-deep-orange darken-1"></i></a>
+                                        </center>
+                                    </td>
+                                </tr>
+                            </tbody>
+
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

@@ -8,6 +8,7 @@ use DB;
 use App\Persona;
 
 
+
 class PersonaController extends Controller
 {
     /**
@@ -43,7 +44,7 @@ class PersonaController extends Controller
             $persona= new Persona();
             
             $persona->Cedula = $data["Cedula"];
-            $persona->Nombres = $data["Nombres"];   
+            $persona->Nombre = $data["Nombre"];   
             $persona->Direccion = $data["Direccion"];
             $persona->MovilPpal = $data["MovilPpal"];
             $persona->Direccion = $data["Direccion"];
@@ -56,8 +57,8 @@ class PersonaController extends Controller
             
             
             return JsonResponse::create(array('message' => "Guardado correctamente", "request" =>json_encode($persona->IdPersona)), 200);
-        } catch (Exception $exc) {            
-            return JsonResponse::create(array('message' => "No se pudo guardar", "request" =>json_encode($data)), 401);
+        } catch (\Exception $exc) {    
+            return JsonResponse::create(array('message' => "No se pudo guardar", "request" =>json_encode($exc->getMessage())), 401);
         }
     }
 

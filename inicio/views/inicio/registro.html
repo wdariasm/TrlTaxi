@@ -1,0 +1,77 @@
+<!--
+/*
+    Created on : 26-dic-2015, 22:14:16
+    Author     : andyyairb@gmail.com
+*/
+-->
+
+  <div ng-controller="registroController" class="row">
+        <div class="decoration-head"></div>
+        <div class="resplandor"></div>
+          <div id="logo" class="animated bounceIn"></div>
+        <div id="contenedor-login" class="animated bounceInRight">
+            <form name="frmRegistro" id ="frmRegistro" novalidate >
+            <table width="100%" align="center">
+                <tr>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td><input type="text" class="box-text user" id="txtNombre" name="txtNombre" placeholder="Nombre Completo " ng-model="Cliente.nombres" required>
+                        <div class="error" ng-show="frmRegistro.txtNombre.$dirty && frmRegistro.txtNombre.$invalid">
+                            <small  ng-show="frmRegistro.txtNombre.$error.required">Nombre es Requerido</small>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td><input type="text" class="box-text phone" id="txtTelefono" name="txtTelefono" placeholder="Telefono " ng-model="Cliente.telefono" required ng-pattern="/^[0-9]{6,20}$/" maxlength="11">
+                        <div class="error" ng-show="frmRegistro.txtTelefono.$dirty && frmRegistro.txtTelefono.$invalid">
+                            <small ng-show="frmRegistro.txtTelefono.$error.required">Telefono es Requerido</small>
+                            <small  ng-show="frmRegistro.txtTelefono.$error.pattern">Debe tener Mas de 5 Numeros</small>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td><input type="text" class="box-text email" id="txtCorreo" name="txtCorreo" placeholder="Correo " ng-model="Cliente.email" required  ng-blur="validarEmail()" ng-pattern="/^([\da-zA-Z_\.-]+)@([\da-zA-Z\.-]+)\.([a-zA-Z\.]{2,6})$/">
+                        <div class="error" ng-show="frmRegistro.txtCorreo.$dirty && frmRegistro.txtCorreo.$invalid">
+                           <small  ng-show="frmRegistro.txtCorreo.$error.required">Email es Requerido</small>
+                           <small  ng-show="frmRegistro.txtCorreo.$error.pattern">Email No Valido</small>
+                        </div>
+
+                        <div class="error" style="margin-top: 2px;">
+                            <small  ng-show="valEmail">Email, Ya Existe en el Sistema</small>
+                        </div>
+                    </td>
+                </tr>
+                 <tr>
+                    <td><input type="password" class="box-text pass" id="txtClave" name="txtClave" placeholder="Contraseña" ng-model="Cliente.clave" required ng-pattern="/(?=^.{5,}$)(?=.*\d)(?![.\n])(?=.*[a-zA-Z]).*$/" maxlength="15" >
+                        <div class="error" ng-show="frmRegistro.txtClave.$dirty && frmRegistro.txtClave.$invalid">
+                            <small ng-show="frmRegistro.txtClave.$error.required">Contraseña es Requerida</small>
+                            <small  ng-show="frmRegistro.txtClave.$error.pattern">Minimo 5 Caracteres[Numeros y Letras]</small>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                   <td><p class="error" id="error" style="font-size: 15px; margin-top: 5px;">{{msjError}}</p></td>
+               </tr>
+
+                <tr>
+                    <td>
+                        <button type="button"  ng-disabled="frmRegistro.$invalid" class="btn-iniciar z-depth-1"  ng-click="registrar()" style="display: block; width: 100%" >
+                               REGÍSTRARME
+                        </button></td>
+                </tr>
+                <tr>
+                    <td></td>
+                </tr>
+
+                <tr>
+                    <td><p style="color: #FFFFFF; font-size: 12px; font-family: 'roboto',tahoma; margin-top: 10px;"> <strong> NOTA:</strong> Todos los Campos Son requeridos <br/>
+                            El <strong>EMAIL </strong>debe ser valido, para confirmar su cuenta</p>
+                    </td>
+                </tr>
+
+                </table>
+            </form>
+        </div>
+          <a href="#/login/cliente" class="btn-floating btn-large z-depth-1"><i class="material-icons">reply</i></a>
+  </div>

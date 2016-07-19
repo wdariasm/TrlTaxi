@@ -1,9 +1,10 @@
-app.controller('personaController', ['$scope', 'personaService', 'tipoDocumentoService', function($scope, personaService, tipoDocumentoService) {
+app.controller('personaController', ['$scope', 'personaService', 'tipoDocumentoService', 'perfilService', 'toaster', 'usuarioService',
+    function($scope, personaService, tipoDocumentoService, perfilService, toaster, usuarioService) {
            
     $scope.Personas = [];        
     $scope.Persona = {};    
-    
-    $scope.title = "NUEVO USUARIO";
+    $scope.Permisos =  [];
+    $scope.title = "Nuevo Registro";
     $scope.active = "";
     $scope.editMode = false;
     
@@ -13,28 +14,28 @@ app.controller('personaController', ['$scope', 'personaService', 'tipoDocumentoS
     $scope.valPass =false; // Validar Contraseña Iguales
        
     $scope.TipoDocumentos =[];
-    $scope.TipoSelect ={};
+    $scope.TipoSelect ={};        
        
     $scope.User = {};
     
     loadPersonas();        
         
     
-    $scope.$parent.SetTitulo("GESTION DE USUARIOS");
+    $scope.$parent.SetTitulo("GESTION DE PERSONAL");
     initialize();
     
     function initialize() {
         $scope.Persona = {
             IdPersona : "",
             Cedula: "",
-            Nombres: "",            
+            Nombre: "",            
             Direccion: "",
             MovilPpal: "",
             MovilDos : "",
             Correo: "",           
             Estado:'ACTIVO',           
             TipoDocumento :'',
-            Usuario :"",
+            Login :"",
             Clave: ""
         };  
     }
@@ -47,7 +48,7 @@ app.controller('personaController', ['$scope', 'personaService', 'tipoDocumentoS
             $scope.Personas = pl.data;
         },
         function(errorPl) {
-            console.log('failure loading usuarios', errorPl);
+            console.log('failure loading personal', errorPl);
         });
     }        
     
@@ -63,34 +64,52 @@ app.controller('personaController', ['$scope', 'personaService', 'tipoDocumentoS
             console.log("Some Error Occured " + JSON.stringify(err));
         }); 
     }
-    
     loadTipoDocumentos();
     
-    function loadPerfil(){         
-        var promiseGet = personaService.perfil();
+    function loadPermisos(){
+        var promiseGet = perfilService.getPermisos(); //The Method Call from service        
         promiseGet.then(function (item) {
-            $scope.Perfil = item.data;
+            $scope.Permisos = item.data;
+            if(item.data){
+                $scope.permisosByPerfil();
+            }
         },
         function (errorPl) {
+            toaster.pop('error','¡Error!', "Error al cargar permisos");  
             console.log('failure loading Paises', errorPl);
-        });
-    }   
+        });   
+    }
     
-    function loadBahia(){         
-        var promiseGet = personaService.Bahias();
-        promiseGet.then(function (item) {
-            $scope.Bahias = item.data;
+    loadPermisos();
+           
+    $scope.permisosByPerfil= function(){
+        $("input[name='misPermisos[]']").prop('checked', false);
+        if ($scope.editMode){
+            return;
+        }
+        var promiseGet = perfilService.getPermisoByPerfil(2); 
+        promiseGet.then(function (item) {                 
+            $.each(item.data, function(i, item){                        
+                $('input[name="misPermisos[]"]').each(function() {                            
+                    if (this.id==item.IdPermiso){
+                        document.getElementById(this.id).checked = true;
+                        return;
+                    }
+                });
+            });
         },
         function (errorPl) {
-            console.log('failure loading Paises', errorPl);
+            console.log('error al cargar permisos', errorPl);
         });
-    }                            
-
-    $scope.nuevo = function() {
+    };
+        
+        
+    $scope.Nuevo = function() {
         initialize();
         $scope.editMode = false;
-        $scope.title = "NUEVO USUARIO";
-        $scope.active = "";        
+        $scope.title = "Nuevo Registro";
+        $scope.active = "";    
+        loadPermisos();
     };
 
     $scope.get = function(usuario) {
@@ -148,45 +167,91 @@ app.controller('personaController', ['$scope', 'personaService', 'tipoDocumentoS
     };
     
     
-    $scope.guardar = function() {  
+    $scope.Guardar = function() {       
+        if(!$scope.Persona.Cedula || $scope.Persona.Cedula === ""){
+            toaster.pop('warning', '¡Alerta!', 'Por favor ingrese la identificación');
+            return;
+        }
         
-        var bahiaSel = "0";
+        var Npermisos = $('input[name="misPermisos[]"]:checked').length;        
+        if (Npermisos === 0){
+            toaster.pop('warning', '¡Alerta!', 'Por favor seleccione uno de los permisos');
+            return;
+        }        
         
         
-        
-        var object = {
-            Cedula: $scope.Persona.Cedula,            
-            Nombres: $scope.Persona.Nombres.toUpperCase(),
-            MovilPpal: $scope.Persona.MovilPpal,
-            Clave: $scope.Persona.Clave,
-            Direccion: (!$scope.Persona.Direccion) ? '' : $scope.Persona.Direccion,
-            Estado: $scope.Persona.Estado,                                    
-            Correo : (!$scope.Persona.Correo) ? '' :  $scope.Persona.Correo,             
-           
-        };
+        $scope.Persona.MovilDos  =  (!$scope.Persona.MovilDos) ? "" : $scope.Persona.MovilDos;                        
+        $scope.Persona.Nombre = $scope.Persona.Nombre.toUpperCase();
+        $scope.Persona.Login = $scope.Persona.Login.toUpperCase();        
+        $scope.Persona.TipoDocumento = $scope.TipoSelect.tdCodigo;
         
         var promise;
         if($scope.editMode){            
-            promise = personaService.put($scope.Persona.Cedula, object);
+            promise = personaService.put($scope.Persona.IdPersona, $scope.Persona);
         }else {
-            
-            if (!$scope.Persona.Clave){
-                Materialize.toast('Contraseña es Requerida', 4000, 'rounded');
-                return;
-            }            
-            promise = personaService.post(object);            
+            promise = personaService.post($scope.Persona);            
         }
         
-        promise.then(function(d) {            
-            Materialize.toast(d.data.message+'..!!', 4000, 'rounded');
-            $scope.nuevo();
-            loadPersonas();
-            $('ul.tabs').tabs('select_tab', 'tabPersona1');
+        promise.then(function(d) {             
+            if (d.data.request > 0  && !$scope.editMode){
+                $scope.Persona.PersonaId = d.data.request;
+                    guardarUsuario($scope.Persona);
+            }else{
+                toaster.pop('success', 'Control de información', d.data.message);
+                $scope.Nuevo();            
+            }                                    
+           $('#tabPanels a[href="#tabListado"]').tab('show');
         }, function(err) {           
-                alert("ERROR AL PROCESAR SOLICITUD");           
-                console.log("Some Error Occured " + JSON.stringify(err));
+            toaster.pop('error', "¡Error!", err.data.request);          
+            console.log("Some Error Occured " + JSON.stringify(err));
         });        
     };
+    
+    function guardarUsuario (item){   
+        var modC="0",  modV="0", modCo="0" , modR="0",  modCc="0", modP="0";
+        var vecPermiso = [];
+        $('input[name="misPermisos[]"]:checked').each(function() { 
+            var modulo= document.getElementById("hd"+this.id).value;
+            switch (modulo) {
+                case "CONFIGURACION": 
+                    modC="1";
+                    break;                
+                case "VEHICULOS":  
+                    modV="1";
+                    break;                    
+                case "CONDUCTORES":
+                    modCo="1";
+                    break;                    
+                case "REPORTES":
+                    modR="1";
+                    break; 
+                case "CONTRATOS":
+                    modCc="1";
+                    break;
+                case "PERSONAL":
+                    modP="1";
+                    break;                
+            }            
+            var ObjPermiso = {
+                "idPermiso" : this.id
+            };
+            vecPermiso.push(ObjPermiso);
+        });         
+        $scope.Persona.Permisos = vecPermiso;
+        $scope.Persona.Modulo = modC + modCo + modCc + modP + modR + modV;                
+        item.ClienteId = null;
+        item.ConductorId = null;
+        item.TipoAcceso =2;
+        var promise = usuarioService.post(item);                            
+        promise.then(function(d) {                         
+            toaster.pop('success', 'Control de información', d.data.message);
+            $scope.Nuevo();                        
+            $('#tabPanels a[href="#tabListado"]').tab('show');
+        }, function(err) {           
+            toaster.pop('error', "¡Error!", err.data.request);          
+            console.log("Some Error Occured " + JSON.stringify(err));
+        });        
+    }
     
     $scope.Desactivar = function(idUser,  Estado) {
         

@@ -4,9 +4,7 @@
             <div class="tabbable-line">
                    <ul class="nav nav-tabs nav-justified" id="tabPanels">
                        <li class="active"> <a href="#tabListado" data-toggle="tab">Listado de Personal </a></li>
-                       <li><a href="#tabRegistro" data-toggle="tab">Registrar  Personal </a></li>
-                       <li><a href="#tabRol" data-toggle="tab">Rol</a></li>
-                       <li><a href="#tabPermiso" data-toggle="tab">Permisos</a></li>
+                       <li><a href="#tabRegistro" data-toggle="tab">{{title}} </a></li>
                    </ul>
             </div>
             
@@ -21,20 +19,18 @@
                                 <th>DIRECCION</th>
                                 <th>TELEFONO</th>
                                 <th>E-MAIL</th>
-                                <th>ESTADO</th> 
-                                <th>DIGITO VERIFICACIÓN</th>
+                                <th>ESTADO</th>                                
                                 <th>ACCÍON</th>
                             </tr>
                         </thead>
 
                         <tbody>
                             <tr data-ng-repeat="items in Personas">
-                                <td class="center">{{ items.Identificacion}}</td>
-                                <td>{{ items.Nombres }}</td>
+                                <td class="center">{{ items.Cedula}}</td>
+                                <td>{{ items.Nombre }}</td>
                                 <td>{{ items.Direccion}}</td> 
                                 <td>{{ items.MovilPpal}}</td> 
-                                <td>{{ items.Correo}}</td> 
-                                <td>{{ items.DigitoVerificacion}}</td> 
+                                <td>{{ items.Correo}}</td>                                
                                 <td>{{ items.Estado}}</td> 
                                 <td>
                                         <center>
@@ -70,7 +66,7 @@
                                <label  for="txtCedula" >Identificación *</label>
                               <div class="input-group">    
                                 <div class="input-group-addon"><i class="fa fa-hashtag"></i></div>
-                                <input type="text" class="form-control" ng-model="Persona.Identificacion" maxlength="10" solo-numeros id="txtCedula" placeholder="Identificación" ng-blur="validarIdentificacion()">
+                                <input type="text" class="form-control" ng-model="Persona.Cedula" maxlength="10" solo-numeros id="txtCedula" placeholder="Identificación" ng-blur="validarIdentificacion()" required>
                               </div>                           
                             </div>
                         </div>
@@ -80,7 +76,7 @@
                                <label for="txtNombre">Nombres *</label>
                                 <div class="input-group">    
                                    <div class="input-group-addon"><i class="fa fa-user"></i></div>
-                                   <input type="text" class="form-control" ng-model="Persona.Nombres" maxlength="100" id="txtNombre" placeholder="Nombre Completo">
+                                   <input type="text" class="form-control" ng-model="Persona.Nombre" maxlength="100" id="txtNombre" placeholder="Nombre Completo" required>
                                </div>
                            </div>
                        </div>
@@ -90,7 +86,7 @@
                               <label for="txtTelefonoPpal">Teléfono Principal *</label>
                                <div class="input-group">    
                                   <div class="input-group-addon"><i class="fa fa-mobile"></i></div>
-                                  <input type="text" class="form-control" ng-model="Persona.MovilPpal" maxlength="10" solo-numeros id="txtTelefonoPpal" placeholder="Teléfono Principal">
+                                  <input type="text" class="form-control" ng-model="Persona.MovilPpal" maxlength="10" solo-numeros id="txtTelefonoPpal" placeholder="Teléfono Principal" required>
 
                                </div>
                           </div>
@@ -112,7 +108,7 @@
                                 <label for="txtDireccion">Dirección *</label>
                                 <div class="input-group">    
                                     <div class="input-group-addon"><i class="fa fa-globe"></i></div>
-                                    <input type="text" class="form-control" ng-model="Persona.Direccion" maxlength="45" id="txtDireccion" placeholder="Dirección">
+                                    <input type="text" class="form-control" ng-model="Persona.Direccion" maxlength="45" id="txtDireccion" placeholder="Dirección" required>
 
                                 </div>
                             </div>
@@ -123,7 +119,7 @@
                                 <label for="txtUsuario">Nombre Usuario *</label>
                                 <div class="input-group">    
                                     <div class="input-group-addon"><i class="fa fa-user-secret"></i></div>
-                                    <input type="text" class="form-control" ng-model="Persona.Usuario" maxlength="45" id="txtUsuario" placeholder="Nombre de Usuario">
+                                    <input type="text" class="form-control" ng-model="Persona.Login" maxlength="45" id="txtUsuario" placeholder="Nombre de Usuario" required>
 
                                 </div>
                             </div>
@@ -135,36 +131,52 @@
                             <label for="txtEmail">E-mail *</label>
                              <div class="input-group">    
                                 <div class="input-group-addon"><i class="fa fa-envelope"></i></div>
-                                <input type="email" class="form-control" ng-model="Persona.Correo" maxlength="60" id="txtEmail" placeholder="E-mail">                        
+                                <input type="email" class="form-control" ng-model="Persona.Correo" maxlength="60" id="txtEmail" placeholder="E-mail" required>                        
                              </div>
                         </div>
                     </div> 
-                    
-                    
-                    
+                                                            
                     <div class="col-xs-3">
                         <div class="form-group">
                             <label for="txtEstado">Estado *</label>
                              <div class="input-group">    
                                 <div class="input-group-addon"><i class="fa fa-list-ul"></i></div>
-                               <select type="text" class="form-control" ng-model="Persona.Estado" id="txtEstado" placeholder="Estado">
+                                <select type="text" class="form-control" ng-model="Persona.Estado" id="txtEstado" placeholder="Estado" required>
                                    <option value="ACTIVO">ACTIVO</option>
                                    <option value="INACTIVO">INACTIVO</option>
-                               </select>
+                                </select>
                        
                              </div>
                         </div>
+                    </div>                                                                          
+                </div>
+                        
+                    <div class="row">
+                        <div class="divider"></div>
+                        <h4>Seleccione los permisos</h4>
+                        <div ng-repeat="permiso in Permisos">
+                            <div class="col-xs-4">     
+                                <div class="checkbox checkbox-primary">
+                                    <input type="hidden" id="hd{{permiso.IdPermiso}}" value="{{permiso.pmModulo}}"/>
+                                    <input type="checkbox" id="{{permiso.IdPermiso}}" name="misPermisos[]"/>
+                                    <label for="{{permiso.IdPermiso}}">{{permiso.pmNombre}}</label> 
+                                </div>
+                            </div> 
+                        </div>
                     </div>
-                   
-               
-                    <div class="col-xs-5">       
-                            <br/>
-                            <button   class="btn btn-primary btn-block"   type="button"  title="Registrar Persona" ng-click="Guardar()">Guardar</button>
-                   </div>
+
                     
-                </div>                                
+                <div class="row">
+                    <br/>
+                    <div class="col-xs-2 col-xs-offset-7">
+                        <button   class="btn btn-success btn-block btn-addon"   type="button"  title="Nuevo Registro" ng-click="Nuevo()"><i class="fa fa-pencil"></i> Nuevo</button>
+                    </div>
+                    <div class="col-xs-2">                                   
+                        <button ng-disabled="frmPersona.$invalid"   class="btn btn-danger btn-block btn-addon"   type="button"  title="Registrar Cliente" ng-click="Guardar()"> <i class="fa fa-floppy-o"></i>Guardar</button>
+                    </div>
+                </div>
             </form>    
-         </div>
+        </div>
                   
                  
                  <div class="tab-pane" id="tabRol">
@@ -193,15 +205,11 @@
                        
                              </div>
                         </div>
-                    </div>
-
-                    <div class="col-xs-2">
-                         <div class="form-group">
-                        <button type="button" class="btn btn-info" ng-click="AgregarRol()" style="margin-top:20%" >Agregar</button>
-                         </div>
-                    </div>
-                    
-                </div>                                
+                    </div>                                       
+                </div>    
+                          
+               
+                          
             </form>
                      
                        <div class="col-xs-12">
@@ -235,18 +243,8 @@
                      
                  </div>
                  
-                 
-                 
-                  <div class="tab-pane" id="tabPermiso">
-                      <form name="frmPermiso" id="frmPermiso" novalidate>
-                <div class="row">
-                   
-                </div>
-                      </form>
-                 
-            </div>
-         </div>
-    
+                                                    
+        </div>    
      </div>
     </div>
  </div>
