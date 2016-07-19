@@ -2,6 +2,7 @@ app.controller("marcaController", ["$scope", "marcaService","toaster",
  function ($scope, marcaService,toaster) {
    $scope.Marca = {};
    $scope.Marcas = [];
+   $scope.IdMarcaGlobal="";
    $scope.editMode = false;
    
     initMarca();
@@ -53,24 +54,27 @@ app.controller("marcaController", ["$scope", "marcaService","toaster",
        
     };
     
+   $scope.VerDesactivar = function(maCodigo,  maEstado) {
+        $scope.maEstado =maEstado;
+        $scope.IdMarcaGlobal = maCodigo;
+        $('#mdConfirmacion').modal('show');         
+    };
+    
     //Funcion que elimina
-     $scope.Desactivar = function(maCodigo,  maEstado) {
-            confirm("jajja");
-       
-        var r = confirm("¿Está seguro de Ejecutar esta Acción?");
-        if (r == true) {
-            var objetc = {
+     $scope.Desactivar = function() {
+         var objetc = {
             maEstado : maEstado
         };
-            var promisePut  = marcaService.updateEstado(maCodigo, objetc);        
+            $('#mdConfirmacion').modal('hide'); 
+            var promisePut  = marcaService.updateEstado($scope.IdMarcaGlobal, objetc);        
                 promisePut.then(function (d) {                
-               // Materialize.toast(d.data.message, 4000, 'rounded');                
+                 toaster.pop('success', "Control de Información", d.data.message);                 
                 loadMarca();
             }, function (err) {                              
                      toaster.pop('error', "Error", "ERROR AL PROCESAR SOLICITUD"); ;
                     console.log("Some Error Occured "+ JSON.stringify(err));
             }); 
-        }        
+                
     };
    
     loadMarca();

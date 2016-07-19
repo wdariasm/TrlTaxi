@@ -1,6 +1,7 @@
 app.controller("servicioController", ["$scope", "servicioService", "toaster",function ($scope, servicioService,toaster) {
    $scope.Servicio = {};
    $scope.Servicios = [];
+   $scope.IdServicioGlobal="";
    $scope.editMode = false;
    
    
@@ -56,24 +57,29 @@ app.controller("servicioController", ["$scope", "servicioService", "toaster",fun
     };
     
     //Funcion que elimina
-     $scope.Desactivar = function(svCodigo,  svEstado) {
-        
-        var r = confirm("¿Está seguro de Ejecutar esta Acción? ("+svEstado+")");
-        if (r == true) {
-            var objetc = {
+     $scope.VerDesactivar = function(svCodigo,  svEstado) {
+        $scope.svEstado =svEstado;
+        $scope.IdServicioGlobal = svCodigo;
+        $('#mdConfirmacion').modal('show');         
+    };
+    
+    //Funcion que elimina
+     $scope.Desactivar = function() {
+         var objetc = {
             svEstado : svEstado
         };
-            var promisePut  = servicioService.updateEstado(svCodigo, objetc);        
+            $('#mdConfirmacion').modal('hide'); 
+            var promisePut  = servicioService.updateEstado($scope.IdServicioGlobal, objetc);        
                 promisePut.then(function (d) {                
-               // Materialize.toast(d.data.message, 4000, 'rounded');                
-                loadServicio();
+                 toaster.pop('success', "Control de Información", d.data.message);                 
+                 loadServicio();
             }, function (err) {                              
-                    alert("ERROR AL PROCESAR DESACTIVAR / ACTIVAR");
+                     toaster.pop('error', "Error", "ERROR AL PROCESAR SOLICITUD"); ;
                     console.log("Some Error Occured "+ JSON.stringify(err));
             }); 
-        }        
+                
     };
-  
+   
     loadServicio();
 }]);
 

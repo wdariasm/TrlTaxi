@@ -1,6 +1,7 @@
 app.controller("escolaridadController", ["$scope", "escolaridadService","toaster", function ($scope, escolaridadService, toaster) {
    $scope.Escolaridad = {};
    $scope.Escolaridades = [];
+   $scope.IdGlobal="";
    $scope.editMode = false;
    
    initEscolaridad();
@@ -58,23 +59,29 @@ app.controller("escolaridadController", ["$scope", "escolaridadService","toaster
     };
     
     //Funcion que elimina
-     $scope.Desactivar = function(esCodigo,  esEstado) {
-        
-        var r = confirm("¿Está seguro de Ejecutar esta Acción? ("+esEstado+")");
-        if (r == true) {
-            var objetc = {
+      $scope.VerDesactivar = function(esCodigo,  esEstado) {
+        $scope.esEstado =esEstado;
+        $scope.IdGlobal = esCodigo;
+        $('#mdConfirmacion').modal('show');         
+    };
+    
+    //Funcion que elimina
+     $scope.Desactivar = function() {
+         var objetc = {
             esEstado : esEstado
         };
-            var promisePut  = escolaridadService.updateEstado(esCodigo, objetc);        
+            $('#mdConfirmacion').modal('hide'); 
+            var promisePut  = escolaridadService.updateEstado($scope.IdGlobal, objetc);        
                 promisePut.then(function (d) {                
-               // Materialize.toast(d.data.message, 4000, 'rounded');                
-                loadEscolaridad();
+                 toaster.pop('success', "Control de Información", d.data.message);                 
+                 loadEscolaridad();
             }, function (err) {                              
-                    alert("ERROR AL PROCESAR DESACTIVAR / ACTIVAR");
+                     toaster.pop('error', "Error", "ERROR AL PROCESAR SOLICITUD"); ;
                     console.log("Some Error Occured "+ JSON.stringify(err));
             }); 
-        }        
+                
     };
+   
    
    
     loadEscolaridad();

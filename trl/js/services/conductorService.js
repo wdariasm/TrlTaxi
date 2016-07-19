@@ -39,17 +39,12 @@ app.service("conductorService",[ '$http', function ($http) {
         var req = $http.put(uri+'/api/conductor/licenciaConduccion/' + id, licencia);
         return req;        
     };
-    
-    
-    
+   
     this.updateEstado=function(id, object){
         var req = $http.put(uri+'/api/conductor/updateEstado/' + id, object);
         return req;
     };  
-    
-    
    
-    
     this.getByNombre = function () {
         var req = $http.get(uri+'/api/conductores');
         return req;
@@ -64,6 +59,17 @@ app.service("conductorService",[ '$http', function ($http) {
         var req = $http.get(uri+'/api/conductor/'+ id + '/novedades' );
         return req;
     };
+    
+     this.getLicencia = function (Id){
+        var req = $http.get(uri+'/api/conductor/'+ Id + '/licencias' );
+        return req;
+    };
+    
+    this.validarNumero = function(Numero){
+        var req = $http.get(uri+'/api/licenciaConduccion/' + Numero +'/validar');
+        return req;	
+    };
+    
 }]);
 
 

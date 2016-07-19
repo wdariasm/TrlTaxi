@@ -19,11 +19,16 @@ class LicenciaConduccionController extends Controller
         return LicenciaConduccion::all();
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    
+     public function GetLicencia($id){
+        return LicenciaConduccion::where("lcConductor",$id)->get();
+    }
+    
+    public function validarNumero($Numero){
+        return LicenciaConduccion::where("Numero",$Numero)->select("Numero")->first();
+    }
+    
+ 
     public function create()
     {
         //

@@ -8,7 +8,7 @@
                             <label for="txtMarca">Descripción *</label>
                              <div class="input-group">    
                                  <div class="input-group-addon"><i class="fa fa-gitlab"></i></div>
-                                 <input type="text" class="form-control" ng-model="Marca.maDescripcion" maxlength="25" id="txtMarca" placeholder="Marca">
+                                 <input type="text" required="" class="form-control" ng-model="Marca.maDescripcion" maxlength="25" id="txtMarca" placeholder="Marca">
                        
                              </div>
                         </div>
@@ -30,7 +30,7 @@
                     
                    <div class="col-xs-5">
                         <br/>
-                        <button   class="btn btn-primary btn-block btn-addon"   type="button"  title="Registrar Marca" ng-click="Guardar()"><i class="fa fa-floppy-o"></i>Guardar</button>
+                        <button ng-disabled="frmMarca.$invalid"  class="btn btn-primary btn-block btn-addon"   type="button"  title="Registrar Marca" ng-click="Guardar()"><i class="fa fa-floppy-o"></i>Guardar</button>
                    </div>
                     
                 </div>                                
@@ -58,12 +58,37 @@
                                 <td>
                                         <center>
                                             <a data-ng-click="get(items)" style="float: left; margin-left: 15px;" href="javascript:;"  title="Editar"><i class="fa fa-lg fa-pencil"></i></a>
-                                            <a data-ng-click="Desactivar(items.maCodigo, 'BORRADO')"  style="float: left; margin-left: 15px;" href="javascript:;"  title="Eliminar"><i class="fa fa-lg fa-trash text-danger"></i></a>
+                                            <a data-ng-click="VerDesactivar(items.maCodigo, 'BORRADO')"  style="float: left; margin-left: 15px;" href="javascript:;"  title="Eliminar"><i class="fa fa-lg fa-trash text-danger"></i></a>
                                         </center>
                                     </td> 
                             </tr>
                         </tbody>
                     </table>
+                    <div class="modal fade bs-example-modal-sm" id="mdConfirmacion" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" style="margin-top: 10%;">
+                                <div class="modal-dialog modal-sm" style="width: 30%" >                                   
+                                    <div class="modal-content">
+                                       
+                                        <div class="modal-header">
+                                            <div class="modal-title">Activar / Borrar Marca</div>
+                                        </div>
+                                        
+                                        <div class="modal-body">
+                                            <div class="row">
+                                                <div class="col-xs-12">
+                                                    <label>¿Está seguro de ejecutar esta acción? '{{maEstado}}' </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                                            <button type="button" class="btn btn-primary" ng-click="Desactivar()">Aceptar</button>
+                                        </div>  
+                                        
+                                    </div>
+                                                                     
+                                </div>
+                            </div>
                 </div>                            
             </div>
         </div>

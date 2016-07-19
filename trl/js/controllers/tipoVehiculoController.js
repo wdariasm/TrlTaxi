@@ -2,6 +2,7 @@ app.controller("tipoVehiculoController", ["$scope", "tipoVehiculoService", "toas
 function ($scope, tipoVehiculoService,toaster) {
    $scope.TipoVehiculo= {};
    $scope.TipoVehiculos = [];
+   $scope.IdTipoGlobal="";
    $scope.editMode = false;
    
      initTipoVehiculo();
@@ -59,23 +60,28 @@ function ($scope, tipoVehiculoService,toaster) {
     };
     
     //Funcion que elimina
-     $scope.Desactivar = function(tvCodigo,  tvEstado) {
-        
-        var r = confirm("¿Está seguro de Ejecutar esta Acción? ("+tvEstado+")");
-        if (r == true) {
-            var objetc = {
+      $scope.VerDesactivar = function(tvCodigo,  tvEstado) {
+        $scope.tvEstado =tvEstado;
+        $scope.IdTipoGlobal = tvCodigo;
+        $('#mdConfirmacion').modal('show');         
+    };
+    
+    //Funcion que elimina
+     $scope.Desactivar = function() {
+         var objetc = {
             tvEstado : tvEstado
         };
-            var promisePut  = tipoVehiculoService.updateEstado(tvCodigo, objetc);        
+            $('#mdConfirmacion').modal('hide'); 
+            var promisePut  = tipoVehiculoService.updateEstado($scope.IdTipoGlobal, objetc);        
                 promisePut.then(function (d) {                
-               // Materialize.toast(d.data.message, 4000, 'rounded');                
+                 toaster.pop('success', "Control de Información", d.data.message);                 
                 loadTipoVehiculo();
             }, function (err) {                              
-                    alert("ERROR AL PROCESAR DESACTIVAR / ACTIVAR");
+                     toaster.pop('error', "Error", "ERROR AL PROCESAR SOLICITUD"); ;
                     console.log("Some Error Occured "+ JSON.stringify(err));
             }); 
-        }        
-    };
+   
+     };
 
     loadTipoVehiculo();
 }]);

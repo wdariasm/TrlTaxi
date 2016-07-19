@@ -2,6 +2,7 @@ app.controller("tipoDocumentoController", ["$scope", "tipoDocumentoService","toa
 function ($scope, tipoDocumentoService,toaster) {
    $scope.TipoDocumento = {};
    $scope.TipoDocumentos = [];
+   $scope.IdTipoGlobal="";
    $scope.editMode = false;
    
    
@@ -61,26 +62,28 @@ function ($scope, tipoDocumentoService,toaster) {
     };
     
     //Funcion que elimina
-     $scope.Desactivar = function(tdCodigo,  tdEstado) {
-            confirm("jajja");
-       
-        var r = confirm("¿Está seguro de Ejecutar esta Acción?");
-        if (r == true) {
-            var objetc = {
+     $scope.VerDesactivar = function(tdCodigo,  tdEstado) {
+        $scope.tdEstado =tdEstado;
+        $scope.IdTipoGlobal = tdCodigo;
+        $('#mdConfirmacion').modal('show');         
+    };
+    
+    //Funcion que elimina
+     $scope.Desactivar = function() {
+         var objetc = {
             tdEstado : tdEstado
         };
-            var promisePut  = tipoDocumentoService.updateEstado(tdCodigo, objetc);        
+            $('#mdConfirmacion').modal('hide'); 
+            var promisePut  = tipoDocumentoService.updateEstado($scope.IdTipoGlobal, objetc);        
                 promisePut.then(function (d) {                
-               // Materialize.toast(d.data.message, 4000, 'rounded');                
+                 toaster.pop('success', "Control de Información", d.data.message);                 
                 loadTipoDocumento();
             }, function (err) {                              
-                    alert("ERROR AL PROCESAR DESACTIVAR / ACTIVAR");
+                     toaster.pop('error', "Error", "ERROR AL PROCESAR SOLICITUD"); ;
                     console.log("Some Error Occured "+ JSON.stringify(err));
             }); 
-        }        
-    };
    
-   
+     };
    
    
    

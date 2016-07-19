@@ -49,14 +49,40 @@
                                 <td>{{ items.Estado}}</td> 
                                 <td>
                                         <center>
-                                            <a data-ng-click="get(items)" style="float: left; margin-left: 15px;" href="javascript:;"  title="Editar"><i class="fa fa-lg fa-pencil text-success"></i></a>
-                                            <a data-ng-click="Desactivar(items.IdConductor, 'RETIRADO')"  style="float: left; margin-left: 15px;" href="javascript:;"  title="Eliminar"><i class="fa fa-lg fa-trash text-danger"></i></a>
+                                            <a data-ng-click="get(items)" style="float: left; margin-left: 15px;" href="javascript:;"  title="Editar"><i class="fa  fa-1x fa-lg fa-pencil text-success"></i></a>
+                                            <a data-ng-click="VerDesactivar(items.IdConductor, 'RETIRADO')"  style="float: left; margin-left: 15px;" href="javascript:;"  title="Eliminar"><i class="fa fa-1x fa-lg fa-trash text-danger"></i></a>
+                                            <a  ng-click="AgregarLicencia(items)" style="float: left; margin-left: 15px;" href="javascript:;"  title="Licencias"><i class="fa fa-book text-info fa-1x"></i></a>
                                         </center>
                                 </td>
                                   </tr>
 
                                 </tbody>
                             </table>
+                         <div class="modal fade bs-example-modal-sm" id="mdConfirmacion" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" style="margin-top: 10%;">
+                                <div class="modal-dialog modal-sm" style="width: 30%" >                                   
+                                    <div class="modal-content">
+                                       
+                                        <div class="modal-header">
+                                            <div class="modal-title">Activar / Retirado  Conductor</div>
+                                        </div>
+                                        
+                                        <div class="modal-body">
+                                            <div class="row">
+                                                <div class="col-xs-12">
+                                                    <label>¿Está seguro de ejecutar esta acción? '{{Estado}}' </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                                            <button type="button" class="btn btn-primary" ng-click="Desactivar()">Aceptar</button>
+                                        </div>  
+                                        
+                                    </div>
+                                                                     
+                                </div>
+                          </div>
                      </div>
             
                 
@@ -84,7 +110,7 @@
                                  <label  for="txtCedula" >Cédula *</label>
                                       <div class="input-group">    
                                           <div class="input-group-addon"><i class="fa fa-hashtag"></i></div>
-                                             <input type="text" class="form-control" ng-model="Conductor.Cedula" id="txtCedula" placeholder="Identificación"  maxlength="10" ng-blur="validarIdentificacion()" solo-numeros >
+                                          <input type="text" required="" class="form-control" ng-model="Conductor.Cedula" id="txtCedula" placeholder="Identificación"  maxlength="10" ng-blur="validarIdentificacion()" solo-numeros >
                                        </div> 
                              </div>
                         </div>
@@ -104,7 +130,7 @@
                                   <label for="txtTelefonoPpal">Teléfono Principal *</label>
                                      <div class="input-group">    
                                           <div class="input-group-addon"><i class="fa fa-mobile"></i></div>
-                                             <input type="text" class="form-control" ng-model="Conductor.TelefonoPpal"  maxlength="10" id="txtTelefonoPpal" placeholder="teléfono " solo-numeros>
+                                          <input type="text" required="" class="form-control" ng-model="Conductor.TelefonoPpal"  maxlength="10" id="txtTelefonoPpal" placeholder="teléfono " solo-numeros>
                      
                                      </div>
                               </div>
@@ -116,7 +142,7 @@
                                  <label for="txtDireccion">Dirección *</label>
                                       <div class="input-group">    
                                           <div class="input-group-addon"><i class="fa fa-globe"></i></div>
-                                              <input type="text" class="form-control" ng-model="Conductor.Direccion" id="txtDireccion" placeholder="Dirección">
+                                          <input type="text" required=""  class="form-control" ng-model="Conductor.Direccion" id="txtDireccion" placeholder="Dirección">
                                         </div>
                               </div>
                          </div> 
@@ -177,7 +203,7 @@
                                         <div class="input-group">    
                                              <div class="input-group-addon"><i class="fa fa-list-ol"></i></div>
                                                 <select ng-model="Conductor.Escolaridad" name="cboEscolaridad" id="cboEscolaridad" style="width: 105%" class="form-control"  required >
-                                                     <option ng-repeat="itemc in Escolaridades" value="{{itemc.esCodigo}}"> {{itemc.esDescripcion}}</option>
+                                                     <option  ng-repeat="itemc in Escolaridades" value="{{itemc.esCodigo}}"> {{itemc.esDescripcion}}</option>
                                                 </select>                                                
                                         </div> 
                              </div>   
@@ -203,7 +229,7 @@
                                  <label for="txtEstado">Estado *</label>
                                      <div class="input-group">    
                                          <div class="input-group-addon"><i class="fa fa-list-ul"></i></div>
-                                              <select type="text" class="form-control" ng-model="Conductor.Estado" id="txtEstado" placeholder="Estado">
+                                             <select required type="text" class="form-control" ng-model="Conductor.Estado" id="txtEstado" placeholder="Estado">
                                                  <option value="ACTIVO">ACTIVO</option>
                                                  <option value="EN RPOCESO">EN RPOCESO</option>
                                                  <option value="RETIRADO">RETIRADO</option>
@@ -258,7 +284,7 @@
                              </div>
                              <div class="col-xs-2">          
                                  <br/>
-                                      <button   class="btn btn-primary btn-block btn-addon"   type="button"  title="Registrar Conductor" ng-click="Guardar()"><i class="fa fa-check"></i> Guardar</button>
+                                      <button  ng-disabled="frmConductor.$invalid"  class="btn btn-primary btn-block btn-addon"   type="button"  title="Registrar Conductor" ng-click="Guardar()"><i class="fa fa-check"></i> Guardar</button>
                              </div>
                          </div>
                     
@@ -291,7 +317,7 @@
                              <div class="col-xs-6">
                                  <div class="form-group">
                                      <label for="txtNovedad">Descripción *</label>
-                                         <textarea class="form-control"  ng-model="Novedad.nvDescripcion" id="txtNovedad" placeholder="Descripción"></textarea>
+                                     <textarea class="form-control"  required="" ng-model="Novedad.nvDescripcion" id="txtNovedad" placeholder="Descripción"></textarea>
                                  </div>
                              </div>
                     
@@ -300,7 +326,7 @@
                              <div class="col-xs-3">
                                  <div class="form-group">
                                      <button type="button" ng-hide="editMode" class="btn btn-primary btn-addon" ng-click="AgregarNovedad()" style="margin-top:10%" ><i class="fa fa-book"></i> Agregar</button>
-                                     <button type="button" ng-show="editMode" class="btn btn-primary btn-addon" ng-click="GuardarNovedad()" style="margin-top:10%" ><i class="fa fa-check"></i> Guardar</button>
+                                     <button ng-disabled="frmNovedad.$invalid" type="button" ng-show="editMode" class="btn btn-primary btn-addon" ng-click="GuardarNovedad()" style="margin-top:10%" ><i class="fa fa-check"></i> Guardar</button>
                                  </div>
                              </div>
                    </div>                                
@@ -348,7 +374,7 @@
                                  <label for="txtNumero">Numero *</label>
                                       <div class="input-group">    
                                           <div class="input-group-addon"><i class="fa fa-hashtag"></i></div>
-                                             <input type="text" class="form-control" ng-model="LicenciaConduccion.Numero" id="txtNumero" placeholder="Numero Licencia"  maxlength="12" solo-numeros >
+                                             <input type="text" class="form-control" ng-model="LicenciaConduccion.Numero" id="txtNumero" placeholder="Numero Licencia" requred maxlength="12" solo-numeros ng-blur="validarNumero()">
                                        </div> 
                              </div>
                          </div>
@@ -358,7 +384,7 @@
                                  <label for="OTLicencia">Transito *</label>
                                      <div class="input-group">    
                                          <div class="input-group-addon"><i class="fa fa-book"></i></div>
-                                             <input type="text" class="form-control" ng-model="LicenciaConduccion.OTLicencia" maxlength="80" id="txtOTLicencia" placeholder="Organismo de transito">
+                                         <input type="text" class="form-control" ng-model="LicenciaConduccion.OTLicencia" maxlength="80" id="txtOTLicencia" required="" placeholder="Organismo de transito">
                                      </div>
                              </div>
                          </div>
@@ -403,17 +429,17 @@
                                  <label for="Categoria">Categoria *</label>
                                      <div class="input-group">    
                                          <div class="input-group-addon"><i class="fa fa-book"></i></div>
-                                             <input type="text" class="form-control" ng-model="LicenciaConduccion.Categoria" maxlength="10" id="txtCategoria" placeholder="Categoria">
+                                         <input type="text" class="form-control" ng-model="LicenciaConduccion.Categoria" maxlength="10" id="txtCategoria" required="" placeholder="Categoria">
                                      </div>
                              </div>
                          </div>
                          
                          <div class="col-xs-3">
                              <div class="form-group">
-                                 <label for="txtlcConductor"> ID Conductor *</label>
+                                 <label for="txtlcConductor"> Cedula Conductor *</label>
                                       <div class="input-group">    
                                           <div class="input-group-addon"><i class="fa fa-hashtag"></i></div>
-                                             <input type="text" class="form-control" ng-model="LicenciaConduccion.lcConductor" id="txtlcConductor" placeholder="Id Conductor"  maxlength="10" solo-numeros >
+                                          <input type="text" class="form-control" ng-model="LicenciaConduccion.Identificacion" id="txtlcConductor" placeholder="Id Conductor" disabled="" maxlength="10" solo-numeros >
                                        </div> 
                              </div>
                          </div>
@@ -421,11 +447,49 @@
                           <div class="row">
                              <div class="col-xs-2 col-xs-offset-10">          
                                  <br/>
-                                     <button   class="btn btn-primary btn-block btn-addon"   type="button"  title="Guardar Licencia" ng-click="GuardarLicencia()"><i class="fa fa-check"></i> Guardar</button>
+                                     <button  ng-disabled="frmLicencia.$invalid" class="btn btn-primary btn-block btn-addon"   type="button"  title="Guardar Licencia" ng-click="GuardarLicencia()"><i class="fa fa-check"></i> Guardar</button>
                              </div>
                          </div>
                      </div>
                 </form>
+                 <div class="col-xs-12">
+                         <div class="row">
+                             <div class="col-xs-12">
+                                  <table border="0" cellspacing="0" class="table table-striped" style="float:height; margin-top: 30px;">
+                                     <thead>
+                                         <tr>
+                                             <th class="center">NUMERO</th>                                
+                                             <th>O.T LICENCIA</th>  
+                                             <th>FECHA DE EXPEDICIÓN</th>
+                                             <th>FECHA VENCIMIENTO</th>
+                                             <th>ESTADO</th>
+                                             <th>CATEGORIA</th>
+                                             <th>ID CONDUCTOR</th>
+                                             <th width="12%">ACCIÓN</th>
+                                         </tr>
+                                     </thead>
+
+                                     <tbody>
+                                          <tr data-ng-repeat="items in Licencias">
+                                              <td class="center">{{ items.Numero}}</td>
+                                              <td>{{ items.OTLicencia }}</td>
+                                              <td>{{items.FechaExpedicion}}</td>
+                                              <td>{{items.FechaVencimiento}}</td>
+                                              <td>{{items.Estado}}</td>
+                                              <td>{{items.Categoria}}</td>
+                                              <td>{{items.lcConductor}}</td>
+                                              <td>
+                                                 <center>
+                                                     <a data-ng-click="getLicencia(items)" style="float: left; margin-left: 15px;" href="javascript:;"  title="Editar"><i class=" fa fa-1x fa-pencil text-success"></i></a>
+                                                     <a ng-click="Cancelar(items.idCategoria,'INACTIVA')"  style="float: left; margin-left: 15px;" href="javascript:;"  title="Cancelar"><i class="fa fa-1x fa-ban text-warning"></i></a>
+                                                 </center>
+                                              </td>
+                                          </tr>
+                                     </tbody>
+                                   </table>
+                             </div>                               
+                      </div>
+                 </div> 
              </div>
             </div>
         </div>
@@ -439,7 +503,7 @@
         
     });
     
-    $('#tabPanels a[href="#tabRegistro"]').tab('show');
+    //$('#tabPanels a[href="#tabRegistro"]').tab('show');
 
 $(function() {
     
