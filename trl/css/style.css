@@ -186,6 +186,10 @@ input{
   border-width: 0;
   border-radius: 0;
 }
+.input-group-addon {
+  background-color: #edf1f2;
+  border-color: #cfdadd;
+}
 
 
 

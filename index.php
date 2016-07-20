@@ -1,2 +1,2 @@
 <?php
-   header('Location: trl/index.html');
+   header('Location: inicio/index.html');

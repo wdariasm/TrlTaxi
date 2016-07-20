@@ -172,4 +172,62 @@ class UsuarioController extends Controller
     {
         //
     }
+    
+    public function cerrarSesion($usuario)
+    {
+        try{
+            DB::update("UPDATE usuario SET  session='CERRADA' WHERE idUsuario = '$usuario'");
+            return JsonResponse::create(array('message' => 'Correcto', "request" =>'Session Cerrada Correctamente'), 200);
+        }catch (Exception $exc) {
+            return JsonResponse::create(array('message' => "error", "request" =>json_encode($exc)), 401);
+        }
+
+
+    }
+
+    public function autenticar(Request $request){
+        try {
+            $data = $request->all();
+
+            $dirIp= ip2long($request->ip());
+            if (!$dirIp){
+                $dirIp = 0;
+            }
+
+            $user = Usuario::select('Estado','Sesion', 'Clave', 'IdUsuario')->where("Login",$data['username'])->first();                    
+
+            if (empty($user)){
+                return JsonResponse::create(array('message' => "error", "request" =>'Usuario no existe en el Sistema'), 200);
+            }
+
+            if($user['Estado'] != 'ACTIVO'){
+                return JsonResponse::create(array('message' => "error", "request" =>'Usuario Bloqueado'), 200);
+            }
+          
+            $clave =Crypt::decrypt($user['Clave']);      
+            if(strcmp($data['clave'], $clave) !== 0 ){                 
+                return JsonResponse::create(array('message' => "error", "request" =>'Credenciales no validas'), 200);
+            }
+            
+
+            if($user['Sesion'] == 'INICIADA'){
+                $result = DB::Select("SELECT DirIp, IF(DATE(FechaCnx) = CURRENT_DATE(), 'SI', 'NO') entrar"
+                        . " FROM usuario WHERE IdUsuario= '".$user['IdUsuario']."'");                
+                if ($result[0]->entrar == 'SI' && $dirIp!=$result[0]->DirIp ){
+                    return JsonResponse::create(array('message' => "error", "request" =>'Usted Tiene una Sesion iniciada Ya'), 200);
+                }
+            }
+            
+            $usuario = DB::select("SELECT us.IdUsuario,  us.ConductorId, us.ClienteId, us.PersonaId, us.Nombre, us.Login, us.Estado, us.TipoAcceso, "
+                    . " us.Modulo, GROUP_CONCAT(up.IdPermiso SEPARATOR ',') permisos FROM usuario us INNER JOIN "
+                    . " usuariopermiso up ON us.IdUsuario=up.IdUsuario WHERE us.IdUsuario='".$user['IdUsuario']."' GROUP BY us.IdUsuario ");
+
+            DB::update("UPDATE usuario SET FechaCnx = NOW(), DirIp=$dirIp, Sesion='INICIADA' WHERE IdUsuario = ".$user['IdUsuario']."");
+
+            return JsonResponse::create(array('message' =>"Correcto", "request" =>json_encode($usuario)), 200);
+
+        } catch (Exception $exc) {
+            return JsonResponse::create(array('message' => "No se puedo autenticar el usuario", "request" =>json_encode($exc)), 401);
+        }
+    }
 }
