@@ -18,6 +18,10 @@ class ClienteController extends Controller
                 ->get();
     }
 
+    
+     public function validarIdentificacion($Cedula){
+        return Cliente::where("Identificacion",$Cedula)->select("Identificacion")->first();
+    }
     /**
      * Show the form for creating a new resource.
      *

@@ -90,7 +90,7 @@ app.controller("conductorController", ["$scope", "conductorService", "tipoDocume
     function initTabla() {
         $scope.TablaConductor = new ngTableParams({
             page: 1,
-            count: 20,
+            count: 10,
             sorting: undefined
         }, {
             filterDelay: 50,
@@ -205,9 +205,9 @@ app.controller("conductorController", ["$scope", "conductorService", "tipoDocume
         $scope.editMode = false;
         $scope.title = "Nuevo Conductor";
     };
+    
 	
-   
-	//Editar Novedad
+       //Editar Novedad
     $scope.getNovedad = function(item) {
         $scope.Novedad=item;
         $scope.editNovedad = true;
@@ -320,7 +320,7 @@ app.controller("conductorController", ["$scope", "conductorService", "tipoDocume
             FechaExpedicion:moment().format('L'),
             FechaVencimiento: moment().format('L'),
             Estado: "ACTIVA",
-            Categoria:"",
+            Categoria:"C1",
             FechaReg:"",
             lcConductor:""
         };         
@@ -428,7 +428,7 @@ app.controller("conductorController", ["$scope", "conductorService", "tipoDocume
             console.log("Some Error Occured " + JSON.stringify(err));
         });
     };
-    
+  
     loadConductor(); 
     
 }]);

@@ -190,7 +190,7 @@
                                  <label for="txtFechaNacimiento">Fecha Nacimiento *</label>
                                       <div class="input-group">    
                                          <div class="input-group-addon"><i class="fa fa-calendar-o"></i></div>
-                                             <input type="text" id="txtFechaNacimiento" ng-model="Conductor.FechaNacimiento"  name="txtFechaNacimiento" class="form-control" ng-change="Cambiarformato('FechaNacimiento')"  value=""  >
+                                         <input type="text" required="" id="txtFechaNacimiento" ng-model="Conductor.FechaNacimiento"  name="txtFechaNacimiento" class="form-control" ng-change="Cambiarformato('FechaNacimiento')"  value=""  >
                                      </div>
                              </div>
                          </div> 
@@ -201,7 +201,7 @@
                              <div class="form-group">
                                     <label  for="cboEscolaridad">Escolaridad *</label>
                                         <div class="input-group">    
-                                             <div class="input-group-addon"><i class="fa fa-list-ol"></i></div>
+                                             <div class="input-group-addon"><i class="fa fa-mortar-board"></i></div>
                                                 <select ng-model="Conductor.Escolaridad" name="cboEscolaridad" id="cboEscolaridad" style="width: 105%" class="form-control"  required >
                                                      <option  ng-repeat="itemc in Escolaridades" value="{{itemc.esCodigo}}"> {{itemc.esDescripcion}}</option>
                                                 </select>                                                
@@ -216,7 +216,7 @@
                                  <label for="txtFechaIngreso">Fecha Ingreso*</label>
                                      <div class="input-group">    
                                          <div class="input-group-addon"><i class="fa fa-calendar-check-o"></i></div>
-                                              <input type="text" class="form-control" ng-model="Conductor.FechaIngreso" id="txtFechaIngreso" name="txtFechaIngreso" placeholder="Fecha Ingreso" ng-change="Cambiarformato('FechaIngreso')">
+                                         <input required="" type="text" class="form-control" ng-model="Conductor.FechaIngreso" id="txtFechaIngreso" name="txtFechaIngreso" placeholder="Fecha Ingreso" ng-change="Cambiarformato('FechaIngreso')">
                         
                                       </div>
                              </div>
@@ -258,7 +258,7 @@
                                  <label for="txtCdPlaca">Placa *</label>
                                      <div class="input-group">    
                                          <div class="input-group-addon"><i class="fa fa-eraser"></i></div>
-                                         <input type="text" class="form-control" ng-model="Conductor.CdPlaca" maxlength="6" id="txtCdPlaca" placeholder="Placa" ng-blur="ValidarPlaca()">
+                                         <input type="text" class="form-control" ng-model="Conductor.CdPlaca" maxlength="6" id="txtCdPlaca" required="" placeholder="Placa" ng-blur="ValidarPlaca()">
                                      </div>
                               </div>
                          </div>
@@ -280,7 +280,7 @@
                           <div class="row">
                              <div class="col-xs-2 col-xs-offset-8">                                        
                                  <br/>
-                                     <button   class="btn btn-danger btn-block btn-addon"   type="button"  title="Nuevo Conductor" ng-click="Nuevo()"><i class="fa fa-pencil"></i>Nuevo</button>
+                                     <button   class="btn btn-success btn-block btn-addon"   type="button"  title="Nuevo Conductor" ng-click="Nuevo()"><i class="fa fa-pencil"></i>Nuevo</button>
                              </div>
                              <div class="col-xs-2">          
                                  <br/>
@@ -424,14 +424,19 @@
                               </div>
                          </div>
                          
-                         <div class="col-xs-3">
+                          <div class="col-xs-3">
                              <div class="form-group">
-                                 <label for="Categoria">Categoria *</label>
+                                 <label for="txtCategoria">Categoria *</label>
                                      <div class="input-group">    
                                          <div class="input-group-addon"><i class="fa fa-book"></i></div>
-                                         <input type="text" class="form-control" ng-model="LicenciaConduccion.Categoria" maxlength="10" id="txtCategoria" required="" placeholder="Categoria">
-                                     </div>
-                             </div>
+                                             <select required type="text" class="form-control" ng-model="LicenciaConduccion.Categoria" id="txtCategoria" placeholder="Categoria">
+                                                 <option value="C1">C1</option>
+                                                 <option value="C2">C2</option>
+                                                 <option value="C3">C3</option>
+                                              </select>
+                       
+                                      </div>
+                              </div>
                          </div>
                          
                          <div class="col-xs-3">

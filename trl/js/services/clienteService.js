@@ -29,8 +29,8 @@ app.service("clienteService",[ '$http', function ($http) {
         return req;
     };
     
-     this.validarIdentificacion = function(Cedula){
-        var req = $http.get(uri+'/api/cliente/' + Cedula +'/validar');
+     this.validarIdentificacion = function(Identificacion){
+        var req = $http.get(uri+'/api/cliente/' + Identificacion +'/validar');
         return req;	
     };
 }]);
