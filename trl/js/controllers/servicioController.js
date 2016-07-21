@@ -4,6 +4,8 @@ app.controller("servicioController", ["$scope", "servicioService", "toaster",fun
    $scope.IdServicioGlobal="";
    $scope.editMode = false;
    
+   $scope.$parent.SetTitulo("SERVICIO");
+
    
       initServicio();
     function initServicio() {
@@ -66,7 +68,7 @@ app.controller("servicioController", ["$scope", "servicioService", "toaster",fun
     //Funcion que elimina
      $scope.Desactivar = function() {
          var objetc = {
-            svEstado : svEstado
+            svEstado : $scope.svEstado
         };
             $('#mdConfirmacion').modal('hide'); 
             var promisePut  = servicioService.updateEstado($scope.IdServicioGlobal, objetc);        

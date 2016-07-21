@@ -4,6 +4,9 @@ app.controller("escolaridadController", ["$scope", "escolaridadService","toaster
    $scope.IdGlobal="";
    $scope.editMode = false;
    
+        $scope.$parent.SetTitulo("ESCOLARIDAD");
+
+   
    initEscolaridad();
     function initEscolaridad() {
         $scope.Escolaridad = {
@@ -68,7 +71,7 @@ app.controller("escolaridadController", ["$scope", "escolaridadService","toaster
     //Funcion que elimina
      $scope.Desactivar = function() {
          var objetc = {
-            esEstado : esEstado
+            esEstado :$scope.esEstado
         };
             $('#mdConfirmacion').modal('hide'); 
             var promisePut  = escolaridadService.updateEstado($scope.IdGlobal, objetc);        

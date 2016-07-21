@@ -121,7 +121,7 @@ class ClienteController extends Controller
             $cliente->save();
             return JsonResponse::create(array('message' => "Datos Actualizados Correctamente", "request" =>json_encode($IdCliente)), 200);
         } catch (Exception $ex) {
-            return JsonResponse::create(array('message' => "No se pudo modificar el Taxista", "exception"=>$ex->getMessage(), "request" =>json_encode($IdCliente)), 401);
+            return JsonResponse::create(array('message' => "No se pudo modificar el Cliente", "exception"=>$ex->getMessage(), "request" =>json_encode($IdCliente)), 401);
         }
     }
     

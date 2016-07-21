@@ -18,6 +18,9 @@ app.controller("conductorController", ["$scope", "conductorService", "tipoDocume
    $scope.editMode = false;
    $scope.editNovedad = false;
    
+        $scope.$parent.SetTitulo("GESTION DE CONDUCTOR");
+
+   
     initialize();
     initNovedad();
     initLicencia();
@@ -227,7 +230,7 @@ app.controller("conductorController", ["$scope", "conductorService", "tipoDocume
     //Funcion que elimina
      $scope.Desactivar = function() {
          var objetc = {
-            Estado : Estado
+            Estado :$scope.Estado
         };
             $('#mdConfirmacion').modal('hide'); 
             var promisePut  = conductorService.updateEstado($scope.IdConductorGlobal, objetc);        

@@ -3,16 +3,26 @@
         <div class="col-xs-12">  
              <div class="tabbable-line">
                     <ul class="nav nav-tabs nav-justified" id="tabPanels">
-                        <li class="active"> <a href="#tabListado" data-toggle="tab">Listado de Personal </a></li>
-                        <li><a href="#tabRegistro" data-toggle="tab">Registrar  Personal </a></li>
-                        <li><a href="#tabRol" data-toggle="tab">Rol</a></li>
-                        <li><a href="#tabPermiso" data-toggle="tab">Permisos</a></li>
+                        <li class="active"> <a href="#tabListado" data-toggle="tab">Listado de Cliente </a></li>
+                        <li><a href="#tabRegistro" data-toggle="tab">Registrar  Cliente </a></li>
                     </ul>
              </div>
             
             <div class="tab-content">
                  <br/>
                         <div class="tab-pane active" id="tabListado">
+                            <div class="row">
+                             <div class="col-xs-6">
+                                 <label  for="search">Filtro</label>
+                                     <div class="input-group">
+                                         <div class="input-group-addon"><i class="fa  fa-search text-primary"></i></div>
+                                         <input  class="form-control" id="search" type="search" placeholder="" ng-model="TablaCliente.filter()['filtro']">
+                                     </div>
+                              </div>
+                              <div class="" style="float:width; margin-top:30px;">
+                                     <label class=" text-primary" style="font-size: 18px;">Total: {{Clientes.length}}</label>
+                              </div>
+                            </div>
                             <table class="table table-hover table-condensed" ng-table="TablaCliente" style="float:height; margin-top: 50px;">
                                 <thead>
                                     <tr>
@@ -40,7 +50,7 @@
                                 <td>
                                         <center>
                                             <a data-ng-click="get(items)" style="float: left; margin-left: 15px;" href="javascript:;"  title="Editar"><i class="fa fa-lg fa-pencil text-success"></i></a>
-                                            <a data-ng-click="VerDesactivar(items.IdCliente, 'RETIRADO')"  style="float: left; margin-left: 15px;" href="javascript:;"  title="Eliminar"><i class="fa fa-lg fa-trash text-danger"></i></a>
+                                            <a data-ng-click="VerDesactivar(items.IdCliente, 'INACTIVO')"  style="float: left; margin-left: 15px;" href="javascript:;"  title="Eliminar"><i class="fa fa-lg fa-trash text-danger"></i></a>
                                         </center>
                                 </td>
                                   </tr>
@@ -48,12 +58,12 @@
                                 </tbody>
                               
                             </table>
-                             <div class="modal fade bs-example-modal-sm" id="mdConfirmacion" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" style="margin-top: 10%;">
+                              <div class="modal fade bs-example-modal-sm" id="mdConfirmacion" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" style="margin-top: 10%;">
                                 <div class="modal-dialog modal-sm" style="width: 30%" >                                   
                                     <div class="modal-content">
                                        
                                         <div class="modal-header">
-                                            <div class="modal-title">Activar / Retirado  Cliente</div>
+                                            <div class="modal-title">Activar / Inactivar  Cliente</div>
                                         </div>
                                         
                                         <div class="modal-body">
@@ -152,7 +162,7 @@
                                             <label for="txtTelefono3">Teléfono</label>
                                                 <div class="input-group">    
                                                     <div class="input-group-addon"><i class="fa fa-phone"></i></div>
-                                                        <input type="text" id="txtTelefono3" class="form-control" ng-model="Cliente.MovilTres" maxlength="10" solo-numeros id="txtTelefonoTres" placeholder="Teléfono">
+                                                        <input type="text" id="txtTelefono3" class="form-control" ng-model="Cliente.MovilTres" maxlength="10" solo-numeros  placeholder="Teléfono">
                                                </div>
                                                
                                        </div>
@@ -175,7 +185,7 @@
                                             <label for="txtDigitoVerificacion">Digito Verificación  *</label>
                                                 <div class="input-group">    
                                                     <div class="input-group-addon"><i class="fa fa-hashtag"></i></div>
-                                                         <input type="text" class="form-control" ng-model="Cliente.DigitoVerificacion" id="txtDigitoVerificacion" placeholder="Digito Verificación">
+                                                    <input type="text" class="form-control" ng-model="Cliente.DigitoVerificacion" id="txtDigitoVerificacion" placeholder="Digito Verificación" maxlength="2">
                                                </div>
                                        </div>
                                    </div> 
@@ -204,78 +214,6 @@
                                 </div>                                
                             </form>    
                         </div>
-                  
-                 
-                        <div class="tab-pane" id="tabRol">
-                            <form name="frmRol" id="frmRol" novalidate>
-                                 <div class="row">
-                                    <div class="col-xs-4">
-                                        <div class="form-group">
-                                            <label for="txtRol">Descripción *</label>
-                                               <div class="input-group">
-                                                    <div class="input-group-addon"><i class="fa fa-user"></i></div>
-                                                        <input type="text" class="form-control"  ng-model="Rol.Descripcion" id="txtRol" placeholder="Descripción">
-                                               </div>
-                                        </div>
-                                   </div>
-                    
-                                   <div class="col-xs-3">
-                                        <div class="form-group">
-                                            <label for="txtEstado">Estado *</label>
-                                                <div class="input-group">    
-                                                    <div class="input-group-addon"><i class="fa fa-list-ul"></i></div>
-                                                        <select type="text" class="form-control" ng-model="Rol.Estado" id="txtEstado" placeholder="Estado">
-                                                            <option value="ACTIVO">ACTIVO</option>
-                                                            <option value="INACTIVO">INACTIVO</option>
-                                                        </select>
-                                               </div>
-                                       </div>
-                                   </div>
-
-                                   <div class="col-xs-2">
-                                        <div class="form-group">
-                                            <button type="button" class="btn btn-info" ng-click="AgregarRol()" style="margin-top:20%" >Agregar</button>
-                                       </div>
-                                   </div>  
-                              </div>                                
-                         </form>
-                     
-                        <div class="col-xs-12">
-                            <div class="row">
-                                <div class="col-xs-12">
-                                    <table border="0" cellspacing="0" class="table table-striped" >
-                                        <thead>
-                                            <tr>
-                                                <th class="center">DESCRIPCIÓN</th>                                
-                                                <th>ESTADO </th>  
-                                                <th width="12%">ACCIÓN</th>
-                                           </tr>
-                                      </thead>
-
-                                      <tbody>
-                                           <tr data-ng-repeat="items in Roles">
-                                                <td class="center">{{ items.nvTipo}}</td>
-                                                <td>{{ items.nvDescripcion }}</td>
-                                                <td>
-                                                    <center>
-                                                        <a data-ng-click="get(items)" style="float: left; margin-left: 3px;" href="javascript:;"  title="Editar"><i class="small small mdi-image-edit teal-text  darken-1"></i></a>
-                                                        <a ng-click="Desactivar(items.idCategoria, 'Borrado')"  style="float: left; margin-left: 3px;" href="javascript:;"  title="Eliminar"><i class="small mdi-action-delete red-text text-deep-orange darken-1"></i></a>
-                                                    </center>
-                                               </td>
-                                           </tr>
-                                     </tbody>
-                                  </table>
-                               </div>                            
-                           </div>
-                      </div>
-                    </div>
-                 
-                    <div class="tab-pane" id="tabPermiso">
-                        <form name="frmPermiso" id="frmPermiso" novalidate>
-                            <div class="row">
-                            </div>
-                       </form>
-                    </div>
               </div>
           </div>
       </div>

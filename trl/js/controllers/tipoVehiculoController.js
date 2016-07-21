@@ -5,6 +5,9 @@ function ($scope, tipoVehiculoService,toaster) {
    $scope.IdTipoGlobal="";
    $scope.editMode = false;
    
+        $scope.$parent.SetTitulo("TIPOS DE VEHICULOS");
+
+   
      initTipoVehiculo();
     function initTipoVehiculo() {
         $scope.TipoVehiculo = {
@@ -69,7 +72,7 @@ function ($scope, tipoVehiculoService,toaster) {
     //Funcion que elimina
      $scope.Desactivar = function() {
          var objetc = {
-            tvEstado : tvEstado
+            tvEstado : $scope.tvEstado
         };
             $('#mdConfirmacion').modal('hide'); 
             var promisePut  = tipoVehiculoService.updateEstado($scope.IdTipoGlobal, objetc);        

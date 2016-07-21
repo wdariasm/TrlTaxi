@@ -5,6 +5,9 @@ app.controller("marcaController", ["$scope", "marcaService","toaster",
    $scope.IdMarcaGlobal="";
    $scope.editMode = false;
    
+   $scope.$parent.SetTitulo("MARCA");
+
+   
     initMarca();
     function initMarca() {
         $scope.Marca = {
@@ -63,7 +66,7 @@ app.controller("marcaController", ["$scope", "marcaService","toaster",
     //Funcion que elimina
      $scope.Desactivar = function() {
          var objetc = {
-            maEstado : maEstado
+            maEstado :$scope.maEstado
         };
             $('#mdConfirmacion').modal('hide'); 
             var promisePut  = marcaService.updateEstado($scope.IdMarcaGlobal, objetc);        

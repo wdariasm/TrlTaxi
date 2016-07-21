@@ -5,7 +5,8 @@ function ($scope, tipoDocumentoService,toaster) {
    $scope.IdTipoGlobal="";
    $scope.editMode = false;
    
-   
+   $scope.$parent.SetTitulo("TIPO DOCUMENTO");
+
      initTipoDocumento();
     function initTipoDocumento() {
         $scope.TipoDocumento = {
@@ -71,7 +72,7 @@ function ($scope, tipoDocumentoService,toaster) {
     //Funcion que elimina
      $scope.Desactivar = function() {
          var objetc = {
-            tdEstado : tdEstado
+            tdEstado : $scope.tdEstado
         };
             $('#mdConfirmacion').modal('hide'); 
             var promisePut  = tipoDocumentoService.updateEstado($scope.IdTipoGlobal, objetc);        

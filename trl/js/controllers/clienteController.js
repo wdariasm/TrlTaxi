@@ -9,6 +9,9 @@ function ($scope, clienteService, tipoDocumentoService,toaster,ngTableParams) {
    $scope.valIdent=false;
    $scope.editMode = false;
    
+     $scope.$parent.SetTitulo("GESTION DE CLIENTE");
+   
+   
     function initialize() {
         $scope.Cliente = {
             IdCliente :"",
@@ -51,7 +54,7 @@ function ($scope, clienteService, tipoDocumentoService,toaster,ngTableParams) {
    function initTabla() {
         $scope.TablaCliente = new ngTableParams({
             page: 1,
-            count: 20,
+            count: 10,
             sorting: undefined
         }, {
             filterDelay: 50,
@@ -116,7 +119,7 @@ function ($scope, clienteService, tipoDocumentoService,toaster,ngTableParams) {
     };
     
      //Funcion que elimina
-     $scope.VerDesactivar = function(IdCliente,  Estado) {
+         $scope.VerDesactivar = function(IdCliente,  Estado) {
         $scope.Estado =Estado;
         $scope.IdClienteGlobal = IdCliente;
         $('#mdConfirmacion').modal('show');         
@@ -125,12 +128,12 @@ function ($scope, clienteService, tipoDocumentoService,toaster,ngTableParams) {
    
      $scope.Desactivar = function() {
          var objetc = {
-            Estado : Estado
+            Estado :$scope.Estado
         };
             $('#mdConfirmacion').modal('hide'); 
             var promisePut  = clienteService.updateEstado($scope.IdClienteGlobal, objetc);        
                 promisePut.then(function (d) {                
-                toaster.pop('success', "Control de Información", d.data.message);                 
+                 toaster.pop('success', "Control de Información", d.data.message);                 
                 loadCliente(); 
             }, function (err) {                              
                      toaster.pop('error', "Error", "ERROR AL PROCESAR SOLICITUD"); ;

@@ -7,9 +7,12 @@ function($scope, usuarioService,toaster) {
     $scope.active = "";
     $scope.editMode = false;    
     
+         $scope.$parent.SetTitulo("GESTION DE USUARIO");
+
+    
     loadUsuarios();        
     initialize();
-    
+
     function initialize() {
         $scope.Usuario = {
             Login: "",
