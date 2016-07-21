@@ -1,78 +1,5 @@
  <style>
-            
-    body{
-        overflow: auto;
-    }
-    .header{
-        background-color: #edf1f2;
-        height: 18em;
-        position: relative;
-        z-index: 1;
-    }     
-
-    .titulo{               
-        color: #fff;    
-        width: 240px;
-        text-align: center;
-        height: 80px;
-        font-size: 24px;
-        font-weight: 700;
-        border-radius: 2%;  
-        margin-top: 10px;
-        -webkit-transition: all 0.2s ease-in-out;
-        -o-transition: all 0.2s ease-in-out;
-        transition: all 0.2s ease-in-out;
-    }
-    .titulo img{
-         width: 430px; height: 180px;
-    }
-
-    .pages {                                
-        overflow: auto;
-        padding: 0;
-        position: absolute;                           
-        top: 0;
-        z-index: 2;               
-    }
-
-    .pages > div {
-        padding: 64px 5px 0;            
-    }
-
-    .pages .header {
-        color: #F36F23 ;
-        font-size: 24px;
-        font-weight: normal;
-        letter-spacing: 1.2px;
-        margin-bottom: 60px;
-        margin-top: 5px;
-    }
-
-    .page {  
-        display: block;
-        opacity: 1;
-        transform: translateY(0px);
-        transition: all 0.3s ease-out 0s;
-    }     
-
-    .pageicon {
-        border: 3px solid #F36F23;
-        border-radius: 50px;
-        color: #F36F23;                                
-        font-size: 65px;
-        margin-top: 5px;
-        text-align: center;
-        width: 98px;
-        margin: 0 auto;
-    }
-
-    .espacio{
-        margin-top: 40px;
-    }
-    .well{
-        background-color: #fff;
-    }
-
+                  
     @media (max-width:480px){
         .pageicon {                    
             font-size: 45px;
@@ -98,23 +25,23 @@
 
 </style>
 
-
-<div ng-controller="sesionController" class="row">
-    <div  class="header"> 
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-md-3 col-xs-3">
-                    <div class="titulo">
-                        <label class="visible-xs" >Transporte Ruta libre</label>
-                        <img src="../trl/images/logo.png" class="animated slideInLeft"  alt="logo"/> 
+<div ng-controller="sesionController" class="container-fluid">
+    <div  class="row">
+        <div  class="header"> 
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-3 col-xs-3">
+                        <div class="titulo">
+                            <label class="visible-xs hidden-sm" >Transporte Ruta libre</label>
+                            <img src="../trl/images/logo.png" class="animated slideInLeft"  alt="logo"/> 
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </div>  
-        <div class="container-fluid">
+        </div>  
+        
             <div class="row">               
-                <div  class="pages col-md-10 col-xs-12">                                   
+                <div  class=" col-md-10 col-xs-12 pages">                                   
                     <div class="col-md-4 col-md-offset-5 col-xs-10 col-xs-offset-1">                         
                         <div class="well page animated slideInDown" >               
 
@@ -157,6 +84,6 @@
                     </div>
                 </div>                                    
             </div>   <!-- div pages-->              
-        </div>  <!-- div row-->
-    </div> <!-- div Container-fluid-->                               
-</div>
+        </div>  <!-- div row-->                                 
+    </div>
+</div> <!-- div Container-fluid-->  

@@ -1,29 +1,43 @@
-<!--
-    CONFIRMAR EMAIL
--->
-<div ng-controller="ConfirmarController" class="row">
-    <div class="decoration-head"></div>
-    <div class="resplandor"></div>
-    <div id="logo" class="animated bounceIn"></div>
-    <div id="contenedor-login" class="animated bounceInLeft">                    
-        <table width="100%" align="center">
-            <tr>
-                <td></td>
-            </tr>
-            <tr>
-                 <h2>Confirmación de Cliente</h2>
-                    <hr>
-                    <br/>
+<style>
+    body{
+        background-color: #edf1f2
+    }
+</style>
 
-            </tr>
+<div ng-controller="ConfirmarController" class="container-fluid" >
+   
+    <div  class="row">
+        <div  class="header"> 
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-3 col-xs-3">
+                        <div class="titulo">                            
+                            <img src="../trl/images/logo.png" class="animated slideInLeft"  alt="logo"/> 
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>  
+        
+        <div class="row" >              
+                <div  class=" col-md-10 col-xs-12 pages">                                   
+                    <div class="col-md-4 col-md-offset-5 col-xs-10 col-xs-offset-1">                         
+                        <div class="well page animated slideInDown" >               
 
-            <tr>
-            <h3 style="font-family: 'roboto',tahoma; color: #FFFFFF;">Estamos Procesando Su Solicitud, Espere.....</h3>
-            </tr>
+                            <h2 class="text-primary  text-center espacio"><strong>Confirmación de Usuario</strong></h2><br/>                         
+                            <div class="pageicon"><span class="fa {{msjIcono}} "></span></div>                                                 
+                            <div class="row espacio" >          
+                                <div class="col-md-10 text-center col-md-offset-1">                          
 
-            <tr>
-                <td><div class="error"  style="font-size: 20px; margin-top: 15px;">{{msjError}}</div></td>
-            </tr>                
-        </table>        
-    </div>    
+                                    <h5>{{msjError}}</h5>
+                                    <br/> <br/><br/> 
+                                </div>                            
+                           
+                        </div>
+                    </div>
+                </div>                                    
+            </div>   <!-- div pages-->              
+        </div>  <!-- div row-->                                 
+    </div>
+    
 </div>

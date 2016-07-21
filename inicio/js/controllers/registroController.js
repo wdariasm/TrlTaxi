@@ -1,27 +1,31 @@
-app.controller('ConfirmarController', function ($scope, $routeParams, registroService) {
+app.controller('ConfirmarController', function ($scope, $routeParams, sesionService) {
     $scope.idCliente = $routeParams.idCliente;
     $scope.haskey = $routeParams.haskey;
-    $scope.msjError = "";
-    verificarUser();
+    $scope.msjError = "Procesando información,  Espere.....";
+    $scope.msjIcono = "fa-spinner  fa-pulse";
     function verificarUser(){
-        var promiseGet = registroService.confirmar($scope.idCliente,$scope.haskey);
+        var promiseGet = sesionService.confirmar($scope.idCliente,$scope.haskey);
         promiseGet.then(function (d) {
             if (d.data.message =="Correcto"){
+                $scope.msjIcono = "fa-check";
                 $scope.msjError = d.data.request;
-                setTimeout( "location.href = '#/login/cliente'", 5000);
-                $scope.msjError +=" .. En Segundos Sera Redireccionado..";
+                setTimeout( "location.href = '#/inicio/login'", 5000);
+                $scope.msjError +=" .. En segundos sera redireccionado..";
+                
             } else {
                 $scope.msjError = d.data.request;
+                $scope.msjIcono = "fa-frown-o";
             }
 
         }, function (err) {
-                $scope.msjError = 'Error Al procesar Solicitud';
+                $scope.msjError = 'Error al procesar solicitud';
                 console.log("Some Error Occured "+ JSON.stringify(err));
         });
     }
+    verificarUser();
 });
 
-app.controller('recordarClaveController', function ($scope, registroService) {
+app.controller('recordarClaveController', function ($scope, sesionService) {
 
     $scope.Cliente = {};
     $scope.msjError = "";
@@ -40,7 +44,7 @@ app.controller('recordarClaveController', function ($scope, registroService) {
             email : $scope.Cliente.email.toUpperCase()
         };
 
-        var promisePost = registroService.recuperar(object);
+        var promisePost = sesionService.recuperar(object);
         promisePost.then(function (d) {
             $scope.msjError = d.data.request;
         }, function (err) {
@@ -51,7 +55,7 @@ app.controller('recordarClaveController', function ($scope, registroService) {
 
 });
 
-app.controller('cambiarClaveController', function ($scope, $routeParams, registroService) {
+app.controller('cambiarClaveController', function ($scope, $routeParams, sesionService) {
 
     $scope.id = $routeParams.id;
     $scope.idCliente = $routeParams.idCliente;
@@ -63,7 +67,7 @@ app.controller('cambiarClaveController', function ($scope, $routeParams, registr
 
     verificarKey();
     function verificarKey(){
-        var promiseGet = registroService.verificarKey($scope.idCliente,$scope.id, $scope.haskey);
+        var promiseGet = sesionService.verificarKey($scope.idCliente,$scope.id, $scope.haskey);
         promiseGet.then(function (d) {
             if (d.data.message === "Correcto"){
                 $scope.editMode = true;
@@ -90,7 +94,7 @@ app.controller('cambiarClaveController', function ($scope, $routeParams, registr
             verificar : "SI"
         };
 
-        var promisePut = registroService.udpatePass($scope.idCliente,object);
+        var promisePut = sesionService.udpatePass($scope.idCliente,object);
         promisePut.then(function (d) {
             if (d.data.message === "Correcto"){
                 $scope.msjError = d.data.request;

@@ -14,7 +14,7 @@ var app;
             })
             
             .when('/confirmar/:idCliente/:haskey', {
-                templateUrl: 'views/cliente/confirmar.html'                
+                templateUrl: 'views/inicio/confirmar.html'                
             }) 
             
             .when('/cambiarClave/:id/:idCliente/:haskey', {

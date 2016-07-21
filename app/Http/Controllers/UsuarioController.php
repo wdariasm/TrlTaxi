@@ -230,4 +230,97 @@ class UsuarioController extends Controller
             return JsonResponse::create(array('message' => "No se puedo autenticar el usuario", "request" =>json_encode($exc)), 401);
         }
     }
+    
+    public function ConfirmarCuenta($id, $key){
+
+        $usuario = Usuario::where("IdUsuario",$id)->where("KeyConf",$key)
+                ->select("KeyConf")->first();
+
+        if (empty($usuario)){
+            return JsonResponse::create(array('message' => "Error", "request" =>'Error, Key de confirmación invalido'), 200);
+        }
+
+        DB::update("UPDATE usuario SET Estado = 'ACTIVO' WHERE IdUsuario = $id ");
+
+        return JsonResponse::create(array('message' => "Correcto", "request" =>'Usuario confirmado correctamente'), 200);
+    }
+
+    public function RecuperarClave(Request $request){
+        $data = $request->all();
+        $correo = $data['email'];
+
+        $usuario = Cliente::where("Email",$correo)->select('Email', 'Nombre',  'idCliente')->first();
+        if (empty($usuario)) {
+            return JsonResponse::create(array('message' => "error", "request" =>'Email No Existe en El Sistema'), 200);
+        }
+
+        if (strcmp($usuario->Email, $correo) !== 0) {
+            return JsonResponse::create(array('message' => "error", "request" =>'El Email Ingresado no Coincide, Con el registrado en el Sistema'), 200);
+        }
+
+        $keyCon = uniqid('bT',true);
+        DB::update("UPDATE recuperacion SET estado ='VENCIDO' WHERE idCliente = $usuario->idCliente AND date(fecha)= CURRENT_DATE()");
+        $id = DB::table('recuperacion')->insertGetId(
+            array('idCliente' => $usuario->idCliente, 'keyConf' => $keyCon, 'estado' => 'ACTIVO')
+        );
+
+        $config = Configuracion::where("idParametro",1)->select('empresa', 'prUrl')->first();
+
+        $para  = $usuario->Email;
+        $nombre = $usuario->Nombre;
+        // título
+        $título = utf8_encode("Cambio de Contraseña [$config->empresa]");
+        // mensaje
+        $mensaje = "
+        <html>
+        <head>
+          <title>". utf8_encode("Recuperación de  Contraseña") ."</title>
+        </head>
+        <body>
+            <img style='height:60px;' src='http://$config->prUrl/taxi/images/logo.png' alt=''/>
+            <h1>Hola, ". $usuario->Nombre ."</h1><br/>
+            <p>Hemos Recibido una solicitud, para recuperar Contraseña</p>
+            <p> Si deseas cambiar tu Contraseña, por favor sigue este enlace para ingresar una Nueva Contraseña</p>
+            <p><a href='http://$config->prUrl/cliente/index.html#/cambiarClave/$id/$usuario->idCliente/$keyCon' target='_blank'>Click Aqui, para cambiar tu Contraseña</a></p>
+            <br/>
+            <p>Atentamente</p>
+            <p>Tu equipo de $config->empresa</p>
+        </body>
+        </html>
+        ";
+
+        $cabeceras  = 'MIME-Version: 1.0' . "\r\n";
+        $cabeceras .= 'Content-type: text/html; charset=UTF-8' . "\r\n";
+
+        $cabeceras .= 'To: '.$nombre.' <'.$para.'>' . "\r\n";
+        $cabeceras .= 'From: SportsBook Atlantis <info@BahiaTaxi.com>' . "\r\n";
+        //mail($para, $título, $mensaje, $cabeceras);
+        return JsonResponse::create(array('message' => "Correcto", "request" =>'Email enviado Correctamente'), 200);
+    }
+
+    
+
+    public function vefiricarKey($idCliente, $id, $key){
+
+       $Object =DB::select("SELECT id, idCliente, estado,  TIMESTAMPDIFF(MINUTE, fecha, NOW()) AS minutos"
+               . " FROM recuperacion WHERE id=$id  AND keyConf = '$key' LIMIT 1");
+
+        if(empty($Object)){
+           return array('message' => 'error', 'request' =>'Error, Key de Confirmación Invalido');
+        }
+
+        if($Object[0]->idCliente != $idCliente){
+           return array('message' => 'error', 'request' =>'Error, Key de Confirmación Falso');
+        }
+
+        if($Object[0]->estado == 'VENCIDO'){
+           return array('message' => 'error', 'request' =>'Error, Key de Confirmación Vencido');
+        }
+
+        if( (int)$Object[0]->minutos > 10){
+           return array('message' => 'error', 'request' =>'Error, El tiempo para Cambiar tu Contraseña ha Caducado');
+        }
+
+        return array('message' => "Correcto", "request" =>'');
+    }
 }

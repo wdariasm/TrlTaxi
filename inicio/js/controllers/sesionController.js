@@ -34,7 +34,8 @@ app.controller('sesionController', ['$scope' , 'sesionService', 'toaster', funct
         promise.then(function(d) {
             if (d.data.message === "Correcto") {
                 sessionStorage.setItem("usuario","");
-                sessionStorage.setItem("usuario",d.data.request);                
+                sessionStorage.setItem("usuario",btoa(d.data.request));             
+                return;
                 location.href = "../trl/index.html";
                 
             } else{
