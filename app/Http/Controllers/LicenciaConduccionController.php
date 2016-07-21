@@ -106,7 +106,7 @@ class LicenciaConduccionController extends Controller
             $licencia->lcConductor = $data["lcConductor"];
             $licencia->save();
             
-            return JsonResponse::create(array('message' => "Conductor Actualizado Correctamente", "request" =>json_encode($licencia->IdLicencia)), 200);
+            return JsonResponse::create(array('message' => "Licencia Actualizado Correctamente", "request" =>json_encode($licencia->IdLicencia)), 200);
         } catch (Exception $exc) {
             return JsonResponse::create(array('message' => "No se pudo guardar", "request" =>json_encode($exc->message)), 401);
         }
@@ -121,5 +121,19 @@ class LicenciaConduccionController extends Controller
     public function destroy($id)
     {
         //
+    }
+    
+    
+     //Actualiza el estado (Funcion eliminar)
+      public function updateEstado(Request $request, $IdLicencia){
+        try {
+            $data = $request->all();
+            $licencia =  LicenciaConduccion::find($IdLicencia);
+            $licencia->Estado = $data['Estado'];
+            $licencia->save();
+            return JsonResponse::create(array('message' => "Datos Actualizados Correctamente", "request" =>json_encode($IdLicencia)), 200);
+        } catch (Exception $ex) {
+            return JsonResponse::create(array('message' => "No se pudo modificar el Taxista", "exception"=>$ex->getMessage(), "request" =>json_encode($IdLicencia)), 401);
+        }
     }
 }

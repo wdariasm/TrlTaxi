@@ -70,6 +70,11 @@ app.service("conductorService",[ '$http', function ($http) {
         return req;	
     };
     
+     this.updateEstadoLicencia=function(id, object){
+        var req = $http.put(uri+'/api/licenciaConduccion/updateEstado/' + id, object);
+        return req;
+    };  
+    
 }]);
 
 

@@ -13,6 +13,7 @@ app.controller("conductorController", ["$scope", "conductorService", "tipoDocume
    
    $scope.title="Registro Conductor";
    $scope.IdConductorGlobal = "";
+   $scope.IdLicenciaG="";
    $scope.TablaConductor = {};
    $scope.TablaNovedad = {};
    $scope.editMode = false;
@@ -431,6 +432,29 @@ app.controller("conductorController", ["$scope", "conductorService", "tipoDocume
             console.log("Some Error Occured " + JSON.stringify(err));
         });
     };
+    
+     $scope.VerDesactivarLicencia = function(IdLicencia,  Estado) {
+        $scope.Estado =Estado;
+        $scope.IdLicenciaG = IdLicencia;
+        $('#mdConfirmacion').modal('show');         
+    };
+    
+    //Funcion que elimina
+     $scope.DesactivarLicencia = function() {
+         var objetc = {
+            Estado :$scope.Estado
+        };
+            $('#mdConfirmacion').modal('hide'); 
+            var promisePut  = conductorService.updateEstadoLicencia($scope.IdLicenciaG, objetc);        
+                promisePut.then(function (d) {                
+                 toaster.pop('success', "Control de Información", d.data.message);                 
+                loadLicenciaConduccion(); 
+            }, function (err) {                              
+                     toaster.pop('error', "Error", "ERROR AL PROCESAR SOLICITUD"); ;
+                    console.log("Some Error Occured "+ JSON.stringify(err));
+            }); 
+   
+     };
   
     loadConductor(); 
     
