@@ -323,4 +323,19 @@ class UsuarioController extends Controller
 
         return array('message' => "Correcto", "request" =>'');
     }
+    
+    
+       public function updateEstado(Request $request, $IdUsuario){
+       try {
+           $data = $request->all();
+           $usuario = Usuario::find($IdUsuario);
+           $usuario->Estado = $data['Estado'];
+           $msj = ($data['Estado'] === 'ACTIVO') ? 'ACTIVADO' : 'BORRADO';
+           $usuario->save();
+           return JsonResponse::create(array('message' => "USUARIO $msj CORRECTAMENTE", "request" =>json_encode($IdUsuario)), 200);
+       } catch (Exception $ex) {
+           return JsonResponse::create(array('message' => "No se pudo modificar el usuario", "exception"=>$ex->getMessage(), "request" =>json_encode($IdUsuario)), 401);
+       }
+   }
+
 }

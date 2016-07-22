@@ -20,8 +20,18 @@ app.service("usuarioService", ['$http', function ($http) {
         return req;        
     };
     
-    this.perfil = function () {
-        var req = $http.get(uri+'/api/perfil');
+     this.cliente = function () {
+        var req = $http.get(uri+'/api/cliente');
+        return req;
+    };
+    
+    this.conductor = function () {
+        var req = $http.get(uri+'/api/conductor');
+        return req;
+    };
+    
+     this.persona = function () {
+        var req = $http.get(uri+'/api/persona');
         return req;
     };
     
@@ -31,5 +41,10 @@ app.service("usuarioService", ['$http', function ($http) {
         return req;
     };
     
+     //Cambiar Contraseña
+    this.udpatePass = function (id,usuario) {        
+        var req = $http.put(uri+'/api/usuario/updatePassword/' + id, usuario);
+        return req;        
+    };
 }]);
 

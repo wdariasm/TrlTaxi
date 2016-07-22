@@ -54,6 +54,10 @@ var app;
                 templateUrl: 'views/configuracion/cliente.html'
             })
             
+             .when("/0/usuario",{
+                templateUrl: 'views/configuracion/usuario.html'
+            })
+            
             .otherwise({
                 redirectTo:"/"               
             });

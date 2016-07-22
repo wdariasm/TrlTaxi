@@ -119,7 +119,7 @@ function ($scope, clienteService, tipoDocumentoService,toaster,ngTableParams) {
     };
     
      //Funcion que elimina
-         $scope.VerDesactivar = function(IdCliente,  Estado) {
+        $scope.VerDesactivar = function(IdCliente,  Estado) {
         $scope.Estado =Estado;
         $scope.IdClienteGlobal = IdCliente;
         $('#mdConfirmacion').modal('show');         
