@@ -13,7 +13,6 @@
         <link href="css/font-awesome.min.css" rel="stylesheet" type="text/css"/>
         <link href="css/awesome-checkbox.css" rel="stylesheet" type="text/css"/>
         <link href="css/toaster.css" rel="stylesheet" type="text/css"/>
-       
         <link href="css/style.css" rel="stylesheet" type="text/css"/>
     </head>
     <body id="cuerpo">
@@ -54,9 +53,8 @@
                         <img src="images/logo.png" alt="logo"/>                        
                     </div>
                     <!-- Sidebar brand name -->
-                    <a data-toggle="dropdown" class="sidebar-brand" href="#settings-dropdown">
-                        wdam@gmail.com                        
-                    </a>
+                      <div class="sidebar-text">{{Login.Nombre}}</div> 
+                    
                 </div>
 
                 <!-- Sidebar navigation -->
@@ -191,7 +189,8 @@
         <script src="js/libs/daterangepicker/daterangepicker.js" type="text/javascript"></script>
         <script src="js/libs/angular/toaster.js" type="text/javascript"></script>
         
-        <script src="js/app.js" type="text/javascript"></script>                                
+        <script src="js/app.js" type="text/javascript"></script> 
+        <script src="js/session.js" type="text/javascript"></script>
         <script src="js/services/marcaService.js" type="text/javascript"></script>
         <script src="js/services/tipoVehiculoService.js" type="text/javascript"></script>
         <script src="js/services/servicioService.js" type="text/javascript"></script>

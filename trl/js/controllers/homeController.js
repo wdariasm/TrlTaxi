@@ -1,6 +1,7 @@
 app.controller("homeController", ["$scope", function ($scope) {
         
     $scope.Titulo = "BIENVENIDOS"; 
+    $scope.Login = {};
         
     var click = 1;    
         
@@ -28,5 +29,14 @@ app.controller("homeController", ["$scope", function ($scope) {
     $scope.SetTitulo = function (title){
         $scope.Titulo = title;
     };
+    
+    function validarUser (){        
+        $scope.Login = session.getUser();                       
+        console.log($scope.Login);
+    }
+    
+    validarUser();
+    
+    
 }]);
 

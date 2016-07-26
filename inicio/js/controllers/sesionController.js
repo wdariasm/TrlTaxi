@@ -34,8 +34,8 @@ app.controller('sesionController', ['$scope' , 'sesionService', 'toaster', funct
         promise.then(function(d) {
             if (d.data.message === "Correcto") {
                 sessionStorage.setItem("usuario","");
-                sessionStorage.setItem("usuario",btoa(d.data.request));             
-                return;
+                
+                sessionStorage.setItem("usuario",btoa(d.data.request));                             
                 location.href = "../trl/index.html";
                 
             } else{
@@ -43,7 +43,7 @@ app.controller('sesionController', ['$scope' , 'sesionService', 'toaster', funct
                 toaster.pop('error', '¡Error!', d.data.request);
             }
         }, function(err) {
-               toaster.pop('error', '¡Error!', 'Error al procesar solicitud.');
+               toaster.pop('error', '¡Error!', err.data.request);
                 console.log("Some Error Occured " + JSON.stringify(err));
         });
     };

@@ -178,8 +178,7 @@ app.controller('personaController', ['$scope', 'personaService', 'tipoDocumentoS
             toaster.pop('warning', '¡Alerta!', 'Por favor seleccione uno de los permisos');
             return;
         }        
-        
-        
+                
         $scope.Persona.MovilDos  =  (!$scope.Persona.MovilDos) ? "" : $scope.Persona.MovilDos;                        
         $scope.Persona.Nombre = $scope.Persona.Nombre.toUpperCase();
         $scope.Persona.Login = $scope.Persona.Login.toUpperCase();        
@@ -242,6 +241,7 @@ app.controller('personaController', ['$scope', 'personaService', 'tipoDocumentoS
         item.ClienteId = null;
         item.ConductorId = null;
         item.TipoAcceso =2;
+        item.Contrato = 0;
         var promise = usuarioService.post(item);                            
         promise.then(function(d) {                         
             toaster.pop('success', 'Control de información', d.data.message);

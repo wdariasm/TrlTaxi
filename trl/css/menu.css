@@ -296,8 +296,8 @@ body {
   height: 48px;
   line-height: 48px;
   padding: 0;
-  padding-left: 16px;
-  padding-right: 56px;
+  padding-left: 10px;
+  padding-right: 10px;
   text-decoration: none;
   clear: both;
   font-weight: 500;
@@ -308,6 +308,7 @@ body {
   -webkit-transition: all 0.2s ease-in-out;
   -o-transition: all 0.2s ease-in-out;
   transition: all 0.2s ease-in-out;
+  text-align: center;
 }
 .sidebar .sidebar-text:hover,
 .sidebar .sidebar-text:focus {
@@ -350,8 +351,8 @@ body {
   cursor: pointer;
   user-select: none;
   display: block;
-  height: 48px;
-  line-height: 48px;
+  height: 40px;
+  line-height: 30px;
   padding: 0;
   padding-left: 16px;
   padding-right: 10px;
@@ -515,7 +516,7 @@ body {
   background-color: #bdbdbd;
 }
 .sidebar-colored .sidebar-text {
-  color: #212121;
+  color: #212121;  
 }
 .sidebar-colored .sidebar-nav li > a {
   color: #212121;
