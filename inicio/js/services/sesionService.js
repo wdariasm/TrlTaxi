@@ -5,7 +5,7 @@ app.service("sesionService", ['$http', function ($http) {
         return req; 
     };
     
-    this.postEmail = function (email) { 
+    this.recordar = function (email) { 
         var req = $http.post(uri+'/api/usuario/recordar',email);         
         return req; 
     };
@@ -18,14 +18,7 @@ app.service("sesionService", ['$http', function ($http) {
     this.validarEmail = function (email) { 
         var req = $http.get(uri+'/api/usuario/'+email+'/email');         
         return req; 
-    };
-    
-        
-    this.recuperar= function  (object) {
-        var req = $http.post(uri + '/api/usuario/recuperar',object);
-        return req;
-    };
-    
+    };                
     
     this.verificarKey = function(idCliente, id, haskey){
         var req = $http.get(uri+'/api/usuario/' + idCliente +'/recuperar/'+ id + '/' + haskey);

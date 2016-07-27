@@ -34,7 +34,7 @@ class UsuarioController extends Controller
     {
          try{
             $data = $request->all();                        
-            $bytes = openssl_random_pseudo_bytes(5,$cstrong);
+            $bytes = openssl_random_pseudo_bytes(3,$cstrong);
             $clave = strtoupper(bin2hex($bytes));   
             $usuario= new Usuario();                        
             $usuario->Login = $data["Login"];
@@ -102,7 +102,7 @@ class UsuarioController extends Controller
         $cabeceras .= 'To: '.$nombre.' <'.$para.'>' . "\r\n";
         $cabeceras .= 'From: Transporte Ruta Libre <info@trl.co>' . "\r\n";        
                
-        //mail($para, $título, $mensaje, $cabeceras);
+        mail($para, $título, $mensaje, $cabeceras);
     }
 
     /**
@@ -246,28 +246,20 @@ class UsuarioController extends Controller
     public function RecuperarClave(Request $request){
         $data = $request->all();
         $correo = $data['email'];
-
-        $usuario = Cliente::where("Email",$correo)->select('Email', 'Nombre',  'idCliente')->first();
+        $usuario = Usuario::where("Email",$correo)->select('Email', 'Nombre',  'Login', 'IdUsuario')->first();
         if (empty($usuario)) {
             return JsonResponse::create(array('message' => "error", "request" =>'Email No Existe en El Sistema'), 200);
-        }
-
-        if (strcmp($usuario->Email, $correo) !== 0) {
-            return JsonResponse::create(array('message' => "error", "request" =>'El Email Ingresado no Coincide, Con el registrado en el Sistema'), 200);
-        }
-
+        }       
+        
         $keyCon = uniqid('bT',true);
-        DB::update("UPDATE recuperacion SET estado ='VENCIDO' WHERE idCliente = $usuario->idCliente AND date(fecha)= CURRENT_DATE()");
+        DB::update("UPDATE recuperacion SET Estado ='VENCIDO' WHERE UsuarioId = $usuario->IdUsuario AND date(Fecha)= CURRENT_DATE()");
         $id = DB::table('recuperacion')->insertGetId(
-            array('idCliente' => $usuario->idCliente, 'keyConf' => $keyCon, 'estado' => 'ACTIVO')
+            array('UsuarioId' => $usuario->IdUsuario, 'KeyConf' => $keyCon, 'Estado' => 'ACTIVO', 'Username' => $usuario->Login)
         );
-
-        $config = Configuracion::where("idParametro",1)->select('empresa', 'prUrl')->first();
-
+        
         $para  = $usuario->Email;
-        $nombre = $usuario->Nombre;
-        // título
-        $título = utf8_encode("Cambio de Contraseña [$config->empresa]");
+        $nombre = $usuario->Nombre;        
+        $título = utf8_encode("Cambio de Contraseña [Trl Transporte]");
         // mensaje
         $mensaje = "
         <html>
@@ -275,51 +267,99 @@ class UsuarioController extends Controller
           <title>". utf8_encode("Recuperación de  Contraseña") ."</title>
         </head>
         <body>
-            <img style='height:60px;' src='http://$config->prUrl/taxi/images/logo.png' alt=''/>
+            <img style='height:60px;' src='http://".$_SERVER['HTTP_HOST']."/trl/images/logo.png' alt=''/>
             <h1>Hola, ". $usuario->Nombre ."</h1><br/>
-            <p>Hemos Recibido una solicitud, para recuperar Contraseña</p>
-            <p> Si deseas cambiar tu Contraseña, por favor sigue este enlace para ingresar una Nueva Contraseña</p>
-            <p><a href='http://$config->prUrl/cliente/index.html#/cambiarClave/$id/$usuario->idCliente/$keyCon' target='_blank'>Click Aqui, para cambiar tu Contraseña</a></p>
+            <p>Hemos Recibido una solicitud, para recuperar su contraseña</p>
+            <p> Si deseas cambiar tu contraseña, por favor sigue este enlace para ingresar una nueva contraseña</p>
+            <p><a href='http://".$_SERVER['HTTP_HOST']."/inicio/index.html#/cambiarClave/$id/$usuario->IdUsuario/$keyCon' target='_blank'>Click Aqui, para cambiar tu Contraseña</a></p>
             <br/>
             <p>Atentamente</p>
-            <p>Tu equipo de $config->empresa</p>
+            <p>Tu equipo de TRL</p>
         </body>
-        </html>
-        ";
-
+        </html>";
         $cabeceras  = 'MIME-Version: 1.0' . "\r\n";
         $cabeceras .= 'Content-type: text/html; charset=UTF-8' . "\r\n";
-
         $cabeceras .= 'To: '.$nombre.' <'.$para.'>' . "\r\n";
-        $cabeceras .= 'From: SportsBook Atlantis <info@BahiaTaxi.com>' . "\r\n";
-        //mail($para, $título, $mensaje, $cabeceras);
+        $cabeceras .= 'From: Transporte Ruta Libre <info@trl.co>' . "\r\n";  
+        //mail($para, $título, $mensaje, $cabeceras);        
         return JsonResponse::create(array('message' => "Correcto", "request" =>'Email enviado Correctamente'), 200);
     }
 
     
 
-    public function vefiricarKey($idCliente, $id, $key){
+    public function vefiricarKey($idUsuario, $id, $key){
 
-       $Object =DB::select("SELECT id, idCliente, estado,  TIMESTAMPDIFF(MINUTE, fecha, NOW()) AS minutos"
-               . " FROM recuperacion WHERE id=$id  AND keyConf = '$key' LIMIT 1");
+       $Object =DB::select("SELECT Id, UsuarioId, Estado,  TIMESTAMPDIFF(MINUTE, fecha, NOW()) AS minutos"
+               . " FROM recuperacion WHERE Id=$id  AND KeyConf = '$key' LIMIT 1");
 
         if(empty($Object)){
-           return array('message' => 'error', 'request' =>'Error, Key de Confirmación Invalido');
+           return array('message' => 'error', 'request' =>'Error, Key de confirmación inválido');
         }
 
-        if($Object[0]->idCliente != $idCliente){
+        if($Object[0]->UsuarioId != $idUsuario){
            return array('message' => 'error', 'request' =>'Error, Key de Confirmación Falso');
         }
 
-        if($Object[0]->estado == 'VENCIDO'){
+        if($Object[0]->Estado == 'VENCIDO'){
            return array('message' => 'error', 'request' =>'Error, Key de Confirmación Vencido');
         }
 
-        if( (int)$Object[0]->minutos > 10){
-           return array('message' => 'error', 'request' =>'Error, El tiempo para Cambiar tu Contraseña ha Caducado');
+        if( (int)$Object[0]->minutos > 20){
+           return array('message' => 'error', 'request' =>'Error, El tiempo para cambiar tu contraseña ha caducado');
         }
 
         return array('message' => "Correcto", "request" =>'');
+    }
+    
+     public function updatePassword(Request $request, $id)
+    {        
+        try{                                                  
+            $data = $request->all();             
+        $verificar =  $this->vefiricarKey($id, $data["Codigo"], $data["Key"]);
+            
+            if ($verificar['message'] != "Correcto"){
+                return $verificar;
+            }                       
+            $clave = $data["Clave"];
+            $usuario = Usuario::find($id);
+            $usuario->Clave =  Crypt::encrypt($clave);            
+            $usuario->Sesion = 'CERRADA';
+            $usuario->save();
+            DB::update("UPDATE recuperacion SET estado ='VENCIDO' WHERE Id = ".$data['Codigo']." and keyConf='".$data["Key"]."'");            
+            
+            $user = $usuario->Login;
+            $para  = $usuario->Email;
+            $nombre = $usuario->Nombre;
+            // título
+            $título = utf8_encode('Cambio de Contraseña [TRL Transporte]');
+            // mensaje
+            $mensaje = "
+            <html>
+            <head>
+              <title>". utf8_encode("Cambio de Contraseña") ."</title>
+            </head>
+            <body>          
+              <h1>Hola, $nombre </h1><br/>
+              <p>Tu Contraseña ha sido modificada exitosamente</p>                         
+              <br/>    
+              <h3>Tus datos de Inicio de Session</h3>
+              <p>Usuario SportsBook: $user</p>
+              <p>Contraseña: $clave</p>
+               <br/>
+              <p>Atentamente</p>
+              <p>Tu equipo de TRL</p>
+            </body>
+            </html> ";
+
+            $cabeceras  = 'MIME-Version: 1.0' . "\r\n";
+            $cabeceras .= 'Content-type: text/html; charset=UTF-8' . "\r\n";
+            $cabeceras .= 'To: '.$nombre.' <'.$para.'>' . "\r\n";
+            $cabeceras .= 'From: Transporte Ruta Libre <info@trl.co>' . "\r\n";  
+            //mail($para, $título, $mensaje, $cabeceras);            
+            return JsonResponse::create(array('message' => "Correcto", "request" =>'Contraseña modificada correctamente'), 200);
+        } catch (Exception $exc) {            
+            return JsonResponse::create(array('message' => "No se pudo Modificar la Contraseña", "request" =>json_encode($exc)), 401);
+        }
     }
     
     

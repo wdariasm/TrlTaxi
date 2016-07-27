@@ -1,27 +1,29 @@
 app.controller("tipoVehiculoController", ["$scope", "tipoVehiculoService", "toaster",
 function ($scope, tipoVehiculoService,toaster) {
-   $scope.TipoVehiculo= {};
-   $scope.TipoVehiculos = [];
-   $scope.IdTipoGlobal="";
-   $scope.editMode = false;
+    $scope.TipoVehiculo= {};
+    $scope.TipoVehiculos = [];
+    $scope.IdTipoGlobal="";
+    $scope.editMode = false;
+    $scope.title = "NUEVO TIPO VEHICULO"; 
    
-        $scope.$parent.SetTitulo("TIPOS DE VEHICULOS");
-
-   
-     initTipoVehiculo();
+    $scope.$parent.SetTitulo("TIPOS DE VEHICULO");
+       
     function initTipoVehiculo() {
         $scope.TipoVehiculo = {
             tvDescripcion:"",
-            tvEstado:"ACTIVO"
-        };          
+            tvEstado:"ACTIVO",
+            tvNumPasajero : 0,
+            tvCodigo : 0
+        };           
     }
+    initTipoVehiculo();
 
     function loadTipoVehiculo (){
         var promise = tipoVehiculoService.getAll();
         promise.then(function(d) {                        
             $scope.TipoVehiculos = d.data;
         }, function(err) {           
-                alert("ERROR AL PROCESAR SOLICITUD");           
+                toaster.pop('error','¡Error!',"Error al cargar Tipo de Vehiculo");           
                 console.log("Some Error Occured " + JSON.stringify(err));
         }); 
     }
@@ -29,11 +31,7 @@ function ($scope, tipoVehiculoService,toaster) {
    
    $scope.Guardar = function (){
        
-       $scope.TipoVehiculo.tvDescripcion = $scope.TipoVehiculo.tvDescripcion.toUpperCase();
-       $scope.TipoVehiculo.tvEstado=$scope.TipoVehiculo.tvEstado.toUpperCase();
-       
-       
-       
+       $scope.TipoVehiculo.tvDescripcion = $scope.TipoVehiculo.tvDescripcion.toUpperCase();                           
        
         var promise;
         if($scope.editMode){            
@@ -45,12 +43,18 @@ function ($scope, tipoVehiculoService,toaster) {
         promise.then(function(d) {                        
             loadTipoVehiculo();
             toaster.pop('success', "Control de Información", d.data.message); 
-             
+            initTipoVehiculo();
         }, function(err) {           
-                toaster.pop('error', "Error", "ERROR AL PROCESAR SOLICITUD");         
+                toaster.pop('error', "¡Error!", "Error al guardar tipo de Vehículo");         
                 console.log("Some Error Occured " + JSON.stringify(err));
         }); 
-        initTipoVehiculo();
+       
+   };
+   
+   $scope.nuevo = function (){
+       initTipoVehiculo();
+       $scope.editMode =false;
+        $scope.title = "NUEVO TIPO VEHICULO"; 
    };
    
     //edita la Tipo vehiculo
@@ -58,8 +62,7 @@ function ($scope, tipoVehiculoService,toaster) {
         $scope.TipoVehiculo=item;
         $scope.editMode = true;
         $scope.title = "EDITAR TIPO VEHICULO"; 
-        $scope.active = "active";
-       console.log(item);        
+        $scope.active = "active";            
     };
     
     //Funcion que elimina

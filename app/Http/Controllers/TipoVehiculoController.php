@@ -21,16 +21,7 @@ class TipoVehiculoController extends Controller
                 ->get();
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
+  
     /**
      * Store a newly created resource in storage.
      *
@@ -43,7 +34,8 @@ class TipoVehiculoController extends Controller
             $data = $request->all(); 
             $tipoVehiculo= new TipoVehiculo();                        
             $tipoVehiculo->tvDescripcion = $data["tvDescripcion"];
-            $tipoVehiculo->tvEstado = $data["tvEstado"];                     
+            $tipoVehiculo->tvEstado = $data["tvEstado"];
+            $tipoVehiculo->tvNumPasajero = $data["tvNumPasajero"];            
             $tipoVehiculo->save();
             
             return JsonResponse::create(array('message' => "Tipo de vehiculo  guardado correctamente", "request" =>json_encode($tipoVehiculo->tvCodigo)), 200);
@@ -63,22 +55,12 @@ class TipoVehiculoController extends Controller
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  int  $tvCodigo
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $tvCodigo)
@@ -88,11 +70,12 @@ class TipoVehiculoController extends Controller
             $tipoVehiculo = TipoVehiculo::find($tvCodigo);
             $tipoVehiculo->tvDescripcion = $data["tvDescripcion"];
             $tipoVehiculo->tvEstado = $data["tvEstado"];
+            $tipoVehiculo->tvNumPasajero = $data["tvNumPasajero"];
             $tipoVehiculo->save();
 
             return JsonResponse::create(array('message' => "Datos Actualizados correctamente", "request" =>json_encode($tipoVehiculo->tvCodigo)), 200);
-        } catch (Exception $exc) {
-            return JsonResponse::create(array('message' => "No se pudo guardar", "request" =>json_encode($request)), 401);
+        } catch (\Exception $exc) {
+            return JsonResponse::create(array('message' => "No se pudo guardar", "request" =>json_encode($exc->getMessage())), 401);
         }
     }
 

@@ -2,6 +2,7 @@
     <div class="row">
         <div class="col-xs-4">            
             <form name="frmTipoVehiculo" id="frmTipoVehiculo" novalidate>
+                <h4 class="text-primary">{{title}}</h4>
                 <div class="row">
                     <div class="col-xs-12">
                         <div class="form-group">
@@ -11,6 +12,16 @@
                                  <input type="text" required="" class="form-control" ng-model="TipoVehiculo.tvDescripcion" maxlength="100" id="txtTipoVehiculo" placeholder="Tipo Vehiculo">
                        
                                </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-xs-12">
+                        <div class="form-group">
+                            <label  for="txtNumPasajero">Numero de Pasajeros *</label>
+                            <div class="input-group">
+                                <div class="input-group-addon"><i class="fa fa-users"></i></div>
+                                <input class="form-control" ng-model="TipoVehiculo.tvNumPasajero" solo-numeros id="txtNumPasajero" name="txtNumPasajero" type="text"  required   maxlength="3" >
+                            </div>
                         </div>
                     </div>
                     
@@ -30,10 +41,16 @@
                         </div>
                     </div>
                     
-                    <div class="col-xs-5">     
-                            <br/>
+                    <div class="row">
+                        <br/>
+                        <div class="col-xs-5 col-xs-offset-1">                                                                    
+                            <button   class="btn btn-success btn-block btn-addon"   type="button"  title="Nuevo / Cancelar" ng-click="nuevo()"><i class="fa fa-pencil"></i> Nuevo</button>
+                        </div>
+                        <div class="col-xs-5">                                 
                             <button  ng-disabled="frmTipoVehiculo.$invalid"  class="btn btn-primary btn-block btn-addon"   type="button"  title="Registrar Tipo Vehiculo" ng-click="Guardar()"><i class="fa fa-check"></i>Guardar</button>
-                   </div>
+                         </div>
+                    </div>
+                    
                     
                 </div>                                
             </form>
@@ -47,6 +64,7 @@
                             <tr>
                                 <th class="center">CODIGO</th>                                
                                 <th>DESCRIPCIÓN</th>
+                                <th># PASAJEROS</th>
                                 <th>ESTADO</th>
                                 <th width="12%">ACCIÓN</th>
                             </tr>
@@ -56,6 +74,7 @@
                             <tr data-ng-repeat="items in TipoVehiculos">
                                 <td class="center">{{ items.tvCodigo}}</td>
                                 <td>{{ items.tvDescripcion }}</td>
+                                <td>{{ items.tvNumPasajero }}</td>
                                 <td>{{ items.tvEstado}}</td>
                                 <td>
                                     <center>

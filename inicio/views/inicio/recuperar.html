@@ -1,0 +1,67 @@
+<style>
+    body{
+        background-color: #edf1f2
+    }
+</style>
+<div ng-controller="recordarClaveController" class="container-fluid">               
+    <div  class="row">
+        <div  class="header"> 
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-3 col-xs-3">
+                        <div class="titulo">                            
+                            <img src="../trl/images/logo.png" class="animated slideInLeft"  alt="logo"/> 
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>  
+        
+        <div class="row" >              
+            <div  class=" col-md-10 col-xs-12 pages">                                   
+                <div class="col-md-4 col-md-offset-5 col-xs-10 col-xs-offset-1">                         
+                    <div class="well page animated slideInDown" >               
+
+                            <h2 class="text-primary  text-center "><strong>Recuperar Contraseña</strong></h2><br/>                         
+                            
+                            <div class="row" >          
+                                <div class="col-md-12 col-xs-12">
+                                    <form name="frmRecuperar" novalidate="">
+                                        <div class="form-group">
+                                            <label for="txtEmail">Correo electronico *</label>
+                                             <div class="input-group">    
+                                                <div class="input-group-addon"><i class="fa fa-envelope"></i></div>
+                                                <input type="email" class="form-control" ng-model="Usuario.email" maxlength="60" id="txtEmail" placeholder="E-mail" required>                        
+                                             </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <button ng-disabled="frmRecuperar.$invalid"   class="btn btn-primary btn-block btn-addon"   type="button"  title="Registrar Cliente" ng-click="Recuperar()"> <i class="fa fa-send"></i>Enviar Correo</button>
+                                        </div>
+                                        
+                                    </form>
+                                    <div class="text-center" ng-show="Cargando"><i class="fa fa-spinner fa-pulse fa-fw fa-3x text-primary"></i></div>
+                                    <div class="text-center" <h5>{{msjError}}</h5></div>
+                                   <br/>  
+                                </div>                            
+                                <div class="col-md-12 col-xs-12">
+                                    <h5>1. Ingrese su Dirección de Correo Electronico &nbsp;&nbsp;&nbsp; </h5>
+                                    <h5>2. Se le enviará un Email, con un enlace para cambiar su Contraseña </h5>
+                                    <h5>3. Tendra 20 Minutos para cambiar su Contraseña. </h5>
+                                    <h6>Nota: El correo debe coincidir, al que utilizó en su registro.</h6>
+                                </div>
+                                <a href="#/login" class="btn" title="Inicio" style="float: right" ><i class="fa fa-home fa-3x"></i></a>
+                        </div>                                                        
+                    </div>                                                            
+                </div> 
+                
+                 
+                
+            </div>   <!-- div pages-->              
+        </div>  <!-- div row-->      
+        
+        <div class="row">
+           
+        </div>
+    </div>                                      
+  </div>
+	

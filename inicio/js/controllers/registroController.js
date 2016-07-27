@@ -25,80 +25,91 @@ app.controller('ConfirmarController', function ($scope, $routeParams, sesionServ
     verificarUser();
 });
 
-app.controller('recordarClaveController', function ($scope, sesionService) {
+app.controller('recordarClaveController', ['$scope', 'sesionService', 'toaster',  function ($scope, sesionService, toaster) {
 
-    $scope.Cliente = {};
+    $scope.Usuario = {};
+    $scope.Cargando = false;
     $scope.msjError = "";
-
-    init();
-
+    
     function init(){
-        $scope.Cliente = {
+        $scope.Usuario = {
             email : ""
         };
     }
+    
+    init();
 
-    $scope.recuperar= function (){
-        $scope.msjError = "";
+    $scope.Recuperar= function (){
+        $scope.msjError = "Espere por favor.... ";   
+        $scope.Cargando = true;
         var object = {
-            email : $scope.Cliente.email.toUpperCase()
+            email : $scope.Usuario.email.toUpperCase()
         };
-
-        var promisePost = sesionService.recuperar(object);
+        var promisePost = sesionService.recordar(object);
         promisePost.then(function (d) {
+            $scope.Cargando =false;
+            toaster.pop('success','TRL', d.data.request);
             $scope.msjError = d.data.request;
         }, function (err) {
-            alert("ERROR AL ENVIAR SOLICITUD");
+            toaster.pop('error', '¡Error!', err.data.request);
             console.log("Some Error Occured " + JSON.stringify(err));
         });
     };
 
-});
+}]);
 
-app.controller('cambiarClaveController', function ($scope, $routeParams, sesionService) {
+app.controller('cambiarClaveController', ['$scope', '$routeParams', 'sesionService', 'toaster', function ($scope, $routeParams, sesionService,toaster) {
 
     $scope.id = $routeParams.id;
-    $scope.idCliente = $routeParams.idCliente;
+    $scope.IdUser = $routeParams.idUser;
     $scope.haskey = $routeParams.haskey;
-    $scope.msjError = "";
-    $scope.msjKey = "Espere.. Verificando Información...."
+    $scope.msjError = "   ..";
+    $scope.msjKey = "Espere.. Verificando Información....";
+    $scope.Cargando = false;
     $scope.editMode = false;
+    
     $scope.User  = {};
-
-    verificarKey();
+    
     function verificarKey(){
-        var promiseGet = sesionService.verificarKey($scope.idCliente,$scope.id, $scope.haskey);
+        $scope.Cargando =true;
+        var promiseGet = sesionService.verificarKey($scope.IdUser,$scope.id, $scope.haskey);
         promiseGet.then(function (d) {
-            if (d.data.message === "Correcto"){
+             $scope.Cargando = false;
+            if (d.data.message === "Correcto"){               
                 $scope.editMode = true;
             } else {
                 $scope.msjKey = d.data.request;
             }
 
         }, function (err) {
-                $scope.msjKey = 'Error Al procesar Solicitud';
-                console.log("Some Error Occured "+ JSON.stringify(err));
+            $scope.msjKey = 'Error Al procesar Solicitud';
+            console.log("Some Error Occured "+ JSON.stringify(err));
         });
     }
+    
+    verificarKey();
 
-    $scope.guardar= function (){
-        if ($scope.User.clave != $scope.User.claveConf){
+    $scope.Guardar= function (){
+         $scope.msjError ="";
+        if ($scope.User.clave !== $scope.User.claveConf){
+            toaster.pop('error', '¡Error!', "Contraseña NO son Iguales.. Verifique");
             $scope.msjError = "Contraseña NO son Iguales.. Verifique";
             return;
         }
-
+        $scope.Cargando =true;
         var object = {
-            clave:$scope.User.clave,
-            codigo : $scope.id,
+            Clave:$scope.User.clave,
+            Codigo : $scope.id,
             Key : $scope.haskey,
-            verificar : "SI"
+            Verificar : "NO"
         };
 
-        var promisePut = sesionService.udpatePass($scope.idCliente,object);
+        var promisePut = sesionService.udpatePass($scope.IdUser,object);
         promisePut.then(function (d) {
+            $scope.Cargando =false;
             if (d.data.message === "Correcto"){
                 $scope.msjError = d.data.request;
-                setTimeout( "location.href = '#/login/cliente'", 5000);
+                setTimeout( "location.href = '#/inicio/login'", 5000);
                 $scope.msjError +=" .. En Segundos Sera Redireccionado..";
             } else {
                 $scope.msjError = d.data.request;
@@ -106,7 +117,8 @@ app.controller('cambiarClaveController', function ($scope, $routeParams, sesionS
 
         }, function (err) {
             $scope.msjError = 'Error Al procesar Solicitud';
+            toaster.pop('error','¡Error!',err.data.request);
             console.log("Some Error Occured "+ JSON.stringify(err));
         });
     };
-});
+}]);

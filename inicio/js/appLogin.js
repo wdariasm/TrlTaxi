@@ -9,16 +9,16 @@ var app;
                 templateUrl: 'views/inicio/login.html'
             })
           
-            .when("/recordar",{
-                templateUrl: 'views/inicio/recordarPass.html'
+            .when("/recuperar",{
+                templateUrl: 'views/inicio/recuperar.html'
             })
             
             .when('/confirmar/:idCliente/:haskey', {
                 templateUrl: 'views/inicio/confirmar.html'                
             }) 
             
-            .when('/cambiarClave/:id/:idCliente/:haskey', {
-                templateUrl: 'views/cliente/cambiarClave.html'                
+            .when('/cambiarClave/:id/:idUser/:haskey', {
+                templateUrl: 'views/inicio/cambiarClave.html'                
             }) 
             
             .otherwise({

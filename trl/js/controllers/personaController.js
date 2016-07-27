@@ -116,9 +116,8 @@ app.controller('personaController', ['$scope', 'personaService', 'tipoDocumentoS
         $scope.editMode = true;
         $scope.title = "EDITAR USUARIO";
         $scope.active = "active";
-        $scope.Persona = usuario;                
-        
-        $('ul.tabs').tabs('select_tab', 'tabPersona2');        
+        $scope.Persona = usuario;                        
+       $('#tabPanels a[href="#tabRegistro"]').tab('show');   
     };
     
     $scope.CambiarPass = function(id, nombre, apellido) {         

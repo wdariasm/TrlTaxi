@@ -172,7 +172,7 @@
                         <button   class="btn btn-success btn-block btn-addon"   type="button"  title="Nuevo Registro" ng-click="Nuevo()"><i class="fa fa-pencil"></i> Nuevo</button>
                     </div>
                     <div class="col-xs-2">                                   
-                        <button ng-disabled="frmPersona.$invalid"   class="btn btn-danger btn-block btn-addon"   type="button"  title="Registrar Cliente" ng-click="Guardar()"> <i class="fa fa-check"></i>Guardar</button>
+                        <button ng-disabled="frmPersona.$invalid"   class="btn btn-primary btn-block btn-addon"   type="button"  title="Registrar Cliente" ng-click="Guardar()"> <i class="fa fa-check"></i>Guardar</button>
                     </div>
                 </div>
             </form>    
@@ -255,8 +255,6 @@
         e.preventDefault();
         $(this).tab('show');
         
-    });
-    
-    $('#tabPanels a[href="#tabRegistro"]').tab('show');
+    });       
     
 </script>

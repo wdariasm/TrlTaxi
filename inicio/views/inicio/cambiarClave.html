@@ -1,64 +1,64 @@
-<div ng-controller="cambiarClaveController" class="row">
-    <div class="decoration-head"></div>
-    <div class="resplandor"></div>
-    <div id="logo" class="animated bounceIn"></div>    
-    <div id="contenedor-login" class="animated bounceInRight">
-        <h2>Cambiar Contraseña</h2>
-        <form name="frmCambiar" novalidate autocomplete="off" ng-show="editMode">            
-            <table width="100%" align="center" >
-                <tr>
-                    <td><br/></td>
-                </tr>
-                <tr>
-                    <td>
-                        <input ng-model="User.clave" class="box-text pass" placeholder="Nueva Contraseña *"  type="password" name="txtClave1"  maxlength="15" required ng-pattern="/(?=^.{5,}$)(?=.*\d)(?![.\n])(?=.*[a-zA-Z]).*$/">                        
-                        <div class="error" ng-show="frmCambiar.txtClave1.$dirty && frmCambiar.txtClave1.$invalid">
-                            <small ng-show="frmCambiar.txtClave1.$error.required">Contraseña es Requerida</small>
-                            <small  ng-show="frmCambiar.txtClave1.$error.pattern">Minimo 6 Caracteres[Numeros y Letras]</small>
-                        </div>                    
-                    </td>                    
-                </tr>
-                <tr>
-                    <td>
-                        <input ng-model="User.claveConf" class="box-text pass"  type="password" name="txtClave2" placeholder="Confirmar Contraseña"  maxlength="15" required ng-pattern="/(?=^.{5,}$)(?=.*\d)(?![.\n])(?=.*[a-zA-Z]).*$/" >                        
-                        <div class="error" ng-show="frmCambiar.txtClave2.$dirty && frmCambiar.txtClave2.$invalid">
-                            <small ng-show="frmCambiar.txtClave2.$error.required">Contraseña es Requerida</small>
-                            <small  ng-show="frmCambiar.txtClave2.$error.pattern">Minimo 5 Caracteres[Numeros y Letras]</small>
-                        </div>                        
-                    </td>
-                </tr>
-                <tr>
-                   <td><p class="error" id="error" style="font-size: 15px; margin-top: 5px;">{{msjError}}</p></td>
-               </tr>
-               <tr>
-                   <td>
-                       <button type="button" class="btn-iniciar z-depth-1" ng-disabled="frmCambiar.$invalid" ng-click="guardar()"  id="login" title="Cambiar Contraseña">
-                            Guardar
-                        </button>  
-                   </td>
-               </tr>
-               <tr>
-                   <td>
-                       <br/><br/>
-                       <p class="notas">
-                           <strong> INTRUCCIONES</strong><br/>
-                            1.Ingrese una Nueva Contraseña <br/>
-                            2.Confirme la  Nueva Contraseña <br/>
-                            3.Se le enviará un correo electronico, notificandole el estado de este Proceso<br/>
-                            <strong>Nota:</strong> Recuerde que la Contraseña debe tener Caracteres Alfanumerios [A-Z] [0-9]</p>
-                       </p>
-                   </td>
-               </tr>
-            </table>            
-        </form>
+<style>
+    body{
+        background-color: #edf1f2
+    }
+</style>
+<div ng-controller="cambiarClaveController" class="container-fluid">
+    <div  class="row">
+        <div  class="header"> 
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-3 col-xs-3">
+                        <div class="titulo">                            
+                            <img src="../trl/images/logo.png" class="animated slideInLeft"  alt="logo"/> 
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>  
         
-        <table width="100%" align="center" ng-hide="editMode">
-            <tr>
-                <td>
-                    <br/>              
-                    <p class="error" id="error" style="font-size: 18px; margin-top: 5px;">{{msjKey}}</p>
-                </td>
-            </tr>
-        </table>        
-    </div>        
+         <div class="row" >              
+            <div  class=" col-md-10 col-xs-12 pages">                                   
+                <div class="col-md-4 col-md-offset-5 col-xs-10 col-xs-offset-1">                     
+                    <div class="well page animated slideInDown" >    
+                         <h2 class="text-primary  text-center "><strong>Cambiar Contraseña</strong></h2><br/> 
+                        <form name="frmCambiar" novalidate autocomplete="off" ng-show="editMode">
+                             
+                            <div class="form-group">
+                                <label for="txtClave1">Nueva contraseña *</label>
+                                 <div class="input-group">    
+                                    <div class="input-group-addon"><i class="fa fa-envelope"></i></div>
+                                    <input ng-model="User.clave" class="form-control" placeholder="Nueva Contraseña *"  type="password" name="txtClave1"  maxlength="15" required ng-pattern="/(?=^.{5,}$)(?=.*\d)(?![.\n])(?=.*[a-zA-Z]).*$/">
+                                 </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="txtClave1">Confirmar contraseña *</label>
+                                 <div class="input-group">    
+                                    <div class="input-group-addon"><i class="fa fa-envelope"></i></div>
+                                    <input ng-model="User.claveConf" class="form-control"  type="password" name="txtClave2" placeholder="Confirmar Contraseña"  maxlength="15" required ng-pattern="/(?=^.{5,}$)(?=.*\d)(?![.\n])(?=.*[a-zA-Z]).*$/" >
+                                 </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <button ng-disabled="frmCambiar.$invalid"   class="btn btn-primary btn-block btn-addon"   type="button"  title="Registrar Cliente" ng-click="Guardar()"> <i class="fa fa-send"></i>Guardar</button>
+                            </div>
+                        </form>
+                        
+                        <div class="text-center" ng-show="Cargando"><i class="fa fa-spinner fa-pulse fa-fw fa-3x text-primary"></i></div>
+                                                
+                        <div class="col-md-12 col-xs-12" ng-show="editMode">
+                            <p><strong> INTRUCCIONES</strong></p>
+                                <h5>1.Ingrese una nueva contraseña </h5>
+                                <h5>2.Confirme la  nueva contraseña </h5>
+                                <h5>3.Se le enviará un correo electronico, notificandole el estado de este Proceso</h5>                                         
+                                <h6><strong>Nota:</strong> Recuerde que la contraseña debe tener caracteres alfanumerios [A-Z] [0-9]</h6>
+                        </div>
+                        <div class="text-center" <h5>{{msjError}}</h5></div>                                              
+                        <p ng-hide="editMode" class="text-danger text-center" id="error" style="font-size: 18px; margin-top: 5px;">{{msjKey}}</p>
+                    </div>
+                </div>
+            </div>
+         </div>    
+    </div>
 </div>

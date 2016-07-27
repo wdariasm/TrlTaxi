@@ -31,12 +31,9 @@ app.controller("homeController", ["$scope", function ($scope) {
     };
     
     function validarUser (){        
-        $scope.Login = session.getUser();                       
-        console.log($scope.Login);
+        $scope.Login = session.getUser();                               
     }
     
-    validarUser();
-    
-    
+    validarUser();        
 }]);
 
