@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 
 use App\LicenciaConduccion;
 use Illuminate\Http\JsonResponse;
+use DB;
 
 class LicenciaConduccionController extends Controller
 {
@@ -20,8 +21,10 @@ class LicenciaConduccionController extends Controller
     }
 
     
-     public function GetLicencia($id){
-        return LicenciaConduccion::where("lcConductor",$id)->get();
+     public function GetLicencia(){
+        $result = DB::select("SELECT li.Numero, li.OTLicencia, li.FechaExpedicion, li.FechaVencimiento, li.Estado,"
+                . " li.Categoria, co.Cedula FROM licenciaconduccion li INNER JOIN conductor co ON li.lcConductor = co.IdConductor");
+        return $result; 
     }
     
     public function validarNumero($Numero){
