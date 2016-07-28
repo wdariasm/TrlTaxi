@@ -46,5 +46,11 @@ app.service("usuarioService", ['$http', function ($http) {
         var req = $http.put(uri+'/api/usuario/updatePassword/' + id, usuario);
         return req;        
     };
+    
+    this.cerrarSesion = function (usuario) {
+        var req = $http.delete(uri+'/api/usuario/'+usuario+'/cerrar');
+        return req;
+    };
+    
 }]);
 

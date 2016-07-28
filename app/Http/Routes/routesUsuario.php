@@ -7,3 +7,4 @@
     Route::get('api/usuario/{id}/recuperar/{idKey}/{key}','UsuarioController@VefiricarKey');       
     Route::put('api/usuario/actualizar/{idUsuario}','UsuarioController@updatePassword');
     Route::post('api/usuario/recordar', 'UsuarioController@RecuperarClave');
+    Route::delete('api/usuario/{id}/cerrar','UsuarioController@cerrarSesion');

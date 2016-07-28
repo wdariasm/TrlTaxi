@@ -81,11 +81,11 @@ class UsuarioController extends Controller
           <title>Confirmar Email y Datos de Usuario</title>
         </head>
         <body>
-         <img style='height:60px;' src='http://localhost/trl/images/logo.png' alt=''/>
+         <img style='height:60px;' src='http://".$_SERVER['HTTP_HOST']."/trl/images/logo.png' alt=''/>
           <h1> ¡Bienvenido a Transporte Ruta Libre!</h1>
           <p>Hola, $nombre </p><br/>
           <p> Por favor sigue este enlace para confirmar sus Datos de Usuario</p>
-          <p><a href='http://localhost/inicio/index.html#/0/confirmar/$idUsuario/$key' target='_blank'>Click Aqui, Para Confirmar tus Datos </a></p> 
+          <p><a href='http://".$_SERVER['HTTP_HOST']."/inicio/index.html#/0/confirmar/$idUsuario/$key' target='_blank'>Click Aqui, Para Confirmar tus Datos </a></p> 
           <br/>    
           <p>Usuario TRL: $user</p>
           <p>Contraseña TRL: $clave</p>
@@ -177,13 +177,11 @@ class UsuarioController extends Controller
     public function cerrarSesion($usuario)
     {
         try{
-            DB::update("UPDATE usuario SET  session='CERRADA' WHERE idUsuario = '$usuario'");
+            DB::update("UPDATE usuario SET  Sesion='CERRADA' WHERE IdUsuario = $usuario");
             return JsonResponse::create(array('message' => 'Correcto', "request" =>'Session Cerrada Correctamente'), 200);
-        }catch (Exception $exc) {
+        }catch (\Exception $exc) {
             return JsonResponse::create(array('message' => "error", "request" =>json_encode($exc)), 401);
         }
-
-
     }
 
     public function autenticar(Request $request){
@@ -281,7 +279,7 @@ class UsuarioController extends Controller
         $cabeceras .= 'Content-type: text/html; charset=UTF-8' . "\r\n";
         $cabeceras .= 'To: '.$nombre.' <'.$para.'>' . "\r\n";
         $cabeceras .= 'From: Transporte Ruta Libre <info@trl.co>' . "\r\n";  
-        //mail($para, $título, $mensaje, $cabeceras);        
+        mail($para, $título, $mensaje, $cabeceras);        
         return JsonResponse::create(array('message' => "Correcto", "request" =>'Email enviado Correctamente'), 200);
     }
 
@@ -289,7 +287,7 @@ class UsuarioController extends Controller
 
     public function vefiricarKey($idUsuario, $id, $key){
 
-       $Object =DB::select("SELECT Id, UsuarioId, Estado,  TIMESTAMPDIFF(MINUTE, fecha, NOW()) AS minutos"
+       $Object =DB::select("SELECT Id, UsuarioId, Estado,  TIMESTAMPDIFF(MINUTE, Fecha, NOW()) AS minutos"
                . " FROM recuperacion WHERE Id=$id  AND KeyConf = '$key' LIMIT 1");
 
         if(empty($Object)){
@@ -355,7 +353,7 @@ class UsuarioController extends Controller
             $cabeceras .= 'Content-type: text/html; charset=UTF-8' . "\r\n";
             $cabeceras .= 'To: '.$nombre.' <'.$para.'>' . "\r\n";
             $cabeceras .= 'From: Transporte Ruta Libre <info@trl.co>' . "\r\n";  
-            //mail($para, $título, $mensaje, $cabeceras);            
+            mail($para, $título, $mensaje, $cabeceras);            
             return JsonResponse::create(array('message' => "Correcto", "request" =>'Contraseña modificada correctamente'), 200);
         } catch (Exception $exc) {            
             return JsonResponse::create(array('message' => "No se pudo Modificar la Contraseña", "request" =>json_encode($exc)), 401);

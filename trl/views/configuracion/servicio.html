@@ -2,6 +2,7 @@
     <div class="row">
         <div class="col-xs-4">            
             <form name="frmServicio" id="frmServicio" novalidate>
+                <h5 class="text-primary">{{title}}</h5>
                 <div class="row">
                     <div class="col-xs-12">
                         <div class="form-group">
@@ -28,10 +29,31 @@
                         </div>
                     </div>
                     
-                     <div class="col-xs-5">     
-                            <br/>
-                            <button  ng-disabled="frmServicio.$invalid" class="btn btn-primary btn-block btn-addon"   type="button"  title="Registrar Servicio" ng-click="Guardar()"> <i class="fa fa-check"></i>Guardar</button>
-                   </div>
+                    <div class="row">                        
+                        <div class="col-xs-12">
+                            <hr>
+                            <h5>Seleccione los tipos de vehículos</h5>
+                            <div ng-repeat="tpv in TipoVehiculos">
+                                <div class="col-xs-6">     
+                                    <div class="checkbox checkbox-primary">                                        
+                                         <input type="checkbox" checklist-model="Servicio.TipoVehiculo" checklist-value="tpv.tvCodigo">
+                                         <label for="{{tpv.tvCodigo}}">{{tpv.tvDescripcion}} &nbsp; ({{tpv.tvNumPasajero}})</label> 
+                                    </div>
+                                </div> 
+                            </div>
+                        </div>
+                    </div>
+                        
+                    
+                    <div class="row">
+                        <br/>
+                        <div class="col-xs-5 col-xs-offset-1">                                                                    
+                            <button   class="btn btn-success btn-block btn-addon"   type="button"  title="Nuevo / Cancelar" ng-click="Nuevo()"><i class="fa fa-pencil"></i> Nuevo</button>
+                        </div>
+                        <div class="col-xs-5">                                 
+                             <button  ng-disabled="frmServicio.$invalid" class="btn btn-primary btn-block btn-addon"   type="button"  title="Registrar Servicio" ng-click="Guardar()"> <i class="fa fa-check"></i>Guardar</button>
+                         </div>
+                    </div>                                        
                     
                 </div>                                
             </form>
@@ -46,7 +68,7 @@
                                 <th class="center">CODIGO</th>                                
                                 <th>DESCRIPCIÓN</th>
                                 <th>ESTADO</th>
-                                <th width="12%">ACCIÓN</th>
+                                <th width="17%">ACCIÓN</th>
                             </tr>
                         </thead>
 
@@ -56,10 +78,10 @@
                                 <td>{{ items.svDescripcion }}</td>
                                 <td>{{ items.svEstado}}</td>
                                 <td>
-                                     <center>
-                                            <a data-ng-click="get(items)" style="float: left; margin-left: 15px;" href="javascript:;"  title="Editar"><i class="fa fa-lg fa-pencil"></i></a>
-                                            <a ng-click="VerDesactivar(items.svCodigo, 'BORRADO')"  style="float: left; margin-left: 15px;" href="javascript:;"  title="Eliminar"><i class="fa fa-lg fa-trash text-danger"></i></a>
-                                        </center>
+                                    <center>
+                                        <a ng-click="get(items)" style="float: left; margin-left: 15px;" href="javascript:;"  title="Editar"><i class="fa fa-lg fa-pencil"></i></a>
+                                        <a ng-click="VerDesactivar(items.svCodigo, 'BORRADO')"  style="float: left; margin-left: 15px;" href="javascript:;"  title="Eliminar"><i class="fa fa-lg fa-trash text-danger"></i></a>                                       
+                                    </center>
                                 </td>
                             </tr>
                         </tbody>

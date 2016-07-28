@@ -37,3 +37,26 @@ app.controller("homeController", ["$scope", function ($scope) {
     validarUser();        
 }]);
 
+app.controller('salirController',['$scope', 'usuarioService', 'toaster', function ($scope, usuarioService, toaster) {
+        
+    $scope.$parent.SetTitulo("CERRANDO SESIÓN");
+    $scope.mensaje = "Cerrando sesión ....";
+    function cerrarSession (){
+        var promise = usuarioService.cerrarSesion($scope.$parent.Login.IdUsuario); 
+        promise.then(function(pl) {                       
+            sessionStorage.setItem("usuario","");
+            sessionStorage.removeItem("usuario"); 
+            $scope.mensaje = "Su sesión ha finalizado correctamente";
+            toaster.pop('success','¡Información!',"Su sesión ha terminado.");
+            setTimeout ('location.href = "../inicio/index.html#/login"', 3000);                       
+        },
+        function(errorPl) {
+            toaster.pop('error','¡Error!',errorPl.data.request);
+            console.log('failure loading usuarios', errorPl);
+        });        
+    }   
+    
+    cerrarSession();
+   
+}]);
+

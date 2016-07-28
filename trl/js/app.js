@@ -1,7 +1,7 @@
 var uri = "../public";
 var app;
 (function(){
-    app = angular.module("trlTransporte", ['ngRoute','ng-currency','ngTable','toaster', 'ngAnimate']);
+    app = angular.module("trlTransporte", ['ngRoute','ng-currency','ngTable','toaster', 'ngAnimate', 'checklist-model']);
     
     app.config(['$routeProvider', '$locationProvider', function AppConfig($routeProvider, $locationProvider){                        
 
@@ -56,6 +56,10 @@ var app;
             
              .when("/0/usuario",{
                 templateUrl: 'views/configuracion/usuario.html'
+            })
+            
+            .when("/2/salir",{
+                templateUrl: 'views/proceso/salir.html'
             })
             
             .otherwise({
