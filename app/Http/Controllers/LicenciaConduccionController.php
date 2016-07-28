@@ -24,7 +24,8 @@ class LicenciaConduccionController extends Controller
      public function GetLicencia(){
         $result = DB::select("SELECT li.Numero, li.OTLicencia, li.FechaExpedicion, li.FechaVencimiento, li.Estado,"
                 . " li.Categoria, co.Cedula FROM licenciaconduccion li INNER JOIN conductor co ON li.lcConductor = co.IdConductor");
-        return $result; 
+        return $result;  
+        
     }
     
     public function validarNumero($Numero){
