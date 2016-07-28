@@ -34,7 +34,7 @@ app.controller("homeController", ["$scope", function ($scope) {
         $scope.Login = session.getUser();                               
     }
     
-    validarUser();        
+    //validarUser();        
 }]);
 
 app.controller('salirController',['$scope', 'usuarioService', 'toaster', function ($scope, usuarioService, toaster) {

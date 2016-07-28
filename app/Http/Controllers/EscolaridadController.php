@@ -112,8 +112,8 @@ class EscolaridadController extends Controller
     {
         //
     }
-	
-	  public function updateEstado(Request $request, $esCodigo){
+    
+    public function updateEstado(Request $request, $esCodigo){
         try {
             $data = $request->all();
             $escolaridad = Escolaridad::find($esCodigo);

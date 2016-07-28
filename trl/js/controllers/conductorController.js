@@ -1,5 +1,5 @@
 app.controller("conductorController", ["$scope", "conductorService", "tipoDocumentoService", "escolaridadService","toaster", "ngTableParams", "vehiculoService",
-    function ($scope, conductorService,tipoDocumentoService,escolaridadService,toaster,ngTableParams,vehiculoService) {
+   function ($scope, conductorService,tipoDocumentoService,escolaridadService,toaster,ngTableParams,vehiculoService) {
    $scope.Conductor = {};
    $scope.Conductores = [];
    $scope.Novedad={};

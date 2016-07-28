@@ -1,0 +1,125 @@
+<div ng-controller="disponibilidadController"  class="container-fluid">
+    <div class="row">
+         <form class="col-xs-10 col-xs-offset-1" name="frmDisponibilidad" id="frmDisponibilidad" novalidate>
+                <h5 class="text-primary">{{title}}</h5>
+                       <div class="col-xs-3">
+                            <div class="form-group">
+                                <label  for="cboTipoVehiculo">Tipo Vehiculo *</label>
+                                    <div class="input-group">    
+                                        <div class="input-group-addon"><i class="fa fa-car"></i></div>
+                                            <select ng-model="Disponibilidad.dpTipoVehiculo" name="cboTipoVehiculo" id="cboTipoVehiculo" style="width: 105%" class="form-control"  required >
+                                                 <option ng-repeat="itemc in TipoVehiculos" value="{{itemc.tvCodigo}}"> {{itemc.tvCodigo}} - {{itemc.tvDescripcion }}</option>
+                                            </select>                                                
+                                    </div> 
+                            </div>   
+                        </div>
+                         
+                         <div class="col-xs-3">
+                             <div class="form-group">
+                                 <label for="txtNombre">Nombre *</label>
+                                     <div class="input-group">    
+                                         <div class="input-group-addon"><i class="fa fa-book"></i></div>
+                                         <input type="text" class="form-control" ng-model="Disponibilidad.dpNombre" maxlength="60" id="txtNombre" required="" placeholder="Nombre Disponibilidad">
+                                     </div>
+                             </div>
+                         </div>
+                         
+
+                         <div class="col-xs-3">
+                             <div class="form-group">
+                                 <label for="txtEstado">Estado *</label>
+                                     <div class="input-group">    
+                                         <div class="input-group-addon"><i class="fa fa-list-ul"></i></div>
+                                         <select type="text" required="" class="form-control" ng-model="Disponibilidad.dpEstado" id="txtEstado" placeholder="Estado">
+                                                 <option value="ACTIVO">ACTIVO</option>
+                                                 <option value="INACTIVO">INACTIVO</option>
+                                              </select>
+                       
+                                      </div>
+                              </div>
+                         </div>
+                         
+                         <div class="col-xs-3">
+                             <div class="form-group">
+                                 <label for="txtdpValorHora"> Valor / Hora *</label>
+                                      <div class="input-group">    
+                                          <div class="input-group-addon"><i class="fa fa-hashtag"></i></div>
+                                          <input required="" type="text" class="form-control" ng-model="Disponibilidad.dpValorHora" id="txtdpValorHora" placeholder="Valor por hora"  maxlength="11" solo-numeros >
+                                       </div> 
+                             </div>
+                         </div>
+                         
+                          <div class="row">
+                              <div class="col-xs-2 col-xs-offset-8">                                        
+                                 <br/>
+                                     <button   class="btn btn-success btn-block btn-addon"   type="button"  title="Nuevo Conductor" ng-click="nuevo()"><i class="fa fa-pencil"></i>Nuevo</button>
+                             </div>
+                             <div class="col-xs-2">          
+                                 <br/>
+                                     <button  ng-disabled="frmDisponibilidad.$invalid" class="btn btn-primary btn-block btn-addon"   type="button"  title="Guardar Disponibilidad" ng-click="Guardar()"><i class="fa fa-check"></i> Guardar</button>
+                             </div>
+                         </div>
+                    
+                </form>
+                <div class="col-xs-12">
+                         <div class="row">
+                             <div class="col-xs-12">
+                                  <table border="0" cellspacing="0" class="table table-striped" style="float:height; margin-top: 30px;">
+                                     <thead>
+                                         <tr>
+                                             <th class="center">CODIGO</th> 
+                                             <th>NOMBRE</th>
+                                             <th>VALOR / HORA</th>  
+                                             <th>ESTADO</th>
+                                             <th>TIPO VEHICULO</th>
+                                             <th width="12%">ACCIÓN</th>
+                                         </tr>
+                                     </thead>
+
+                                     <tbody>
+                                          <tr data-ng-repeat="items in Disponibilidades">
+                                              <td class="center">{{ items.dpCodigo}}</td>
+                                              <td>{{ items.dpNombre }}</td>
+                                              <td>{{items.dpValorHora}}</td>
+                                              <td>{{items.dpEstado}}</td>
+                                              <td>{{items.tvDescripcion}}</td>
+                                              <td>
+                                                 <center>
+                                                     <a data-ng-click="get(items)" style="float: left; margin-left: 15px;" href="javascript:;"  title="Editar"><i class=" fa fa-1x fa-pencil text-success"></i></a>
+                                                     <a ng-click="VerDesactivar(items.dpCodigo,'INACTIVO')"  style="float: left; margin-left: 15px;" href="javascript:;"  title="Cancelar"><i class="fa fa-1x fa-ban text-warning"></i></a>
+                                                 </center>
+                                              </td>
+                                          </tr>
+                                     </tbody>
+                                   </table>
+                                <div class="modal fade bs-example-modal-sm" id="mdConfirmacion" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" style="margin-top: 10%;">
+                                  <div class="modal-dialog modal-sm" style="width: 30%" >                                   
+                                    <div class="modal-content">
+                                       
+                                        <div class="modal-header">
+                                            <div class="modal-title">Activar / Inactivar Disponibilidad</div>
+                                        </div>
+                                        
+                                        <div class="modal-body">
+                                            <div class="row">
+                                                <div class="col-xs-12">
+                                                    <label>¿Está seguro de ejecutar esta acción? '{{dpEstado}}' </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                                            <button type="button" class="btn btn-primary" ng-click="Desactivar()">Aceptar</button>
+                                        </div>  
+                                        
+                                    </div>
+                                                                     
+                                  </div>
+                              </div>
+                                 
+                             </div>                               
+                         </div>
+                 </div> 
+    </div>                            
+</div>

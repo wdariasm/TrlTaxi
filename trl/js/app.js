@@ -58,6 +58,10 @@ var app;
                 templateUrl: 'views/configuracion/usuario.html'
             })
             
+             .when("/0/disponibilidad",{
+                templateUrl: 'views/configuracion/disponibilidad.html'
+            })
+            
             .when("/2/salir",{
                 templateUrl: 'views/proceso/salir.html'
             })
