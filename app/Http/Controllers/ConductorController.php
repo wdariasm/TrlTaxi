@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Conductor;
 use App\Novedad;
 use Illuminate\Http\JsonResponse;
+use DB;
 
 class ConductorController extends Controller
 {
@@ -14,11 +15,12 @@ class ConductorController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index()       
     {
-        //return Conductor::all();
-        return Conductor::where('Estado','<>','RETIRADO')
-                ->get();
+         $result = DB::select("SELECT co.IdConductor, co.Cedula,  co.Nombre, co.TelefonoPpal, co.Direccion, co.Estado,"
+                . " es.esDescripcion FROM conductor co INNER JOIN escolaridad es ON co.Escolaridad = es.esCodigo"
+                . " WHERE  co.Estado <> 'RETIRADO' ");
+        return $result; 
     }
 
    public function validIdConductorarEmail($email){
@@ -97,7 +99,7 @@ class ConductorController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $IdConductor
+     * @coram  int  $IdConductor
      * @return \Illuminate\Http\Response
      */
     public function show($IdConductor)
@@ -108,7 +110,7 @@ class ConductorController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $IdConductor
+     * @coram  int  $IdConductor
      * @return \Illuminate\Http\Response
      */
     public function edit($IdConductor)
@@ -119,8 +121,8 @@ class ConductorController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $idIdConductor
+     * @coram  \Illuminate\Http\Request  $request
+     * @coram  int  $idIdConductor
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $IdConductor)
@@ -172,7 +174,7 @@ class ConductorController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $idIdConductor
+     * @coram  int  $idIdConductor
      * @return \Illuminate\Http\Response
      */
     public function destroy($idIdConductor)

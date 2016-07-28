@@ -34,7 +34,7 @@ function ($scope, clienteService, tipoDocumentoService,toaster,ngTableParams) {
             $scope.Clientes = d.data;
             $scope.TablaCliente.reload();
         }, function(err) {           
-                alert("ERROR AL PROCESAR SOLICITUD");           
+                toaster.pop('error','¡Error!',"Error al cargar Clientes");           
                 console.log("Some Error Occured " + JSON.stringify(err));
         }); 
     }
@@ -44,7 +44,7 @@ function ($scope, clienteService, tipoDocumentoService,toaster,ngTableParams) {
         promise.then(function(d) {                        
             $scope.TipoDocumentos = d.data;
         }, function(err) {           
-                alert("ERROR AL PROCESAR SOLICITUD");           
+                toaster.pop('error','¡Error!',"ERROR AL PROCESAR SOLICITUD");            
                 console.log("Some Error Occured " + JSON.stringify(err));
         }); 
     }

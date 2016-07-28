@@ -28,5 +28,10 @@ app.service("escolaridadService",[ '$http', function ($http) {
         var req = $http.get(uri+'/api/escolaridades');
         return req;
     };
+    
+    this.validarCodigo = function(Codigo){
+        var req = $http.get(uri+'/api/escolaridad/' + Codigo +'/validar');
+        return req;	
+    };
 }]);
 

@@ -22,6 +22,10 @@ class EscolaridadController extends Controller
         
     }
 
+    
+     public function validarCodigo($esCodigo){
+        return Escolaridad::where("esCodigo",$esCodigo)->select("esCodigo")->first();
+    }
     /**
      * Show the form for creating a new resource.
      *

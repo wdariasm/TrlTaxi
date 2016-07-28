@@ -83,7 +83,7 @@ function ($scope, tipoVehiculoService,toaster) {
                  toaster.pop('success', "Control de Información", d.data.message);                 
                 loadTipoVehiculo();
             }, function (err) {                              
-                     toaster.pop('error', "Error", "ERROR AL PROCESAR SOLICITUD"); ;
+                     toaster.pop('error', "Error", "Error al Desactivar tipo de Vehiculo"); ;
                     console.log("Some Error Occured "+ JSON.stringify(err));
             }); 
    

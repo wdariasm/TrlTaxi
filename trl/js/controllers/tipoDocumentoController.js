@@ -4,6 +4,7 @@ function ($scope, tipoDocumentoService,toaster) {
    $scope.TipoDocumentos = [];
    $scope.IdTipoGlobal="";
    $scope.editMode = false;
+   $scope.title="NUEVO TIPO DOCUMENTO";
    
    $scope.$parent.SetTitulo("TIPO DOCUMENTO");
 
@@ -21,7 +22,7 @@ function ($scope, tipoDocumentoService,toaster) {
         promise.then(function(d) {                        
             $scope.TipoDocumentos = d.data;
         }, function(err) {           
-                alert("ERROR AL PROCESAR SOLICITUD");           
+                toaster.pop('error','¡Error!',"Error al cargar Tipo Documento");             
                 console.log("Some Error Occured " + JSON.stringify(err));
         }); 
     }
@@ -47,10 +48,16 @@ function ($scope, tipoDocumentoService,toaster) {
            toaster.pop('success', "Control de Información", d.data.message); 
              
         }, function(err) {           
-                toaster.pop('error', "Error", "ERROR AL PROCESAR SOLICITUD");       
+                toaster.pop('error', "Error", "Error al guardar Tipo Documento");       
                 console.log("Some Error Occured " + JSON.stringify(err));
         }); 
         initTipoDocumento();
+   };
+   
+    $scope.nuevo = function (){
+       initTipoDocumento();
+       $scope.editMode =false;
+       $scope.title = "NUEVO TIPO DOCUMENTO"; 
    };
    
     //edita la tipoDocumento
@@ -80,7 +87,7 @@ function ($scope, tipoDocumentoService,toaster) {
                  toaster.pop('success', "Control de Información", d.data.message);                 
                 loadTipoDocumento();
             }, function (err) {                              
-                     toaster.pop('error', "Error", "ERROR AL PROCESAR SOLICITUD"); ;
+                     toaster.pop('error', "Error", "Error  al desactivar Tipo Documento"); ;
                     console.log("Some Error Occured "+ JSON.stringify(err));
             }); 
    

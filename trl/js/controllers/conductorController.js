@@ -19,7 +19,7 @@ app.controller("conductorController", ["$scope", "conductorService", "tipoDocume
    $scope.editMode = false;
    $scope.editNovedad = false;
    
-        $scope.$parent.SetTitulo("GESTION DE CONDUCTOR");
+   $scope.$parent.SetTitulo("GESTION DE CONDUCTOR");
 
    
     initialize();
@@ -60,7 +60,7 @@ app.controller("conductorController", ["$scope", "conductorService", "tipoDocume
             $scope.Conductores = d.data;
             $scope.TablaConductor.reload();
         }, function(err) {           
-                alert("ERROR AL PROCESAR SOLICITUD");           
+                toaster.pop('error','¡Error!',"Error al cargar Conductores");           
                 console.log("Some Error Occured " + JSON.stringify(err));
         }); 
     }
@@ -70,7 +70,7 @@ app.controller("conductorController", ["$scope", "conductorService", "tipoDocume
         promise.then(function(d) {                        
             $scope.Escolaridades = d.data;
         }, function(err) {           
-                alert("ERROR AL PROCESAR SOLICITUD");           
+                toaster.pop('error','¡Error!',"Error al cargar Escolaridad");       
                 console.log("Some Error Occured " + JSON.stringify(err));
         }); 
     }
@@ -83,7 +83,7 @@ app.controller("conductorController", ["$scope", "conductorService", "tipoDocume
         promise.then(function(d) {                        
             $scope.TipoDocumentos = d.data;
         }, function(err) {           
-                alert("ERROR AL PROCESAR SOLICITUD");           
+               toaster.pop('error','¡Error!',"Error al cargar Tipo Documento");            
                 console.log("Some Error Occured " + JSON.stringify(err));
         }); 
     }
@@ -149,7 +149,7 @@ app.controller("conductorController", ["$scope", "conductorService", "tipoDocume
            toaster.pop('success', "Control de Información", d.data.message); 
              
         }, function(err) {           
-                toaster.pop('error', "Error", "ERROR AL PROCESAR SOLICITUD");         
+                toaster.pop('error', "Error", "Error al guardar Conductor");         
                 console.log("Some Error Occured " + JSON.stringify(err));
         });       
    };
@@ -239,7 +239,7 @@ app.controller("conductorController", ["$scope", "conductorService", "tipoDocume
                  toaster.pop('success', "Control de Información", d.data.message);                 
                 loadConductor(); 
             }, function (err) {                              
-                     toaster.pop('error', "Error", "ERROR AL PROCESAR SOLICITUD"); ;
+                     toaster.pop('error', "Error", "Error al descativar Conductor"); ;
                     console.log("Some Error Occured "+ JSON.stringify(err));
             }); 
    
@@ -450,7 +450,7 @@ app.controller("conductorController", ["$scope", "conductorService", "tipoDocume
                  toaster.pop('success', "Control de Información", d.data.message);                 
                 loadLicenciaConduccion(); 
             }, function (err) {                              
-                     toaster.pop('error', "Error", "ERROR AL PROCESAR SOLICITUD"); ;
+                     toaster.pop('error', "Error", "Error al procesar Solicitud"); ;
                     console.log("Some Error Occured "+ JSON.stringify(err));
             }); 
    

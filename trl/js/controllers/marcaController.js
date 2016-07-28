@@ -4,6 +4,8 @@ app.controller("marcaController", ["$scope", "marcaService","toaster",
    $scope.Marcas = [];
    $scope.IdMarcaGlobal="";
    $scope.editMode = false;
+   $scope.title="NUEVA MARCA";
+   
    
    $scope.$parent.SetTitulo("MARCA");
 
@@ -22,11 +24,16 @@ app.controller("marcaController", ["$scope", "marcaService","toaster",
         promise.then(function(d) {                        
             $scope.Marcas = d.data;
         }, function(err) {           
-                alert("ERROR AL PROCESAR SOLICITUD");           
+                toaster.pop('error','¡Error!',"Error al cargar Marcas");             
                 console.log("Some Error Occured " + JSON.stringify(err));
         }); 
     }
    
+    $scope.nuevo = function (){
+       initMarca();
+       $scope.editMode =false;
+       $scope.title = "NUEVA MARCA"; 
+   };
    
    $scope.Guardar = function (){
         $scope.Marca.maDescripcion = $scope.Marca.maDescripcion.toUpperCase();
@@ -43,7 +50,7 @@ app.controller("marcaController", ["$scope", "marcaService","toaster",
              toaster.pop('success', "Control de Información", d.data.message);
              
         }, function(err) {           
-                 toaster.pop('error', "Error", "ERROR AL PROCESAR SOLICITUD");           
+                 toaster.pop('error', "Error", "Error al guardar Marca");           
                 console.log("Some Error Occured " + JSON.stringify(err));
         });  
         initMarca();
@@ -74,7 +81,7 @@ app.controller("marcaController", ["$scope", "marcaService","toaster",
                  toaster.pop('success', "Control de Información", d.data.message);                 
                 loadMarca();
             }, function (err) {                              
-                     toaster.pop('error', "Error", "ERROR AL PROCESAR SOLICITUD"); ;
+                     toaster.pop('error', "Error", "Error  al desactivar Marca"); ;
                     console.log("Some Error Occured "+ JSON.stringify(err));
             }); 
                 

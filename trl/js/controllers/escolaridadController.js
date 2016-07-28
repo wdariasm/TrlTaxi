@@ -3,8 +3,10 @@ app.controller("escolaridadController", ["$scope", "escolaridadService","toaster
    $scope.Escolaridades = [];
    $scope.IdGlobal="";
    $scope.editMode = false;
+   $scope.valCodigo = false;
+   $scope.title="NUEVA ESCOLARIDAD";
    
-        $scope.$parent.SetTitulo("ESCOLARIDAD");
+   $scope.$parent.SetTitulo("ESCOLARIDAD");
 
    
    initEscolaridad();
@@ -17,22 +19,32 @@ app.controller("escolaridadController", ["$scope", "escolaridadService","toaster
     }
   
    
-   
     function loadEscolaridad (){
         var promise = escolaridadService.getAll();
         promise.then(function(d) {                        
             $scope.Escolaridades = d.data;
         }, function(err) {           
-                alert("ERROR AL PROCESAR SOLICITUD");           
+               toaster.pop('error','¡Error!',"Error al cargar Escolaridad");          
                 console.log("Some Error Occured " + JSON.stringify(err));
         }); 
     }
+   
+    $scope.nuevo = function (){
+       initEscolaridad();
+       $scope.editMode =false;
+       $scope.title = "NUEVA ESCOLARIDAD"; 
+   };
    
    
    $scope.Guardar = function (){
        
         $scope.Escolaridad.esDescripcion = $scope.Escolaridad.esDescripcion.toUpperCase();
         $scope.Escolaridad.esEstado=$scope.Escolaridad.esEstado.toUpperCase();
+        
+        if ($scope.valCodigo){
+           toaster.pop('error','¡Error!', 'El Codigo ya existe'); 
+            return;
+             }
 
         var promise;
         if($scope.editMode){            
@@ -46,7 +58,7 @@ app.controller("escolaridadController", ["$scope", "escolaridadService","toaster
             toaster.pop('success', "Control de Información", d.data.message); 
              
         }, function(err) {           
-                toaster.pop('error', "Error", "ERROR AL PROCESAR SOLICITUD");         
+                toaster.pop('error', "Error", "Error al guardar Escolaridad");         
                 console.log("Some Error Occured " + JSON.stringify(err));
         });    
         initEscolaridad();
@@ -79,13 +91,28 @@ app.controller("escolaridadController", ["$scope", "escolaridadService","toaster
                  toaster.pop('success', "Control de Información", d.data.message);                 
                  loadEscolaridad();
             }, function (err) {                              
-                     toaster.pop('error', "Error", "ERROR AL PROCESAR SOLICITUD"); ;
+                     toaster.pop('error', "Error", "Error al desactivar Escolaridad"); ;
                     console.log("Some Error Occured "+ JSON.stringify(err));
             }); 
                 
     };
    
-   
+     $scope.validarCodigo= function () {
+        $scope.valCodigo = false;
+        if (!$scope.Escolaridad.esCodigo) {
+            return;
+        }        
+        var promisePost = escolaridadService.validarCodigo($scope.Escolaridad.esCodigo);
+        promisePost.then(function (d) {
+            if (d.data.esCodigo) {
+                $scope.valCodigo = true;
+                toaster.pop('info', "Codigo ya existe"); 
+            }
+        }, function (err) {
+           toaster.pop('error', "Error", "Error al validar el Codigo"); 
+            console.log("Some Error Occured " + JSON.stringify(err));
+        });
+    };
    
     loadEscolaridad();
 }]);
