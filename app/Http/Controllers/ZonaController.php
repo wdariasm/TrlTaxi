@@ -73,8 +73,8 @@ class ZonaController extends Controller
                 }
             }        
             return JsonResponse::create(array('message' => "Guardado correctamente", "request" =>json_encode($id[0]->znCodigo)), 200);
-        } catch (Exception $exc) {
-            return JsonResponse::create(array('message' => "No se pudo guardar", 'error'=>$exc, "request" =>json_encode($request)), 401);
+        } catch (\Exception $exc) {
+            return JsonResponse::create(array('message' => "No se pudo guardar",  "request" =>json_encode($exc->getMessage())), 401);
         }
 
     }
@@ -121,8 +121,8 @@ class ZonaController extends Controller
                 }
             }        
             return JsonResponse::create(array('message' => "Datos Actualizados correctamente", "request" =>json_encode($id)), 200);
-        } catch (Exception $exc) {
-            return JsonResponse::create(array('message' => "No se pudo guardar", 'error'=>$exc, "request" =>json_encode($request)), 401);
+        } catch (\Exception $exc) {
+            return JsonResponse::create(array('message' => "No se pudo guardar",  "request" =>json_encode($exc->getMessage())), 401);
         }
     }
 
@@ -137,8 +137,8 @@ class ZonaController extends Controller
         try {
             DB::delete("DELETE FROM zona WHERE znCodigo = $id");
              return JsonResponse::create(array('message' => 'Zona Eliminada Correctamente'), 200);
-        }catch (Exception $exc) {
-            return JsonResponse::create(array('message' => "No se pudo Eliminar", 'error'=>$exc), 401);
+        }catch (\Exception $exc) {
+            return JsonResponse::create(array('message' => "No se pudo Eliminar", 'request'=>$exc), 401);
         }
         
     }
