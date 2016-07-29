@@ -62,6 +62,10 @@ var app;
                 templateUrl: 'views/configuracion/disponibilidad.html'
             })
             
+            .when("/0/zona",{
+                templateUrl: 'views/configuracion/zona.html'
+            })
+            
             .when("/2/salir",{
                 templateUrl: 'views/proceso/salir.html'
             })
