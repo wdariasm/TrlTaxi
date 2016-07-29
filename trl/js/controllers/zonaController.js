@@ -247,21 +247,45 @@ app.controller('zonaController',['$scope', 'zonaService', 'ngTableParams', 'toas
         });  
     };
     
-    $scope.eliminar = function(idZona) {
+     $scope.VerEliminar= function(znCodigo) {
+        $scope.znCodigo =znCodigo;
         
-        var r = confirm("¿Está seguro de Ejecutar Eliminar esta Zona");
-        if (r == true) {            
-            var promiseDel  = zonaService.delete(idZona);        
+        $('#mdConfirmacion').modal('show');         
+    };
+    
+    //Funcion que elimina
+     $scope.eliminar = function() {
+         var objetc = {
+            znCodigo :$scope.znCodigo
+        };
+            $('#mdConfirmacion').modal('hide'); 
+            var promiseDel  = zonaService.delete($scope.znCodigo, objetc);        
                 promiseDel.then(function (d) {                
-                toaster.pop('success', '¡Información', d.data.message);                
-                loadZona();
+                 toaster.pop('success', "Control de Información", d.data.message);                 
+                 loadZona();
             }, function (err) {                              
-                toaster.pop('error', "¡Error!", err.data.request);  
-                console.log("Some Error Occured "+ JSON.stringify(err));
+                     toaster.pop('error', "¡Error!", err.data.request);
+                    console.log("Some Error Occured "+ JSON.stringify(err));
             }); 
-        } 
-        
-    };          
+                
+    };
+    
+    
+//    $scope.eliminar = function(idZona) {
+//          $('#mdConfirmacion').modal('hide'); 
+//        var r = confirm("¿Está seguro de Ejecutar Eliminar esta Zona");
+//        if (r == true) {            
+//            var promiseDel  = zonaService.delete(idZona);        
+//                promiseDel.then(function (d) {                
+//                toaster.pop('success', '¡Información', d.data.message);                
+//                loadZona();
+//            }, function (err) {                              
+//                toaster.pop('error', "¡Error!", err.data.request);  
+//                console.log("Some Error Occured "+ JSON.stringify(err));
+//            }); 
+//        } 
+//        
+//    };          
 }]);
 
 

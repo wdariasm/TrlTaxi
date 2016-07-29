@@ -56,12 +56,38 @@
                                 <td>
                                     <center>
                                         <a data-ng-click="get(item)" style="float: left; margin-left: 3px;" href="javascript:;"  title="Editar"><i class="fa fa-pencil fa-lg text-success"></i></a>                                                    
-                                        <a ng-click="eliminar(item.znCodigo)"  style="float: left; margin-left: 10px;" href="javascript:;"  title="Eliminar"><i class="fa fa-lg fa-trash text-danger"></i></a>
+                                        <a ng-click="VerEliminar(item.znCodigo)"  style="float: left; margin-left: 10px;" href="javascript:;"  title="Eliminar"><i class="fa fa-lg fa-trash text-danger"></i></a>
                                     </center>
                                 </td> 
                             </tr>
                         </tbody>
-                    </table>                        
+                    </table> 
+                    
+                      <div class="modal fade bs-example-modal-sm" id="mdConfirmacion" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" style="margin-top: 10%;">
+                                <div class="modal-dialog modal-sm" style="width: 30%" >                                   
+                                    <div class="modal-content">
+                                       
+                                        <div class="modal-header">
+                                            <div class="modal-title">Eliminar Zona</div>
+                                        </div>
+                                        
+                                        <div class="modal-body">
+                                            <div class="row">
+                                                <div class="col-xs-12">
+                                                    <label>¿Está seguro de ejecutar esta acción? '{{znCodigo}}' </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                                            <button type="button" class="btn btn-primary" ng-click="eliminar()">Aceptar</button>
+                                        </div>  
+                                        
+                                    </div>
+                                                                     
+                                </div>
+                     </div>
                 </div>                                        
             </div>
             </form>
