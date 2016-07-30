@@ -19,7 +19,7 @@
                                 <label  for="cboDepartamento">Departamento *</label>
                                     <div class="input-group">    
                                         <div class="input-group-addon"><i class="fa fa-globe text-success"></i></div>
-                                           <select ng-model="DeptSelect" class="form-control" id="cboDepartamento" ng-options="item as item.dtCodigo +' - '+ item.dtNombre for item in Departamentos track by item.dtCodigo" required></select>           
+                                           <select ng-model="DeptSelect" ng-change="CambiaDept()" class="form-control" id="cboDepartamento" ng-options="item as item.dtCodigo +' - '+ item.dtNombre for item in Departamentos track by item.dtCodigo" required></select>           
                                     </div> 
                             </div>   
                         </div>
@@ -29,7 +29,7 @@
                                 <label  for="cboMunicipio">Municipio *</label>
                                     <div class="input-group">    
                                         <div class="input-group-addon"><i class="fa fa-globe text-success"></i></div>
-                                           <select ng-model="MunSelect" class="form-control" id="cboMunicipio" ng-options="item as item.dtCodigo +' - '+ item.dtNombre for item in Departamentos track by item.dtCodigo" required></select>           
+                                        <select ng-model="MunSelect"  class="form-control" id="cboMunicipio" ng-options="item as item.muCodigo +' - '+ item.muNombre for item in Municipios track by item.muCodigo" required></select>           
                                     </div> 
                             </div>   
                         </div>

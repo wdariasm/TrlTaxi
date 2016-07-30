@@ -4,6 +4,7 @@ function ($scope,rutaService, tipoVehiculoService,departamentoService, toaster) 
     $scope.Rutas= [];
     $scope.TipoVehiculos= [];
     $scope.Departamentos=[];
+    $scope.Municipios=[];
     $scope.IdRutapGlobal="";
     $scope.editMode = false;
     $scope.title = "NUEVA RUTA"; 
@@ -59,6 +60,7 @@ function ($scope,rutaService, tipoVehiculoService,departamentoService, toaster) 
             $scope.Departamentos = d.data;
              if(d.data){
                $scope.DeptSelect = d.data[0];
+               loadMunicipio($scope.DeptSelect.dtCodigo);
             }
         }, function(err) {           
                 toaster.pop('error','¡Error!',"Error al cargar Departamentos");           
@@ -67,10 +69,10 @@ function ($scope,rutaService, tipoVehiculoService,departamentoService, toaster) 
     }
     loadDepartamento();
     
-     function loadMunicipio(){
-        var promise = departamentoService.getAll();
+     function loadMunicipio(dtCodigo){
+        var promise = departamentoService.getMunicipios(dtCodigo);
         promise.then(function(d) {                        
-            $scope.Departamentos = d.data;
+            $scope.Municipios = d.data;
              if(d.data){
                $scope.MunSelect = d.data[0];
             }
@@ -79,7 +81,11 @@ function ($scope,rutaService, tipoVehiculoService,departamentoService, toaster) 
                 console.log("Some Error Occured " + JSON.stringify(err));
         }); 
     }
-    loadMunicipio();
+    
+    $scope.CambiaDept=function(){               
+       
+               loadMunicipio($scope.DeptSelect.dtCodigo);
+    };
    
    $scope.Guardar = function (){
        $scope.Ruta.trTipoVehiculo = $scope.VehiculoSelect.tvCodigo;

@@ -19,5 +19,10 @@ app.service("departamentoService", ['$http', function ($http) {
         var req = $http.put(uri+'/api/departamento/' + id, departamento);
         return req;        
     };
+    
+    this.getMunicipios = function (id) {
+        var req = $http.get(uri+'/api/departamento/'+id+' /municipios');
+        return req;
+    };
 
 }]);
