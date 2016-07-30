@@ -24,9 +24,14 @@ app.service("transfertService", ['$http', function ($http) {
         return req;        
     };
             
-    this.getByNombre = function () {
+    this.getActivos = function () {
         var req = $http.get(uri+'/api/transferts');
         return req;
     };
+    
+    this.updateEstado=function(id, object){
+        var req = $http.put(uri+'/api/transfert/updateEstado/' + id, object);
+        return req;
+    };  
 }]);
 

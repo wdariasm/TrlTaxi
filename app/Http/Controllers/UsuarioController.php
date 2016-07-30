@@ -222,7 +222,7 @@ class UsuarioController extends Controller
 
             return JsonResponse::create(array('message' =>"Correcto", "request" =>json_encode($usuario)), 200);
 
-        } catch (DecryptException $e) {
+        } catch (\DecryptException $e) {
             return JsonResponse::create(array('message' => "No se puedo autenticar el usuario", "request" =>json_encode($e->getMessage())), 401);
         } catch (\Exception $exc) {
             return JsonResponse::create(array('message' => "No se puedo autenticar el usuario", "request" =>json_encode($exc->getMessage())), 401);
