@@ -1,0 +1,25 @@
+<div  ng-controller="transfertController" class="container-fluid">
+    <div class="row">
+        <div class="col-xs-4">
+            <form name="frmServicio" id="frmServicio" novalidate>
+                <h5 class="text-primary">{{title}}</h5>
+                <div class="row">
+                    <div class="col-xs-11">
+                        <div class="form-group">
+                            <label  for="cboZonaOrigen">Zona origen *</label>
+                            <div class="input-group">    
+                                <div class="input-group-addon"><i class="fa fa-cc"></i></div>                                                                                
+                                <select ng-model="TipoSelect" class="form-control" id="cboZonaOrigen" ng-options="item as  item.znNombre for item in TipoDocumentos track by item.znCodigo" required></select>
+                            </div> 
+                        </div>   
+                    </div>
+                </div>
+            </form>
+        </div>
+        
+        <div class="cpl-xs-8">
+            
+        </div>        
+    </div>
+    
+</div>

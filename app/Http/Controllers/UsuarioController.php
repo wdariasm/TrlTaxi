@@ -200,9 +200,9 @@ class UsuarioController extends Controller
 
             if($user['Estado'] != 'ACTIVO'){
                 return JsonResponse::create(array('message' => "error", "request" =>'Usuario Bloqueado'), 200);
-            }
+            }         
           
-            $clave =Crypt::decrypt($user['Clave']);      
+            $clave =Crypt::decrypt($user['Clave']);                                    
             if(strcmp($data['clave'], $clave) !== 0 ){                 
                 return JsonResponse::create(array('message' => "error", "request" =>'Credenciales no validas'), 200);
             }            
@@ -222,6 +222,8 @@ class UsuarioController extends Controller
 
             return JsonResponse::create(array('message' =>"Correcto", "request" =>json_encode($usuario)), 200);
 
+        } catch (DecryptException $e) {
+            return JsonResponse::create(array('message' => "No se puedo autenticar el usuario", "request" =>json_encode($e->getMessage())), 401);
         } catch (\Exception $exc) {
             return JsonResponse::create(array('message' => "No se puedo autenticar el usuario", "request" =>json_encode($exc->getMessage())), 401);
         }
@@ -262,7 +264,7 @@ class UsuarioController extends Controller
         $mensaje = "
         <html>
         <head>
-          <title>". utf8_encode("Recuperación de  Contraseña") ."</title>
+          <title>". utf8_encode("Recuperación de  contraseña") ."</title>
         </head>
         <body>
             <img style='height:60px;' src='http://".$_SERVER['HTTP_HOST']."/trl/images/logo.png' alt=''/>
@@ -329,7 +331,7 @@ class UsuarioController extends Controller
             $para  = $usuario->Email;
             $nombre = $usuario->Nombre;
             // título
-            $título = utf8_encode('Cambio de Contraseña [TRL Transporte]');
+            $título = utf8_encode("Cambio de Contraseña [TRL Transporte]");
             // mensaje
             $mensaje = "
             <html>
@@ -338,7 +340,7 @@ class UsuarioController extends Controller
             </head>
             <body>          
               <h1>Hola, $nombre </h1><br/>
-              <p>Tu Contraseña ha sido modificada exitosamente</p>                         
+              <p>Tu contraseña ha sido modificada exitosamente</p>                         
               <br/>    
               <h3>Tus datos de Inicio de Session</h3>
               <p>Usuario SportsBook: $user</p>
@@ -352,7 +354,7 @@ class UsuarioController extends Controller
             $cabeceras  = 'MIME-Version: 1.0' . "\r\n";
             $cabeceras .= 'Content-type: text/html; charset=UTF-8' . "\r\n";
             $cabeceras .= 'To: '.$nombre.' <'.$para.'>' . "\r\n";
-            $cabeceras .= 'From: Transporte Ruta Libre <info@trl.co>' . "\r\n";  
+            $cabeceras .= 'From: Transporte Ruta Libre <info@trl.com.co>' . "\r\n";  
             mail($para, $título, $mensaje, $cabeceras);            
             return JsonResponse::create(array('message' => "Correcto", "request" =>'Contraseña modificada correctamente'), 200);
         } catch (Exception $exc) {            

@@ -30,7 +30,7 @@ include 'Routes/routesPersona.php';
 include 'Routes/routesPerfil.php';
 include 'Routes/routesDisponibilidad.php';
 include 'Routes/routesZona.php';
-
+include 'Routes/routesDepartamento.php';
 
 
 

@@ -66,6 +66,14 @@ var app;
                 templateUrl: 'views/configuracion/zona.html'
             })
             
+            .when("/0/transfert",{
+                templateUrl: 'views/configuracion/transfert.html'
+            })
+            
+            .when("/0/ruta",{
+                templateUrl: 'views/configuracion/ruta.html'
+            })                        
+            
             .when("/2/salir",{
                 templateUrl: 'views/proceso/salir.html'
             })
