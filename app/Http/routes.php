@@ -31,7 +31,7 @@ include 'Routes/routesPerfil.php';
 include 'Routes/routesDisponibilidad.php';
 include 'Routes/routesZona.php';
 include 'Routes/routesDepartamento.php';
-
+include 'Routes/routesRuta.php';
 
 
 

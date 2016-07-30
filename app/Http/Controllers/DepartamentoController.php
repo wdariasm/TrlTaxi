@@ -19,4 +19,21 @@ class DepartamentoController extends Controller
        }
        
    }
+   
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index()       
+    {
+         return Departamento::all(); 
+    }
+    
+    
+    public function getMunicipios($id){
+       
+        return Municipio::where('muDepartamento',$id)->get();
+    }
+    
 }

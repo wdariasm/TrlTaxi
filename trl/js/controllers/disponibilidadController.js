@@ -6,6 +6,7 @@ function ($scope,disponibilidadService, tipoVehiculoService,toaster) {
     $scope.IdDispGlobal="";
     $scope.editMode = false;
     $scope.title = "NUEVA DISPONIBILIDAD"; 
+    $scope.TipoSelect ={}; 
    
     $scope.$parent.SetTitulo("DISPONIBILIDAD");
     initDisponibilidad();  
@@ -15,7 +16,7 @@ function ($scope,disponibilidadService, tipoVehiculoService,toaster) {
             dpNombre:"",
             dpValorHora:"",
             dpEstado : "ACTIVO",
-            dpTipoVehiculo :"1"
+            dpTipoVehiculo :''
         };           
     }
     initDisponibilidad();
@@ -35,6 +36,9 @@ function ($scope,disponibilidadService, tipoVehiculoService,toaster) {
         var promise = tipoVehiculoService.getAll();
         promise.then(function(d) {                        
             $scope.TipoVehiculos = d.data;
+             if(d.data){
+               $scope.TipoSelect = d.data[0];
+            }
         }, function(err) {           
                 toaster.pop('error','¡Error!',"Error al cargar Tipo de Vehiculo");           
                 console.log("Some Error Occured " + JSON.stringify(err));
@@ -44,7 +48,7 @@ function ($scope,disponibilidadService, tipoVehiculoService,toaster) {
     loadTipoVehiculo();
    
    $scope.Guardar = function (){
-       
+        $scope.Disponibilidad.dpTipoVehiculo = $scope.TipoSelect.tvCodigo;
        $scope.Disponibilidad.dpNombre = $scope.Disponibilidad.dpNombre.toUpperCase();                           
        
         var promise;

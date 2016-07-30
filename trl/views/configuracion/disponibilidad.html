@@ -7,9 +7,7 @@
                                 <label  for="cboTipoVehiculo">Tipo Vehiculo *</label>
                                     <div class="input-group">    
                                         <div class="input-group-addon"><i class="fa fa-car"></i></div>
-                                            <select ng-model="Disponibilidad.dpTipoVehiculo" name="cboTipoVehiculo" id="cboTipoVehiculo" style="width: 105%" class="form-control"  required >
-                                                 <option ng-repeat="itemc in TipoVehiculos" value="{{itemc.tvCodigo}}"> {{itemc.tvCodigo}} - {{itemc.tvDescripcion }}</option>
-                                            </select>                                                
+                                           <select ng-model="TipoSelect" class="form-control" id="cboTipoVehiculo" ng-options="item as item.tvCodigo +' - '+ item.tvDescripcion for item in TipoVehiculos track by item.tvCodigo" required></select>           
                                     </div> 
                             </div>   
                         </div>
