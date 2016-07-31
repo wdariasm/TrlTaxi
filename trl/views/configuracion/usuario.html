@@ -1,95 +1,94 @@
- <div ng-controller="usuarioController"  class="container-fluid">
-<div class="row">
+<div ng-controller="usuarioController"  class="container-fluid">
+    <div class="row">
         <div class="col-xs-12">  
-             <div class="tabbable-line">
-                    <ul class="nav nav-tabs nav-justified" id="tabPanels">
-                        <li class="active"> <a href="#tabListado" data-toggle="tab">Listado de Usuario </a></li>
-                        <li><a href="#tabRegistro" data-toggle="tab">{{title    }}</a></li>
-                        <li><a href="#tabCambiarC" data-toggle="tab">Cambiar Contraseña</a></li>
-                       
-                    </ul>
-             </div>
+            <div class="tabbable-line">
+                <ul class="nav nav-tabs nav-justified" id="tabPanels">
+                    <li class="active"> <a href="#tabListado" data-toggle="tab">Listado de Usuario </a></li>
+                    <li><a href="#tabRegistro" data-toggle="tab">{{title    }}</a></li>
+                    <li><a href="#tabRoles" data-toggle="tab">Perfiles de Usuario</a></li>
+                    <li><a href="#tabCambiarC" data-toggle="tab">Cambiar Contraseña</a></li>                                              
+                </ul>
+            </div>
             
-            <div class="tab-content">
-                 <br/>
-                        <div class="tab-pane active" id="tabListado">
-                             <div class="row">
-                             <div class="col-xs-6">
-                                 <label  for="search">Filtro</label>
-                                     <div class="input-group">
-                                         <div class="input-group-addon"><i class="fa  fa-search text-primary"></i></div>
-                                         <input  class="form-control" id="search" type="search" placeholder="" ng-model="TablaUsuario.filter()['busqueda']">
-                                     </div>
-                              </div>
-                              <div class="" style="float:width; margin-top:30px;">
-                                     <label class=" text-primary" style="font-size: 18px;">Total: {{Usuarios.length}}</label>
-                              </div>
-                         </div>
-                           
-                           <table class="table table-hover table-condensed" ng-table="TablaUsuario" style="float:height; margin-top: 50px;">
-                                <thead>
-                                    <tr>
-                                        <th>CODIGO</th>
-                                        <th>NOMBRE</th>  
-                                        <th>FECHA CONEXION</th>    
-                                        <th>ESTADO</th> 
-                                        <th>ACCIÓN</th>
-                                    </tr>
-                                </thead>
-                                
-                                 <tbody>
-                                 <tr data-ng-repeat="items in $data">
-                                <td class="center">{{ items.IdUsuario}}</td>
-                                <td>{{ items.Nombre }}</td>
-                                <td>{{ items.FechaCnx}}</td> 
-                                <td>{{ items.Estado}}</td> 
-                                <td>
-                                        <center>
-                                            <a data-ng-click="get(items)" style="float: left; margin-left: 15px;" href="javascript:;"  title="Editar"><i class="fa fa-lg fa-pencil"></i></a>
-                                            <a data-ng-click="VerDesactivar(items.IdUsuario, 'BORRADO')"  style="float: left; margin-left: 15px;" href="javascript:;"  title="Borrar"><i class="fa fa-lg fa-trash"></i></a>
-                                            <a data-ng-click="CambiarPass(items.IdUsuario,  items.Nombre)" style="float: left; margin-left: 15px;" href="javascript:;"  title="Cambiar Contraseña"><i class="fa fa-lg fa-refresh text-warning"></i></a>
-                                        </center>
-                                </td>
-                                  </tr>
+            <div class="tab-content">                 
+                <div class="tab-pane active" id="tabListado">
+                    <br/>
+                    <div class="row">
+                        <div class="col-xs-6">
+                         <label  for="search">Filtro</label>
+                             <div class="input-group">
+                                 <div class="input-group-addon"><i class="fa  fa-search text-primary"></i></div>
+                                 <input  class="form-control" id="search" type="search" placeholder="" ng-model="TablaUsuario.filter()['busqueda']">
+                             </div>
+                        </div>
+                        <div class="" style="float:width; margin-top:30px;">
+                               <label class=" text-primary" style="font-size: 18px;">Total: {{Usuarios.length}}</label>
+                        </div>
+                    </div>
 
-                                </tbody>
-                              
-                            </table>
-                            <div class="modal fade bs-example-modal-sm" id="mdConfirmacion" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" style="margin-top: 10%;">
-                                <div class="modal-dialog modal-sm" style="width: 30%" >                                   
-                                    <div class="modal-content">
-                                       
-                                        <div class="modal-header">
-                                            <div class="modal-title">Activar / Borrar  Usuario</div>
-                                        </div>
-                                        
-                                        <div class="modal-body">
-                                            <div class="row">
-                                                <div class="col-xs-12">
-                                                    <label>¿Está seguro de ejecutar esta acción? '{{Estado}}' </label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
-                                            <button type="button" class="btn btn-primary" ng-click="Desactivar()">Aceptar</button>
-                                        </div>  
-                                        
-                                    </div>
-                                                                     
+                    <table class="table table-hover table-condensed" ng-table="TablaUsuario" style=" margin-top: 20px;">
+                        <thead>
+                            <tr>
+                                <th>CODIGO</th>
+                                <th>NOMBRE</th>  
+                                <th>FECHA CONEXION</th>    
+                                <th>ESTADO</th> 
+                                <th>ACCIÓN</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <tr data-ng-repeat="items in $data">
+                               <td class="center">{{ items.IdUsuario}}</td>
+                               <td>{{ items.Nombre }}</td>
+                               <td>{{ items.FechaCnx}}</td> 
+                               <td>{{ items.Estado}}</td> 
+                               <td>
+                                       <center>
+                                           <a data-ng-click="get(items)" style="float: left; margin-left: 15px;" href="javascript:;"  title="Editar"><i class="fa fa-lg fa-pencil"></i></a>
+                                           <a data-ng-click="VerDesactivar(items.IdUsuario, 'BORRADO')"  style="float: left; margin-left: 15px;" href="javascript:;"  title="Borrar"><i class="fa fa-lg fa-trash"></i></a>
+                                           <a data-ng-click="CambiarPass(items.IdUsuario,  items.Nombre)" style="float: left; margin-left: 15px;" href="javascript:;"  title="Cambiar Contraseña"><i class="fa fa-lg fa-refresh text-warning"></i></a>
+                                       </center>
+                               </td>
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+                    <div class="modal fade bs-example-modal-sm" id="mdConfirmacion" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" style="margin-top: 10%;">
+                        <div class="modal-dialog modal-sm" style="width: 30%" >                                   
+                            <div class="modal-content">
+
+                                <div class="modal-header">
+                                    <div class="modal-title">Activar / Borrar  Usuario</div>
                                 </div>
-                          </div>
-                            
-                     </div>
+
+                                <div class="modal-body">
+                                    <div class="row">
+                                        <div class="col-xs-12">
+                                            <label>¿Está seguro de ejecutar esta acción? '{{Estado}}' </label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                                    <button type="button" class="btn btn-primary" ng-click="Desactivar()">Aceptar</button>
+                                </div>  
+
+                            </div>
+
+                        </div>
+                </div>
+            </div>
             
                 
-                <div class="tab-pane" id="tabRegistro">
-                    
+            <div class="tab-pane" id="tabRegistro">
+                <br/>
             <form class="col-xs-10 col-xs-offset-1" name="frmUsuario" id="frmUsuario" novalidate>
                 <div class="row">
                     
-                     <div class="col-xs-3">
+                    <div class="col-xs-3">
                         <div class="form-group">
                             <label for="txtLogin">Login *</label>
                              <div class="input-group">    
@@ -254,10 +253,88 @@
                 </div>                                
             </form>    
          </div>
+                 
+            <div class="tab-pane" id="tabRoles">
+                <br/>
+                <div ng-controller="perfilController">
+                <div class="row" >
+                    <div class="col-xs-6">
+                        <h5 class="text-primary">{{title}}</h5>
+                        <div class="col-xs-3">
+                            <div class="form-group">
+                                <label  for="txtId">Codigo *</label>     
+                                <input class="form-control" ng-model="Perfil.IdRol" solo-letras id="txtId" type="text" required maxlength="2" disabled>                                              
+                            </div>                                
+                        </div>
+                        
+                        <div class="col-xs-7">
+                            <div class="form-group">
+                                <label  for="txtNombre1">Descripción *</label>     
+                                <input class="form-control" ng-model="Perfil.Descripcion" solo-letras name="txtNombre1" id="txtNombre1" type="text" required maxlength="20" disabled>                                              
+                            </div>                                
+                        </div>
+                        
+                        <div class="row">                        
+                            <div class="col-xs-12">                                
+                                <h5>Seleccione los  permisos</h5>
+                                <div ng-repeat="tpv in Permisos">
+                                    <div class="col-xs-6">     
+                                        <div class="checkbox checkbox-primary">                                        
+                                             <input type="checkbox" checklist-model="Perfil.Permisos" checklist-value="tpv.IdPermiso">
+                                             <label for="{{tpv.IdPermiso}}">{{tpv.pmNombre}}</label> 
+                                        </div>
+                                    </div> 
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <br/>
+                            <div class="col-xs-4 col-xs-offset-2">                                                                    
+                                <button   class="btn btn-success btn-block btn-addon"   type="button"  title="Nuevo / Cancelar" ng-click="Nuevo()"><i class="fa fa-pencil"></i> Nuevo</button>
+                            </div>
+                            <div class="col-xs-4">                                 
+                                 <button  class="btn btn-primary btn-block btn-addon"   type="button"  title="Guardar" ng-click="Guardar()"> <i class="fa fa-check"></i>Guardar</button>
+                             </div>
+                        </div>  
+                        
+                    </div>
+                    
+                    <div class="col-xs-6">
+                        <table class="table table-hover table-condensed"  >
+                            <thead>
+                                <tr>
+                                    <th>CÓDIGO</th>
+                                    <th>NOMBRE</th>
+                                    <th>ESTADO</th> 
+                                    <th>ACCIÓN</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                <tr ng-repeat="pr in Perfiles">
+                                   <td>{{ pr.IdRol}}</td>
+                                   <td>{{ pr.Descripcion }}</td>
+                                   <td>{{ pr.Estado}}</td>                                    
+                                   <td>
+                                        <center>
+                                           <a data-ng-click="get(pr)" style="float: left; margin-left: 15px;" href="javascript:;"  title="Editar"><i class="fa fa-lg fa-pencil text-success"></i></a>
+                                           <a data-ng-click="VerDesactivar(pr.IdRol, 'INACTIVO')"  style="float: left; margin-left: 15px;" href="javascript:;"  title="Borrar"><i class="fa fa-lg fa-power-off text-warning"></i></a>                                               
+                                        </center>
+                                   </td>
+                                </tr>
+
+                            </tbody>
+
+                        </table>
+                    </div>
+                </div>
+                </div>    
+            </div>     
                   
                  
-                 <div class="tab-pane" id="tabCambiarC">
-                  <form class="col-xs-12 col-xs-offset-1" name="frmCambiarC" id="frmCambiarC" novalidate>
+            <div class="tab-pane" id="tabCambiarC">
+                <form class="col-xs-10 col-xs-offset-1" name="frmCambiarC" id="frmCambiarC" novalidate>
                       <div class="row">
                             <div class="card  darken-1">
                             <div class="card-content">
@@ -345,7 +422,7 @@
         
     });
     
-    //$('#tabPanels a[href="#tabRegistro"]').tab('show');
+    $('#tabPanels a[href="#tabRoles"]').tab('show');
     
     
     $('input[name="txtFechaConexion"]').daterangepicker({

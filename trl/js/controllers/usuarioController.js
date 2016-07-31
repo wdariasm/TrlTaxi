@@ -237,7 +237,114 @@ function($scope, usuarioService,toaster,ngTableParams) {
     
     initTabla();
      
+}]);
 
+app.controller('perfilController', ['$scope', 'perfilService', 'toaster',function($scope, perfilService,toaster) {
+    $scope.Perfiles = [];
+    $scope.Perfil = {};
+    $scope.Permisos = [];    
+    $scope.editMode = false;
+    $scope.title ="";
+    
+    loadPerfiles();
+    loadPermisos();
+    init();
+    
+    function init(){
+        $scope.Perfil = {
+            IdRol : 0,
+            Descripcion : "",
+            Estado : "",
+            Permisos : []
+        };        
+    }
+    
+    function loadPerfiles(){
+        var promiseGet = perfilService.getAll(); //The Method Call from service        
+        promiseGet.then(function (item) {
+            $scope.Perfiles = item.data;           
+        },
+        function (errorPl) {
+            toaster.pop('error','¡Error!', "Error al cargar permisos");  
+            console.log('failure loading Paises', errorPl);
+        });   
+    }
+    
+    
+    function loadPermisos(){
+        var promiseGet = perfilService.getPermisos(); //The Method Call from service        
+        promiseGet.then(function (item) {
+            $scope.Permisos = item.data;            
+        },
+        function (errorPl) {
+            toaster.pop('error','¡Error!', "Error al cargar permisos");  
+            console.log('failure loading Paises', errorPl);
+        });   
+    }
+    
+    
+    
+    //edita la marca
+    $scope.get = function(item) {
+        init();
+        $scope.Perfil=item;
+        $scope.editMode = true;
+        $scope.title = "EDITANDO PERFIL"; 
+        $scope.permisosByPerfil(item.IdRol);                
+    };
+    
+    $scope.Nuevo = function (){
+        $scope.editMode = false;
+        $scope.title="";
+        init();
+    };
+    
+    
+    $scope.permisosByPerfil= function(id){
+        $scope.Perfil.Permisos = [];
+        var promiseGet = perfilService.getPermisoByPerfil(id); 
+        promiseGet.then(function (d) {                             
+            if(d.data.length){                               
+                var tipos = JSON.parse("[" + d.data[0].permisos + "]");                          
+                $scope.Perfil.Permisos = angular.copy(tipos);
+            }
+        },
+        function (errorPl) {
+            toaster.pop('error','¡Error!', "Error al cargar permisos del perfil seleccionado");  
+            console.log('error al cargar permisos', errorPl);
+        });
+    };
+    
+    $scope.Guardar = function (){
+       
+        if($scope.Perfil.Descripcion ===""){
+            toaster.pop('info', '¡Alerta!', 'Ingrese Descripción del perfil');
+            return;
+        }
+       
+        if ($scope.Perfil.Permisos.length === 0){
+            toaster.pop('info', '¡Alerta!', 'Seleccione al menos un permiso');
+            return;
+        }
+                
+        var promise;
+        if($scope.editMode){            
+            promise = perfilService.put($scope.Perfil.IdRol, $scope.Perfil);
+        }else {
+            promise = perfilService.post($scope.Perfil);            
+        }        
+                              
+        promise.then(function(d) {                        
+            loadPerfiles();
+            loadPermisos();
+            toaster.pop('success', "Control de Información", d.data.message);
+            init();
+        }, function(err) {           
+                toaster.pop('error', "¡Error!", err.data.request);         
+                console.log("Some Error Occured " + JSON.stringify(err));
+        });          
+    };
+    
 }]);
 
 
