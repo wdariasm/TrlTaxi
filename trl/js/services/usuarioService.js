@@ -19,22 +19,7 @@ app.service("usuarioService", ['$http', function ($http) {
         var req = $http.put(uri+'/api/usuario/' + id, usuario);
         return req;        
     };
-    
-     this.cliente = function () {
-        var req = $http.get(uri+'/api/cliente');
-        return req;
-    };
-    
-    this.conductor = function () {
-        var req = $http.get(uri+'/api/conductor');
-        return req;
-    };
-    
-     this.persona = function () {
-        var req = $http.get(uri+'/api/persona');
-        return req;
-    };
-    
+         
     
     this.updateEstado=function(id, object){
         var req = $http.put(uri+'/api/usuario/updateEstado/' + id, object);
@@ -49,6 +34,16 @@ app.service("usuarioService", ['$http', function ($http) {
     
     this.cerrarSesion = function (usuario) {
         var req = $http.delete(uri+'/api/usuario/'+usuario+'/cerrar');
+        return req;
+    };
+    
+     this.getPermisos = function (id) {
+        var req = $http.get(uri+'/api/usuario/'+id+'/permisos');        
+        return req;
+    };
+    
+    this.validar = function (user) {
+        var req = $http.get(uri+'/api/usuario/' + user + '/validar');
         return req;
     };
     

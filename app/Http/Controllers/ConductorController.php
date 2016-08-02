@@ -23,12 +23,12 @@ class ConductorController extends Controller
         return $result; 
     }
 
-   public function validIdConductorarEmail($email){
+    public function validIdConductorarEmail($email){
        return Conductor::where("Email",$email)->select("Email")->first();
     }
     
     public function validarIdentificacion($Cedula){
-        return Conductor::where("Cedula",$Cedula)->select("Cedula")->first();
+        return Conductor::where("Cedula",$Cedula)->select("Cedula", 'Nombre', 'Email', 'IdConductor')->first();
     }
     
      public function GetNovedadByConductor($IdConductor){
@@ -65,16 +65,12 @@ class ConductorController extends Controller
                 $insert->nvConductor=$conductor->IdConductor;
                 $insert->nvTipo=$n["nvTipo"];
                 $insert->nvDescripcion=$n["nvDescripcion"];
-                $insert->nvEstado="ACTIVA";
-                
-                $insert->save();
-                        
-            }
-                
-            
+                $insert->nvEstado="ACTIVA";                
+                $insert->save();                        
+            }                            
             
             return JsonResponse::create(array('message' => "Conductor  guardado correctamente", "request" =>json_encode($conductor->IdConductor)), 200);
-        } catch (Exception $exc) {    
+        } catch (\Exception $exc) {    
             return JsonResponse::create(array('message' => "No se pudo guardar", "request" =>json_encode($exc->getMessage())), 401);
         }
     }
@@ -91,7 +87,7 @@ class ConductorController extends Controller
                 
                 $insert->save();
             return JsonResponse::create(array('message' => "Novedad  guardada correctamente", "request" =>json_encode($insert->nvCodigo)), 200);
-        } catch (Exception $exc) {    
+        } catch (\Exception $exc) {    
             return JsonResponse::create(array('message' => "No se pudo guardar", "request" =>json_encode($exc->getMessage())), 401);
         }
     }
@@ -103,17 +99,6 @@ class ConductorController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show($IdConductor)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @coram  int  $IdConductor
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($IdConductor)
     {
         //
     }
@@ -150,8 +135,8 @@ class ConductorController extends Controller
             $conductor->save();
             
             return JsonResponse::create(array('message' => "Conductor Actualizado Correctamente", "request" =>json_encode($conductor->IdConductor)), 200);
-        } catch (Exception $exc) {
-            return JsonResponse::create(array('message' => "No se pudo guardar", "request" =>json_encode($exc->message)), 401);
+        } catch (\Exception $exc) {
+            return JsonResponse::create(array('message' => "No se pudo guardar", "request" =>json_encode($exc->getMessage())), 401);
         }
         
     }
@@ -167,8 +152,8 @@ class ConductorController extends Controller
             $novedad->save();
             
             return JsonResponse::create(array('message' => " Novedad Actualizada Correctamente", "request" =>json_encode($novedad->nvCodigo)), 200);
-        } catch (Exception $exc) {
-            return JsonResponse::create(array('message' => "No se pudo guardar", "request" =>json_encode($exc->message)), 401);
+        } catch (\Exception $exc) {
+            return JsonResponse::create(array('message' => "No se pudo guardar", "request" =>json_encode($exc->getMessage())), 401);
         } 
     }
     /**
@@ -191,8 +176,8 @@ class ConductorController extends Controller
             $conductor->Estado = $data['Estado'];
             $conductor->save();
             return JsonResponse::create(array('message' => "Datos Actualizados Correctamente", "request" =>json_encode($IdConductor)), 200);
-        } catch (Exception $ex) {
-            return JsonResponse::create(array('message' => "No se pudo modificar el Taxista", "exception"=>$ex->getMessage(), "request" =>json_encode($IdConductor)), 401);
+        } catch (\Exception $ex) {
+            return JsonResponse::create(array('message' => "No se pudo modificar el Taxista", "request" =>json_encode($ex->getMessage())), 401);
         }
     }
 

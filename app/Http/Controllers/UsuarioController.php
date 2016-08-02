@@ -8,7 +8,6 @@ use App\UsuarioPermiso;
 use Illuminate\Http\JsonResponse;
 use DB;
 use Crypt;
-
  
 class UsuarioController extends Controller
 {
@@ -19,11 +18,18 @@ class UsuarioController extends Controller
      */
     public function index()
     {
-        //
+        return Usuario::join('rol', 'usuario.TipoAcceso', '=', 'rol.IdRol')
+                ->select('IdUsuario', 'Login', 'Nombre', 'Estado', 'Modulo', 'Sesion', 'FechaCnx','ValidarClave',
+                'ClienteId', 'PersonaId', 'ConductorId', 'TipoAcceso', 'Contrato', 'Email', 'rol.Descripcion' )->get();
+    }
+    
+    public  function GetPermisos ($user){
+        return UsuarioPermiso::join('permiso', 'usuariopermiso.IdPermiso', '=' , 'permiso.IdPermiso')
+                ->where('usuariopermiso.IdUsuario', $user)
+                ->select( 'permiso.IdPermiso', 'pmNombre', 'pmModulo')->get();        
     }
 
    
-
     /**
      * Store a newly created resource in storage.
      *
@@ -36,7 +42,12 @@ class UsuarioController extends Controller
             $data = $request->all();                        
             $bytes = openssl_random_pseudo_bytes(3,$cstrong);
             $clave = strtoupper(bin2hex($bytes));   
-            $usuario= new Usuario();                        
+            
+            if(!isset($data["Login"])){
+                return JsonResponse::create(array('message' => "Error al crear usuario", "request" =>json_encode('Error')), 200);
+            }
+            
+            $usuario= new Usuario();              
             $usuario->Login = $data["Login"];
             $usuario->Clave =  Crypt::encrypt($clave);
             $usuario->Nombre = $data["Nombre"];
@@ -55,15 +66,15 @@ class UsuarioController extends Controller
             foreach ($permisos as $p) {
                 $insert = new UsuarioPermiso();
                 $insert->IdUsuario =$usuario->IdUsuario;
-                $insert->IdPermiso = $p['idPermiso'];
+                $insert->IdPermiso = $p['IdPermiso'];
                 $insert->save();
             }
             
             $this->EnviarEmail($data, $usuario->IdUsuario, $clave, $usuario->KeyConf);
 
             return JsonResponse::create(array('message' => "Usuario guardado correctamente", "request" =>json_encode($usuario->IdUsuario)), 200);
-        } catch (Exception $exc) {
-            return JsonResponse::create(array('message' => "No se pudo guardar", "request" =>json_encode($exc)), 401);
+        } catch (\Exception $exc) {
+            return JsonResponse::create(array('message' => "No se pudo guardar", "request" =>json_encode($exc->getMessage())), 401);
         }
     }
     
@@ -114,28 +125,12 @@ class UsuarioController extends Controller
     public function show($id)
     {
         //
-    }
-
-    
-     public function perfiles(){
-        $result = DB::select ("SELECT * FROM rol");
-        return $result;
-    }
-    
+    }         
     
     public function validar($user){
         return Usuario::where("Login",$user)->select("Login")->first();
     }
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
+   
 
     /**
      * Update the specified resource in storage.
@@ -154,8 +149,19 @@ class UsuarioController extends Controller
             $usuario->Modulo = $data["Modulo"];
             $usuario->Sesion = 'CERRADA';
             $usuario->TipoAcceso = $data["TipoAcceso"];
+            $usuario->Email = $data["Email"];
+            $usuario->Contrato = $data["Contrato"];
             $usuario->Login = $data["Login"];
             $usuario->save();
+            
+            UsuarioPermiso::where('IdUsuario',$id)->delete();
+            $permisos = $data["Permisos"];
+            foreach ($permisos as $p) {
+                $insert = new UsuarioPermiso();
+                $insert->IdUsuario =$id;
+                $insert->IdPermiso = $p['IdPermiso'];
+                $insert->save();
+            }
 
             return JsonResponse::create(array('message' => "Datos Actualizados Correctamente", "request" =>json_encode($usuario->IdUsuario)), 200);
         } catch (Exception $exc) {

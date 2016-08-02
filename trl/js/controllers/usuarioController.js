@@ -1,109 +1,298 @@
-app.controller('usuarioController', ['$scope', 'usuarioService', 'toaster', "ngTableParams",
-function($scope, usuarioService,toaster,ngTableParams) {
+app.controller('usuarioController', ['$scope', 'usuarioService', 'toaster', "ngTableParams", "perfilService", 
+    "personaService", "funcionService", "clienteService", "conductorService", 
+function($scope, usuarioService,toaster,ngTableParams , perfilService, personaService, funcionService, clienteService, conductorService) {
     $scope.Usuario = {};  
     $scope.Usuarios = [];
+    $scope.Perfiles = [];
+    $scope.Permisos = [];
     
-    $scope.title = "Nuevo Usuario";
-    $scope.active = "";
+    $scope.title = "Nuevo Usuario";    
     $scope.editMode = false;  
-    
-    $scope.Conductores = [];
-    $scope.Personas = [];
-    $scope.Clientes=[];
+        
     $scope.valPass =false;
+    $scope.ValLogin = false;
     $scope.IdUsuarioGlobal="";
+    $scope.ExisteIdentificion =false;
     
-     $scope.TablaUsuario = {};
-    
+    $scope.TablaUsuario = {};    
     $scope.User = {};
-    $scope.$parent.SetTitulo("GESTION DE USUARIO");
+    $scope.PerfilSelect = {};
+        
+    $scope.$parent.SetTitulo("GESTION DE USUARIOS");
 
     loadUsuarios();        
-    initialize();
-    loadPersonas();
-    loadCliente();
-    loadConductor();
+    initialize();    
     initTabla();
-
+    loadPerfiles();
+    loadPermisos();
+        
     function initialize() {
         $scope.Usuario = {
             IdUsuario:"",
-            Login: "",
-            Clave: "",
+            Login: "",            
             Nombre: "",
             Estado: "ACTIVO",
             Modulo: "",
-            Sesion : 'CERRADA',
-            FechaCnx: moment().format('L'),
+            Sesion : 'CERRADA',            
             DirIp: "",
-            ClienteId: "",
-            PersonaId: "",
-            ConductorId:"",
-            TipoAcceso:"",
-            ValidarClave:"SI"
+            ClienteId: null,
+            PersonaId: null,
+            ConductorId:null,
+            TipoAcceso:"",            
+            ValidarClave : "SI",
+            Email : "",
+            Contrato : "",
+            Permisos : [],
+            Identificacion :""
         };  
     }
-    
-     $scope.Cambiarformato= function (variable){
-        console.log(variable);
-        $scope.Usuario[variable] = moment($scope.Usuario[variable]).format('L');
-    };
-    
-       function loadUsuarios() {
+         
+    function loadUsuarios() {
         var promiseGet = usuarioService.getAll(); //The Method Call from service
         promiseGet.then(function(pl) {
             $scope.Usuarios = pl.data;
             $scope.TablaUsuario.reload();
         },
-                function(errorPl) {
-                    console.log('failure loading usuarios', errorPl);
-                });
-    }  
-    
-    
-     function loadCliente(){
-        var promise = usuarioService.cliente();
-        promise.then(function(item) {                        
-            $scope.Clientes = item.data;
-        }, function(errCl) {           
-                 console.log('failure loading Clientes', errCl);
-        }); 
-    }
-    
-    function loadConductor(){
-        var promise = usuarioService.conductor();
-        promise.then(function(d) {                        
-            $scope.Conductores = d.data;
-        }, function(err) {           
-                console.log('failure loading Conductores', err);
-        }); 
-    }
-    
-    
-    function loadPersonas() {
-        var promiseGet = usuarioService.persona(); //The Method Call from service
-        promiseGet.then(function(pl) {
-            $scope.Personas = pl.data;
-        },
         function(errorPl) {
-            console.log('failure loading personas', errorPl);
+            toaster.pop('error','¡Error!', "Error al cargar usuarios");  
+            console.log('failure loading usuarios', errorPl);
         });
-    }        
+    } 
     
-     $scope.nuevo = function() {
+    function loadPerfiles(){
+        var promiseGet = perfilService.getActivos(); //The Method Call from service        
+        promiseGet.then(function (item) {
+            $scope.Perfiles = item.data;           
+            if(item.data){
+                $scope.PerfilSelect.IdRol=2;
+                $scope.permisosByPerfil();
+            }
+        },
+        function (errorPl) {
+            toaster.pop('error','¡Error!', "Error al cargar permisos");  
+            console.log('failure loading Paises', errorPl);
+        });   
+    }
+    
+    
+    function loadPermisos(){
+        var promiseGet = perfilService.getPermisos(); //The Method Call from service        
+        promiseGet.then(function (item) {
+            $scope.Permisos = item.data;            
+        },
+        function (errorPl) {
+            toaster.pop('error','¡Error!', "Error al cargar permisos");  
+            console.log('failure loading Paises', errorPl);
+        });   
+    }
+    
+    function permisosByUsuario (id){         
+        $scope.Usuario.Permisos = [];       
+        var promiseGet = usuarioService.getPermisos(id); 
+        promiseGet.then(function (d) {                             
+            if(d.data.length){                
+                $scope.Usuario.Permisos = angular.copy(d.data);
+            }
+        },
+        function (errorPl) {
+            toaster.pop('error','¡Error!', "Error al cargar permisos del usuario seleccionado");  
+            console.log('error al cargar permisos', errorPl);
+        });
+    };
+    
+    function getPersona (id, nit){         
+        var promiseGet;
+        if(id !== null){
+            promiseGet= personaService.get(id); 
+        }else{
+            promiseGet= personaService.validar(nit); 
+        }                
+        promiseGet.then(function (d) {                                       
+            if(d.data){                
+                $scope.Usuario.Identificacion = d.data.Cedula;
+                $scope.Usuario.PersonaId =d.data.IdPersona;
+                if(!$scope.editMode){
+                   $scope.Usuario.Nombre = d.data.Nombre;
+                   $scope.Usuario.Email = d.data.Correo;
+                }                
+                $scope.ExisteIdentificion =true;
+            }else{
+                toaster.pop('error', '¡Error!','Empleado no se encuentra registrado en el sistema.');
+            }
+        },
+        function (errorPl) {
+            toaster.pop('error','¡Error!', "Error al cargar permisos del usuario seleccionado");  
+            console.log('error al cargar permisos', errorPl);
+        });
+    };
+    
+    function getCliente (id, nit){         
+        var promiseGet;
+        if(id !== null){
+            promiseGet= clienteService.get(id); 
+        }else{
+            promiseGet= clienteService.validarIdentificacion(nit); 
+        }                
+        promiseGet.then(function (d) {                                       
+            if(d.data){                
+                $scope.Usuario.Identificacion = d.data.Identificacion;
+                $scope.Usuario.ClienteId =d.data.IdCliente;
+                if(!$scope.editMode){
+                   $scope.Usuario.Nombre = d.data.Nombres;
+                   $scope.Usuario.Email = d.data.Correo;
+                }                
+                $scope.ExisteIdentificion =true;
+            }else{
+                toaster.pop('error', '¡Error!','Empleado no se encuentra registrado en el sistema.');
+            }
+        },
+        function (errorPl) {
+            toaster.pop('error','¡Error!', "Error al cargar permisos del usuario seleccionado");  
+            console.log('error al cargar permisos', errorPl);
+        });
+    };
+    
+    function getConductor (id, nit){         
+        var promiseGet;
+        if(id !== null){
+            promiseGet= conductorService.get(id); 
+        }else{
+            promiseGet= conductorService.validarIdentificacion(nit); 
+        }                
+        promiseGet.then(function (d) {                                       
+            if(d.data){                
+                $scope.Usuario.Identificacion = d.data.Cedula;
+                $scope.Usuario.ConductorId =d.data.IdConductor;
+                if(!$scope.editMode){
+                   $scope.Usuario.Nombre = d.data.Nombre;
+                   $scope.Usuario.Email = d.data.Email;
+                }                
+                $scope.ExisteIdentificion =true;
+            }else{
+                toaster.pop('error', '¡Error!','Empleado no se encuentra registrado en el sistema.');
+            }
+        },
+        function (errorPl) {
+            toaster.pop('error','¡Error!', "Error al cargar permisos del usuario seleccionado");  
+            console.log('error al cargar permisos', errorPl);
+        });
+    };
+    
+    $scope.Nuevo = function() {
         initialize();
+        loadPerfiles();
         $scope.editMode = false;
-        $scope.title = "Nuevo Usuario";
-        $scope.active = "";        
+        $scope.title = "Nuevo Usuario";        
     };
 
     $scope.get = function(usuario) {
         $scope.editMode = true;
-        $scope.title = "Editar Usuario";
-        $scope.active = "active";
+        $scope.title = "Editar Usuario";        
         $scope.Usuario = usuario;        
+        $scope.PerfilSelect.IdRol = usuario.TipoAcceso;
+        if($scope.Usuario.PersonaId){
+            getPersona($scope.Usuario.PersonaId, null);
+        }else if($scope.Usuario.ConductorId){
+            getConductor($scope.Usuario.continue, null);
+        }else if($scope.Usuario.ClienteId){
+            getCliente($scope.Usuario.ClienteId, null);
+        }
+                
+        
+        permisosByUsuario(usuario.IdUsuario);
         $('#tabPanels a[href="#tabRegistro"]').tab('show');       
+    };        
+    
+    $scope.permisosByPerfil= function(){
+        
+        if($scope.editMode) return;       
+        
+        $scope.Usuario.Permisos = [];       
+        var promiseGet = perfilService.getPermisoByPerfil($scope.PerfilSelect.IdRol); 
+        promiseGet.then(function (d) {                             
+            if(d.data.length){                
+                $scope.Usuario.Permisos = angular.copy(d.data);
+            }
+        },
+        function (errorPl) {
+            toaster.pop('error','¡Error!', "Error al cargar permisos del perfil seleccionado");  
+            console.log('error al cargar permisos', errorPl);
+        });
     };
+    
+    $scope.Guardar = function (){
+       
+        if($scope.ValLogin){
+            toaster.pop('error', '¡Error!', 'Nombre de usuario ya existe');
+            return;
+        }
+        
+        if(!$scope.ExisteIdentificion){
+            toaster.pop('error', '¡Error!', 'N° Identificación no existe en el sistema');
+            return;
+        }
+        
+        if ($scope.Usuario.Permisos.length === 0){
+            toaster.pop('info', '¡Alerta!', 'Seleccione al menos un permiso');
+            return;
+        }
+        
+        $scope.Usuario.Modulo = funcionService.GetModuloUser($scope.Usuario.Permisos);        
+        $scope.Usuario.Nombre = $scope.Usuario.Nombre.toUpperCase();
+        $scope.Usuario.TipoAcceso = $scope.PerfilSelect.IdRol;
+                              
+        var promise;
+        if($scope.editMode){            
+            promise = usuarioService.put($scope.Usuario.IdUsuario, $scope.Usuario);
+        }else {                              
+            promise = usuarioService.post($scope.Usuario);            
+        }
+        
+        promise.then(function(d) {            
+            toaster.pop('success', "Control de Información", d.data.message);
+            $scope.Nuevo();
+            loadUsuarios();
+            $('#tabPanels a[href="#tabListado"]').tab('show');	    
+        }, function(err) {           
+               toaster.pop('error', "¡Error!", err.data.request);          
+               console.log("Some Error Occured " + JSON.stringify(err));
+        });        
+    };      
+    
+    $scope.BuscarIdentificacion = function (){
+        if(!$scope.Usuario.Identificacion){
+            toaster.pop('info','¡Alerta!', 'Por favor ingrese el número de identificación');
+            return;
+        }
+        
+        if($scope.PerfilSelect.IdRol === 3 ){
+            getConductor(null, $scope.Usuario.Identificacion);
+        }else if($scope.PerfilSelect.IdRol === 1 || $scope.PerfilSelect.IdRol === 2){
+            getPersona(null, $scope.Usuario.Identificacion);
+        }else if($scope.PerfilSelect.IdRol === 4 || $scope.PerfilSelect.IdRol === 4){
+            getCliente(null, $scope.Usuario.Identificacion);
+        }
+    };
+    
+    $scope.ValidarLogin = function () {
+        $scope.ValLogin = false;
+        if($scope.editMode) return;
+        if (!$scope.Usuario.Login) {
+            toaster.pop('info','¡Alerta!', 'Por favor ingrese el Login');
+            return;
+        }        
+        var promisePost = usuarioService.validar($scope.Usuario.Login);
+        promisePost.then(function (d) {
+            if (d.data.Login) {
+                $scope.ValLogin = true;
+                toaster.pop('info',  "Nombre de usuario ya existe"); 
+            }
+        }, function (err) {
+           toaster.pop('error', "Error", "Error al validar Identificación"); 
+            console.log("Some Error Occured " + JSON.stringify(err));
+        });
+    };
+        
     
      $scope.CambiarPass = function(id, nombre) {         
         $scope.User = {
@@ -147,50 +336,7 @@ function($scope, usuarioService,toaster,ngTableParams) {
         
     };
     
-    
-    $scope.Guardar = function (){
-       
-        
-        var object = {
-        Login: $scope.Usuario.Login,       
-        Clave:$scope.Usuario.Clave,
-        Nombre:$scope.Usuario.Nombre.toUpperCase(),
-        Estado:$scope.Usuario.Estado,
-        Modulo:$scope.Usuario.Modulo,
-        DirIp:$scope.Usuario.DirIp,
-        ClienteId:$scope.Usuario.ClienteId,
-        PersonaId:$scope.Usuario.PersonaId,
-        ConductorId:$scope.Usuario.ConductorId,
-        TipoAcceso:$scope.Usuario.TipoAcceso,
-        ValidarClave:$scope.Usuario.ValidarClave
-        };
-
-
-         var promise;
-        if($scope.editMode){            
-            promise = usuarioService.put($scope.Usuario.IdUsuario, object);
-        }else {
-            
-            if (!$scope.Usuario.Clave){
-               alert("Contraseña es requerida");
-                return;
-            }            
-            promise = usuarioService.post(object);            
-        }
-        
-        promise.then(function(d) {            
-            $scope.nuevo();
-            loadUsuarios();
-             $('#tabPanels a[href="#tabListado"]').tab('show');
-	       toaster.pop('success', "Control de Información", d.data.message);
-        }, function(err) {           
-               toaster.pop('error', "Error", "ERROR AL PROCESAR SOLICITUD");          
-                console.log("Some Error Occured " + JSON.stringify(err));
-        });        
-    };      
-   
-   
-   
+                 
    // Function 
     $scope.VerDesactivar = function(IdUsuario,  Estado) {
         $scope.Estado =Estado;
@@ -254,7 +400,7 @@ app.controller('perfilController', ['$scope', 'perfilService', 'toaster',functio
         $scope.Perfil = {
             IdRol : 0,
             Descripcion : "",
-            Estado : "",
+            rEstado : "",
             Permisos : []
         };        
     }
@@ -344,6 +490,25 @@ app.controller('perfilController', ['$scope', 'perfilService', 'toaster',functio
                 console.log("Some Error Occured " + JSON.stringify(err));
         });          
     };
+    
+    // Function 
+    $scope.VerInactivo = function(id) {        
+        $scope.IdPerfil = id;
+        $('#mdPerfil').modal('show');         
+    };
+
+     $scope.Inactivar = function() {        
+            $('#mdPerfil').modal('hide'); 
+            var promisePut  = perfilService.delete($scope.IdPerfil);        
+                promisePut.then(function (d) {                
+                 toaster.pop('success', "¡Información!", d.data.message);                 
+                loadPerfiles();
+            }, function (err) {                              
+                     toaster.pop('error', '¡Error!',err.data.request); ;
+                    console.log("Some Error Occured "+ JSON.stringify(err));
+            }); 
+   
+     };
     
 }]);
 

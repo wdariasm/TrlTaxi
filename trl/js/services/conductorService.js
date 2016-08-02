@@ -50,8 +50,8 @@ app.service("conductorService",[ '$http', function ($http) {
         return req;
     };
     
-     this.validarIdentificacion = function(Cedula){
-        var req = $http.get(uri+'/api/conductor/' + Cedula +'/validar');
+     this.validarIdentificacion = function(cedula){
+        var req = $http.get(uri+'/api/conductor/' + cedula +'/validar');
         return req;	
     };
     

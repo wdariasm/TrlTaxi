@@ -19,7 +19,7 @@ class PerfilController extends Controller
     
     public function GetPerfilActivos()
     {
-        return Perfil::where('Estado','ACTIVO')->orderBy('Descripcion', 'asc')->get();       
+        return Perfil::where('rEstado','ACTIVO')->orderBy('Descripcion', 'asc')->get();       
     }
     
     public function GetPermisos(){
@@ -28,8 +28,14 @@ class PerfilController extends Controller
                 ->orderBy('pmNombre', 'asc')->get();
     }
     
+//    public  function GetPermisosByPerfil($perfil){
+//        return DB::select("SELECT   GROUP_CONCAT(IdPermiso) permisos FROM rolpermiso WHERE idRol=$perfil  GROUP BY idRol");
+//    }
+    
     public  function GetPermisosByPerfil($perfil){
-        return DB::select("SELECT   GROUP_CONCAT(IdPermiso) permisos FROM rolpermiso WHERE idRol=$perfil  GROUP BY idRol");
+        return PerfilPermiso::join('permiso', 'rolpermiso.IdPermiso', '=' , 'permiso.IdPermiso')
+                ->where('rolpermiso.IdRol', $perfil)
+                ->select( 'permiso.IdPermiso', 'pmNombre', 'pmModulo')->get();        
     }
 
     /**
@@ -44,7 +50,7 @@ class PerfilController extends Controller
             $data = $request->all();        
             $perfil = new Perfil();            
             $perfil->Descripcion = $data["Descripcion"];
-            $perfil->Estado  = $data["Estado"];            
+            $perfil->rEstado  = $data["rEstado"];            
             $perfil->save();                  
             $permisos = $data["Permisos"];            
             for ($index = 0; $index < count($permisos); $index++) {
@@ -74,9 +80,9 @@ class PerfilController extends Controller
         try {            
             $data = $request->all();            
             $perfil = Perfil::find($id);
-            $perfil->Descripcion = $data["Descripcion"];
-            $perfil->Estado  = $data["Estado"];
-            //$perfil->save();
+            //$perfil->Descripcion = $data["Descripcion"];
+            $perfil->rEstado  = 'ACTIVO';
+            $perfil->save();
             $permisos = $data["Permisos"];
             PerfilPermiso::where('IdRol',$id)->delete();                      
             for ($index = 0; $index < count($permisos); $index++) {
@@ -101,12 +107,14 @@ class PerfilController extends Controller
      * @return Response
      */
     public function destroy($id){
-        try {
-            $perfil = Perfil::find($id);
-            $perfil->delete();
-            return JsonResponse::create(array('message' => "Perfil Eliminado Correctamente", "request" =>json_encode($id)), 200);
-        } catch (Exception $ex) {
-            return JsonResponse::create(array('message' => "No se pudo Eliminar el Campeonato", "exception"=>$ex->getMessage(), "request" =>json_encode($id)), 401);
+        try {             
+            $perfil = Perfil::find($id);    
+            $perfil->rEstado = 'INACTIVO';
+            $perfil->save();
+            PerfilPermiso::where('IdRol',$id)->delete();
+            return JsonResponse::create(array('message' => "Perfil inactivado Correctamente", "request" =>json_encode($id)), 200);
+        } catch (\Exception $ex) {
+            return JsonResponse::create(array('message' => "No se pudo inactivar",  "request" =>json_encode($ex->getMessage())), 401);
         }
     }
 }
