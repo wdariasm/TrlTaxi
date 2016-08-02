@@ -81,7 +81,7 @@ class PersonaController extends Controller
             $data = $request->all(); 
             $persona = Persona::find($id);
             $persona->Cedula = $data["Cedula"];
-            $persona->Nombres = $data["Nombres"];   
+            $persona->Nombre = $data["Nombre"];   
             $persona->Direccion = $data["Direccion"];
             $persona->MovilPpal = $data["MovilPpal"];
             $persona->Direccion = $data["Direccion"];

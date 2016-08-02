@@ -237,7 +237,7 @@ function($scope, usuarioService,toaster,ngTableParams , perfilService, personaSe
             return;
         }
         
-        $scope.Usuario.Modulo = funcionService.GetModuloUser($scope.Usuario.Permisos);        
+        $scope.Usuario.Modulo = funcionService.GetModuloUser($scope.Usuario.Permisos);
         $scope.Usuario.Nombre = $scope.Usuario.Nombre.toUpperCase();
         $scope.Usuario.TipoAcceso = $scope.PerfilSelect.IdRol;
                               
@@ -288,7 +288,7 @@ function($scope, usuarioService,toaster,ngTableParams , perfilService, personaSe
                 toaster.pop('info',  "Nombre de usuario ya existe"); 
             }
         }, function (err) {
-           toaster.pop('error', "Error", "Error al validar Identificación"); 
+           toaster.pop('error', "Error", "Error al validar login"); 
             console.log("Some Error Occured " + JSON.stringify(err));
         });
     };

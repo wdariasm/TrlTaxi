@@ -91,73 +91,86 @@
                 <form  class="col-xs-10 col-xs-offset-1" name="frmRuta" id="frmRuta" novalidate>
                     <div class="row">
                        <div class="col-xs-3">
-                           <div id="image" style="width: 50%; height: 150px; top: 1em;"></div>
-                                <div class="col-xs-4">
+                           <div class="row">
+                           <div id="image" style="width: 50%; height: 100px; top: 1em; margin-left: -20px;"></div>
+                               <!-- <div class="col-xs-4">
                                     <a href="javascript:;"  class="btn btn-info btn-block " style="height: 105%;  width: 70%; margin-top: 1em; text-align: center" id="cambiar" ng-click="modificarImagen()" ng-show="editMode" >Cambiar</a>
-                                </div>
+                                </div> -->
                                 <div class="error" ng-show="estadoImg">                            
                                     <small>Selecciona Imagen</small>
                                 </div>
-                                <div class="file-field col-xs-2" style="top: 1em; margin-left: 20px">
-                                    <div class="btn btn-primary">
-                                      <i class="fa fa-1x fa-camera text-success"></i>
-                                      <input uploader-model="Ruta.trImagen" type="file" id="files">
-                                    </div>
-                                </div>                               
+                                <div class="col-xs-2" style="top: 1em; margin-left: -40px">                                                                         
+                                      <input uploader-model="Ruta.trImagen" type="file" id="files">                                    
+                                </div>
+                           </div>   
                        </div>
-                       <div class="col-xs-3">
-                            <div class="form-group">
-                                <label  for="cboTipoVehiculo">Tipo Vehiculo *</label>
-                                    <div class="input-group">    
-                                        <div class="input-group-addon"><i class="fa fa-car text-success"></i></div>
-                                           <select ng-model="VehiculoSelect" class="form-control" id="cboTipoVehiculo" ng-options="item as item.tvCodigo +' - '+ item.tvDescripcion for item in TipoVehiculos track by item.tvCodigo" required></select>           
-                                    </div> 
-                            </div>   
-                        </div>
+                        
+                        <div class="col-xs-9">
+                            <div class="row">
+                        
+                                <div class="col-xs-4">
+                                    <div class="form-group">
+                                        <label  for="cboTipoVehiculo">Tipo Vehiculo *</label>
+                                            <div class="input-group">    
+                                                <div class="input-group-addon"><i class="fa fa-car text-success"></i></div>
+                                                   <select ng-model="VehiculoSelect" class="form-control" id="cboTipoVehiculo" ng-options="item as item.tvCodigo +' - '+ item.tvDescripcion for item in TipoVehiculos track by item.tvCodigo" required></select>           
+                                            </div> 
+                                    </div>   
+                                </div>
                          
-                        <div class="col-xs-3">
-                            <div class="form-group">
-                                <label  for="cboDepartamento">Departamento *</label>
-                                    <div class="input-group">    
-                                        <div class="input-group-addon"><i class="fa fa-globe text-success"></i></div>
-                                           <select ng-model="DeptSelect" ng-change="CambiaDept()" class="form-control" id="cboDepartamento" ng-options="item as  item.dtNombre for item in Departamentos track by item.dtCodigo" required></select>           
-                                    </div> 
-                            </div>   
-                        </div>
+                                <div class="col-xs-4">
+                                    <div class="form-group">
+                                        <label  for="cboDepartamento">Departamento *</label>
+                                            <div class="input-group">    
+                                                <div class="input-group-addon"><i class="fa fa-globe text-success"></i></div>
+                                                   <select ng-model="DeptSelect" ng-change="CambiaDept()" class="form-control" id="cboDepartamento" ng-options="item as  item.dtNombre for item in Departamentos track by item.dtCodigo" required></select>           
+                                            </div> 
+                                    </div>   
+                                </div>
                         
-                        <div class="col-xs-3">
-                            <div class="form-group">
-                                <label  for="cboMunicipio">Municipio *</label>
-                                    <div class="input-group">    
-                                        <div class="input-group-addon"><i class="fa fa-globe text-success"></i></div>
-                                        <select ng-model="MunSelect"  class="form-control" id="cboMunicipio" ng-options="item as  item.muNombre for item in Municipios track by item.muCodigo" required></select>           
-                                    </div> 
-                            </div>   
-                        </div>
+                                <div class="col-xs-4">
+                                    <div class="form-group">
+                                        <label  for="cboMunicipio">Municipio *</label>
+                                            <div class="input-group">    
+                                                <div class="input-group-addon"><i class="fa fa-globe text-success"></i></div>
+                                                <select ng-model="MunSelect"  class="form-control" id="cboMunicipio" ng-options="item as  item.muNombre for item in Municipios track by item.muCodigo" required></select>           
+                                            </div> 
+                                    </div>   
+                                </div>
                         
-                         <div class="col-xs-3">
-                             <div class="form-group">
-                                 <label for="txtNombre">Nombre *</label>
-                                     <div class="input-group">    
-                                         <div class="input-group-addon"><i class="fa fa-tasks text-success"></i></div>
-                                         <input type="text" class="form-control" ng-model="Ruta.rtNombre" maxlength="30" id="txtNombre" required="" placeholder="Nombre Ruta">
-                                     </div>
-                             </div>
-                         </div>
+                                <div class="col-xs-4">
+                                    <div class="form-group">
+                                        <label for="txtNombre">Nombre *</label>
+                                            <div class="input-group">    
+                                                <div class="input-group-addon"><i class="fa fa-tasks text-success"></i></div>
+                                                <input type="text" class="form-control" ng-model="Ruta.rtNombre" maxlength="30" id="txtNombre" required="" placeholder="Nombre Ruta">
+                                            </div>
+                                    </div>
+                                </div>
                          
                         
-                        <div class="col-xs-6">
-                             <div class="form-group">
-                                 <label for="txtDescripcion">Descripción *</label>
-                                     <div class="input-group">    
-                                         <div class="input-group-addon"><i class="fa fa-road text-success"></i></div>
-                                         <input type="text" class="form-control" ng-model="Ruta.rtDescripcion" maxlength="255" id="txtDescripcion" required="" placeholder="Descripción">
+                                <div class="col-xs-8">
+                                     <div class="form-group">
+                                         <label for="txtDescripcion">Descripción *</label>
+                                             <div class="input-group">    
+                                                 <div class="input-group-addon"><i class="fa fa-road text-success"></i></div>
+                                                 <input type="text" class="form-control" ng-model="Ruta.rtDescripcion" maxlength="255" id="txtDescripcion" required="" placeholder="Descripción">
+                                             </div>
                                      </div>
-                             </div>
-                        </div>
+                                </div>
                         
+                                
+                                <div class="col-xs-4">
+                                    <div class="form-group">
+                                        <label for="txttrValor"> Valor *</label>
+                                             <div class="input-group">    
+                                                 <div class="input-group-addon"><i class="fa fa-hashtag text-success"></i></div>
+                                                 <input required="" type="text" class="form-control" ng-model="Ruta.trValor" id="txttrValor"  fcsa-number="{ min: 0,  maxDecimals: 0  }" maxlength="11" solo-numeros >
+                                              </div> 
+                                    </div>
+                                </div>
 
-                         <div class="col-xs-3">
+                         <div class="col-xs-4">
                              <div class="form-group">
                                  <label for="txtEstado">Estado *</label>
                                      <div class="input-group">    
@@ -172,25 +185,20 @@
                               </div>
                          </div>
                          
-                         <div class="col-xs-3">
-                             <div class="form-group">
-                                 <label for="txttrValor"> Valor *</label>
-                                      <div class="input-group">    
-                                          <div class="input-group-addon"><i class="fa fa-hashtag text-success"></i></div>
-                                          <input required="" type="text" class="form-control" ng-model="Ruta.trValor" id="txttrValor"  fcsa-number="{ min: 0,  maxDecimals: 0  }" maxlength="11" solo-numeros >
-                                       </div> 
-                             </div>
-                         </div>
                          
-                        <div class="row">
-                             <br/>
-                                <div class="col-xs-2 col-xs-offset-8">                                                                    
-                                     <button   class="btn btn-success btn-block btn-addon"   type="button"  title="Nuevo / Cancelar" ng-click="nuevo()"><i class="fa fa-pencil"></i> Nuevo</button>
-                                </div>
-                                <div class="col-xs-2">   
-                                     <button ng-disabled="frmRuta.$invalid"  class="btn btn-primary btn-block btn-addon"   type="button"  title="Guardar Ruta" ng-click="Guardar()"><i class="fa fa-check"></i>Guardar</button>
-                                </div>
-                        </div>
+                            </div> 
+                            <div class="row">
+                                <br/>
+                                   <div class="col-xs-3 col-xs-offset-6">                                                                    
+                                        <button   class="btn btn-success btn-block btn-addon"   type="button"  title="Nuevo / Cancelar" ng-click="nuevo()"><i class="fa fa-pencil"></i> Nuevo</button>
+                                   </div>
+                                   <div class="col-xs-3">   
+                                        <button ng-disabled="frmRuta.$invalid"  class="btn btn-primary btn-block btn-addon"   type="button"  title="Guardar Ruta" ng-click="Guardar()"><i class="fa fa-check"></i>Guardar</button>
+                                   </div>
+                           </div>
+                        </div>    
+                         
+                        
                     </div>                                
                   </form>    
              </div>

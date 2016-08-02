@@ -1,26 +1,21 @@
-app.controller('personaController', ['$scope', 'personaService', 'tipoDocumentoService', 'perfilService', 'toaster', 'usuarioService',
-    function($scope, personaService, tipoDocumentoService, perfilService, toaster, usuarioService) {
+app.controller('personaController', ['$scope', 'personaService', 'tipoDocumentoService', 'perfilService', 'toaster', 'usuarioService', "funcionService",
+    function($scope, personaService, tipoDocumentoService, perfilService, toaster, usuarioService, funcionService) {
            
     $scope.Personas = [];        
     $scope.Persona = {};    
     $scope.Permisos =  [];
-    $scope.title = "Nuevo Registro";
-    $scope.active = "";
-    $scope.editMode = false;
-    
-    $scope.Perfil= []; // Roles o Perfiles
-    $scope.Bahias = [];
-    $scope.valUser = false; // Validar si el Persona Existe    
-    $scope.valPass =false; // Validar Contraseña Iguales
+    $scope.title = "Nuevo Registro";    
+    $scope.editMode = false;        
+    $scope.valUser = false; // Validar si el Persona Existe   
+    $scope.ValLogin = false;
        
     $scope.TipoDocumentos =[];
-    $scope.TipoSelect ={};        
-       
-    $scope.User = {};
+    $scope.TipoSelect ={};                       
     
-    loadPersonas();        
+    loadPersonas();  
+    loadTipoDocumentos();
+    loadPermisos(); 
         
-    
     $scope.$parent.SetTitulo("GESTION DE PERSONAL");
     initialize();
     
@@ -36,7 +31,8 @@ app.controller('personaController', ['$scope', 'personaService', 'tipoDocumentoS
             Estado:'ACTIVO',           
             TipoDocumento :'',
             Login :"",
-            Clave: ""
+            Clave: "",
+            Permisos : []
         };  
     }
     
@@ -63,8 +59,7 @@ app.controller('personaController', ['$scope', 'personaService', 'tipoDocumentoS
             toaster.pop('error','¡Error!', "Error al cargar tipos de documento");           
             console.log("Some Error Occured " + JSON.stringify(err));
         }); 
-    }
-    loadTipoDocumentos();
+    }    
     
     function loadPermisos(){
         var promiseGet = perfilService.getPermisos(); //The Method Call from service        
@@ -79,26 +74,18 @@ app.controller('personaController', ['$scope', 'personaService', 'tipoDocumentoS
             console.log('failure loading Paises', errorPl);
         });   
     }
-    
-    loadPermisos();
-           
-    $scope.permisosByPerfil= function(){
-        $("input[name='misPermisos[]']").prop('checked', false);
-        if ($scope.editMode){
-            return;
-        }
+                           
+    $scope.permisosByPerfil= function(){        
+        if($scope.editMode) return;               
+        $scope.Persona.Permisos = [];       
         var promiseGet = perfilService.getPermisoByPerfil(2); 
-        promiseGet.then(function (item) {                 
-            $.each(item.data, function(i, item){                        
-                $('input[name="misPermisos[]"]').each(function() {                            
-                    if (this.id==item.IdPermiso){
-                        document.getElementById(this.id).checked = true;
-                        return;
-                    }
-                });
-            });
+        promiseGet.then(function (d) {                             
+            if(d.data.length){                
+                $scope.Persona.Permisos = angular.copy(d.data);
+            }
         },
         function (errorPl) {
+            toaster.pop('error','¡Error!', "Error al cargar permisos del perfil seleccionado");  
             console.log('error al cargar permisos', errorPl);
         });
     };
@@ -114,79 +101,44 @@ app.controller('personaController', ['$scope', 'personaService', 'tipoDocumentoS
 
     $scope.get = function(usuario) {
         $scope.editMode = true;
-        $scope.title = "EDITAR USUARIO";
+        $scope.title = "Editando Empleado";
         $scope.active = "active";
-        $scope.Persona = usuario;                        
+        $scope.Persona = usuario;   
+        console.log($scope.Persona);
        $('#tabPanels a[href="#tabRegistro"]').tab('show');   
     };
-    
-    $scope.CambiarPass = function(id, nombre, apellido) {         
-        $scope.User = {
-            Cedula : id, 
-            apellido : apellido,
-            nombre : nombre,
-            Clave : "", 
-            ClaveConf : ""
-        };
-        $('ul.tabs').tabs('select_tab', 'tabPersona3');        
-    };
-    
-    $scope.cancelar = function (){        
-        $scope.valPass = false;
-        $scope.User = {
-            Cedula : "", 
-            apellido : "",
-            nombre : "",
-            Clave : "", 
-            ClaveConf : ""
-        };
-        $('ul.tabs').tabs('select_tab', 'tabPersona1');
-    };
-    
-    $scope.guardarPass = function (){
-        $scope.valPass = false;
-        if ($scope.User.Clave != $scope.User.ClaveConf){
-            $scope.valPass = true;
-            return;
-        }
-        
-        var object = {            
-            Clave:$scope.User.Clave            
-        };
-        
-        var promise = personaService.udpatePass($scope.User.Cedula, object);       
-        promise.then(function(d) {            
-            Materialize.toast(d.data.message+'..!!', 4000, 'rounded');
-            $scope.cancelar();            
-        }, function(err) {           
-                alert("ERROR AL CAMBIAR CONTRASEÑA");           
-                console.log("Some Error Occured " + JSON.stringify(err));
-        });     
-        
-    };
-    
-    
+       
     $scope.Guardar = function() {       
         if(!$scope.Persona.Cedula || $scope.Persona.Cedula === ""){
             toaster.pop('warning', '¡Alerta!', 'Por favor ingrese la identificación');
             return;
-        }
-        
-        var Npermisos = $('input[name="misPermisos[]"]:checked').length;        
-        if (Npermisos === 0){
-            toaster.pop('warning', '¡Alerta!', 'Por favor seleccione uno de los permisos');
-            return;
-        }        
+        }                                       
                 
         $scope.Persona.MovilDos  =  (!$scope.Persona.MovilDos) ? "" : $scope.Persona.MovilDos;                        
-        $scope.Persona.Nombre = $scope.Persona.Nombre.toUpperCase();
-        $scope.Persona.Login = $scope.Persona.Login.toUpperCase();        
+        $scope.Persona.Nombre = $scope.Persona.Nombre.toUpperCase();               
         $scope.Persona.TipoDocumento = $scope.TipoSelect.tdCodigo;
         
         var promise;
         if($scope.editMode){            
             promise = personaService.put($scope.Persona.IdPersona, $scope.Persona);
         }else {
+            
+            if(!$scope.Persona.Login){
+                toaster.pop('info', '¡Alerta!', 'Ingrese el nombre de usuario');
+                return;
+            }
+            
+            if ($scope.Persona.Permisos.length === 0){
+                toaster.pop('info', '¡Alerta!', 'Seleccione al menos un permiso');
+                return;            
+            }
+            
+            if($scope.ValLogin){
+                toaster.pop('error', '¡Alerta!', 'Nombre de usuario ya existe en el sistema');
+                return;   
+            }
+                        
+            $scope.Persona.Login = $scope.Persona.Login.toUpperCase(); 
             promise = personaService.post($scope.Persona);            
         }
         
@@ -205,38 +157,8 @@ app.controller('personaController', ['$scope', 'personaService', 'tipoDocumentoS
         });        
     };
     
-    function guardarUsuario (item){   
-        var modC="0",  modV="0", modCo="0" , modR="0",  modCc="0", modP="0";
-        var vecPermiso = [];
-        $('input[name="misPermisos[]"]:checked').each(function() { 
-            var modulo= document.getElementById("hd"+this.id).value;
-            switch (modulo) {
-                case "CONFIGURACION": 
-                    modC="1";
-                    break;                
-                case "VEHICULOS":  
-                    modV="1";
-                    break;                    
-                case "CONDUCTORES":
-                    modCo="1";
-                    break;                    
-                case "REPORTES":
-                    modR="1";
-                    break; 
-                case "CONTRATOS":
-                    modCc="1";
-                    break;
-                case "PERSONAL":
-                    modP="1";
-                    break;                
-            }            
-            var ObjPermiso = {
-                "idPermiso" : this.id
-            };
-            vecPermiso.push(ObjPermiso);
-        });         
-        $scope.Persona.Permisos = vecPermiso;
-        $scope.Persona.Modulo = modC + modCo + modCc + modP + modR + modV;                
+    function guardarUsuario (item){                  
+        $scope.Persona.Modulo = funcionService.GetModuloUser($scope.Persona.Permisos);                
         item.ClienteId = null;
         item.ConductorId = null;
         item.TipoAcceso =2;
@@ -284,6 +206,25 @@ app.controller('personaController', ['$scope', 'personaService', 'tipoDocumentoS
             }
         }, function (err) {
             alert("ERROR AL PROCESAR SOLICITUD");
+            console.log("Some Error Occured " + JSON.stringify(err));
+        });
+    };
+    
+    $scope.ValidarLogin = function () {
+        $scope.ValLogin = false;
+        if($scope.editMode) return;
+        if (!$scope.Persona.Login) {
+            toaster.pop('info','¡Alerta!', 'Por favor ingrese el Login');
+            return;
+        }        
+        var promisePost = usuarioService.validar($scope.Persona.Login);
+        promisePost.then(function (d) {
+            if (d.data.Login) {
+                $scope.ValLogin = true;
+                toaster.pop('info',  "Nombre de usuario ya existe"); 
+            }
+        }, function (err) {
+           toaster.pop('error', "Error", "Error al validar nombre de usuario"); 
             console.log("Some Error Occured " + JSON.stringify(err));
         });
     };

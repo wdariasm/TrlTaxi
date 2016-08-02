@@ -114,13 +114,12 @@
                             </div>
                         </div> 
 
-                        <div class="col-xs-3">
+                        <div class="col-xs-3" ng-hide="editMode">
                             <div class="form-group">
                                 <label for="txtUsuario">Nombre Usuario *</label>
                                 <div class="input-group">    
                                     <div class="input-group-addon"><i class="fa fa-user-secret"></i></div>
-                                    <input type="text" class="form-control" ng-model="Persona.Login" maxlength="45" id="txtUsuario" placeholder="Nombre de Usuario" required>
-
+                                    <input type="text" class="form-control" ng-model="Persona.Login" maxlength="45" id="txtUsuario" placeholder="Nombre de Usuario" ng-blur="ValidarLogin()" >
                                 </div>
                             </div>
                         </div> 
@@ -151,17 +150,18 @@
                     </div>                                                                          
                 </div>
                         
-                    <div class="row">
-                        <hr>
-                        <h4>Seleccione los permisos</h4>
-                        <div ng-repeat="permiso in Permisos">
-                            <div class="col-xs-4">     
-                                <div class="checkbox checkbox-primary">
-                                    <input type="hidden" id="hd{{permiso.IdPermiso}}" value="{{permiso.pmModulo}}"/>
-                                    <input type="checkbox" id="{{permiso.IdPermiso}}" name="misPermisos[]"/>
-                                    <label for="{{permiso.IdPermiso}}">{{permiso.pmNombre}}</label> 
-                                </div>
-                            </div> 
+                    <div class="row" ng-hide="editMode">                        
+                        <div class="col-xs-12">              
+                            <hr>
+                            <h5>Seleccione los  permisos</h5>
+                            <div ng-repeat="tpv in Permisos">
+                                <div class="col-xs-4">     
+                                    <div class="checkbox checkbox-primary">                                        
+                                         <input type="checkbox" checklist-model="Persona.Permisos" checklist-value="tpv">
+                                         <label for="{{tpv.IdPermiso}}">{{tpv.pmNombre}}</label> 
+                                    </div>
+                                </div> 
+                            </div>
                         </div>
                     </div>
 
