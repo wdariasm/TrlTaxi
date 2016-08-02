@@ -24,7 +24,7 @@ class ClienteController extends Controller
 
     
      public function validarIdentificacion($Cedula){
-        return Cliente::where("Identificacion",$Cedula)->select("Identificacion")->first();
+        return Cliente::where("Identificacion",$Cedula)->select("Identificacion", 'Nombres', 'IdCliente', 'Correo')->first();
     }
     /**
      * Show the form for creating a new resource.
@@ -75,7 +75,7 @@ class ClienteController extends Controller
      */
     public function show($id)
     {
-        //
+        return Cliente::find($id);
     }
 
     /**
