@@ -13,6 +13,12 @@ app.service("rutaService",[ '$http', function ($http) {
         var req = $http.post(uri+'/api/ruta',ruta); 
         return req; 
     };
+    
+    this.postImagen = function (formData) {        
+        var req = $http.post(uri+'/api/ruta/imagen', formData,{transformRequest: angular.identity, 
+            headers: {'Content-Type': undefined}});
+        return req;        
+    };
           
     this.put = function (id,ruta) {        
         var req = $http.put(uri+'/api/ruta/' + id, ruta);

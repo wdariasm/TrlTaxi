@@ -42,7 +42,7 @@
                                  <label for="txtdpValorHora"> Valor / Hora *</label>
                                       <div class="input-group">    
                                           <div class="input-group-addon"><i class="fa fa-hashtag"></i></div>
-                                          <input required="" type="text" class="form-control" ng-model="Disponibilidad.dpValorHora" id="txtdpValorHora" placeholder="Valor por hora"  maxlength="11" solo-numeros >
+                                          <input required="" type="text" class="form-control" ng-model="Disponibilidad.dpValorHora" id="txtdpValorHora" fcsa-number="{ min: 0,  maxDecimals: 0  }"  maxlength="11" solo-numeros >
                                        </div> 
                              </div>
                          </div>

@@ -1,5 +1,5 @@
-app.controller("rutaController", ["$scope", "rutaService","tipoVehiculoService", "departamentoService", "toaster",
-function ($scope,rutaService, tipoVehiculoService,departamentoService, toaster) {
+app.controller("rutaController", ["$scope", "rutaService","tipoVehiculoService", "departamentoService", "toaster","ngTableParams",
+function ($scope,rutaService, tipoVehiculoService,departamentoService, toaster,ngTableParams) {
     $scope.Ruta= {};
     $scope.Rutas= [];
     $scope.TipoVehiculos= [];
@@ -7,10 +7,12 @@ function ($scope,rutaService, tipoVehiculoService,departamentoService, toaster) 
     $scope.Municipios=[];
     $scope.IdRutapGlobal="";
     $scope.editMode = false;
-    $scope.title = "NUEVA RUTA"; 
+    $scope.estadoImg =false;
+    $scope.title = "Nueva Ruta"; 
     $scope.VehiculoSelect ={}; 
     $scope.DeptSelect={};
     $scope.MunSelect={};
+    $scope.TablaRuta = {};
    
     $scope.$parent.SetTitulo("RUTA");
     initRuta();  
@@ -20,12 +22,14 @@ function ($scope,rutaService, tipoVehiculoService,departamentoService, toaster) 
             rtNombre:"",
             rtDescripcion:"",
             trTipoVehiculo:"",
-            trValor:"",
+            trValor:"0",
             trDepartamento:"",
             trCiudad:"",
             trEstado : "ACTIVO",
             trImagen :''
-        };           
+        };   
+        document.getElementById("image").innerHTML ="";
+        $scope.estadoImg =false;
     }
     initRuta();
 
@@ -33,6 +37,7 @@ function ($scope,rutaService, tipoVehiculoService,departamentoService, toaster) 
         var promise = rutaService.getAll();
         promise.then(function(d) {                        
             $scope.Rutas = d.data;
+            $scope.TablaRuta.reload();
         }, function(err) {           
                 toaster.pop('error','¡Error!',"Error al cargar Ruta");           
                 console.log("Some Error Occured " + JSON.stringify(err));
@@ -94,6 +99,9 @@ function ($scope,rutaService, tipoVehiculoService,departamentoService, toaster) 
        $scope.Ruta.rtNombre = $scope.Ruta.rtNombre.toUpperCase();   
        $scope.Ruta.rtDescripcion = $scope.Ruta.rtDescripcion.toUpperCase(); 
        
+       var formData=new FormData();
+       formData.append('imagen',$scope.Ruta.trImagen);
+       
         var promise;
         if($scope.editMode){            
             promise = rutaService.put($scope.Ruta.rtCodigo, $scope.Ruta);
@@ -115,15 +123,16 @@ function ($scope,rutaService, tipoVehiculoService,departamentoService, toaster) 
    $scope.nuevo = function (){
        initRuta();
        $scope.editMode =false;
-        $scope.title = "NUEVA RUTA"; 
+        $scope.title = "Nueva Ruta"; 
    };
    
     //edita la Ruta
     $scope.get = function(item) {
         $scope.Ruta=item;
         $scope.editMode = true;
-        $scope.title = "EDITAR RUTA"; 
-        $scope.active = "active";            
+        $scope.title = "Editar Ruta"; 
+        $scope.active = "active";    
+          $('#tabPanels a[href="#tabRegistroRuta"]').tab('show');
     };
     
     //Funcion que elimina
@@ -149,7 +158,50 @@ function ($scope,rutaService, tipoVehiculoService,departamentoService, toaster) 
             }); 
    
      };
-
+      function initTabla() {
+        $scope.TablaRuta = new ngTableParams({
+            page: 1,
+            count: 10,
+            sorting: undefined
+        }, {
+            filterDelay: 50,
+            total: 1000,
+            counts : [],
+            getData: function (a, b) {
+                var c = b.filter().busqueda;
+                f = [];
+                c ? (c = c.toLowerCase(), f = $scope.Rutas.filter(function (a) {
+                    return a.rtCodigo.toLowerCase().indexOf(c) > -1 ||
+                           a.rtNombre.toLowerCase().indexOf(c) > -1 ||
+                           a.rtDescripcion.toLowerCase().indexOf(c) > -1 ||
+                           a.trCiudad.toLowerCase().indexOf(c) > -1 ||  
+                           a.trEstado.toLowerCase().indexOf(c) > -1 
+                })) : f = $scope.Rutas, f = b.sorting() ? f : f, b.total(f.length), a.resolve(f.slice((b.page() - 1) * b.count(), b.page() * b.count()))
+            }
+        });
+    };
+    initTabla();
+    
+    
+   $scope.modificarImagen = function(){
+        var formData=new FormData();
+        formData.append('imagen',$scope.Ruta.trImagen);
+        formData.append('id', $scope.Ruta.rtCodigo);
+        
+        if (!$scope.Ruta.trImagen){        
+            $scope.estadoImg =true;
+            return;
+        }
+        
+        var promisePost = rutaService.postImagen(formData);        
+        promisePost.then(function (d) {           
+           toaster.pop('success', "Imagen", "Imágen cambiada corretamente");             
+            $('#tabPanels a[href="#tabListado"]').tab('show');
+        }, function (err) {                                        
+            toaster.pop('error', "Error!", 'Error al cambiar Imagen');                            
+            console.log(JSON.stringify(err));
+        });
+    };   
     loadRuta();
 }]);
 

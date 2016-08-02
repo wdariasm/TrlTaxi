@@ -47,9 +47,12 @@ class RutaController extends Controller
             $ruta->trDepartamento = $data["trDepartamento"];
             $ruta->trCiudad = $data["trCiudad"];
             $ruta->trEstado = $data["trEstado"];
-            $ruta->trImagen = $data["trImagen"];
+            $ruta->trImagen = "http://".$_SERVER['HTTP_HOST'].'/image/'.$data["rtCodigo"].".jpg";
             $ruta->save();
             
+             if ($request->hasFile('imagen')) {
+                $request->file('imagen')->move("../image/",$data["rtCodigo"].'.jpg');    
+            }
             return JsonResponse::create(array('message' => "Ruta guardada correctamente", "request" =>json_encode($ruta->rtCodigo)), 200);
         } catch (Exception $exc) {    
             return JsonResponse::create(array('message' => "No se pudo guardar", "request" =>json_encode($exc->getMessage())), 401);
@@ -97,13 +100,31 @@ class RutaController extends Controller
             $ruta->trDepartamento = $data["trDepartamento"];
             $ruta->trCiudad = $data["trCiudad"];
             $ruta->trEstado = $data["trEstado"];
-            $ruta->trImagen = $data["trImagen"];
             $ruta->save();
 
             return JsonResponse::create(array('message' => "Datos Actualizados correctamente", "request" =>json_encode($ruta->rtCodigo)), 200);
         } catch (Exception $exc) {
             return JsonResponse::create(array('message' => "No se pudo guardar", "request" =>json_encode($request)), 401);
         }
+    }
+    
+    public function updateImage(Request $request){        
+        try {
+            $data = $request->all();
+            $ruta = Ruta::find($data["id"]);
+            $id = $ruta->rtCodigo;
+            $ruta->trImagen = "http://".$_SERVER['HTTP_HOST'].'/image/'.$id.".jpg";            
+            $ruta->save();
+                        
+            if ($request->hasFile('imagen')) {
+                $request->file('imagen')->move("../image/", $id.".jpg");
+                return JsonResponse::create(array('message' => "Imagen Guardada Correctamente","request"=>  json_encode($id)), 200);
+            }            
+            
+            return JsonResponse::create(array('message' => "Error al Guardar imagen","request"=>  json_encode($id)), 200);
+        } catch (Exception $exc) {
+            return JsonResponse::create(array('message' => "No se pudo guardar La imagen", "exception"=>$exc->getMessage()), 401);
+        }        
     }
 
     /**
