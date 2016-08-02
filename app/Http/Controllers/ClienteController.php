@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use App\Cliente;
+use DB;
 class ClienteController extends Controller
 {
     /**
@@ -12,10 +13,13 @@ class ClienteController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
-    {
-         return Cliente::where('Estado','<>','INACTIVO')
-                ->get();
+    public function index(){
+             $result = DB::select("SELECT co.Identificacion, co.Nombres,  co.Direccion, co.MovilPpal, co.Estado, co.DigitoVerificacion,"
+                . " co.TipoPersona, co.Correo, es.tdDescripcion FROM clientes co INNER JOIN tipodocumento es ON co.TipoDocumento = es.tdCodigo"
+                . " WHERE  Estado <> 'INACTIVO' ");
+        return $result; 
+    
+        
     }
 
     
@@ -53,6 +57,7 @@ class ClienteController extends Controller
             $cliente->Estado = $data["Estado"]; 
             $cliente->DigitoVerificacion = $data["DigitoVerificacion"]; 
             $cliente->TipoDocumento = $data["TipoDocumento"]; 
+            $cliente->TipoPersona = $data["TipoPersona"]; 
             
             $cliente->save();
             
@@ -105,6 +110,7 @@ class ClienteController extends Controller
             $cliente->Estado = $data["Estado"]; 
             $cliente->DigitoVerificacion = $data["DigitoVerificacion"]; 
             $cliente->TipoDocumento = $data["TipoDocumento"];  
+            $cliente->TipoPersona = $data["TipoPersona"]; 
             $cliente->save();
             return JsonResponse::create(array('message' => "Cliente Actualizado Correctamente", "request" =>json_encode($cliente->IdCliente)), 200);
         } catch (Exception $exc) {

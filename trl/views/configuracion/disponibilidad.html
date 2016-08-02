@@ -6,7 +6,7 @@
                             <div class="form-group">
                                 <label  for="cboTipoVehiculo">Tipo Vehiculo *</label>
                                     <div class="input-group">    
-                                        <div class="input-group-addon"><i class="fa fa-car"></i></div>
+                                        <div class="input-group-addon"><i class="fa fa-car text-success"></i></div>
                                            <select ng-model="TipoSelect" class="form-control" id="cboTipoVehiculo" ng-options="item as item.tvCodigo +' - '+ item.tvDescripcion for item in TipoVehiculos track by item.tvCodigo" required></select>           
                                     </div> 
                             </div>   
@@ -16,7 +16,7 @@
                              <div class="form-group">
                                  <label for="txtNombre">Nombre *</label>
                                      <div class="input-group">    
-                                         <div class="input-group-addon"><i class="fa fa-book"></i></div>
+                                         <div class="input-group-addon"><i class="fa fa-book text-success"></i></div>
                                          <input type="text" class="form-control" ng-model="Disponibilidad.dpNombre" maxlength="60" id="txtNombre" required="" placeholder="Nombre Disponibilidad">
                                      </div>
                              </div>
@@ -27,7 +27,7 @@
                              <div class="form-group">
                                  <label for="txtEstado">Estado *</label>
                                      <div class="input-group">    
-                                         <div class="input-group-addon"><i class="fa fa-list-ul"></i></div>
+                                         <div class="input-group-addon"><i class="fa fa-list-ul text-success"></i></div>
                                          <select type="text" required="" class="form-control" ng-model="Disponibilidad.dpEstado" id="txtEstado" placeholder="Estado">
                                                  <option value="ACTIVO">ACTIVO</option>
                                                  <option value="INACTIVO">INACTIVO</option>
@@ -41,7 +41,7 @@
                              <div class="form-group">
                                  <label for="txtdpValorHora"> Valor / Hora *</label>
                                       <div class="input-group">    
-                                          <div class="input-group-addon"><i class="fa fa-hashtag"></i></div>
+                                          <div class="input-group-addon"><i class="fa fa-hashtag text-success"></i></div>
                                           <input required="" type="text" class="form-control" ng-model="Disponibilidad.dpValorHora" id="txtdpValorHora" fcsa-number="{ min: 0,  maxDecimals: 0  }"  maxlength="11" solo-numeros >
                                        </div> 
                              </div>

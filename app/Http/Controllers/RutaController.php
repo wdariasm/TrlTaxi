@@ -16,7 +16,10 @@ class RutaController extends Controller
      */
     public function index()
     {
-       return Ruta::all();
+       $result = DB::select("SELECT r.rtCodigo, r.rtNombre, r.rtDescripcion,r.trValor,r.trEstado, c.tvDescripcion, m.muNombre,"
+                . " d.dtNombre from ruta r,clasevehiculo c,municipio m,departamento d"
+                . " where r.trTipoVehiculo=c.tvCodigo and r.trCiudad=m.muCodigo and m.muDepartamento=d.dtCodigo and r.trEstado <>'BORRADO' ");
+        return $result; 
     }
 
     /**

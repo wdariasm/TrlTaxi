@@ -92,7 +92,7 @@
                         <div class="form-group">
                             <label for="txtLogin">Login *</label>
                              <div class="input-group">    
-                                <div class="input-group-addon"><i class="fa fa-sign-in"></i></div>
+                                <div class="input-group-addon"><i class="fa fa-sign-in text-success"></i></div>
                                 <input required="" type="text" class="form-control" ng-model="Usuario.Login" maxlength="12" id="txtlogin" placeholder="login ">
                             </div>
                         </div>
@@ -102,7 +102,7 @@
                         <div class="form-group">
                             <label for="txtClave">Contraseña </label>
                              <div class="input-group">    
-                                <div class="input-group-addon"><i class="fa fa-key"></i></div>
+                                <div class="input-group-addon"><i class="fa fa-key text-success"></i></div>
                                 <input required="" type="password" class="form-control" ng-model="Usuario.Clave" maxlength="255" id="txtClave" placeholder="Clave ">
                             </div>
                         </div>
@@ -112,7 +112,7 @@
                         <div class="form-group">
                             <label for="txtNombre">Nombre*</label>
                              <div class="input-group">    
-                                <div class="input-group-addon"><i class="fa fa-user"></i></div>
+                                <div class="input-group-addon"><i class="fa fa-user text-success"></i></div>
                                 <input required="" type="text" class="form-control" ng-model="Usuario.Nombre" maxlength="45" id="txtNombre" placeholder="Nombre ">
                             </div>
                         </div>
@@ -123,7 +123,7 @@
                         <div class="form-group">
                             <label for="txtEstado">Estado *</label>
                              <div class="input-group">    
-                             <div class="input-group-addon"><i class="fa fa-list-ul"></i></div>
+                             <div class="input-group-addon"><i class="fa fa-list-ul text-success"></i></div>
                              <select type="text" class="form-control" required="" ng-model="Usuario.Estado" id="txtEstado" placeholder="Estado">
                                 <option value="ACTIVO">ACTIVO</option>
                                 <option value="INACTIVO">INACTIVO</option>
@@ -138,7 +138,7 @@
                         <div class="form-group">
                             <label for="txtModulo">Modulo *</label>
                              <div class="input-group">    
-                                <div class="input-group-addon"><i class="fa fa-mobile"></i></div>
+                                <div class="input-group-addon"><i class="fa fa-mobile text-success"></i></div>
                                 <input required="" type="text" class="form-control" ng-model="Usuario.MovilPpal" maxlength="5" solo-numeros id="txtModulo" placeholder="Modulo">
                      
                              </div>
@@ -150,7 +150,7 @@
                         <div class="form-group">
                             <label for="txtSesion">Sesion *</label>
                              <div class="input-group">    
-                             <div class="input-group-addon"><i class="fa fa-list"></i></div>
+                             <div class="input-group-addon"><i class="fa fa-list text-success"></i></div>
                              <select type="text"  class="form-control" required="" ng-model="Usuario.Sesion" id="txtSesion" placeholder="clave">
                                 <option value="INICIADA">INICIADA</option>
                                 <option value="CERRADA">CERRADA</option>
@@ -165,7 +165,7 @@
                              <div class="form-group">
                                  <label for="txtFechaConexion">Fecha Conexion *</label>
                                       <div class="input-group">    
-                                         <div class="input-group-addon"><i class="fa fa-calendar-o"></i></div>
+                                         <div class="input-group-addon"><i class="fa fa-calendar-o text-success"></i></div>
                                          <input disabled="" type="text" required="" id="txtFechaConexion" ng-model="Usuario.FechaCnx"  name="txtFechaConexion" class="form-control" ng-change="Cambiarformato('FechaCnx')"  value=""  >
                                      </div>
                              </div>
@@ -175,7 +175,7 @@
                         <div class="form-group">
                             <label for="txtDirIp">Direccion IP *</label>
                             <div class="input-group">    
-                                <div class="input-group-addon"><i class="fa fa-globe"></i></div>
+                                <div class="input-group-addon"><i class="fa fa-globe text-success"></i></div>
                                 <input type="text" class="form-control" ng-model="Usuario.DirIp" maxlength="10" id="txtDirIp" placeholder="IP ">
                         
                             </div>
@@ -186,7 +186,7 @@
                         <div class="form-group">
                             <label for="txtClienteId">Cliente *</label>
                             <div class="input-group">    
-                                <div class="input-group-addon"><i class="fa fa-user"></i></div>
+                                <div class="input-group-addon"><i class="fa fa-user text-success"></i></div>
                                 <input type="text" class="form-control" ng-model="Usuario.ClienteId" maxlength="10" id="txtClienteId" placeholder="Id Cliente">
                         
                             </div>
@@ -198,7 +198,7 @@
                         <div class="form-group">
                             <label for="txtPersonaId">Persona</label>
                              <div class="input-group">    
-                                <div class="input-group-addon"><i class="fa fa-male"></i></div>
+                                <div class="input-group-addon"><i class="fa fa-male text-success"></i></div>
                                 <input type="text" class="form-control" ng-model="Usuario.PersonaId" maxlength="10" solo-numeros id="txtPersonaId" placeholder="Id Persona">
                              </div>
                         </div>
@@ -209,7 +209,7 @@
                         <div class="form-group">
                             <label for="txtConductorId">Conductor</label>
                             <div class="input-group">    
-                               <div class="input-group-addon"><i class="fa fa-user-md"></i></div>
+                               <div class="input-group-addon"><i class="fa fa-user-md text-success"></i></div>
                                <input type="text" class="form-control" ng-model="Usuario.ConductorId" maxlength="10" solo-numeros id="txtConductorId" placeholder="Id Conductor">
                             </div>
                         </div>
@@ -220,7 +220,7 @@
                         <div class="form-group">
                             <label for="txtTipoAcceso">Tipo Acceso *</label>
                              <div class="input-group">    
-                                <div class="input-group-addon"><i class="fa fa-universal-access"></i></div>
+                                <div class="input-group-addon"><i class="fa fa-universal-access text-success"></i></div>
                                 <input type="text" class="form-control" ng-model="Usuario.TipoAcceso" maxlength="3" id="txtTipoAcceso" placeholder="tipo Acceso">
                         
                              </div>
@@ -232,7 +232,7 @@
                         <div class="form-group">
                             <label for="txtValidarClave">Validar Clave *</label>
                              <div class="input-group">    
-                             <div class="input-group-addon"><i class="fa fa-key"></i></div>
+                             <div class="input-group-addon"><i class="fa fa-key text-success"></i></div>
                              <select type="text" class="form-control" required="" ng-model="Usuario.ValidarClave" id="txtValidarClave" placeholder="clave">
                                 <option value="SI">SI</option>
                                 <option value="NO">NO</option>

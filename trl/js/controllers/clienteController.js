@@ -4,6 +4,8 @@ function ($scope, clienteService, tipoDocumentoService,toaster,ngTableParams) {
    $scope.Clientes = [];
    $scope.TablaCliente = {};
    $scope.TipoDocumentos=[];
+   $scope.title="Nuevo Cliente";
+   $scope.TipoSelect ={}; 
    
    $scope.IdClienteGlobal="";
    $scope.valIdent=false;
@@ -22,17 +24,29 @@ function ($scope, clienteService, tipoDocumentoService,toaster,ngTableParams) {
             MovilDos: "",
             MovilTres: "",
             Correo: "",            
-            Estado: "ACTIVO",
+            Estado: 'ACTIVO',
+            TipoPersona:'NATURAL',
             DigitoVerificacion:"",
-            TipoDocumento:"" 
+            TipoDocumento:''
+           
         };         
     }
+    
+      $scope.Nuevo = function (){
+        initialize();
+        $scope.editMode =false;
+        $scope.title = "Nuevo Cliente"; 
+   };
+   
     initialize();
     function loadCliente (){
         var promise = clienteService.getAll();
         promise.then(function(d) {                        
             $scope.Clientes = d.data;
             $scope.TablaCliente.reload();
+             if(d.data){
+               $scope.TipoSelect = d.data[0];
+            }
         }, function(err) {           
                 toaster.pop('error','¡Error!',"Error al cargar Clientes");           
                 console.log("Some Error Occured " + JSON.stringify(err));
@@ -82,7 +96,9 @@ function ($scope, clienteService, tipoDocumentoService,toaster,ngTableParams) {
         $scope.Cliente.Estado=$scope.Cliente.Estado.toUpperCase();
         $scope.Cliente.Direccion = $scope.Cliente.Direccion.toUpperCase();
         $scope.Cliente.DigitoVerificacion = $scope.Cliente.DigitoVerificacion.toUpperCase();
-        $scope.Cliente.TipoDocumento = $scope.Cliente.TipoDocumento.toUpperCase();
+        $scope.Cliente.TipoPersona = $scope.Cliente.TipoPersona.toUpperCase();
+        
+        $scope.Cliente.TipoDocumento = $scope.TipoSelect.tdCodigo;
         
           if ($scope.valIdent){
            toaster.pop('error','¡Error!', 'N° de Cedula ya existe'); 
@@ -110,7 +126,7 @@ function ($scope, clienteService, tipoDocumentoService,toaster,ngTableParams) {
     $scope.get = function(item) {
         $scope.Cliente=item;
         $scope.editMode = true;
-        $scope.title = "EDITAR CLIENTE"; 
+        $scope.title = "Editar Cliente"; 
         $scope.active = "active";
        console.log(item);        
        
