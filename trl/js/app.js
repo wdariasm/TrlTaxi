@@ -73,7 +73,11 @@ var app;
             
             .when("/0/ruta",{
                 templateUrl: 'views/configuracion/ruta.html'
-            })                        
+            })     
+            
+             .when("/0/banco",{
+                templateUrl: 'views/configuracion/banco.html'
+            }) 
             
             .when("/2/salir",{
                 templateUrl: 'views/proceso/salir.html'

@@ -33,5 +33,7 @@ include 'Routes/routesZona.php';
 include 'Routes/routesDepartamento.php';
 include 'Routes/routesRuta.php';
 include 'Routes/routesTransfert.php';
+include 'Routes/routesBanco.php';
+include 'Routes/routesFranquicia.php';
 
 

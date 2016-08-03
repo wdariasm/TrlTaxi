@@ -142,4 +142,23 @@ class LicenciaConduccionController extends Controller
             return JsonResponse::create(array('message' => "No se pudo modificar el Taxista", "exception"=>$ex->getMessage(), "request" =>json_encode($IdLicencia)), 401);
         }
     }
+    
+    public function calcularFechaVencimiento(Request $request, $IdLicencia){
+        try{
+            $data =$request->all();
+            $timeActual= time();
+            $fechaVencimiento=$FechaVencimiento;
+            $fecha=  strtotime($fechaVencimiento)- strtotime($timeActual);
+            $diferencia=  intval($fecha/60/60/24);
+            if($fecha!=$fechaVencimiento){
+                
+            }
+            
+            return JsonResponse::create(array('message' => "Datos Actualizados Correctamente", "request" =>json_encode($IdLicencia)), 200);
+  
+        } catch (Exception $ex) {
+            return JsonResponse::create(array('message' => "No se pudo modificar el estado", "exception"=>$ex->getMessage(), "request" =>json_encode($IdLicencia)), 401);
+
+        }
+    }
 }

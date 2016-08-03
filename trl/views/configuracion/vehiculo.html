@@ -100,7 +100,7 @@
                                         <div class="form-group">
                                             <label  for="txtPlaca">Placa *</label>
                                             <div class="input-group">
-                                                <div class="input-group-addon"><i class="fa fa-automobile"></i></div>
+                                                <div class="input-group-addon"><i class="fa fa-automobile text-success"></i></div>
                                                 <input class="form-control" ng-model="Vehiculo.Placa"  letras-numeros id="txtPlaca" name="txtPlaca" type="text"  required  ng-blur="ValidarPlaca()" maxlength="6" >
 
                                             </div>
@@ -111,7 +111,7 @@
                                         <div class="form-group">
                                             <label  for="txtMovil">Movil *</label>
                                             <div class="input-group">
-                                                <div class="input-group-addon"><i class="fa fa-sort-numeric-asc"></i></div>
+                                                <div class="input-group-addon"><i class="fa fa-sort-numeric-asc text-success"></i></div>
                                                 <input class="form-control" ng-model="Vehiculo.Movil"  solo-numeros id="txtMovil" name="txtMovil" type="text"  required  maxlength="4"  >
                                             </div>
                                         </div>
@@ -121,7 +121,7 @@
                                         <div class="form-group">
                                             <label  for="cboMarca">Marca *</label>
                                             <div class="input-group">
-                                                <div class="input-group-addon"><i class="fa fa-gitlab"></i></div>                                                
+                                                <div class="input-group-addon"><i class="fa fa-gitlab text-success"></i></div>                                                
                                                 <select ng-model="MarcaSelect" class="form-control" id="cboMarca" ng-options="item as item.maDescripcion for item in Marcas track by item.maCodigo" required></select>
                                             </div>
                                         </div>
@@ -134,7 +134,7 @@
                                         <div class="form-group">
                                             <label  for="txtModelo">Modelo *</label>
                                             <div class="input-group">
-                                                <div class="input-group-addon"><i class="fa fa-sort-numeric-desc"></i></div>
+                                                <div class="input-group-addon"><i class="fa fa-sort-numeric-desc text-success"></i></div>
                                                 <input class="form-control" ng-model="Vehiculo.Modelo"  solo-numeros id="txtModelo" name="txtModelo" type="text"  required  maxlength="4"   >
                                             </div>
                                         </div>
@@ -144,7 +144,7 @@
                                         <div class="form-group">
                                             <label  for="cboClase">Clase Vehiculo *</label>
                                             <div class="input-group">
-                                                <div class="input-group-addon"><i class="fa fa-gitlab"></i></div>
+                                                <div class="input-group-addon"><i class="fa fa-gitlab text-success"></i></div>
                                                 <select ng-model="ClaseSelect" class="form-control" id="cboClase" ng-options="item as item.tvDescripcion for item in ClaseVehiculo track by item.tvCodigo" required></select>
                                             </div>
                                         </div>
@@ -154,7 +154,7 @@
                                         <div class="form-group">
                                             <label  for="txtColor">Color *</label>
                                             <div class="input-group">
-                                                <div class="input-group-addon"><i class="fa fa-paint-brush"></i></div>
+                                                <div class="input-group-addon"><i class="fa fa-paint-brush text-success"></i></div>
                                                 <input class="form-control" ng-model="Vehiculo.Color"  solo-letras id="txtColor" name="txtColor" type="text"  required  maxlength="10" >
                                             </div>
                                         </div>
@@ -164,7 +164,7 @@
                                         <div class="form-group">
                                             <label  for="txtCilindraje">Cilindraje *</label>
                                             <div class="input-group">
-                                                <div class="input-group-addon"><i class="fa fa-tachometer"></i></div>
+                                                <div class="input-group-addon"><i class="fa fa-tachometer text-success"></i></div>
                                                 <input class="form-control" ng-model="Vehiculo.Cilindraje" solo-numeros id="txtCilindraje" name="txtCilindraje" type="text"  required   maxlength="10" >
                                             </div>
                                         </div>
@@ -174,7 +174,7 @@
                                         <div class="form-group">
                                             <label  for="txtRunt">Runt *</label>
                                             <div class="input-group">
-                                                <div class="input-group-addon"><i class="fa fa-certificate"></i></div>
+                                                <div class="input-group-addon"><i class="fa fa-certificate text-success"></i></div>
                                                 <input class="form-control" ng-model="Vehiculo.Runt" letras-numeros id="txtRunt" name="txtRunt" type="text"  required   maxlength="45" >
                                             </div>
                                         </div>
@@ -184,7 +184,7 @@
                                         <div class="form-group">
                                             <label for="txtTipo">Tipo *</label>
                                             <div class="input-group">
-                                                <div class="input-group-addon"><i class="fa fa-list-ul"></i></div>
+                                                <div class="input-group-addon"><i class="fa fa-list-ul text-success"></i></div>
                                                <select type="text" class="form-control" ng-model="Vehiculo.Tipo" id="txtTipo" placeholder="Estado">
                                                    <option value="PROPIO">PROPIO</option>
                                                    <option value="ARRENDADO">ARRENDADO</option>
@@ -197,7 +197,7 @@
                                         <div class="form-group">
                                             <label  for="txtFechaArriendo">Fecha Arriendo *</label>
                                             <div class="input-group">
-                                                <div class="input-group-addon"><i class="fa fa-calendar-times-o"></i></div>
+                                                <div class="input-group-addon"><i class="fa fa-calendar-times-o text-success"></i></div>
                                                 <input type="text" id="txtFechaArriendo" name="txtFechaArriendo" ng-model="Vehiculo.FechaArriendo" class="form-control" value="" ng-disabled="Vehiculo.Tipo !='ARRENDADO'" ng-change="CambiarFormato('FechaArriendo')">                                                                                            
                                             </div>
                                         </div>
@@ -207,7 +207,7 @@
                                         <div class="form-group">
                                             <label  for="txtFechaMto">Fecha Prox Mantenimiento</label>
                                             <div class="input-group">
-                                                <div class="input-group-addon"><i class="fa fa-calendar-check-o"></i></div>
+                                                <div class="input-group-addon"><i class="fa fa-calendar-check-o text-success"></i></div>
                                                 <input type="text" id="txtFechaMto" ng-model="Vehiculo.FProxMantenimiento" name="txtFechaMto" class="form-control" value="" ng-change="CambiarFormato('FProxMantenimiento')" >                                                                                            
                                             </div>
                                         </div>
@@ -219,7 +219,7 @@
                                         <div class="form-group">
                                             <label for="txtEstado">Estado *</label>
                                              <div class="input-group">
-                                                 <div class="input-group-addon"><i class="fa fa-list"></i></div>
+                                                 <div class="input-group-addon"><i class="fa fa-list text-success"></i></div>
                                             <select type="text" class="form-control" ng-model="Vehiculo.Estado" id="txtEstado" placeholder="Estado">
                                                 <option value="ACTIVO">ACTIVO</option>
                                                 <option value="INACTIVO">INACTIVO</option>
@@ -266,7 +266,7 @@
                                         <div class="form-group">
                                             <label for="txtTipoN">Tipo *</label>
                                              <div class="input-group">
-                                                 <div class="input-group-addon"><i class="fa fa-list"></i></div>
+                                                 <div class="input-group-addon"><i class="fa fa-list text-success"></i></div>
                                             <select type="text" class="form-control" ng-model="Novedad.Tipo" id="txtTipoN" placeholder="Tipo Novedad">
                                                 <option value="SOAT">SOAT</option>
                                                 <option value="TARJETA DE OPERACION">TARJETA DE OPERACION</option>
@@ -281,7 +281,7 @@
                                         <div class="form-group">
                                             <label  for="txtCodigoN">Código *</label>
                                             <div class="input-group">
-                                                <div class="input-group-addon"><i class="fa fa-sort-numeric-asc"></i></div>
+                                                <div class="input-group-addon"><i class="fa fa-sort-numeric-asc text-success"></i></div>
                                                 <input class="form-control" ng-model="Novedad.Codigo"  letras-numeros id="txtCodigoN" name="txtCodigoN" type="text"  required  maxlength="12" >
 
                                             </div>
@@ -292,7 +292,7 @@
                                         <div class="form-group">
                                             <label  for="txtEntidad">Entidad *</label>
                                             <div class="input-group">
-                                                <div class="input-group-addon"><i class="fa fa-university"></i></div>
+                                                <div class="input-group-addon"><i class="fa fa-university text-success"></i></div>
                                                 <input class="form-control" ng-model="Novedad.Entidad"  letras-numeros id="txtEntidad"  type="text"  required  maxlength="100" >
                                             </div>
                                         </div>
@@ -303,7 +303,7 @@
                                         <div class="form-group">
                                             <label  for="txtFechaExp">Fecha Expedicion</label>
                                             <div class="input-group">
-                                                <div class="input-group-addon"><i class="fa fa-calendar-check-o"></i></div>
+                                                <div class="input-group-addon"><i class="fa fa-calendar-check-o text-success"></i></div>
                                                 <input type="text" id="txtFechaExp" ng-model="Novedad.FechaExpedicion"  name="txtFechaExp" class="form-control dateNovedad" value=""  data-date-format="DD/MM/yyyy">                                                                                            
                                             </div>
                                         </div>
@@ -313,7 +313,7 @@
                                         <div class="form-group">
                                             <label  for="txtFechaInicio">Fecha Inicio</label>
                                             <div class="input-group">
-                                                <div class="input-group-addon"><i class="fa fa-calendar-plus-o"></i></div>
+                                                <div class="input-group-addon"><i class="fa fa-calendar-plus-o text-success"></i></div>
                                                 <input type="text" id="txtFechaInicio" ng-model="Novedad.FechaInicioVigencia" name="txtFechaInicio" class="form-control dateNovedad" value=""  data-date-format="DD/MM/yyyy">                                                                                            
                                             </div>
                                         </div>
@@ -323,7 +323,7 @@
                                         <div class="form-group">
                                             <label  for="txtFechaVen">Fecha Vencimiento</label>
                                             <div class="input-group">
-                                                <div class="input-group-addon"><i class="fa fa-calendar-times-o"></i></div>
+                                                <div class="input-group-addon"><i class="fa fa-calendar-times-o text-success"></i></div>
                                                 <input type="text" id="txtFechaVen" ng-model="Novedad.FechaVencimiento" name="txtFechaVen" class="form-control dateNovedad" value=""  data-date-format="DD/MM/yyyy">                                                                                            
                                             </div>
                                         </div>
@@ -333,7 +333,7 @@
                                         <div class="form-group">
                                             <label for="cboEstadoN">Tipo *</label>
                                              <div class="input-group">
-                                                <div class="input-group-addon"><i class="fa fa-check-square-o"></i></div>
+                                                <div class="input-group-addon"><i class="fa fa-check-square-o text-success"></i></div>
                                                 <select type="text" class="form-control" ng-model="Novedad.Estado" id="cboEstadoN" placeholder="Estado">
                                                     <option value="VIGENTE">VIGENTE</option>
                                                     <option value="NO VIGENTE">NO VIGENTE</option>
@@ -350,7 +350,7 @@
                                         <div class="form-group">
                                             <label  for="txtModServ">Modo Servicio</label>
                                             <div class="input-group">
-                                                <div class="input-group-addon"><i class="fa fa-automobile"></i></div>
+                                                <div class="input-group-addon"><i class="fa fa-automobile text-success"></i></div>
                                                 <input class="form-control" ng-model="Novedad.ModServicio"  letras-numeros id="txtModServ"  type="text"    maxlength="45" >
                                             </div>
                                         </div>
@@ -360,7 +360,7 @@
                                         <div class="form-group">
                                             <label  for="txtRadioAcc">Radio de Accion</label>
                                             <div class="input-group">
-                                                <div class="input-group-addon"><i class="fa fa-globe"></i></div>
+                                                <div class="input-group-addon"><i class="fa fa-globe text-success"></i></div>
                                                 <input class="form-control" ng-model="Novedad.RadioAccion"  letras-numeros id="txtRadioAcc"  type="text"    maxlength="45" >
                                             </div>
                                         </div>

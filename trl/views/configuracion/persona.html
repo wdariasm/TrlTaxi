@@ -53,7 +53,7 @@
                                 <div class="form-group">
                                     <label  for="cboTipoDocumento">Tipo Documento *</label>
                                     <div class="input-group">    
-                                        <div class="input-group-addon"><i class="fa fa-cc"></i></div>                                                                                
+                                        <div class="input-group-addon"><i class="fa fa-cc text-success"></i></div>                                                                                
                                         <select ng-model="TipoSelect" class="form-control" id="cboTipoDocumento" ng-options="item as item.tdCodigo +' - '+ item.tdDescripcion for item in TipoDocumentos track by item.tdCodigo" required></select>
                                     </div> 
                                 </div>   
@@ -65,7 +65,7 @@
                             <div class="form-group">
                                <label  for="txtCedula" >Identificación *</label>
                               <div class="input-group">    
-                                <div class="input-group-addon"><i class="fa fa-hashtag"></i></div>
+                                <div class="input-group-addon"><i class="fa fa-hashtag text-success"></i></div>
                                 <input type="text" class="form-control" ng-model="Persona.Cedula" maxlength="10" solo-numeros id="txtCedula" placeholder="Identificación" ng-blur="validarIdentificacion()" required>
                               </div>                           
                             </div>
@@ -75,7 +75,7 @@
                            <div class="form-group">
                                <label for="txtNombre">Nombres *</label>
                                 <div class="input-group">    
-                                   <div class="input-group-addon"><i class="fa fa-user"></i></div>
+                                   <div class="input-group-addon"><i class="fa fa-user text-success"></i></div>
                                    <input type="text" class="form-control" ng-model="Persona.Nombre" maxlength="100" id="txtNombre" placeholder="Nombre Completo" required>
                                </div>
                            </div>
@@ -85,7 +85,7 @@
                           <div class="form-group">
                               <label for="txtTelefonoPpal">Teléfono Principal *</label>
                                <div class="input-group">    
-                                  <div class="input-group-addon"><i class="fa fa-mobile"></i></div>
+                                  <div class="input-group-addon"><i class="fa fa-mobile text-success"></i></div>
                                   <input type="text" class="form-control" ng-model="Persona.MovilPpal" maxlength="10" solo-numeros id="txtTelefonoPpal" placeholder="Teléfono Principal" required>
 
                                </div>
@@ -96,7 +96,7 @@
                             <div class="form-group">
                                 <label for="txtTelefono2">Móvil</label>
                                  <div class="input-group">    
-                                    <div class="input-group-addon"><i class="fa fa-mobile"></i></div>
+                                    <div class="input-group-addon"><i class="fa fa-mobile text-success"></i></div>
                                     <input type="text" class="form-control" ng-model="Persona.MovilDos" maxlength="10" solo-numeros id="txtTelefonoDos" placeholder="Móvil">
                                  </div>
                             </div>
@@ -107,7 +107,7 @@
                             <div class="form-group">
                                 <label for="txtDireccion">Dirección *</label>
                                 <div class="input-group">    
-                                    <div class="input-group-addon"><i class="fa fa-globe"></i></div>
+                                    <div class="input-group-addon"><i class="fa fa-globe text-success"></i></div>
                                     <input type="text" class="form-control" ng-model="Persona.Direccion" maxlength="45" id="txtDireccion" placeholder="Dirección" required>
 
                                 </div>
@@ -118,7 +118,7 @@
                             <div class="form-group">
                                 <label for="txtUsuario">Nombre Usuario *</label>
                                 <div class="input-group">    
-                                    <div class="input-group-addon"><i class="fa fa-user-secret"></i></div>
+                                    <div class="input-group-addon"><i class="fa fa-user-secret text-success"></i></div>
                                     <input type="text" class="form-control" ng-model="Persona.Login" maxlength="45" id="txtUsuario" placeholder="Nombre de Usuario" ng-blur="ValidarLogin()" >
                                 </div>
                             </div>
@@ -129,7 +129,7 @@
                         <div class="form-group">
                             <label for="txtEmail">E-mail *</label>
                              <div class="input-group">    
-                                <div class="input-group-addon"><i class="fa fa-envelope"></i></div>
+                                <div class="input-group-addon"><i class="fa fa-envelope text-success"></i></div>
                                 <input type="email" class="form-control" ng-model="Persona.Correo" maxlength="60" id="txtEmail" placeholder="E-mail" required>                        
                              </div>
                         </div>
@@ -139,7 +139,7 @@
                         <div class="form-group">
                             <label for="txtEstado">Estado *</label>
                              <div class="input-group">    
-                                <div class="input-group-addon"><i class="fa fa-list-ul"></i></div>
+                                <div class="input-group-addon"><i class="fa fa-list-ul text-success"></i></div>
                                 <select type="text" class="form-control" ng-model="Persona.Estado" id="txtEstado" placeholder="Estado" required>
                                    <option value="ACTIVO">ACTIVO</option>
                                    <option value="INACTIVO">INACTIVO</option>
@@ -187,7 +187,7 @@
                         <div class="form-group">
                             <label for="txtRol">Descripción *</label>
                            <div class="input-group">
-                             <div class="input-group-addon"><i class="fa fa-user"></i></div>
+                             <div class="input-group-addon"><i class="fa fa-user text-success"></i></div>
                             <input type="text" class="form-control"  ng-model="Rol.Descripcion" id="txtRol" placeholder="Descripción">
                            </div>
                         </div>
@@ -197,7 +197,7 @@
                         <div class="form-group">
                             <label for="txtEstado">Estado *</label>
                              <div class="input-group">    
-                                 <div class="input-group-addon"><i class="fa fa-list-ul"></i></div>
+                                 <div class="input-group-addon"><i class="fa fa-list-ul text-success"></i></div>
                             <select type="text" class="form-control" ng-model="Rol.Estado" id="txtEstado" placeholder="Estado">
                                 <option value="ACTIVO">ACTIVO</option>
                                 <option value="INACTIVO">INACTIVO</option>

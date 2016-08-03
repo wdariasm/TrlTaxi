@@ -1,0 +1,199 @@
+<div ng-controller="bancoController"  class="container-fluid">
+    <div class="row">
+        <div class="col-xs-12">  
+             <div class="tabbable-line">
+                    <ul class="nav nav-tabs nav-justified" id="tabPanels">
+                        <li class="active"> <a href="#tabBanco" data-toggle="tab">{{title}} </a></li>
+                        <li><a href="#tabFranquicia" data-toggle="tab">{{Titulo}}</a></li>
+                    </ul>
+             </div>
+            
+            <div class="tab-content">
+                 <br/>
+                    <div class="tab-pane active" id="tabBanco">
+	                <div class="col-xs-4">
+                            <form name="frmBanco" id="frmBanco" novalidate>
+                                <div class="row">
+                                    <div class="col-xs-11">
+                                        <div class="form-group">
+                                            <label  for="txtNombre">Nombre*</label>
+                                                <div class="input-group">
+                                                     <div class="input-group-addon"><i class="fa fa-edit text-success"></i></div>
+                                                         <input class="form-control" ng-model="Banco.bcNombre" letras-numeros id="txtNombre" name="txtNombre" type="text"  required   maxlength="30" >
+                                                </div>
+                                       </div>
+                                   </div>
+                               </div>
+                               <div class="row">
+                                    <div class="col-xs-5 col-xs-offset-1">                                        
+                                        <br/>
+                                            <button   class="btn btn-success btn-block btn-addon"   type="button"  title="Nuevo / Cancelar" ng-click="NuevoBanco()"><i class="fa fa-pencil"></i> Nuevo</button>
+                                   </div>
+                                   <div class="col-xs-5">
+                                         <br/>
+                                             <button ng-disabled="frmBanco.$invalid"   class="btn btn-primary btn-block btn-addon"   type="button"  title="Registrar Banco" ng-click="GuardarBanco()"><i class="fa fa-check"></i> Guardar</button>
+                                  </div>
+                              </div>
+                           </form>
+                       </div>
+        
+                       <div class="col-xs-8">
+                            <div class="row">
+                                <div class="col-xs-8">
+                                     <label  for="search">Filtro</label>
+                                        <div class="input-group">
+                                            <div class="input-group-addon"><i class="fa  fa-search text-primary"></i></div>
+                                                <input  class="form-control" id="search" type="search" placeholder="" ng-model="TablaBanco.filter()['busqueda']">
+                                       </div>
+                               </div>
+                               <div class="" style="float:width; margin-top:30px;">
+                                    <label class=" text-primary" style="font-size: 18px;">Total: {{Bancos.length}}</label>
+                               </div>
+                                <br/>
+                          </div>
+            
+                         <table class="table table-striped table-condensed" ng-table="TablaBanco">
+                            <thead>
+                                <tr>                        
+                                    <th>CODIGO</th>
+                                    <th>NOMBRE</th>
+                                    <th width="9%">ACCION</th>
+                               </tr>
+                           </thead>
+
+                           <tbody>
+                                <tr ng-repeat="item in $data">                        
+                                    <td><center>{{ item.bcCodigo}}</center></td>
+                                    <td><center>{{ item.bcNombre }}</center></td>
+                                    <td>
+                                        <center>
+                                            <a ng-click="getBanco(item)" style="float: left; margin-left: 3px;" href="javascript:;"  title="Editar"><i class="fa fa-pencil fa-1x text-success"></i></a>
+                                       </center>
+                                    </td>
+                               </tr>
+                          </tbody>
+                         </table>
+                      </div>  
+                    </div>
+            
+                
+                    <div class="tab-pane" id="tabFranquicia">
+                         <div class="col-xs-4">
+                            <form name="frmFranquicia" id="frmFranquicia" novalidate>
+                                <div class="row">
+                                    <div class="col-xs-11">
+                                        <div class="form-group">
+                                            <label  for="txtDescripcion">Descripcion*</label>
+                                                <div class="input-group">
+                                                     <div class="input-group-addon"><i class="fa fa-edit text-success"></i></div>
+                                                         <input class="form-control" ng-model="Franquicia.frDescripcion" letras-numeros id="txtDescripcion" name="txtDescripcion" type="text"  required   maxlength="20" >
+                                                </div>
+                                       </div>
+                                   </div>
+                                   <div class="col-xs-11">
+                                        <div class="form-group">
+                                            <label for="txtEstado">Estado *</label>
+                                                <div class="input-group">
+                                                    <div class="input-group-addon"><i class="fa fa-list text-success"></i></div>
+                                                        <select type="text" class="form-control" ng-model="Franquicia.frEstado" id="txtEstado" placeholder="Estado" required>
+                                                            <option value="ACTIVO">ACTIVO</option>
+                                                            <option value="INACTIVO">INACTIVO</option>
+                                                        </select>
+                                                </div>
+                                        </div>
+                                    </div>
+                               </div> 
+                               <div class="row">
+                                    <div class="col-xs-5 col-xs-offset-1">                                        
+                                        <br/>
+                                            <button   class="btn btn-success btn-block btn-addon"   type="button"  title="Nuevo / Cancelar" ng-click="NuevaFranquicia()"><i class="fa fa-pencil"></i> Nuevo</button>
+                                   </div>
+                                   <div class="col-xs-5">
+                                         <br/>
+                                             <button ng-disabled="frmFranquicia.$invalid"   class="btn btn-primary btn-block btn-addon"   type="button"  title="Registrar Franquicia" ng-click="GuardarFranquicia()"><i class="fa fa-check"></i> Guardar</button>
+                                  </div>
+                              </div>
+                           </form>
+                       </div>
+        
+                       <div class="col-xs-8">
+                            <div class="row">
+                                <div class="col-xs-8">
+                                     <label  for="search">Filtro</label>
+                                        <div class="input-group">
+                                            <div class="input-group-addon"><i class="fa  fa-search text-primary"></i></div>
+                                                <input  class="form-control" id="search" type="search" placeholder="" ng-model="TablaFranquicia.filter()['busqueda']">
+                                       </div>
+                               </div>
+                               <div class="" style="float:width; margin-top:30px;">
+                                    <label class=" text-primary" style="font-size: 18px;">Total: {{Franquicias.length}}</label>
+                               </div>
+                                <br/>
+                          </div>
+            
+                         <table class="table table-striped table-condensed" ng-table="TablaFranquicia">
+                            <thead>
+                                <tr>                        
+                                    <th>CODIGO</th>
+                                    <th>NOMBRE</th>
+                                    <th>ESTADO</th>
+                                    <th width="9%">ACCION</th>
+                               </tr>
+                           </thead>
+
+                           <tbody>
+                                <tr ng-repeat="item in $data">                        
+                                    <td><center>{{ item.frCodigo}}</center></td>
+                                    <td><center>{{ item.frDescripcion }}</center></td>
+                                    <td><center>{{ item.frEstado }}</center></td>
+                                    <td>
+                                        <center>
+                                            <a ng-click="getFranquicia(item)" style="float: left; margin-left: 3px;" href="javascript:;"  title="Editar"><i class="fa fa-pencil fa-1x text-success"></i></a>
+                                            <a ng-click="VerDesactivarFranq (item.frCodigo, 'INACTIVO')"  style="float: left; margin-left: 15px;" href="javascript:;"  title="Eliminar"><i class="fa fa-lg fa-trash text-danger"></i></a>
+                                        </center>
+                                    </td>
+                               </tr>
+                          </tbody>
+                         </table>
+                           <div class="modal fade bs-example-modal-sm" id="mdConfirmacion" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" style="margin-top: 10%;">
+                                <div class="modal-dialog modal-sm" style="width: 30%" >                                   
+                                    <div class="modal-content">
+                                       
+                                        <div class="modal-header">
+                                            <div class="modal-title">Activar / Inactivar Franquicia</div>
+                                        </div>
+                                        
+                                        <div class="modal-body">
+                                            <div class="row">
+                                                <div class="col-xs-12">
+                                                    <label>¿Está seguro de ejecutar esta acción? '{{ frEstado}}' </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                                            <button type="button" class="btn btn-primary" ng-click="DesactivarFranq()">Aceptar</button>
+                                        </div>  
+                                        
+                                    </div>
+                                                                     
+                                </div>
+                           </div> 
+                      </div> 
+                   </div>
+           </div>
+       </div>
+    </div>
+</div>
+
+<script>
+    $('#tabPanels a').click(function (e) {
+        e.preventDefault();
+        $(this).tab('show');
+        
+    });
+
+</script>
+    
+
