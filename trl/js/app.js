@@ -75,13 +75,25 @@ var app;
                 templateUrl: 'views/configuracion/ruta.html'
             })     
             
-             .when("/0/banco",{
+            .when("/0/banco",{
                 templateUrl: 'views/configuracion/banco.html'
             }) 
             
+            .when("/0/encuesta",{
+                templateUrl: 'views/configuracion/encuesta.html'
+            })
+            
+            .when("/0/tipo-mantenimiento",{
+                templateUrl: 'views/configuracion/tipomantenimiento.html'
+            })
+            
             .when("/1/servicios",{
                 templateUrl: 'views/contratos/solicitarServicio.html'
-            })  
+            })
+            
+            .when("/1/contratos",{
+                templateUrl: 'views/contratos/contrato.html'
+            })
             
             .when("/2/salir",{
                 templateUrl: 'views/proceso/salir.html'
