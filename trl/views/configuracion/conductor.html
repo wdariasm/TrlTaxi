@@ -42,11 +42,11 @@
                                  <tbody>
                                  <tr data-ng-repeat="items in $data">
                                 <td class="center">{{ items.Cedula}}</td>
-                                <td>{{ items.Nombre }}</td>
-                                <td>{{ items.TelefonoPpal}}</td> 
-                                <td>{{ items.Direccion}}</td> 
-                                <td>{{ items.esDescripcion}}</td> 
-                                <td>{{ items.Estado}}</td> 
+                                <td><center>{{ items.Nombre }}</center></td>
+                                <td><center>{{ items.TelefonoPpal}}</center></td> 
+                                <td><center>{{ items.Direccion}}</center></td> 
+                                <td><center>{{ items.esDescripcion}}</center></td> 
+                                <td><center>{{ items.Estado}}</center></td> 
                                 <td>
                                         <center>
                                             <a data-ng-click="get(items)" style="float: left; margin-left: 15px;" href="javascript:;"  title="Editar"><i class="fa  fa-1x fa-lg fa-pencil text-success"></i></a>
@@ -349,9 +349,9 @@
                                      <tbody>
                                           <tr data-ng-repeat="items in Novedades">
                                               <td class="center">{{ items.nvTipo}}</td>
-                                              <td>{{ items.nvDescripcion }}</td>
-                                              <td>{{items.nvFechaReg}}</td>
-                                              <td>{{items.nvEstado}}</td>
+                                              <td><center>{{ items.nvDescripcion }}</center></td>
+                                              <td><center>{{items.nvFechaReg}}</center></td>
+                                              <td><center>{{items.nvEstado}}</center></td>
                                               <td>
                                                  <center>
                                                      <a data-ng-click="getNovedad(items)" style="float: left; margin-left: 15px;" href="javascript:;"  title="Editar"><i class=" fa fa-1x fa-pencil text-success"></i></a>
@@ -477,12 +477,12 @@
                                      <tbody>
                                           <tr data-ng-repeat="items in Licencias">
                                               <td class="center">{{ items.Numero}}</td>
-                                              <td>{{ items.OTLicencia }}</td>
-                                              <td>{{items.FechaExpedicion}}</td>
-                                              <td>{{items.FechaVencimiento}}</td>
-                                              <td>{{items.Estado}}</td>
-                                              <td>{{items.Categoria}}</td>
-                                              <td>{{items.Cedula}}</td>
+                                              <td><center>{{ items.OTLicencia }}</center></td>
+                                              <td><center>{{items.FechaExpedicion}}</center></td>
+                                              <td><center>{{items.FechaVencimiento}}</center></td>
+                                              <td><center>{{items.Estado}}</center></td>
+                                              <td><center>{{items.Categoria}}</center></td>
+                                              <td><center>{{items.Cedula}}</center></td>
                                               <td>
                                                  <center>
                                                      <a data-ng-click="getLicencia(items)" style="float: left; margin-left: 15px;" href="javascript:;"  title="Editar"><i class=" fa fa-1x fa-pencil text-success"></i></a>
