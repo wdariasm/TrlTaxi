@@ -12,6 +12,7 @@ app.controller("bancoController", ["$scope", "bancoService","toaster", "ngTableP
    $scope.TablaBanco = {};
    $scope.TablaFranquicia = {};
    $scope.editMode = false;
+   $scope.editFranquicia=false;
   
    $scope.$parent.SetTitulo("GESTION DE BANCO Y FRANQUICIAS");
 
@@ -108,14 +109,14 @@ app.controller("bancoController", ["$scope", "bancoService","toaster", "ngTableP
     
     $scope.NuevaFranquicia = function (){
         initFranquicia();
-        $scope.editMode = false;
+        $scope.editFranquicia = false;
         $scope.Titulo = "Nueva Franquicia";
     };
     
      $scope.getFranquicia = function(item) {
         $scope.Franquicia=item;
         $scope.Titulo = "Editar Franquicia";
-        $scope.editMode = true;
+        $scope.editFranquicia = true;
         $scope.active = "active";
     };
     
@@ -136,7 +137,7 @@ app.controller("bancoController", ["$scope", "bancoService","toaster", "ngTableP
         $scope.Franquicia.frDescripcion = $scope.Franquicia.frDescripcion.toUpperCase();
       
         var promise;
-        if($scope.editMode){            
+        if($scope.editFranquicia){            
             promise = bancoService.putFranquicia($scope.Franquicia.frCodigo, $scope.Franquicia);
         }else {
             promise = bancoService.postFranquicia($scope.Franquicia);            
