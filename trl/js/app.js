@@ -79,6 +79,10 @@ var app;
                 templateUrl: 'views/configuracion/banco.html'
             }) 
             
+            .when("/1/servicios",{
+                templateUrl: 'views/contratos/solicitarServicio.html'
+            })  
+            
             .when("/2/salir",{
                 templateUrl: 'views/proceso/salir.html'
             })
