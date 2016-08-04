@@ -1,5 +1,5 @@
-app.controller("servicioController", ["$scope", "servicioService", "toaster", "tipoVehiculoService", 
-    function ($scope, servicioService,toaster, tipoVehiculoService) {
+app.controller("servicioController", ["$scope", "tiposervicioService", "toaster", "tipoVehiculoService", 
+    function ($scope, tiposervicioService,toaster, tipoVehiculoService) {
    $scope.Servicio = {};
    $scope.Servicios = [];
    $scope.IdServicioGlobal="";
@@ -21,7 +21,7 @@ app.controller("servicioController", ["$scope", "servicioService", "toaster", "t
     initServicio();
    
     function loadServicio (){
-        var promise = servicioService.getAll();
+        var promise = tiposervicioService.getAll();
         promise.then(function(d) {                        
             $scope.Servicios = d.data;
         }, function(err) {           
@@ -52,9 +52,9 @@ app.controller("servicioController", ["$scope", "servicioService", "toaster", "t
         $scope.Servicio.svDescripcion = $scope.Servicio.svDescripcion.toUpperCase();       
         var promise;
         if($scope.editMode){            
-            promise = servicioService.put($scope.Servicio.svCodigo, $scope.Servicio);
+            promise = tiposervicioService.put($scope.Servicio.svCodigo, $scope.Servicio);
         }else {
-            promise = servicioService.post($scope.Servicio);            
+            promise = tiposervicioService.post($scope.Servicio);            
         }        
                               
         promise.then(function(d) {                        
@@ -99,7 +99,7 @@ app.controller("servicioController", ["$scope", "servicioService", "toaster", "t
             svEstado : $scope.svEstado
         };
         $('#mdConfirmacion').modal('hide'); 
-        var promisePut  = servicioService.updateEstado($scope.IdServicioGlobal, objetc);        
+        var promisePut  = tiposervicioService.updateEstado($scope.IdServicioGlobal, objetc);        
             promisePut.then(function (d) {                
              toaster.pop('success', "Control de Información", d.data.message);                 
              loadServicio();
