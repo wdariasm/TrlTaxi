@@ -1,12 +1,14 @@
 {
-  "private": true,
-  "scripts": {
-    "prod": "gulp --production",
-    "dev": "gulp watch"
-  },
+  "name": "gulp trl",
+  "version": "1.0",
+  "description": "Gulp: Transporte",  
+  "main": "gulpfile.js",
+  "license": "MIT",
+  "author": "wdam",
   "devDependencies": {
     "gulp": "^3.9.1",
-    "laravel-elixir": "^5.0.0",
-    "bootstrap-sass": "^3.0.0"
+    "gulp-concat": "^2.6.0",
+    "gulp-uglify": "^2.0.0",
+    "gulp-util": "^3.0.7"
   }
 }

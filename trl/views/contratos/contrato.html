@@ -1,0 +1,58 @@
+<div  ng-controller="contratoController" class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="tabbable-line">
+                <ul class="nav nav-tabs nav-justified" id="tabPanels">
+                    <li class="active"> <a href="#tabListado" data-toggle="tab">Listado de Contratos </a></li>
+                    <li><a href="#tabRegistro" data-toggle="tab">{{title}} </a></li>
+                </ul>
+            </div>
+            
+            <div class="tab-content">
+                <div class="tab-pane" id="tabListado">
+                    
+                </div>
+                
+                <div class="tab-pane" id="tabListado">
+                    <form name="frmContrato" novalidate>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label  for="txtCedula" >Identificación *</label>
+                                            <div class="input-group">    
+                                                <div class="input-group-addon"><i class="fa fa-hashtag text-success"></i></div>
+                                                     <input  type="text" class="form-control" required="" ng-model="Cliente.Identificacion" maxlength="10" solo-numeros id="txtCedula" placeholder="Identificación" ng-blur="validarIdentificacion()" >
+                                            </div> 
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="txtNombre">Nombres *</label>
+                                            <div class="input-group">    
+                                                <div class="input-group-addon"><i class="fa fa-user text-success"></i></div>
+                                                <input type="text"  class="form-control" required="" ng-model="Cliente.Nombres" maxlength="100" id="txtNombre" placeholder="Nombre Completo">
+                                            </div>
+                                    </div>
+                                </div>
+                                
+                            </div>                            
+                        </div>
+                    </form>
+                </div>
+            </div>            
+        </div>
+    </div>
+</div>
+
+<script>
+    $('#tabPanels a').click(function (e) {
+        e.preventDefault();
+        $(this).tab('show');
+        
+    });
+    
+    $('#tabPanels a[href="#tabRegistro"]').tab('show');
+    
+</script>
