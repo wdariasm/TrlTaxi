@@ -66,10 +66,10 @@
                                      <thead>
                                          <tr>
                                              <th class="center">CODIGO</th> 
-                                             <th><center>NOMBRE</center></th>
-                                             <th><center>VALOR / HORA</center></th>  
-                                             <th><center>ESTADO</center></th>
-                                             <th><center>TIPO VEHICULO</center></th>
+                                             <th>NOMBRE</th>
+                                             <th>VALOR / HORA/th>  
+                                             <th>ESTADO</th>
+                                             <th>TIPO VEHICULO</th>
                                              <th width="12%">ACCIÓN</th>
                                          </tr>
                                      </thead>
@@ -77,10 +77,10 @@
                                      <tbody>
                                           <tr data-ng-repeat="items in Disponibilidades">
                                               <td class="center">{{ items.dpCodigo}}</td>
-                                              <td><center>{{ items.dpNombre }}</center></td>
-                                              <td><center>{{items.dpValorHora}}</center></td>
-                                              <td><center>{{items.dpEstado}}</center></td>
-                                              <td><center>{{items.tvDescripcion}}</center></td>
+                                              <td>{{ items.dpNombre }}</td>
+                                              <td>{{items.dpValorHora}}</td>
+                                              <td>{{items.dpEstado}}</td>
+                                              <td>{{items.tvDescripcion}}</td>
                                               <td>
                                                  <center>
                                                      <a data-ng-click="get(items)" style="float: left; margin-left: 15px;" href="javascript:;"  title="Editar"><i class=" fa fa-1x fa-pencil text-success"></i></a>

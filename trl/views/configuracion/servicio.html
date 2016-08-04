@@ -66,8 +66,8 @@
                         <thead>
                             <tr>
                                 <th class="center">CODIGO</th>                                
-                                <th><center>DESCRIPCIÓN</center></th>
-                                <th><center>ESTADO</center></th>
+                                <th>DESCRIPCIÓN</th>
+                                <th>ESTADO</th>
                                 <th width="17%">ACCIÓN</th>
                             </tr>
                         </thead>
@@ -75,8 +75,8 @@
                         <tbody>
                             <tr data-ng-repeat="items in Servicios">
                                 <td class="center">{{ items.svCodigo}}</td>
-                                <td><center>{{ items.svDescripcion }}</center></td>
-                                <td><center>{{ items.svEstado}}</center></td>
+                                <td>{{ items.svDescripcion }}</td>
+                                <td>{{ items.svEstado}}</td>
                                 <td>
                                     <center>
                                         <a ng-click="get(items)" style="float: left; margin-left: 15px;" href="javascript:;"  title="Editar"><i class="fa fa-lg fa-pencil"></i></a>

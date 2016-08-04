@@ -61,8 +61,8 @@
                         <thead>
                             <tr>
                                 <th class="center">CODIGO</th>                                
-                                <th><center>DESCRIPCIÓN</center></th>
-                                <th><center>ESTADO</center></th>
+                                <th>DESCRIPCIÓN</th>
+                                <th>ESTADO</th>
                                 <th width="12%">ACCIÓN</th>
                             </tr>
                         </thead>
@@ -70,8 +70,8 @@
                         <tbody>
                             <tr data-ng-repeat="items in Escolaridades">
                                 <td class="center">{{ items.esCodigo}}</td>
-                                <td><center>{{ items.esDescripcion }}</center></td>
-                                <td><center>{{ items.esEstado}}</center></td>
+                                <td>{{ items.esDescripcion }}</td>
+                                <td>{{ items.esEstado}}</td>
                                 <td>
                                     <center>
                                             <a data-ng-click="get(items)" style="float: left; margin-left: 15px;" href="javascript:;"  title="Editar"><i class="fa fa-lg fa-pencil"></i></a>

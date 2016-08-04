@@ -29,12 +29,12 @@
                     <table class="table table-hover table-condensed" ng-table="TablaUsuario" style=" margin-top: 20px;">
                         <thead>
                             <tr>
-                                <th><center>LOGIN</center></th>
-                                <th><center>NOMBRE</center></th> 
-                                <th><center>TIPO</center></th> 
-                                <th><center>SESION</center></th> 
-                                <th><center>FECHA CONEXION</center></th>    
-                                <th><center>ESTADO</center></th> 
+                                <th>LOGIN</th>
+                                <th>NOMBRE</th> 
+                                <th>TIPO</th> 
+                                <th>SESION</th> 
+                                <th>FECHA CONEXION</th>    
+                                <th>ESTADO</th> 
                                 <th width="12%">ACCIÓN</th>
                             </tr>
                         </thead>
@@ -42,11 +42,11 @@
                         <tbody>
                             <tr data-ng-repeat="items in $data">
                                <td class="center">{{ items.Login}}</td>
-                               <td><center>{{ items.Nombre }}</center></td>
-                               <td><center>{{ items.Descripcion }}</center></td>
-                               <td><center>{{ items.Sesion }}</center></td>                               
-                               <td><center>{{ items.FechaCnx}}</center></td> 
-                               <td><center>{{ items.Estado}}</center></td> 
+                               <td>{{ items.Nombre }}</td>
+                               <td>{{ items.Descripcion }}</td>
+                               <td>{{ items.Sesion }}</td>                               
+                               <td>{{ items.FechaCnx}}</td> 
+                               <td>{{ items.Estado}}</td> 
                                <td>
                                        <center>
                                            <a data-ng-click="get(items)" style="float: left; margin-left: 15px;" href="javascript:;"  title="Editar"><i class="fa fa-lg fa-pencil"></i></a>

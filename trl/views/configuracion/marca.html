@@ -50,8 +50,8 @@
                         <thead>
                             <tr>
                                 <th class="center">CODIGO</th>                                
-                                <th><center>DESCRIPCIÓN</center></th>
-                                <th><center>ESTADO</center></th>
+                                <th>DESCRIPCIÓN</th>
+                                <th>ESTADO</th>
                                 <th width="12%">ACCIÓN</th>
                             </tr>
                         </thead>
@@ -59,8 +59,8 @@
                         <tbody>
                             <tr data-ng-repeat="items in Marcas">
                                 <td class="center">{{ items.maCodigo}}</td>
-                                <td><center>{{ items.maDescripcion }}</center></td>
-                                <td><center>{{ items.maEstado}}</center></td>
+                                <td>{{ items.maDescripcion }}</td>
+                                <td>{{ items.maEstado}}</td>
                                 <td>
                                         <center>
                                             <a data-ng-click="get(items)" style="float: left; margin-left: 15px;" href="javascript:;"  title="Editar"><i class="fa fa-lg fa-pencil"></i></a>

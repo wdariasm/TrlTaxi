@@ -77,9 +77,9 @@
                                         <thead>
                                             <tr>
                                                 <th class="center">CODIGO</th>                                
-                                                <th><center>DESCRIPCIÓN</center></th>
-                                                <th><center>PASAJEROS</center></th>
-                                                <th><center>ESTADO</center></th>
+                                                <th>DESCRIPCIÓN</th>
+                                                <th>PASAJEROS</th>
+                                                <th>ESTADO</th>
                                                 <th width="12%">ACCIÓN</th>
                                             </tr>
                                         </thead>
@@ -87,9 +87,9 @@
                                         <tbody>
                                             <tr data-ng-repeat="items in TipoVehiculos">
                                                 <td class="center">{{ items.tvCodigo}}</td>
-                                                <td><center>{{ items.tvDescripcion }}</center></td>
-                                                <td><center>{{ items.tvNumPasajero }}</center></td>
-                                                <td><center>{{ items.tvEstado}}</center></td>
+                                                <td>{{ items.tvDescripcion }}</td>
+                                                <td>{{ items.tvNumPasajero }}</td>
+                                                <td>{{ items.tvEstado}}</td>
                                                 <td>
                                                     <center>
                                                             <a data-ng-click="get(items)" style="float: left; margin-left: 15px;" href="javascript:;"  title="Editar"><i class="fa fa-lg fa-pencil"></i></a>
@@ -189,8 +189,8 @@
                                       <thead>
                                           <tr>
                                               <th class="center">CODIGO</th>                                
-                                              <th><center>DESCRIPCIÓN</center></th>
-                                              <th><center>ESTADO</center></th>
+                                              <th>DESCRIPCIÓN</th>
+                                              <th>ESTADO</th>
                                               <th width="12%">ACCIÓN</th>
                                           </tr>
                                       </thead>
@@ -198,8 +198,8 @@
                                       <tbody>
                                           <tr data-ng-repeat="items in TipoMantenimientos">
                                               <td class="center">{{ items.tmCodigo}}</td>
-                                              <td><center>{{ items.tmDescripcion }}</center></td>
-                                              <td><center>{{ items.tmEstado }}</center></td>
+                                              <td>{{ items.tmDescripcion }}</td>
+                                              <td>{{ items.tmEstado }}</td>
 
                                               <td>
                                                   <center>

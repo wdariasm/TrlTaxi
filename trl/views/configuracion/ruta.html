@@ -27,27 +27,27 @@
                             <table class="table table-hover table-condensed" ng-table="TablaRuta" style="float:height; margin-top: 50px;">
                                 <thead>
                                     <tr>
-                                        <th><center>CODIGO</center></th>
-                                        <th><center>NOMBRE</center></th>
-                                        <th><center>DESCRIPCIÓN</center></th>                                        
-                                        <th><center>TIPO VEHICULO</center></th>
-                                        <th><center>VALOR</center></th>
-                                        <th><center>DEPARTAMENTO</center></th>
-                                        <th><center>CIUDAD</center></th>
-                                        <th><center>ESTADO</center></th>
+                                        <th>CODIGO</th>
+                                        <th>NOMBRE</th>
+                                        <th>DESCRIPCIÓN</th>                                        
+                                        <th>TIPO VEHICULO</th>
+                                        <th>VALOR</th>
+                                        <th>DEPARTAMENTO</th>
+                                        <th>>CIUDAD</th>
+                                        <th>ESTADO</th>
                                         <th width="12%">ACCIÓN</th> 
                                     </tr>
                                 </thead>
                                  <tbody>
                                  <tr data-ng-repeat="items in $data">
                                 <td class="center">{{ items.rtCodigo}}</td>
-                                <td><center>{{ items.rtNombre }}</center></td>
-                                <td><center>{{ items.rtDescripcion}}</center></td> 
-                                <td><center>{{ items.tvDescripcion}}</center></td> 
-                                <td><center>{{ items.trValor}}</center></td> 
-                                <td><center>{{ items.dtNombre}}</center></td> 
-                                <td><center>{{ items.muNombre}}</center></td>
-                                <td><center>{{ items.trEstado}}</center></td>
+                                <td>{{ items.rtNombre }}</td>
+                                <td>{{ items.rtDescripcion}}</td> 
+                                <td>{{ items.tvDescripcion}}</td> 
+                                <td>{{ items.trValor}}</td> 
+                                <td>{{ items.dtNombre}}</td> 
+                                <td>{{ items.muNombre}}</td>
+                                <td>{{ items.trEstado}}</td>
                                 <td>
                                         <center>
                                             <a data-ng-click="get(items)" style="float: left; margin-left: 15px;" href="javascript:;"  title="Editar"><i class="fa  fa-1x fa-lg fa-pencil text-success"></i></a>

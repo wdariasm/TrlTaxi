@@ -28,12 +28,12 @@
                             <table class="table table-hover table-condensed" ng-table="TablaConductor" style="float:height; margin-top: 50px;">
                                 <thead>
                                     <tr>
-                                        <th><center>CEDULA</center></th>
-                                        <th><center>NOMBRE</center></th>                                        
-                                        <th><center>TELEFONO</center></th>
-                                        <th><center>DIRECCION</center></th>
-                                        <th><center>ESCOLARIDAD</center></th>
-                                        <th><center>ESTADO</center></th>
+                                        <th>CEDULA</th>
+                                        <th>NOMBRE</th>                                        
+                                        <th>TELEFONO</th>
+                                        <th>DIRECCION</th>
+                                        <th>ESCOLARIDAD</th>
+                                        <th>ESTADO</th>
                                         <th width="12%">ACCION</th>
                                        
                                         
@@ -42,11 +42,11 @@
                                  <tbody>
                                  <tr data-ng-repeat="items in $data">
                                 <td class="center">{{ items.Cedula}}</td>
-                                <td><center>{{ items.Nombre }}</center></td>
-                                <td><center>{{ items.TelefonoPpal}}</center></td> 
-                                <td><center>{{ items.Direccion}}</center></td> 
-                                <td><center>{{ items.esDescripcion}}</center></td> 
-                                <td><center>{{ items.Estado}}</center></td> 
+                                <td>{{ items.Nombre }}</td>
+                                <td>{{ items.TelefonoPpal}}</td> 
+                                <td>{{ items.Direccion}}</td> 
+                                <td>{{ items.esDescripcion}}</td> 
+                                <td>{{ items.Estado}}</td> 
                                 <td>
                                         <center>
                                             <a data-ng-click="get(items)" style="float: left; margin-left: 15px;" href="javascript:;"  title="Editar"><i class="fa  fa-1x fa-lg fa-pencil text-success"></i></a>
@@ -339,9 +339,9 @@
                                      <thead>
                                          <tr>
                                              <th class="center">TIPO</th>                                
-                                             <th><center>DESCRIPCIÓN</center></th>  
-                                             <th><center>FECHA DE REGISTRO</center></th>
-                                             <th><center>ESTADO</center></th>
+                                             <th>DESCRIPCIÓN</th>  
+                                             <th>FECHA DE REGISTRO</th>
+                                             <th>ESTADO</th>
                                              <th width="12%">ACCIÓN</th>
                                          </tr>
                                      </thead>
@@ -349,9 +349,9 @@
                                      <tbody>
                                           <tr data-ng-repeat="items in Novedades">
                                               <td class="center">{{ items.nvTipo}}</td>
-                                              <td><center>{{ items.nvDescripcion }}</center></td>
-                                              <td><center>{{items.nvFechaReg}}</center></td>
-                                              <td><center>{{items.nvEstado}}</center></td>
+                                              <td>{{ items.nvDescripcion }}</td>
+                                              <td>{{items.nvFechaReg}}</td>
+                                              <td>{{items.nvEstado}}</td>
                                               <td>
                                                  <center>
                                                      <a data-ng-click="getNovedad(items)" style="float: left; margin-left: 15px;" href="javascript:;"  title="Editar"><i class=" fa fa-1x fa-pencil text-success"></i></a>
@@ -464,12 +464,12 @@
                                      <thead>
                                          <tr>
                                              <th class="center">NUMERO</th>                                
-                                             <th><center>O.T LICENCIA</center></th>  
-                                             <th><center>FECHA DE EXPEDICIÓN</center></th>
-                                             <th><center>FECHA VENCIMIENTO</center></th>
-                                             <th><center>ESTADO</center></th>
-                                             <th><center>CATEGORIA</center></th>
-                                             <th><center>ID CONDUCTOR</center></th>
+                                             <th>O.T LICENCIA</th>  
+                                             <th>FECHA DE EXPEDICIÓN</th>
+                                             <th>FECHA VENCIMIENTO</th>
+                                             <th>ESTADO</th>
+                                             <th>CATEGORIA</th>
+                                             <th>ID CONDUCTOR</th>
                                              <th width="12%">ACCIÓN</th>
                                          </tr>
                                      </thead>
@@ -477,12 +477,12 @@
                                      <tbody>
                                           <tr data-ng-repeat="items in Licencias">
                                               <td class="center">{{ items.Numero}}</td>
-                                              <td><center>{{ items.OTLicencia }}</center></td>
-                                              <td><center>{{items.FechaExpedicion}}</center></td>
-                                              <td><center>{{items.FechaVencimiento}}</center></td>
-                                              <td><center>{{items.Estado}}</center></td>
-                                              <td><center>{{items.Categoria}}</center></td>
-                                              <td><center>{{items.Cedula}}</center></td>
+                                              <td>{{ items.OTLicencia }}</td>
+                                              <td>{{items.FechaExpedicion}}</td>
+                                              <td>{{items.FechaVencimiento}}</td>
+                                              <td>{{items.Estado}}</td>
+                                              <td>{{items.Categoria}}</td>
+                                              <td>{{items.Cedula}}</td>
                                               <td>
                                                  <center>
                                                      <a data-ng-click="getLicencia(items)" style="float: left; margin-left: 15px;" href="javascript:;"  title="Editar"><i class=" fa fa-1x fa-pencil text-success"></i></a>

@@ -26,15 +26,15 @@
                             <table class="table table-hover table-condensed" ng-table="TablaCliente" style="float:height; margin-top: 50px;">
                                 <thead>
                                     <tr>
-                                        <th><center>CEDULA</center></th>
-                                        <th><center>NOMBRE</center></th>  
-                                        <th><center>DIRECCION</center></th>
-                                        <th><center>TELEFONO</center></th>
+                                        <th>CEDULA</th>
+                                        <th>NOMBRE</th>  
+                                        <th>DIRECCION</th>
+                                        <th>TELEFONO</th>
                                         
-                                        <th><center>ESTADO</center></th> 
-                                        <th><center>DIGITO VERIFICACIÓN</center></th>
-                                        <th><center>TIPO DOCUMENTO</center></th>
-                                        <th><center>TIPO PERSONA</center></th>
+                                        <th>ESTADO</th> 
+                                        <th>DIGITO VERIFICACIÓN</th>
+                                        <th>TIPO DOCUMENTO</th>
+                                        <th>TIPO PERSONA</th>
                                         <th width="12%">ACCÍON</th>
                                     </tr>
                                 </thead>
@@ -42,14 +42,14 @@
                                  <tbody>
                                  <tr data-ng-repeat="items in $data">
                                 <td class="center">{{ items.Identificacion}}</td>
-                                <td><center>{{ items.Nombres }}</center></td>
-                                <td><center>{{ items.Direccion}}</center></td> 
-                                <td><center>{{ items.MovilPpal}}</center></td> 
+                                <td>{{ items.Nombres }}</td>
+                                <td>{{ items.Direccion}}</td> 
+                                <td>{{ items.MovilPpal}}</td> 
                                
-                                <td><center>{{ items.Estado}}</center></td> 
-                                <td><center>{{ items.DigitoVerificacion}}</center></td> 
-                                <td><center>{{ items.tdDescripcion}}</center></td> 
-                                <td><center>{{ items.TipoPersona}}</center></td> 
+                                <td>{{ items.Estado}}</td> 
+                                <td>{{ items.DigitoVerificacion}}</td> 
+                                <td>{{ items.tdDescripcion}}</td> 
+                                <td>{{ items.TipoPersona}}</td> 
                                
                                 <td>
                                         <center>
