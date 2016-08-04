@@ -1,5 +1,5 @@
-app.controller("clienteController", ["$scope", "clienteService", "tipoDocumentoService","toaster", "ngTableParams",
-function ($scope, clienteService, tipoDocumentoService,toaster,ngTableParams) {
+app.controller("clienteController", ["$scope", "clienteService", "tipoDocumentoService","toaster", "ngTableParams", "funcionService",
+function ($scope, clienteService, tipoDocumentoService,toaster,ngTableParams, funcionService) {
    $scope.Cliente = {};
    $scope.Clientes = [];
    $scope.TablaCliente = {};
@@ -43,10 +43,7 @@ function ($scope, clienteService, tipoDocumentoService,toaster,ngTableParams) {
         var promise = clienteService.getAll();
         promise.then(function(d) {                        
             $scope.Clientes = d.data;
-            $scope.TablaCliente.reload();
-             if(d.data){
-               $scope.TipoSelect = d.data[0];
-            }
+            $scope.TablaCliente.reload();             
         }, function(err) {           
                 toaster.pop('error','¡Error!',"Error al cargar Clientes");           
                 console.log("Some Error Occured " + JSON.stringify(err));
@@ -57,6 +54,9 @@ function ($scope, clienteService, tipoDocumentoService,toaster,ngTableParams) {
         var promise = tipoDocumentoService.getAll();
         promise.then(function(d) {                        
             $scope.TipoDocumentos = d.data;
+            if(d.data){
+               $scope.TipoSelect = d.data[0];
+            }
         }, function(err) {           
                 toaster.pop('error','¡Error!',"ERROR AL PROCESAR SOLICITUD");            
                 console.log("Some Error Occured " + JSON.stringify(err));
@@ -92,18 +92,16 @@ function ($scope, clienteService, tipoDocumentoService,toaster,ngTableParams) {
    
    $scope.Guardar = function (){
        
-        $scope.Cliente.Nombres = $scope.Cliente.Nombres.toUpperCase();
-        $scope.Cliente.Estado=$scope.Cliente.Estado.toUpperCase();
-        $scope.Cliente.Direccion = $scope.Cliente.Direccion.toUpperCase();
-        $scope.Cliente.DigitoVerificacion = $scope.Cliente.DigitoVerificacion.toUpperCase();
-        $scope.Cliente.TipoPersona = $scope.Cliente.TipoPersona.toUpperCase();
-        
+        $scope.Cliente.Nombres = $scope.Cliente.Nombres.toUpperCase();        
+        $scope.Cliente.Direccion = $scope.Cliente.Direccion.toUpperCase();                
+        $scope.Cliente.MovilDos = (!$scope.Cliente.MovilDos) ? "" : $scope.Cliente.MovilDos;
+        $scope.Cliente.MovilTres = (!$scope.Cliente.MovilTres) ? "" : $scope.Cliente.MovilTres;
         $scope.Cliente.TipoDocumento = $scope.TipoSelect.tdCodigo;
         
-          if ($scope.valIdent){
-           toaster.pop('error','¡Error!', 'N° de Cedula ya existe'); 
+        if ($scope.valIdent){
+            toaster.pop('error','¡Error!', 'N° de Cedula ya existe'); 
             return;
-             }
+        }
         
         var promise;
         if($scope.editMode){            
@@ -164,6 +162,7 @@ function ($scope, clienteService, tipoDocumentoService,toaster,ngTableParams) {
         if (!$scope.Cliente.Identificacion) {
             return;
         }        
+        $scope.Cliente.DigitoVerificacion = funcionService.DigitoVerificacion($scope.Cliente.Identificacion);
         var promisePost = clienteService.validarIdentificacion($scope.Cliente.Identificacion);
         promisePost.then(function (d) {
             if (d.data.Identificacion) {
