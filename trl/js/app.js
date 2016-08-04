@@ -82,11 +82,7 @@ var app;
             .when("/0/encuesta",{
                 templateUrl: 'views/configuracion/encuesta.html'
             })
-            
-            .when("/0/tipo-mantenimiento",{
-                templateUrl: 'views/configuracion/tipomantenimiento.html'
-            })
-            
+                       
             .when("/1/servicios",{
                 templateUrl: 'views/contratos/solicitarServicio.html'
             })

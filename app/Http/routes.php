@@ -37,5 +37,6 @@ include 'Routes/routesBanco.php';
 include 'Routes/routesFranquicia.php';
 include 'Routes/routesTipoMantenimiento.php';
 include 'Routes/routesTipoServicio.php';
+include 'Routes/routesContrato.php';
 
 
