@@ -144,7 +144,7 @@ class RutaController extends Controller
     }
     
     //Actualiza el estado (Funcion eliminar)
-      public function updateEstado(Request $request, $rtCodigo){
+    public function updateEstado(Request $request, $rtCodigo){
         try {
             $data = $request->all();
             $ruta = Ruta::find($rtCodigo);

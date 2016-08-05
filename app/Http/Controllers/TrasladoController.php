@@ -15,7 +15,10 @@ class TrasladoController extends Controller
      */
     public function index()
     {
-        //
+        $result = DB::select("SELECT r.tlCodigo, r.tlNombre, r.tlTipoVehiculo,r.tlCiudadOrigen,r.tlEstado, c.tvDescripcion, m.muNombre,"
+                . " d.dtNombre from traslados r,clasevehiculo c,municipio m,departamento d"
+                . " where r.tlValor=c.tvCodigo and r.tlEstado=m.muCodigo and m.muDepartamento=d.dtCodigo and r.tlEstado <>'BORRADO' ");
+        return $result; 
     }
 
     /**
@@ -36,7 +39,25 @@ class TrasladoController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        try{  
+            $data = $request->all(); 
+            $traslado= new Traslado();                        
+            $traslado->tlNombre = $data["tlNombre"];
+            $traslado->tlTipoVehiculo = $data["tlTipoVehiculo"];
+            $traslado->tlValor = $data["tlValor"];
+            $traslado->tlCiudadOrigen = $data["tlCiudadOrigen"];
+            $traslado->tlCiudadDestio = $data["tlCiudadDestio"];
+            $traslado->tlEstado = $data["tlEstado"];
+            
+            $traslado->save();
+            
+             if ($request->hasFile('imagen')) {
+                $request->file('imagen')->move("../image/",$data["tlCodigo"].'.jpg');    
+            }
+            return JsonResponse::create(array('message' => "Traslado guardada correctamente", "request" =>json_encode($traslado->tlCodigo)), 200);
+        } catch (Exception $exc) {    
+            return JsonResponse::create(array('message' => "No se pudo guardar", "request" =>json_encode($exc->getMessage())), 401);
+        }
     }
 
     /**
@@ -68,9 +89,23 @@ class TrasladoController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $tlCodigo)
     {
-        //
+        try{
+            $data = $request->all();
+            $traslado= Traslado::find($tlCodigo);
+            $traslado->tlNombre = $data["tlNombre"];
+            $traslado->tlTipoVehiculo = $data["tlTipoVehiculo"];
+            $traslado->tlValor = $data["tlValor"];
+            $traslado->tlCiudadOrigen = $data["tlCiudadOrigen"];
+            $traslado->tlCiudadDestio = $data["tlCiudadDestio"];
+            $traslado->tlEstado = $data["tlEstado"];
+            $traslado->save();
+
+            return JsonResponse::create(array('message' => "Datos Actualizados correctamente", "request" =>json_encode($traslado->tlCodigo)), 200);
+        } catch (Exception $exc) {
+            return JsonResponse::create(array('message' => "No se pudo guardar", "request" =>json_encode($request)), 401);
+        }
     }
 
     /**
@@ -82,5 +117,18 @@ class TrasladoController extends Controller
     public function destroy($id)
     {
         //
+    }
+    
+    
+    public function updateEstado(Request $request, $tlCodigo){
+        try {
+            $data = $request->all();
+            $traslado = Traslado::find($tlCodigo);
+            $traslado->tlEstado = $data['tlEstado'];
+            $traslado->save();
+            return JsonResponse::create(array('message' => "Datos Actualizados Correctamente", "request" =>json_encode($tlCodigo)), 200);
+        } catch (Exception $ex) {
+            return JsonResponse::create(array('message' => "No se pudo modificar el Taxista", "exception"=>$ex->getMessage(), "request" =>json_encode($tlCodigo)), 401);
+        }
     }
 }

@@ -68,7 +68,7 @@ function ($scope, tipoMantenimientoService,toaster) {
       $scope.VerDesactivar = function(tmCodigo,  tmEstado) {
         $scope.tmEstado =tmEstado;
         $scope.IdTipoGlobal = tmCodigo;
-        $('#mdConfirmacion').modal('show');         
+        $('#mdConfir').modal('show');         
     };
     
     //Funcion que elimina
@@ -76,7 +76,7 @@ function ($scope, tipoMantenimientoService,toaster) {
          var objetc = {
             tmEstado : $scope.tmEstado
         };
-            $('#mdConfirmacion').modal('hide'); 
+            $('#mdConfir').modal('hide'); 
             var promisePut  = tipoMantenimientoService.updateEstado($scope.IdTipoGlobal, objetc);        
                 promisePut.then(function (d) {                
                  toaster.pop('success', "Control de Información", d.data.message);                 
