@@ -3,8 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
 
-use App\Http\Requests;
+use App\Traslado;
 
 class TrasladoController extends Controller
 {
@@ -15,10 +16,11 @@ class TrasladoController extends Controller
      */
     public function index()
     {
-        $result = DB::select("SELECT r.tlCodigo, r.tlNombre, r.tlTipoVehiculo,r.tlCiudadOrigen,r.tlEstado, c.tvDescripcion, m.muNombre,"
-                . " d.dtNombre from traslados r,clasevehiculo c,municipio m,departamento d"
-                . " where r.tlValor=c.tvCodigo and r.tlEstado=m.muCodigo and m.muDepartamento=d.dtCodigo and r.tlEstado <>'BORRADO' ");
-        return $result; 
+//        $result = DB::select("SELECT r.tlCodigo, r.tlNombre, r.tlTipoVehiculo,r.tlCiudadOrigen,r.tlEstado, c.tvDescripcion, m.muNombre,"
+//                . " d.dtNombre from traslados r,clasevehiculo c,municipio m,"
+//                . " where r.tlValor=c.tvCodigo and r.tlEstado=m.muCodigo and m.muDepartamento=d.dtCodigo and r.tlEstado <>'BORRADO' ");
+//        return $result; 
+        return Traslado::all();
     }
 
     /**

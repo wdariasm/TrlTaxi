@@ -1,15 +1,17 @@
-app.controller("trasladoController", ["$scope", "trasladoService","tipoVehiculoService", "departamentoService", "toaster","ngTableParams",
-function ($scope,trasladoService, tipoVehiculoService,departamentoService, toaster,ngTableParams) {
+app.controller("trasladoController", ["$scope", "trasladoService","tipoVehiculoService", "departamentoService", "toaster","ngTableParams","plantillaService",
+function ($scope,trasladoService, tipoVehiculoService,departamentoService, toaster,ngTableParams,plantillaService) {
     $scope.Traslado= {};
     $scope.Traslados= [];
     $scope.TipoVehiculos= [];
     $scope.Municipios=[];
+    $scope.Plantillas=[];
     $scope.IdTrasladopGlobal="";
     $scope.editMode = false;
   
     $scope.title = "Nuevo Traslado"; 
     $scope.VehiculoSelect ={}; 
     $scope.MunSelect={};
+    $scope.PlantillaSelect={};
     $scope.TablaTraslado = {};
    
     $scope.$parent.SetTitulo("TRASLADO");
@@ -22,7 +24,8 @@ function ($scope,trasladoService, tipoVehiculoService,departamentoService, toast
             tlValor:"0",
             tlCiudadOrigen:"",
             tlCiudadDestio:"",
-            tlEstado : "ACTIVO"
+            tlEstado : "ACTIVO",
+            tlPlantilla:""
            
         };   
        
@@ -55,9 +58,24 @@ function ($scope,trasladoService, tipoVehiculoService,departamentoService, toast
     }
     loadTipoVehiculo();
    
+   
+    function loadPlantilla(){
+        var promise = plantillaService.get(4);
+        promise.then(function(d) {                        
+            $scope.Plantillas = d.data;
+             if(d.data){
+               $scope.PlantillaSelect = d.data[0];
+            }
+        }, function(err) {           
+                toaster.pop('error','¡Error!',"Error al cargar Plantillas");           
+                console.log("Some Error Occured " + JSON.stringify(err));
+        }); 
+    }
     
-     function loadMunicipio(){
-        var promise = departamentoService.getMunicipios();
+    loadPlantilla();
+    
+     function loadMunicipio(dtCodigo){
+        var promise = departamentoService.getMunicipios(dtCodigo);
         promise.then(function(d) {                        
             $scope.Municipios = d.data;
              if(d.data){
@@ -68,14 +86,14 @@ function ($scope,trasladoService, tipoVehiculoService,departamentoService, toast
                 console.log("Some Error Occured " + JSON.stringify(err));
         }); 
     }
-   
+    loadMunicipio();
    
    $scope.Guardar = function (){
        $scope.Traslado.tlTipoVehiculo = $scope.VehiculoSelect.tvCodigo;
        $scope.Traslado.tlCiudadDestio = $scope.MunSelect.muCodigo;
        $scope.Traslado.tlCiudadOrigen= $scope.MunSelect.plCodigo;
        $scope.Traslado.tlNombre= $scope.Traslado.tlNombre.toUpperCase();   
-
+       $scope.Traslado.tlPlantilla= $scope.PlantillaSelect.plCodigo;
         var promise;
         if($scope.editMode){            
             promise = trasladoService.put($scope.Traslado.tlCodigo, $scope.Traslado);
@@ -110,18 +128,18 @@ function ($scope,trasladoService, tipoVehiculoService,departamentoService, toast
     };
      
     //Funcion que elimina
-      $scope.VerDesactivar = function(tlCodigo,  tlEstado) {
+      $scope.VerDesactivarTras = function(tlCodigo,  tlEstado) {
         $scope.tlEstado =tlEstado;
         $scope.IdTrasladopGlobal = tlCodigo;
-        $('#mdConfirmacion').modal('show');         
+        $('#mdConfir').modal('show');         
     };
     
     //Funcion que elimina
-     $scope.Desactivar = function() {
+     $scope.DesactivarTraslado = function() {
          var objetc = {
             tlEstado : $scope.tlEstado
         };
-            $('#mdConfirmacion').modal('hide'); 
+            $('#mdConfir').modal('hide'); 
             var promisePut  = trasladoService.updateEstado($scope.IdTrasladopGlobal, objetc);        
                 promisePut.then(function (d) {                
                  toaster.pop('success', "Control de Información", d.data.message);                 
