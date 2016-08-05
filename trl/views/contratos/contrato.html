@@ -4,22 +4,24 @@
             <div class="tabbable-line">
                 <ul class="nav nav-tabs nav-justified" id="tabPanels">
                     <li class="active"> <a href="#tabListado" data-toggle="tab">Listado de Contratos </a></li>
-                    <li><a href="#tabRegistro" data-toggle="tab">{{title}} </a></li>
+                    <li><a href="#tabRegistroCto" data-toggle="tab">{{title}} </a></li>
                 </ul>
             </div>
             
             <div class="tab-content">
                 
-                <div class="tab-pane" id="tabListado">
+                <div class="tab-pane active" id="tabListado">
                     
                 </div>
                 
-                <div class="tab-pane" id="tabRegistro">  
+                <div class="tab-pane" id="tabRegistroCto">  
                     <br>
                     <div class="row">
                         <div class="col-md-12">
                             <form name="frmContrato" novalidate>
-                                
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">Datos Generales</div>
+                                <div class="panel-body">
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label  for="txtCedula" >Identificación *</label>
@@ -79,6 +81,34 @@
                                         </div>
                                     </div>
                                 </div>
+                                </div>
+                                </div>
+                                
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">Servicios y Tarifas</div>
+                                    <div class="panel-body">
+                                        <div class="row">                        
+                                            <div class="col-md-12">
+                                                <div ng-repeat="ts in TipoServicio">
+                                                    <div class="col-md-3">     
+                                                        <div class="checkbox checkbox-primary">                                        
+                                                             <input type="checkbox" id="ts{{ts.svCodigo}}" checklist-model="Servicio.TipoVehiculo" checklist-value="ts">
+                                                             <label for="ts{{ts.svCodigo}}">{{ts.svCodigo}}. &nbsp; {{ts.svDescripcion}}</label> 
+                                                        </div>
+                                                    </div> 
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">Formas de Pago</div>
+                                    <div class="panel-body">
+                                        
+                                    </div>
+                                </div>
+                                    
                                 
                                 
                             </form>
@@ -98,7 +128,7 @@
         
     });
     
-    $('#tabPanels a[href="#tabRegistro"]').tab('show');
+    $('#tabPanels a[href="#tabRegistroCto"]').tab('show');
     
      $(function() {
         $('input[name="txtFechaInicio"]').daterangepicker({

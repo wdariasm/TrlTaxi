@@ -24,8 +24,8 @@ app.service("tiposervicioService",[ '$http', function ($http) {
         return req;
     };      
     
-    this.getByNombre = function () {
-        var req = $http.get(uri+'/api/servicios');
+    this.getActivos= function () {
+        var req = $http.get(uri+'/api/tiposervicios');
         return req;
     };
 }]);

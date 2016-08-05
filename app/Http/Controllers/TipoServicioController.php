@@ -19,6 +19,10 @@ class TipoServicioController extends Controller
         return $servicio;
     }
     
+    public function getActivos(){
+        return TipoServicio::where('svEstado','ACTIVO')->select('svCodigo', 'svDescripcion')->get();
+    }
+    
 
     /**
      * Store a newly created resource in storage.

@@ -1,12 +1,25 @@
-app.controller("contratoController", ["$scope", 'tipoVehiculoService', "toaster", "clienteService", 
-    function ($scope, tipoVehiculoService,toaster, clienteService) {
+app.controller("contratoController", ["$scope", 'tipoVehiculoService', "toaster", "clienteService",  "tiposervicioService",
+    function ($scope, tipoVehiculoService,toaster, clienteService, tiposervicioService) {
         
     $scope.Contrato = {};   
     $scope.Contatos = [];
     $scope.title = "Nuevo Contrato";
     $scope.editMode = false;
-        
+    
+    $scope.TipoServicio = [];
+    
+    getServicios();
     init();
+    
+    function getServicios (){
+        var promise = tiposervicioService.getActivos();
+        promise.then(function(d) {                        
+            $scope.TipoServicio = d.data;
+        }, function(err) {           
+                toaster.pop('error','¡Error!',"Error al cargar tipos de servicio");
+                console.log("Some Error Occured " + JSON.stringify(err));
+        });
+    }
         
     function init (){
         $scope.Contrato = {
@@ -26,6 +39,8 @@ app.controller("contratoController", ["$scope", 'tipoVehiculoService', "toaster"
             ctMovilPpal :""
         };      
     }
+    
+    
     
     $scope.CambiarFormato=function (variable){
         $scope.Contrato[variable] = moment($scope.Contrato[variable]).format('L');

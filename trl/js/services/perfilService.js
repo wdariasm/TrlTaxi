@@ -1,4 +1,4 @@
-app.service("perfilService", function ($http) {
+app.service("perfilService",["$http", function ($http) {
     this.get = function (id) {
         var req = $http.get(uri+'/api/perfil/' + id);
         return req;
@@ -39,6 +39,6 @@ app.service("perfilService", function ($http) {
         var req = $http.get(uri+'/api/permisos');
         return req;
     };
-});
+}]);
 
 
