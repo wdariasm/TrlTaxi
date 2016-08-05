@@ -9,46 +9,34 @@
             </div>
         </div>
         
-        <div class="tab-content">
-            <br/>
-            <div class="tab-pane active" id="tabPlantilla">
-                <div  ng-controller="plantillaController" >
-                     <div class="row">
-                        <div class="col-xs-4">            
-                            <form name="frmPlatilla" id="frmPlatilla" novalidate>
-                                
+        <div class="tab-content">            
+            <div class="tab-pane active" id="tabPlantilla">                
+                <div class="container-fluid"  ng-controller="plantillaController" >
+                     <div class="row">                       
+                        <div class="col-md-4">            
+                            <br/>
+                            <form name="frmPlatilla" id="frmPlatilla" novalidate>                               
                                 <div class="row">
                                     <div class="col-xs-12">
                                         <div class="form-group">
                                             <label for="txtDescripcion">Descripción *</label>
                                                <div class="input-group">    
                                                  <div class="input-group-addon"><i class="fa fa-automobile text-success"></i></div>
-                                                 <input type="text" required="" class="form-control" ng-model="TipoVehiculo.tvDescripcion" maxlength="100" id="txtTipoVehiculo" placeholder="Tipo Vehiculo">
+                                                 <input type="text" required="" class="form-control" ng-model="Plantilla.plDescripcion" maxlength="100" id="txtDescripcion" placeholder="Descripción">
 
                                                </div>
                                         </div>
                                     </div>
-
-                                    <div class="col-xs-12">
-                                        <div class="form-group">
-                                            <label  for="txtNumPasajero">Numero de Pasajeros *</label>
-                                            <div class="input-group">
-                                                <div class="input-group-addon"><i class="fa fa-users text-success"></i></div>
-                                                <input class="form-control" ng-model="TipoVehiculo.tvNumPasajero" solo-numeros id="txtNumPasajero" name="txtNumPasajero" type="text"  required   maxlength="3" >
-                                            </div>
-                                        </div>
-                                    </div>
+                                 
 
                                     <div class="col-xs-12">
                                         <div class="form-group">
                                             <label for="txtEstado">Estado *</label>
                                              <div class="input-group">    
                                                  <div class="input-group-addon"><i class="fa fa-list-ul text-success"></i></div>
-                                            <select type="text" class="form-control" ng-model="TipoVehiculo.tvEstado" id="txtEstado" placeholder="Estado">
+                                            <select type="text" class="form-control" ng-model="Plantilla.plEstado" id="txtEstado" placeholder="Estado">
                                                 <option value="ACTIVO">ACTIVO</option>
-                                                <option value="INACTIVO">INACTIVO</option>
-                                                <option value="BORRADO">BORRADO</option>
-
+                                                <option value="INACTIVO">INACTIVO</option>                                               
                                             </select>
 
                                              </div>
@@ -70,7 +58,8 @@
                             </form>
                         </div>
 
-                        <div class="col-xs-8">
+                        <div class="col-md-8">
+                            <br/>
                             <div class="row">
                                 <div class="col-xs-12">
                                     <table border="0" cellspacing="0" class="table table-striped" >
@@ -78,22 +67,22 @@
                                             <tr>
                                                 <th class="center">CODIGO</th>                                
                                                 <th>DESCRIPCIÓN</th>
-                                                <th>PASAJEROS</th>
+                                                <th>TIPO</th>
                                                 <th>ESTADO</th>
                                                 <th width="12%">ACCIÓN</th>
                                             </tr>
                                         </thead>
 
                                         <tbody>
-                                            <tr data-ng-repeat="items in TipoVehiculos">
-                                                <td class="center">{{ items.tvCodigo}}</td>
-                                                <td>{{ items.tvDescripcion }}</td>
-                                                <td>{{ items.tvNumPasajero }}</td>
-                                                <td>{{ items.tvEstado}}</td>
+                                            <tr data-ng-repeat="items in Plantillas">
+                                                <td class="center">{{ items.plCodigo}}</td>
+                                                <td>{{ items.plDescripcion }}</td>
+                                                <td>{{ items.plTipoServicio }}</td>
+                                                <td>{{ items.plEstado}}</td>
                                                 <td>
                                                     <center>
-                                                            <a data-ng-click="get(items)" style="float: left; margin-left: 15px;" href="javascript:;"  title="Editar"><i class="fa fa-lg fa-pencil"></i></a>
-                                                            <a ng-click="VerDesactivar(items.tvCodigo, 'BORRADO')"  style="float: left; margin-left: 15px;" href="javascript:;"  title="Eliminar"><i class="fa fa-lg fa-trash text-danger"></i></a>
+                                                            <a data-ng-click="Get(items)" style="float: left; margin-left: 15px;" href="javascript:;"  title="Editar"><i class="fa fa-lg fa-pencil"></i></a>
+                                                            <a ng-click="VerDesactivar(items.plCodigo, 'BORRADO')"  style="float: left; margin-left: 15px;" href="javascript:;"  title="Eliminar"><i class="fa fa-lg fa-trash text-danger"></i></a>
                                                     </center>
                                                 </td>
                                             </tr>
