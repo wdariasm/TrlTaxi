@@ -152,7 +152,7 @@ function ($scope,rutaService, tipoVehiculoService,departamentoService, toaster,n
         $scope.active = "active";    
           $('#tabPanels a[href="#tabRegistroRuta"]').tab('show');
     };
-    
+     
     //Funcion que elimina
       $scope.VerDesactivar = function(rtCodigo,  trEstado) {
         $scope.trEstado =trEstado;
