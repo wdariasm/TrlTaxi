@@ -23,7 +23,7 @@
                                      <label class=" text-primary" style="font-size: 18px;">Total: {{Clientes.length}}</label>
                               </div>
                             </div>
-                            <table class="table table-hover table-condensed" ng-table="TablaCliente" style="float:height; margin-top: 50px;">
+                            <table class="table table-hover table-condensed" ng-table="TablaCliente" style="float:height; margin-top: 20px;">
                                 <thead>
                                     <tr>
                                         <th>CEDULA</th>
@@ -31,8 +31,7 @@
                                         <th>DIRECCION</th>
                                         <th>TELEFONO</th>
                                         
-                                        <th>ESTADO</th> 
-                                        <th>DIGITO VERIFICACIÓN</th>
+                                        <th>ESTADO</th>                                         
                                         <th>TIPO DOCUMENTO</th>
                                         <th>TIPO PERSONA</th>
                                         <th width="12%">ACCÍON</th>
@@ -46,8 +45,7 @@
                                 <td>{{ items.Direccion}}</td> 
                                 <td>{{ items.MovilPpal}}</td> 
                                
-                                <td>{{ items.Estado}}</td> 
-                                <td>{{ items.DigitoVerificacion}}</td> 
+                                <td>{{ items.Estado}}</td>                                 
                                 <td>{{ items.tdDescripcion}}</td> 
                                 <td>{{ items.TipoPersona}}</td> 
                                
@@ -189,7 +187,7 @@
                                             <label for="txtEmail">E-mail *</label>
                                                 <div class="input-group">    
                                                     <div class="input-group-addon"><i class="fa fa-envelope text-success"></i></div>
-                                                        <input type="email" class="form-control" ng-model="Cliente.Correo" maxlength="60" id="txtEmail" placeholder="E-mail">
+                                                    <input type="email" class="form-control" ng-model="Cliente.Correo" maxlength="60" id="txtEmail" placeholder="E-mail" required>
                                                </div>
                                        </div>
                                     </div> 
@@ -200,7 +198,7 @@
                                             <label for="txtDigitoVerificacion">Digito Verificación  *</label>
                                                 <div class="input-group">    
                                                     <div class="input-group-addon"><i class="fa fa-hashtag text-success"></i></div>
-                                                    <input type="text" class="form-control" ng-model="Cliente.DigitoVerificacion" id="txtDigitoVerificacion" placeholder="Digito Verificación" maxlength="2">
+                                                    <input type="text" class="form-control" ng-model="Cliente.DigitoVerificacion" id="txtDigitoVerificacion" placeholder="Digito Verificación" maxlength="2" readonly required>
                                                </div>
                                        </div>
                                    </div> 
@@ -243,8 +241,5 @@
         e.preventDefault();
         $(this).tab('show');
         
-    });
-    
-    $('#tabPanels a[href="#tabRegistro"]').tab('show');
-    
+    });            
 </script>

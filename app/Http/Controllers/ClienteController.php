@@ -24,7 +24,7 @@ class ClienteController extends Controller
 
     
      public function validarIdentificacion($Cedula){
-        return Cliente::where("Identificacion",$Cedula)->select("Identificacion", 'Nombres', 'IdCliente', 'Correo')->first();
+        return Cliente::where("Identificacion",$Cedula)->select("Identificacion", 'Nombres', 'IdCliente', 'Correo', 'MovilPpal')->first();
     }
     /**
      * Show the form for creating a new resource.

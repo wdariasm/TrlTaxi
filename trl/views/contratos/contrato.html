@@ -9,37 +9,82 @@
             </div>
             
             <div class="tab-content">
+                
                 <div class="tab-pane" id="tabListado">
                     
                 </div>
                 
-                <div class="tab-pane" id="tabListado">
-                    <form name="frmContrato" novalidate>
-                        <div class="row">
-                            <div class="col-md-12">
+                <div class="tab-pane" id="tabRegistro">  
+                    <br>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <form name="frmContrato" novalidate>
+                                
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label  for="txtCedula" >Identificación *</label>
-                                            <div class="input-group">    
-                                                <div class="input-group-addon"><i class="fa fa-hashtag text-success"></i></div>
-                                                     <input  type="text" class="form-control" required="" ng-model="Cliente.Identificacion" maxlength="10" solo-numeros id="txtCedula" placeholder="Identificación" ng-blur="validarIdentificacion()" >
-                                            </div> 
+                                        <div class="input-group">    
+                                            <div class="input-group-addon"><i class="fa fa-hashtag text-success"></i></div>
+                                                 <input  type="text" class="form-control" required="" ng-model="Contrato.ctNitCliente" maxlength="11" solo-numeros id="txtCedula" placeholder="Identificación" ng-blur="validarIdentificacion()" >
+                                        </div> 
                                     </div>
                                 </div>
 
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="txtNombre">Nombres *</label>
-                                            <div class="input-group">    
-                                                <div class="input-group-addon"><i class="fa fa-user text-success"></i></div>
-                                                <input type="text"  class="form-control" required="" ng-model="Cliente.Nombres" maxlength="100" id="txtNombre" placeholder="Nombre Completo">
-                                            </div>
+                                        <div class="input-group">    
+                                            <div class="input-group-addon"><i class="fa fa-user text-success"></i></div>
+                                            <input type="text"  class="form-control" required="" ng-model="Contrato.ctContratante" maxlength="100" id="txtNombre" placeholder="Nombre Completo">
+                                        </div>
                                     </div>
                                 </div>
                                 
-                            </div>                            
-                        </div>
-                    </form>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label for="txtTelefonoPpal">Teléfono Principal *</label>
+                                        <div class="input-group">    
+                                            <div class="input-group-addon"><i class="fa fa-mobile text-success"></i></div>
+                                            <input type="text" class="form-control" ng-model="Contrato.ctMovilPpal"  required="" maxlength="10" solo-numeros id="txtTelefonoPpal" placeholder="Teléfono Principal">
+                                       </div>
+                                   </div>
+                               </div>
+                                
+                                <div class="col-xs-3">
+                                    <div class="form-group">
+                                        <label  for="txtFechaInicio">Fecha Inicio *</label>
+                                        <div class="input-group">
+                                            <div class="input-group-addon"><i class="fa fa-calendar-times-o text-success"></i></div>
+                                            <input type="text" id="txtFechaInicio" name="txtFechaInicio" ng-model="Contrato.ctFechaInicio" class="form-control" value=""  ng-change="CambiarFormato('ctFechaInicio')">                                                                                            
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-xs-3">
+                                    <div class="form-group">
+                                        <label  for="txtFechaFin">Fecha Finalización *</label>
+                                        <div class="input-group">
+                                            <div class="input-group-addon"><i class="fa fa-calendar-times-o text-success"></i></div>
+                                            <input type="text" id="txtFechaFin" name="txtFechaFin" ng-model="Contrato.ctFechaFinal" class="form-control" value=""  ng-change="CambiarFormato('ctFechaFinal')">                                                                                            
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label for="txtDuracion">Duración *</label>
+                                        <div class="input-group">    
+                                            <div class="input-group-addon"><i class="fa fa-user text-success"></i></div>
+                                            <input type="text"  class="form-control" required="" ng-model="Contrato.ctDuracion" maxlength="100" id="txtDuracion" placeholder="Duración contrato">
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                
+                            </form>
+
+                        </div>                            
+                    </div>                    
                 </div>
             </div>            
         </div>
@@ -54,5 +99,24 @@
     });
     
     $('#tabPanels a[href="#tabRegistro"]').tab('show');
+    
+     $(function() {
+        $('input[name="txtFechaInicio"]').daterangepicker({
+            singleDatePicker: true,
+            showDropdowns: true           
+        }, 
+        function(start, end, label) {
+            $('#txtFechaInicio').val(end.format('DD/MM/YYYY'));         
+        });
+        
+        $('input[name="txtFechaFin"]').daterangepicker({
+            singleDatePicker: true,
+            showDropdowns: true
+        }, 
+        function(start, end, label) {
+            $('#txtFechaFin').val(end.format('DD/MM/YYYY'));
+        });                      
+        
+    });
     
 </script>
