@@ -99,7 +99,7 @@ function ($scope,rutaService, tipoVehiculoService,departamentoService, toaster,n
                $scope.MunSelect = d.data[0];
             }
         }, function(err) {           
-                toaster.pop('error','¡Error!',"Error al cargar Departamentos");           
+                toaster.pop('error','¡Error!',"Error al cargar Municipios");           
                 console.log("Some Error Occured " + JSON.stringify(err));
         }); 
     }
