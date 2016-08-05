@@ -67,11 +67,15 @@ var app;
                 templateUrl: 'views/configuracion/zona.html'
             })
             
-            .when("/0/transfert",{
+            .when("/:tipo/transfert",{
                 templateUrl: 'views/configuracion/transfert.html'
             })
             
-            .when("/0/ruta",{
+            .when("/:tipo/traslado/",{
+                templateUrl: 'views/configuracion/traslado.html'
+            })
+            
+            .when("/:tipo/ruta",{
                 templateUrl: 'views/configuracion/ruta.html'
             })     
             

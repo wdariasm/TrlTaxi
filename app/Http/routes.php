@@ -40,5 +40,6 @@ include 'Routes/routesTipoServicio.php';
 include 'Routes/routesContrato.php';
 include 'Routes/routesEncuesta.php';
 include 'Routes/routesTraslado.php';
+include 'Routes/PlantillaRoutes.php';
 
 

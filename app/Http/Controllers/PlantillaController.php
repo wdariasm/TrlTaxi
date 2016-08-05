@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
-use App\Http\Requests;
+use App\Plantilla;
+use Illuminate\Http\JsonResponse;
 
 class PlantillaController extends Controller
 {
@@ -16,17 +16,7 @@ class PlantillaController extends Controller
     public function index()
     {
         //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
+    }   
 
     /**
      * Store a newly created resource in storage.
@@ -36,30 +26,41 @@ class PlantillaController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        try{  
+            $data = $request->all(); 
+            $plantilla= new Plantilla();                        
+            $plantilla->plDescripcion = $data["plDescripcion"];
+            $plantilla->plEstado = 'ACTIVO';
+            $plantilla->plTipoServicio = $data["plTipoServicio"];            
+            $plantilla->save();           
+            return JsonResponse::create(array('message' => "Plantilla guardada correctamente", "request" =>json_encode($plantilla->plCodigo)), 200);
+            
+        } catch (\Exception $exc) {    
+            return JsonResponse::create(array('message' => "No se pudo guardar", "request" =>json_encode($exc->getMessage())), 401);
+        }
     }
+    
+    
+    /*
+     * Obtener todad las plantillas por tipo de servicio
+     */
+    public function getPlantillaporTipo($id){
+        return Plantilla::where('plTipoServicio',$id)->get();
+    }
+    
 
     /**
-     * Display the specified resource.
-     *
+     * Muestra todas las plantillas activas  por tipo de servicio 
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
     {
-        //
+        return Plantilla::where('plTipoServicio',$id)->where('plEstado','=','ACTIVO')
+                ->select('plCodigo', 'plDescripcion')->get();
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
+    
 
     /**
      * Update the specified resource in storage.
@@ -70,7 +71,18 @@ class PlantillaController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        try{  
+            $data = $request->all(); 
+            $plantilla= Plantilla::find($id);                        
+            $plantilla->plDescripcion = $data["plDescripcion"];
+            $plantilla->plEstado = $data["plEstado"];
+            $plantilla->plTipoServicio = $data["plTipoServicio"];            
+            $plantilla->save();           
+            return JsonResponse::create(array('message' => "Datos actualizados correctamente", "request" =>json_encode($plantilla->plCodigo)), 200);
+            
+        } catch (\Exception $exc) {    
+            return JsonResponse::create(array('message' => "No se pudo guardar", "request" =>json_encode($exc->getMessage())), 401);
+        }
     }
 
     /**
@@ -81,6 +93,14 @@ class PlantillaController extends Controller
      */
     public function destroy($id)
     {
-        //
+        try{            
+            $plantilla= Plantilla::find($id);                                    
+            $plantilla->plEstado = 'INACTIVO';                    
+            $plantilla->save();           
+            return JsonResponse::create(array('message' => "Plantilla inactivada correctamente", "request" =>json_encode($plantilla->plCodigo)), 200);
+            
+        } catch (\Exception $exc) {    
+            return JsonResponse::create(array('message' => "No se pudo guardar", "request" =>json_encode($exc->getMessage())), 401);
+        }
     }
 }

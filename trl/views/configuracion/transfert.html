@@ -1,161 +1,193 @@
-<div  ng-controller="transfertController" class="container-fluid">
+<div class="container-fluid">
     <div class="row">
-        <div class="col-xs-4">
-            <form name="frmTransfert" id="frmTransfert" novalidate>
-                <h5 class="text-primary">{{title}}</h5>
-                <div class="row">
-                    <div class="col-xs-11">
-                        <div class="form-group">
-                            <label  for="txtNombre">Descripcion *</label>
-                            <div class="input-group">
-                                <div class="input-group-addon"><i class="fa fa-edit"></i></div>
-                                <input class="form-control" ng-model="Transfert.tfNombre" letras-numeros id="txtNombre" name="txtNombre" type="text"  required   maxlength="60" >
-                            </div>
-                        </div>
-                    </div>
-                    
-                    
-                    <div class="col-xs-11">
-                        <div class="form-group">
-                            <label  for="cboZonaOrigen">Zona origen *</label>
-                            <div class="input-group">    
-                                <div class="input-group-addon"><i class="fa fa-map-marker"></i></div>                                                                                
-                                <select ng-model="ZonaOrigen" class="form-control" id="cboZonaOrigen" ng-options="item as  item.znNombre for item in Zonas track by item.znCodigo" required></select>
-                            </div> 
-                        </div>   
-                    </div>
-                    
-                    <div class="col-xs-11">
-                        <div class="form-group">
-                            <label  for="cboZonaDestino">Zona destino *</label>
-                            <div class="input-group">    
-                                <div class="input-group-addon"><i class="fa fa-globe"></i></div>                                                                                
-                                <select ng-model="ZonaDestino" class="form-control" id="cboZonaDestino" ng-options="item as  item.znNombre for item in Zonas track by item.znCodigo" required></select>
-                            </div> 
-                        </div>   
-                    </div>
-                    
-                    <div class="col-xs-11">
-                        <div class="form-group">
-                            <label  for="cboClase">Tipo Vehiculo *</label>
-                            <div class="input-group">
-                                <div class="input-group-addon"><i class="fa fa-gitlab"></i></div>
-                                <select ng-model="ClaseSelect" class="form-control" id="cboClase" ng-options="item as item.tvDescripcion for item in ClaseVehiculo track by item.tvCodigo" required></select>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="col-xs-11">
-                        <div class="form-group">
-                            <label  for="txtValor">Valor *</label>
-                            <div class="input-group">
-                                <div class="input-group-addon"><i class="fa fa-usd"></i></div>
-                                <input class="form-control" ng-model="Transfert.tfValor" solo-numeros id="txtValor" name="txtValor" type="text" fcsa-number="{ min: 0,  maxDecimals: 0  }" required   maxlength="10" >
-                            </div>
-                        </div>
-                    </div>  
-                    
-                    <div class="col-xs-11">
-                        <div class="form-group">
-                            <label for="txtEstado">Estado *</label>
-                             <div class="input-group">
-                                <div class="input-group-addon"><i class="fa fa-list"></i></div>
-                                <select type="text" class="form-control" ng-model="Transfert.tfEstado" id="txtEstado" placeholder="Estado" required>
-                                    <option value="ACTIVO">ACTIVO</option>
-                                    <option value="INACTIVO">INACTIVO</option>
-                                </select>
-
-                             </div>
-                        </div>
-                    </div>
-                    
-                </div>
-                <div class="row">
-                    <div class="col-xs-5 col-xs-offset-1">                                        
-                        <br/>
-                        <button   class="btn btn-success btn-block btn-addon"   type="button"  title="Nuevo / Cancelar" ng-click="Nuevo()"><i class="fa fa-pencil"></i> Nuevo</button>
-                    </div>
-                    <div class="col-xs-5">
-                        <!-- ng-disabled="frmVehiculo.$invalid" -->
-                        <br/>
-                        <button ng-disabled="frmTransfert.$invalid"   class="btn btn-primary btn-block btn-addon"   type="button"  title="Registrar Tarifa" ng-click="Guardar()"><i class="fa fa-check"></i> Guardar</button>
-                    </div>
-                </div>
-            </form>
+        <div class="col-md-12">  
+            <div class="tabbable-line">
+                   <ul class="nav nav-tabs nav-justified" id="tabPanels">
+                       <li class="active"> <a href="#tabPlantilla" data-toggle="tab">Plantillas Transfert </a></li>
+                       <li><a href="#tabRegistro" data-toggle="tab">Transfert </a></li>
+                   </ul>
+            </div>
         </div>
         
-        <div class="col-xs-8">
-            <div class="row">
-                <div class="col-xs-8">
-                    <label  for="search">Filtro</label>
-                     <div class="input-group">
-                         <div class="input-group-addon"><i class="fa  fa-search text-primary"></i></div>
-                         <input  class="form-control" id="search" type="search" placeholder="" ng-model="tbTransfert.filter()['busqueda']">
-                     </div>
-
+        <div class="tab-content">
+            <br/>
+            <div class="tab-pane active" id="tabPlantilla">
+                <div  ng-controller="plantillaController" >
+                    
                 </div>
-                 <div class="" style="float:width; margin-top:30px;">
-                     <label class=" text-primary" style="font-size: 18px;">Total: {{Transferts.length}}</label>
-                 </div>
-                <br/>
             </div>
             
-             <table class="table table-striped table-condensed" ng-table="tbTransfert">
-                <thead>
-                    <tr>                        
-                        <th>NOMBRE</th>
-                        <th title="zona Origen">ORIGEN</th>
-                        <th title="Zona Destino">DESTINO</th>                                         
-                        <th title="Tipo de Vehículo">VEHICULO</th>
-                        <th>VALOR</th>
-                        <th>ESTADO</th>
-                        <th width="9%">ACCION</th>
-                    </tr>
-                </thead>
-
-               <tbody>
-                    <tr ng-repeat="item in $data">                        
-                        <td>{{ item.tfNombre}}</td>
-                        <td>{{ item.znNombre }}</td>
-                        <td >{{ item.tfDestino }}</td>
-                        <td>{{ item.tvDescripcion}}</td>
-                        <td >{{ item.tfValor | currency : "$" : 0}}</td>                        
-                        <td>{{ item.tfEstado}}</td>
-                        <td>
-                            <center>
-                                <a ng-click="get(item)" style="float: left; margin-left: 3px;" href="javascript:;"  title="Editar"><i class="fa fa-pencil fa-1x text-success"></i></a>
-                                <a ng-click="VerDesactivar(item.tfCodigo, 'BORRADO')"  style="float: left; margin-left: 7px;" href="javascript:;"  title="Eliminar"><i class="fa fa-trash fa-1x text-danger"></i></a>                                
-                            </center>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>  
-        
-        <div class="modal fade bs-example-modal-sm" id="mdConfirmacion" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" style="margin-top: 10%;">
-            <div class="modal-dialog modal-sm" style="width: 30%" >                                   
-                <div class="modal-content">
-
-                    <div class="modal-header">
-                        <div class="modal-title"> Borrar Tarifa</div>
-                    </div>
-
-                    <div class="modal-body">
+            <div class="tab-pane " id="tabRegistro">
+                <div  class="container-fluid" ng-controller="transfertController" >
+            <div class="row">
+                <div class="col-xs-4">
+                    <form name="frmTransfert" id="frmTransfert" novalidate>
+                        <h5 class="text-primary">{{title}}</h5>
                         <div class="row">
-                            <div class="col-xs-12">
-                                <label>¿Está seguro de ejecutar esta acción?  </label>
+                            <div class="col-xs-11">
+                                <div class="form-group">
+                                    <label  for="txtNombre">Descripcion *</label>
+                                    <div class="input-group">
+                                        <div class="input-group-addon"><i class="fa fa-edit"></i></div>
+                                        <input class="form-control" ng-model="Transfert.tfNombre" letras-numeros id="txtNombre" name="txtNombre" type="text"  required   maxlength="60" >
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="col-xs-11">
+                                <div class="form-group">
+                                    <label  for="cboZonaOrigen">Zona origen *</label>
+                                    <div class="input-group">    
+                                        <div class="input-group-addon"><i class="fa fa-map-marker"></i></div>                                                                                
+                                        <select ng-model="ZonaOrigen" class="form-control" id="cboZonaOrigen" ng-options="item as  item.znNombre for item in Zonas track by item.znCodigo" required></select>
+                                    </div> 
+                                </div>   
+                            </div>
+
+                            <div class="col-xs-11">
+                                <div class="form-group">
+                                    <label  for="cboZonaDestino">Zona destino *</label>
+                                    <div class="input-group">    
+                                        <div class="input-group-addon"><i class="fa fa-globe"></i></div>                                                                                
+                                        <select ng-model="ZonaDestino" class="form-control" id="cboZonaDestino" ng-options="item as  item.znNombre for item in Zonas track by item.znCodigo" required></select>
+                                    </div> 
+                                </div>   
+                            </div>
+
+                            <div class="col-xs-11">
+                                <div class="form-group">
+                                    <label  for="cboClase">Tipo Vehiculo *</label>
+                                    <div class="input-group">
+                                        <div class="input-group-addon"><i class="fa fa-gitlab"></i></div>
+                                        <select ng-model="ClaseSelect" class="form-control" id="cboClase" ng-options="item as item.tvDescripcion for item in ClaseVehiculo track by item.tvCodigo" required></select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-xs-11">
+                                <div class="form-group">
+                                    <label  for="txtValor">Valor *</label>
+                                    <div class="input-group">
+                                        <div class="input-group-addon"><i class="fa fa-usd"></i></div>
+                                        <input class="form-control" ng-model="Transfert.tfValor" solo-numeros id="txtValor" name="txtValor" type="text" fcsa-number="{ min: 0,  maxDecimals: 0  }" required   maxlength="10" >
+                                    </div>
+                                </div>
+                            </div>  
+
+                            <div class="col-xs-11">
+                                <div class="form-group">
+                                    <label for="txtEstado">Estado *</label>
+                                     <div class="input-group">
+                                        <div class="input-group-addon"><i class="fa fa-list"></i></div>
+                                        <select type="text" class="form-control" ng-model="Transfert.tfEstado" id="txtEstado" placeholder="Estado" required>
+                                            <option value="ACTIVO">ACTIVO</option>
+                                            <option value="INACTIVO">INACTIVO</option>
+                                        </select>
+
+                                     </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-5 col-xs-offset-1">                                        
+                                <br/>
+                                <button   class="btn btn-success btn-block btn-addon"   type="button"  title="Nuevo / Cancelar" ng-click="Nuevo()"><i class="fa fa-pencil"></i> Nuevo</button>
+                            </div>
+                            <div class="col-xs-5">
+                                <!-- ng-disabled="frmVehiculo.$invalid" -->
+                                <br/>
+                                <button ng-disabled="frmTransfert.$invalid"   class="btn btn-primary btn-block btn-addon"   type="button"  title="Registrar Tarifa" ng-click="Guardar()"><i class="fa fa-check"></i> Guardar</button>
                             </div>
                         </div>
+                    </form>
+                </div>
+
+                <div class="col-xs-8">
+                    <div class="row">
+                        <div class="col-xs-8">
+                            <label  for="search">Filtro</label>
+                             <div class="input-group">
+                                 <div class="input-group-addon"><i class="fa  fa-search text-primary"></i></div>
+                                 <input  class="form-control" id="search" type="search" placeholder="" ng-model="tbTransfert.filter()['busqueda']">
+                             </div>
+
+                        </div>
+                         <div class="" style="float:width; margin-top:30px;">
+                             <label class=" text-primary" style="font-size: 18px;">Total: {{Transferts.length}}</label>
+                         </div>
+                        <br/>
                     </div>
 
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
-                        <button type="button" class="btn btn-primary" ng-click="Desactivar()">Aceptar</button>
-                    </div>  
+                     <table class="table table-striped table-condensed" ng-table="tbTransfert">
+                        <thead>
+                            <tr>                        
+                                <th>NOMBRE</th>
+                                <th title="zona Origen">ORIGEN</th>
+                                <th title="Zona Destino">DESTINO</th>                                         
+                                <th title="Tipo de Vehículo">VEHICULO</th>
+                                <th>VALOR</th>
+                                <th>ESTADO</th>
+                                <th width="9%">ACCION</th>
+                            </tr>
+                        </thead>
+
+                       <tbody>
+                            <tr ng-repeat="item in $data">                        
+                                <td>{{ item.tfNombre}}</td>
+                                <td>{{ item.znNombre }}</td>
+                                <td >{{ item.tfDestino }}</td>
+                                <td>{{ item.tvDescripcion}}</td>
+                                <td >{{ item.tfValor | currency : "$" : 0}}</td>                        
+                                <td>{{ item.tfEstado}}</td>
+                                <td>
+                                    <center>
+                                        <a ng-click="get(item)" style="float: left; margin-left: 3px;" href="javascript:;"  title="Editar"><i class="fa fa-pencil fa-1x text-success"></i></a>
+                                        <a ng-click="VerDesactivar(item.tfCodigo, 'BORRADO')"  style="float: left; margin-left: 7px;" href="javascript:;"  title="Eliminar"><i class="fa fa-trash fa-1x text-danger"></i></a>                                
+                                    </center>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>  
+
+                <div class="modal fade bs-example-modal-sm" id="mdConfirmacion" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" style="margin-top: 10%;">
+                    <div class="modal-dialog modal-sm" style="width: 30%" >                                   
+                        <div class="modal-content">
+
+                            <div class="modal-header">
+                                <div class="modal-title"> Borrar Tarifa</div>
+                            </div>
+
+                            <div class="modal-body">
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <label>¿Está seguro de ejecutar esta acción?  </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                                <button type="button" class="btn btn-primary" ng-click="Desactivar()">Aceptar</button>
+                            </div>  
+                        </div>
+                    </div>
                 </div>
+
+            </div>    
+            </div>
             </div>
         </div>
         
     </div>
-    
 </div>
+
+<script>
+    $('#tabPanels a').click(function (e) {
+        e.preventDefault();
+        $(this).tab('show');        
+    });       
+    
+</script>
