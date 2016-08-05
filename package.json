@@ -1,7 +1,7 @@
 {
-  "name": "gulp trl",
-  "version": "1.0",
-  "description": "Gulp: Transporte",  
+  "name": "gulp-trl",
+  "version": "1.0.0",
+  "description": "Gulp:-Transporte",  
   "main": "gulpfile.js",
   "license": "MIT",
   "author": "wdam",

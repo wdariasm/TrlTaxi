@@ -22,7 +22,7 @@ function ($scope, encuestaService,toaster) {
         promise.then(function(d) {                        
             $scope.Encuestas = d.data;
         }, function(err) {           
-                toaster.pop('error','¡Error!',"Error al cargar Encuesta");           
+                toaster.pop('error','¡Error!',"Error al cargar encuesta");           
                 console.log("Some Error Occured " + JSON.stringify(err));
         }); 
     }

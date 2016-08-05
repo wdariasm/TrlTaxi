@@ -169,23 +169,31 @@
                                               </div> 
                                     </div>
                                 </div>
+                                
+                                <div class="col-xs-4">
+                                    <div class="form-group">
+                                        <label  for="cboPlantilla">Plantilla *</label>
+                                            <div class="input-group">    
+                                                <div class="input-group-addon"><i class="fa fa-book text-success"></i></div>
+                                                   <select ng-model="PlantillaSelect" class="form-control" id="cboPlantilla" ng-options="item as  item.plNombre for item in Plantillas track by item.plCodigo" required></select>           
+                                            </div> 
+                                    </div>   
+                                </div>
 
-                         <div class="col-xs-4">
-                             <div class="form-group">
-                                 <label for="txtEstado">Estado *</label>
-                                     <div class="input-group">    
-                                         <div class="input-group-addon"><i class="fa fa-list-ul text-success"></i></div>
-                                         <select type="text" required="" class="form-control" ng-model="Ruta.trEstado" id="txtEstado" placeholder="Estado">
-                                                 <option value="ACTIVO">ACTIVO</option>
-                                                 <option value="INACTIVO">INACTIVO</option>
-                                                 <option value="BORRADO">BORRADO</option>
-                                              </select>
-                       
-                                      </div>
-                              </div>
-                         </div>
-                         
-                         
+                                <div class="col-xs-4">
+                                    <div class="form-group">
+                                        <label for="txtEstado">Estado *</label>
+                                            <div class="input-group">    
+                                                <div class="input-group-addon"><i class="fa fa-list-ul text-success"></i></div>
+                                                <select type="text" required="" class="form-control" ng-model="Ruta.trEstado" id="txtEstado" placeholder="Estado">
+                                                        <option value="ACTIVO">ACTIVO</option>
+                                                        <option value="INACTIVO">INACTIVO</option>
+                                                        <option value="BORRADO">BORRADO</option>
+                                                     </select>
+
+                                             </div>
+                                     </div>
+                                </div>
                             </div> 
                             <div class="row">
                                 <br/>
@@ -197,8 +205,6 @@
                                    </div>
                            </div>
                         </div>    
-                         
-                        
                     </div>                                
                   </form>    
              </div>

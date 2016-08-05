@@ -1,15 +1,17 @@
-app.controller("rutaController", ["$scope", "rutaService","tipoVehiculoService", "departamentoService", "toaster","ngTableParams",
-function ($scope,rutaService, tipoVehiculoService,departamentoService, toaster,ngTableParams) {
+app.controller("rutaController", ["$scope", "rutaService","tipoVehiculoService", "departamentoService", "toaster","ngTableParams","plantillaService",
+function ($scope,rutaService, tipoVehiculoService,departamentoService, toaster,ngTableParams,plantillaService) {
     $scope.Ruta= {};
     $scope.Rutas= [];
     $scope.TipoVehiculos= [];
     $scope.Departamentos=[];
     $scope.Municipios=[];
+    $scope.Plantillas=[];
     $scope.IdRutapGlobal="";
     $scope.editMode = false;
     $scope.estadoImg =false;
     $scope.title = "Nueva Ruta"; 
     $scope.VehiculoSelect ={}; 
+    $scope.PlantillaSelect ={}; 
     $scope.DeptSelect={};
     $scope.MunSelect={};
     $scope.TablaRuta = {};
@@ -26,7 +28,8 @@ function ($scope,rutaService, tipoVehiculoService,departamentoService, toaster,n
             trDepartamento:"",
             trCiudad:"",
             trEstado : "ACTIVO",
-            trImagen :''
+            trImagen :'',
+            rtPlantilla:'0'
         };   
         document.getElementById("image").innerHTML ="";
         $scope.estadoImg =false;
@@ -58,6 +61,20 @@ function ($scope,rutaService, tipoVehiculoService,departamentoService, toaster,n
         }); 
     }
     loadTipoVehiculo();
+    
+      function loadPlantilla(){
+        var promise = plantillaService.getAll();
+        promise.then(function(d) {                        
+            $scope.Plantillas = d.data;
+             if(d.data){
+               $scope.PlantillaSelect = d.data[0];
+            }
+        }, function(err) {           
+                toaster.pop('error','¡Error!',"Error al cargar Plantillas");           
+                console.log("Some Error Occured " + JSON.stringify(err));
+        }); 
+    }
+    loadPlantilla();
     
      function loadDepartamento(){
         var promise = departamentoService.getAll();
@@ -95,6 +112,7 @@ function ($scope,rutaService, tipoVehiculoService,departamentoService, toaster,n
    $scope.Guardar = function (){
        $scope.Ruta.trTipoVehiculo = $scope.VehiculoSelect.tvCodigo;
        $scope.Ruta.trCiudad = $scope.MunSelect.muCodigo;
+       $scope.Ruta.rtPlantilla= $scope.PlantillaSelect.plCodigo;
        $scope.Ruta.trDepartamento = $scope.DeptSelect.dtCodigo;
        $scope.Ruta.rtNombre = $scope.Ruta.rtNombre.toUpperCase();   
        $scope.Ruta.rtDescripcion = $scope.Ruta.rtDescripcion.toUpperCase(); 

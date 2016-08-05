@@ -51,6 +51,7 @@ class RutaController extends Controller
             $ruta->trCiudad = $data["trCiudad"];
             $ruta->trEstado = $data["trEstado"];
             $ruta->trImagen = "http://".$_SERVER['HTTP_HOST'].'/image/'.$data["rtCodigo"].".jpg";
+            $ruta->rtPlantilla = $data["rtPlantilla"];
             $ruta->save();
             
              if ($request->hasFile('imagen')) {
@@ -103,6 +104,7 @@ class RutaController extends Controller
             $ruta->trDepartamento = $data["trDepartamento"];
             $ruta->trCiudad = $data["trCiudad"];
             $ruta->trEstado = $data["trEstado"];
+            $ruta->rtPlantilla = $data["rtPlantilla"];
             $ruta->save();
 
             return JsonResponse::create(array('message' => "Datos Actualizados correctamente", "request" =>json_encode($ruta->rtCodigo)), 200);
