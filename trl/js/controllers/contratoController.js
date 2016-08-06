@@ -1,5 +1,5 @@
-app.controller("contratoController", ["$scope", 'tipoVehiculoService', "toaster", "clienteService",  "tiposervicioService",
-    function ($scope, tipoVehiculoService,toaster, clienteService, tiposervicioService) {
+app.controller("contratoController", ["$scope", 'tipoVehiculoService', "toaster", "clienteService",  "tiposervicioService", "plantillaService",
+    function ($scope, tipoVehiculoService,toaster, clienteService, tiposervicioService, plantillaService) {
         
     $scope.Contrato = {};   
     $scope.Contatos = [];
@@ -7,6 +7,7 @@ app.controller("contratoController", ["$scope", 'tipoVehiculoService', "toaster"
     $scope.editMode = false;
     
     $scope.TipoServicio = [];
+    $scope.titlePlantilla = "";
     
     getServicios();
     init();
@@ -20,6 +21,10 @@ app.controller("contratoController", ["$scope", 'tipoVehiculoService', "toaster"
                 console.log("Some Error Occured " + JSON.stringify(err));
         });
     }
+    
+    $scope.imChanged = function(){
+        $scope.testValue = $scope.Contrato.TipoVehiculo.join(',');        
+    };
         
     function init (){
         $scope.Contrato = {
@@ -36,7 +41,9 @@ app.controller("contratoController", ["$scope", 'tipoVehiculoService', "toaster"
             ctDuracion : "",
             ctNumVehiculos : "",
             ctUsuarReg : $scope.$parent.Login.Login,
-            ctMovilPpal :""
+            ctMovilPpal :"",
+            TipoServicio : [],
+            Plantillas : []
         };      
     }
     
@@ -47,6 +54,33 @@ app.controller("contratoController", ["$scope", 'tipoVehiculoService', "toaster"
         var diferencia = moment.preciseDiff($scope.Contrato.ctFechaInicio, $scope.Contrato.ctFechaFinal);
         $scope.Contrato.ctDuracion = diferencia;
     };
+    
+    function loadPlantillas(id) {
+        var promiseGet = plantillaService.get(id); //The Method Call from service
+        promiseGet.then(function(pl) {
+            $scope.Plantillas = pl.data;            
+        },
+        function(errorPl) {
+            toaster.pop("error","¡Error!", "Eror al cargar plantillas de transfert");
+            console.log('failure loading Zona', errorPl);
+        });
+    }
+    
+    $scope.TipoServicioCheck = function(value) {
+        console.log(value);     
+        if(value.svPlantilla==="SI"){
+            $scope.titlePlantilla = "Plantillas " + value.svDescripcion;
+            loadPlantillas(value.svCodigo);
+        }else{
+            
+        }
+        
+    };
+    
+    $scope.TipoPlantillaCheck = function(value,checked) {
+        console.log(checked);
+        console.log($scope.Contrato.Plantillas);
+    };        
         
         
     $scope.validarIdentificacion = function () {

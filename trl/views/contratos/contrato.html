@@ -92,11 +92,41 @@
                                                 <div ng-repeat="ts in TipoServicio">
                                                     <div class="col-md-3">     
                                                         <div class="checkbox checkbox-primary">                                        
-                                                             <input type="checkbox" id="ts{{ts.svCodigo}}" checklist-model="Servicio.TipoVehiculo" checklist-value="ts">
+                                                             <input type="checkbox" id="ts{{ts.svCodigo}}" checklist-model="Contrato.TipoServicio" ng-change="TipoServicioCheck(ts)" checklist-value="ts">
                                                              <label for="ts{{ts.svCodigo}}">{{ts.svCodigo}}. &nbsp; {{ts.svDescripcion}}</label> 
                                                         </div>
                                                     </div> 
                                                 </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <h5 class="text-center text-success" style="margin-bottom: 0px;">{{titlePlantilla}}</h5>
+                                        <hr style="margin-top: 1px;">
+                                        <div class="row" >
+                                            <div class="col-md-12">                                                
+                                                <div ng-repeat="item in Plantillas">
+                                                    <div class="col-md-4">     
+                                                        <div class="checkbox checkbox-primary">                                        
+                                                             <input type="checkbox" id="pl{{item.plCodigo}}" checklist-model="Contrato.Plantillas" ng-change="TipoPlantillaCheck(ts,checked)" checklist-value="item">
+                                                             <label for="pl{{item.plCodigo}}">{{$index + 1}}. &nbsp; {{item.plDescripcion}}</label> 
+                                                        </div>
+                                                    </div> 
+                                                </div>
+                                                
+                                               <!-- <table border="0" cellspacing="0" class="table table-striped" >                                                    
+                                                    <tbody>
+                                                        <tr ng-repeat="items in Plantillas">
+                                                            <td class="center">{{ items.plCodigo}}</td>
+                                                            <td>{{ items.plDescripcion }}</td>                                                            
+                                                            <td>
+                                                                <div class="checkbox checkbox-primary" style="margin-top: 0px; margin-bottom: 0px;">                                        
+                                                                    <input type="checkbox" id="pll{{items.plCodigo}}" checklist-model="Contrato.Plantillas"  ng-change="TipoPlantillaCheck(items)" checklist-value="items">
+                                                                    <label for=""></label> 
+                                                                </div>
+                                                            </td>                                                            
+                                                        </tr>
+                                                    </tbody>
+                                                </table>-->
                                             </div>
                                         </div>
                                     </div>

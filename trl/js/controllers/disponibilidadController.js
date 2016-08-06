@@ -61,7 +61,7 @@ function ($scope,disponibilidadService, tipoVehiculoService,toaster) {
         promise.then(function(d) {                        
             loadDisponibilidad();
             toaster.pop('success', "Control de Información", d.data.message); 
-            initDisponibilidad();
+            $scope.nuevo();
         }, function(err) {           
                 toaster.pop('error', "¡Error!", "Error al guardar Disponibilidad");         
                 console.log("Some Error Occured " + JSON.stringify(err));
