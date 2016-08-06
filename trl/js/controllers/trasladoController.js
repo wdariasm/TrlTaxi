@@ -3,7 +3,10 @@ function ($scope,trasladoService, tipoVehiculoService,departamentoService, toast
     $scope.Traslado= {};
     $scope.Traslados= [];
     $scope.TipoVehiculos= [];
+    $scope.DtoOrigen=[];
+    $scope.DtoDestino=[];
     $scope.Municipios=[];
+    $scope.MunicipiosDestino = [];
     $scope.Plantillas=[];
     $scope.IdTrasladopGlobal="";
     $scope.editMode = false;
@@ -11,6 +14,9 @@ function ($scope,trasladoService, tipoVehiculoService,departamentoService, toast
     $scope.title = "Nuevo Traslado"; 
     $scope.VehiculoSelect ={}; 
     $scope.MunSelect={};
+    $scope.MuniSelect={};
+    $scope.DeptSelect={};
+    $scope.DepDestinoSelect={};
     $scope.PlantillaSelect={};
     $scope.TablaTraslado = {};
    
@@ -74,24 +80,52 @@ function ($scope,trasladoService, tipoVehiculoService,departamentoService, toast
     
     loadPlantilla();
     
-     function loadMunicipio(dtCodigo){
+    function loadDepartamento(){
+        var promise = departamentoService.getAll();
+        promise.then(function(d) {                        
+            $scope.DtoOrigen = d.data;
+             if(d.data){
+                $scope.DeptSelect = d.data[0];
+                $scope.DepDestinoSelect = d.data[1];                
+                loadMunicipio($scope.DeptSelect.dtCodigo, 'Municipios', 'MunSelect');
+                setTimeout(function (){                    
+                    loadMunicipio($scope.DepDestinoSelect.dtCodigo, 'MunicipiosDestino','MuniSelect');
+                },1000);
+                
+            }                                                
+         
+        }, function(err) {           
+                toaster.pop('error','¡Error!',"Error al cargar Departamentos");           
+                console.log("Some Error Occured " + JSON.stringify(err));
+        }); 
+    }
+    loadDepartamento();
+    
+    function loadMunicipio (dtCodigo, modelo , combo){        
         var promise = departamentoService.getMunicipios(dtCodigo);
         promise.then(function(d) {                        
-            $scope.Municipios = d.data;
+            $scope[modelo] = d.data;
              if(d.data){
-               $scope.MunSelect = d.data[0];
+               $scope[combo] = d.data[0];               
             }
         }, function(err) {           
                 toaster.pop('error','¡Error!',"Error al cargar Municipios");           
                 console.log("Some Error Occured " + JSON.stringify(err));
         }); 
-    }
-    loadMunicipio();
+    }    
+    
+      $scope.CambiaDept=function(){               
+        loadMunicipio($scope.DeptSelect.dtCodigo, 'Municipios', 'MunSelect');  
+    };
+    
+     $scope.CambiaDepto=function(){               
+        loadMunicipio($scope.DepDestinoSelect.dtCodigo, 'MunicipiosDestino','MuniSelect');
+    };
    
    $scope.Guardar = function (){
        $scope.Traslado.tlTipoVehiculo = $scope.VehiculoSelect.tvCodigo;
-       $scope.Traslado.tlCiudadDestio = $scope.MunSelect.muCodigo;
-       $scope.Traslado.tlCiudadOrigen= $scope.MunSelect.plCodigo;
+       $scope.Traslado.tlCiudadOrigen= $scope.MunSelect.muCodigo;
+       $scope.Traslado.tlCiudadDestio = $scope.MuniSelect.muCodigo;
        $scope.Traslado.tlNombre= $scope.Traslado.tlNombre.toUpperCase();   
        $scope.Traslado.tlPlantilla= $scope.PlantillaSelect.plCodigo;
         var promise;
@@ -102,15 +136,17 @@ function ($scope,trasladoService, tipoVehiculoService,departamentoService, toast
         }
         
         promise.then(function(d) {                        
-            loadTraslado();
+            
             toaster.pop('success', "Control de Información", d.data.message); 
             initTraslado();
+            loadTraslado();
         }, function(err) {           
                 toaster.pop('error', "¡Error!", "Error al guardar Traslado");         
                 console.log("Some Error Occured " + JSON.stringify(err));
         }); 
        
    };
+   
    
    $scope.nuevo = function (){
        initTraslado();

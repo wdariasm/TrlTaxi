@@ -76,7 +76,7 @@
                                             <tr data-ng-repeat="items in Plantillas">
                                                 <td class="center">{{ items.plCodigo}}</td>
                                                 <td>{{ items.plDescripcion }}</td>
-                                                <td>{{ items.plTipoServicio }}</td>
+                                                <td>{{ items.svDescripcion }}</td>
                                                 <td>{{ items.plEstado}}</td>
                                                 <td>
                                                     <center>
@@ -107,7 +107,7 @@
                                                  <label for="txttlNombre">Nombre *</label>
                                                      <div class="input-group">    
                                                           <div class="input-group-addon"><i class="fa fa-user text-success"></i></div>
-                                                             <input type="text" class="form-control" ng-model="Traslado.tlNombre" id="txttlNombre" placeholder="Nombre ">
+                                                          <input required="" type="text" class="form-control" ng-model="Traslado.tlNombre" id="txttlNombre" placeholder="Nombre ">
                                                      </div>
                                              </div>
                                         </div> 
@@ -131,13 +131,33 @@
                                                       </div> 
                                             </div>
                                         </div>
+                                        
+                                        <div class="col-xs-10">
+                                            <div class="form-group">
+                                                <label  for="cboDepartamento">Departamento Origen *</label>
+                                                    <div class="input-group">    
+                                                        <div class="input-group-addon"><i class="fa fa-globe text-success"></i></div>
+                                                        <select ng-model="DeptSelect"  class="form-control" id="cboDepartamento" ng-change="CambiaDept()" ng-options="item as item.dtCodigo +' - '+  item.dtNombre for item in DtoOrigen track by item.dtCodigo" required></select>           
+                                                    </div> 
+                                            </div>   
+                                        </div>
 
                                         <div class="col-xs-10">
                                             <div class="form-group">
                                                 <label  for="cboMunicipio">Ciudad Origen *</label>
                                                     <div class="input-group">    
                                                         <div class="input-group-addon"><i class="fa fa-globe text-success"></i></div>
-                                                        <select ng-model="MunSelect"  class="form-control" id="cboMunicipio" ng-options="item as  item.muNombre for item in Municipios track by item.muCodigo" required></select>           
+                                                        <select ng-model="MunSelect"  class="form-control" id="cboMunicipio" ng-options="item as item.muCodigo +' - '+  item.muNombre for item in Municipios track by item.muCodigo" required></select>           
+                                                    </div> 
+                                            </div>   
+                                        </div>
+                                        
+                                        <div class="col-xs-10">
+                                            <div class="form-group">
+                                                <label  for="cboDepartamentoDes">Departamento Destino*</label>
+                                                    <div class="input-group">    
+                                                        <div class="input-group-addon"><i class="fa fa-globe text-success"></i></div>
+                                                        <select ng-model="DepDestinoSelect"  class="form-control" id="cboDepartamentoDes" ng-change="CambiaDepto()" ng-options="item as item.dtCodigo +' - '+  item.dtNombre for item in DtoOrigen track by item.dtCodigo" required></select>           
                                                     </div> 
                                             </div>   
                                         </div>
@@ -147,7 +167,7 @@
                                                 <label  for="cboCiudad">Ciudad Destino *</label>
                                                     <div class="input-group">    
                                                         <div class="input-group-addon"><i class="fa fa-globe text-success"></i></div>
-                                                        <select ng-model="MunSelect"  class="form-control" id="cboCiudad" ng-options="item as  item.muNombre for item in Municipios track by item.muCodigo" required></select>           
+                                                        <select ng-model="MuniSelect"  class="form-control" id="cboCiudad" ng-options="item as  item.muNombre for item in MunicipiosDestino track by item.muCodigo" required></select>           
                                                     </div> 
                                             </div>   
                                         </div>
@@ -157,7 +177,7 @@
                                                 <label  for="cboPlantilla">Plantilla *</label>
                                                     <div class="input-group">    
                                                         <div class="input-group-addon"><i class="fa fa-book text-success"></i></div>
-                                                           <select ng-model="PlantillaSelect" class="form-control" id="cboPlantilla" ng-options="item as  item.plDescripcion for item in Plantillas track by item.plCodigo" required></select>           
+                                                           <select   ng-model="PlantillaSelect" class="form-control" id="cboPlantilla" ng-options="item as  item.plDescripcion for item in Plantillas track by item.plCodigo" required></select>           
                                                     </div> 
                                             </div>   
                                         </div>
@@ -213,6 +233,7 @@
                                            <th>VALOR</th>
                                            <th>CIUDAD ORIGEN</th>
                                            <th>CIUDAD DESTINO</th>
+                                           <th>PLANTILLA</th>
                                            <th>ESTADO</th>
                                            <th width="12%">ACCION</th>
 
@@ -223,10 +244,11 @@
                                         <tr data-ng-repeat="items in $data">
                                             <td class="center">{{ items.tlCodigo}}</td>
                                             <td>{{ items.tlNombre }}</td>
-                                            <td>{{ items.tlTipoVehiculo}}</td> 
+                                            <td>{{ items.tvDescripcion}}</td> 
                                             <td>{{ items.tlValor}}</td> 
-                                            <td>{{ items.tlCiudadOrigen}}</td> 
-                                            <td>{{ items.tlCiudadDestio}}</td> 
+                                            <td>{{ items.muNombre}}</td> 
+                                            <td>{{ items.muNombre}}</td> 
+                                            <td>{{ items.plDescripcion}}</td> 
                                             <td>{{ items.tlEstado}}</td> 
                                             <td>
                                                     <center>

@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
-
+use DB;
 use App\Traslado;
 
 class TrasladoController extends Controller
@@ -16,11 +16,10 @@ class TrasladoController extends Controller
      */
     public function index()
     {
-//        $result = DB::select("SELECT r.tlCodigo, r.tlNombre, r.tlTipoVehiculo,r.tlCiudadOrigen,r.tlEstado, c.tvDescripcion, m.muNombre,"
-//                . " d.dtNombre from traslados r,clasevehiculo c,municipio m,"
-//                . " where r.tlValor=c.tvCodigo and r.tlEstado=m.muCodigo and m.muDepartamento=d.dtCodigo and r.tlEstado <>'BORRADO' ");
-//        return $result; 
-        return Traslado::all();
+       $result = DB::select("SELECT r.tlCodigo, r.tlNombre, r.tlValor,r.tlEstado, c.tvDescripcion, m.muNombre,"
+                . " p.plDescripcion FROM traslados r,clasevehiculo c,municipio m,plantilla p"
+                . " WHERE r.tlTipoVehiculo=c.tvCodigo AND r.tlCiudadOrigen=m.muCodigo AND r.tlCiudadDestio=m.muCodigo AND r.tlPlantilla=p.plCodigo");
+        return $result; 
     }
 
     /**
@@ -50,6 +49,7 @@ class TrasladoController extends Controller
             $traslado->tlCiudadOrigen = $data["tlCiudadOrigen"];
             $traslado->tlCiudadDestio = $data["tlCiudadDestio"];
             $traslado->tlEstado = $data["tlEstado"];
+            $traslado->tlPlantilla = $data["tlPlantilla"];
             
             $traslado->save();
             
@@ -102,6 +102,8 @@ class TrasladoController extends Controller
             $traslado->tlCiudadOrigen = $data["tlCiudadOrigen"];
             $traslado->tlCiudadDestio = $data["tlCiudadDestio"];
             $traslado->tlEstado = $data["tlEstado"];
+            $traslado->tlPlantilla = $data["tlPlantilla"];
+            
             $traslado->save();
 
             return JsonResponse::create(array('message' => "Datos Actualizados correctamente", "request" =>json_encode($traslado->tlCodigo)), 200);
