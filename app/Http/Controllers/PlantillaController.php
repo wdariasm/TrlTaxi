@@ -45,7 +45,11 @@ class PlantillaController extends Controller
      * Obtener todad las plantillas por tipo de servicio
      */
     public function getPlantillaporTipo($id){
-        return Plantilla::where('plTipoServicio',$id)->get();
+        
+        return Plantilla::join('tiposervicio', 'plantilla.plTipoServicio', '=', 'tiposervicio.svCodigo')                
+                ->where('plTipoServicio', $id)
+                ->select('plantilla.*','tiposervicio.svDescripcion')                
+                ->get();                
     }
     
 

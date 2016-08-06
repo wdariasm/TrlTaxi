@@ -46,6 +46,7 @@ class TransfertController extends Controller
             $transfert->tfUserReg = $data["tfUserReg"]; 
             $transfert->tfUserMod = $data["tfUserReg"]; 
             $transfert->tfEstado = $data["tfEstado"]; 
+            $transfert->tfPlantilla = $data["tfPlantilla"];            
             $transfert->tfFechaMod = new \DateTime();         
             $transfert->save();
             
@@ -67,6 +68,7 @@ class TransfertController extends Controller
             $transfert->tfValor = $data["tfValor"];             
             $transfert->tfUserMod = $data["tfUserMod"]; 
             $transfert->tfEstado = $data["tfEstado"]; 
+            $transfert->tfPlantilla = $data["tfPlantilla"]; 
             $transfert->tfFechaMod = new \DateTime();         
             $transfert->save();
             

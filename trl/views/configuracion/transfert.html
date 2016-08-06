@@ -77,7 +77,7 @@
                                             <tr data-ng-repeat="items in Plantillas">
                                                 <td class="center">{{ items.plCodigo}}</td>
                                                 <td>{{ items.plDescripcion }}</td>
-                                                <td>{{ items.plTipoServicio }}</td>
+                                                <td>{{ items.svDescripcion }}</td>
                                                 <td>{{ items.plEstado}}</td>
                                                 <td>
                                                     <center>
@@ -110,6 +110,16 @@
                                         <input class="form-control" ng-model="Transfert.tfNombre" letras-numeros id="txtNombre" name="txtNombre" type="text"  required   maxlength="60" >
                                     </div>
                                 </div>
+                            </div>
+                            
+                            <div class="col-xs-11">
+                                <div class="form-group">
+                                    <label  for="cboPlantilla">Plantilla *</label>
+                                    <div class="input-group">    
+                                        <div class="input-group-addon"><i class="fa fa-book"></i></div>                                                                                
+                                        <select ng-model="PlantillaSelect" class="form-control" id="cboPlantilla" ng-options="pl as  pl.plDescripcion for pl in Plantillas track by pl.plCodigo" required></select>
+                                    </div> 
+                                </div>   
                             </div>
 
 

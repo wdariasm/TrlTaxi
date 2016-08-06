@@ -63,7 +63,7 @@ function ($scope,rutaService, tipoVehiculoService,departamentoService, toaster,n
     loadTipoVehiculo();
     
       function loadPlantilla(){
-        var promise = plantillaService.getAll();
+        var promise = plantillaService.get(3);
         promise.then(function(d) {                        
             $scope.Plantillas = d.data;
              if(d.data){

@@ -1,13 +1,21 @@
 app.controller('plantillaController',['$scope',  'ngTableParams', 'toaster',"plantillaService", "$routeParams",
     function ($scope, ngTableParams, toaster, plantillaService, $routeParams) {
     
+    var opcion =["1","3","4"];
+    
     $scope.Plantillas = [];
     $scope.Plantilla = {};
             
     $scope.editMode = false;                    
     $scope.title = "Nueva Plantilla"; 
     $scope.tbPlantilla = {};
-    $scope.TipoId = $routeParams.tipo;      
+    
+    $scope.TipoId = $routeParams.tipo;   
+    
+    if(opcion.indexOf($scope.TipoId) === -1){
+        toaster.pop("error","¡Error!", "Ruta no valida");
+        setTimeout(function (){location.href ="#/";},2000) ;        
+    }
         
     loadPlantilla();
     init();            

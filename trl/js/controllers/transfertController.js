@@ -1,9 +1,10 @@
-app.controller('transfertController',['$scope', 'zonaService', 'ngTableParams', 'toaster',"transfertService", "tipoVehiculoService",
-    function ($scope,  zonaService, ngTableParams, toaster, transfertService, tipoVehiculoService) {
+app.controller('transfertController',['$scope', 'zonaService', 'ngTableParams', 'toaster',"transfertService", "tipoVehiculoService","plantillaService",
+    function ($scope,  zonaService, ngTableParams, toaster, transfertService, tipoVehiculoService, plantillaService) {
     $scope.Zonas = [];           
     $scope.Transferts = [];
     $scope.Transfert = {};
     $scope.ClaseVehiculo = [];
+    $scope.Plantillas = [];
         
     $scope.editMode = false;                    
     $scope.title = "NUEVA TARIFA TRANSFERT"; 
@@ -13,13 +14,14 @@ app.controller('transfertController',['$scope', 'zonaService', 'ngTableParams', 
     $scope.ZonaOrigen = {};
     $scope.ZonaDestino = {};
     $scope.ClaseSelect = {};
+    $scope.PlantillaSelect = {};
             
     $scope.$parent.SetTitulo("GESTIÓN DE TARIFAS TRANSFERT");          
     loadZona();        
     getClaseVehiculo();
     loadTransfert();
-    init();        
-    
+    loadPlantillas();
+    init();            
     initTabla();   
       
     function loadZona() {
@@ -33,6 +35,20 @@ app.controller('transfertController',['$scope', 'zonaService', 'ngTableParams', 
         },
         function(errorPl) {
             toaster.pop("error","¡Error!", "Eror al cargar zonas");
+            console.log('failure loading Zona', errorPl);
+        });
+    }
+    
+    function loadPlantillas() {
+        var promiseGet = plantillaService.get(1); //The Method Call from service
+        promiseGet.then(function(pl) {
+            $scope.Plantillas = pl.data;
+            if(pl.data){
+                $scope.PlantillaSelect = pl.data[0];                
+            }
+        },
+        function(errorPl) {
+            toaster.pop("error","¡Error!", "Eror al cargar plantillas de transfert");
             console.log('failure loading Zona', errorPl);
         });
     }
@@ -74,7 +90,8 @@ app.controller('transfertController',['$scope', 'zonaService', 'ngTableParams', 
             tfValor : 0,
             tfEstado : "ACTIVO",
             tfUserReg : "",
-            tfUserMod : ""
+            tfUserMod : "",
+            tfPlantilla : ""
         };
     }
     
@@ -133,10 +150,12 @@ app.controller('transfertController',['$scope', 'zonaService', 'ngTableParams', 
             return;
         }                
         
+        $scope.Transfert.tfNombre = $scope.Transfert.tfNombre.toUpperCase();
         $scope.Transfert.tfOrigen =$scope.ZonaOrigen.znCodigo;
         $scope.Transfert.tfDestino =$scope.ZonaDestino.znCodigo;
         $scope.Transfert.tfTipoVehiculo = $scope.ClaseSelect.tvCodigo;
-        $scope.Transfert.tfUserReg = $scope.$parent.Login.Login;                
+        $scope.Transfert.tfUserReg = $scope.$parent.Login.Login;  
+        $scope.Transfert.tfPlantilla = $scope.PlantillaSelect.plCodigo;
         
         var promise;
         if($scope.editMode){            
