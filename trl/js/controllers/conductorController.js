@@ -49,7 +49,7 @@ app.controller("conductorController", ["$scope", "conductorService", "tipoDocume
     }
     
     $scope.Cambiarformato= function (variable){
-        console.log(variable)
+        console.log(variable);
         $scope.Conductor[variable] = moment($scope.Conductor[variable]).format('L');
     };  
     
