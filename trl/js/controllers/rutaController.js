@@ -30,8 +30,7 @@ function ($scope,rutaService, tipoVehiculoService,departamentoService, toaster,n
             trEstado : "ACTIVO",
             trImagen :'',
             rtPlantilla:'0'
-        };   
-        document.getElementById("image").innerHTML ="";
+        };           
         $scope.estadoImg =false;
     }
     initRuta();
@@ -110,21 +109,24 @@ function ($scope,rutaService, tipoVehiculoService,departamentoService, toaster,n
     };
    
    $scope.Guardar = function (){
-       $scope.Ruta.trTipoVehiculo = $scope.VehiculoSelect.tvCodigo;
-       $scope.Ruta.trCiudad = $scope.MunSelect.muCodigo;
-       $scope.Ruta.rtPlantilla= $scope.PlantillaSelect.plCodigo;
-       $scope.Ruta.trDepartamento = $scope.DeptSelect.dtCodigo;
-       $scope.Ruta.rtNombre = $scope.Ruta.rtNombre.toUpperCase();   
-       $scope.Ruta.rtDescripcion = $scope.Ruta.rtDescripcion.toUpperCase(); 
        
-       var formData=new FormData();
-       formData.append('imagen',$scope.Ruta.trImagen);
+       console.log($scope.Ruta.trImagen);
+        var formData=new FormData();
+        formData.append('trTipoVehiculo', $scope.VehiculoSelect.tvCodigo);
+        formData.append('trCiudad', $scope.MunSelect.muCodigo);
+        formData.append('rtPlantilla', $scope.PlantillaSelect.plCodigo);
+        formData.append('trDepartamento', $scope.DeptSelect.dtCodigo);
+        formData.append('rtNombre', $scope.Ruta.rtNombre.toUpperCase());
+        formData.append('rtDescripcion', $scope.Ruta.rtDescripcion.toUpperCase());
+        formData.append('trValor', $scope.Ruta.trValor);
+        formData.append('trEstado', $scope.Ruta.trEstado);
+        formData.append('trImagen', $scope.Ruta.trImagen);
        
         var promise;
         if($scope.editMode){            
             promise = rutaService.put($scope.Ruta.rtCodigo, $scope.Ruta);
         }else {
-            promise = rutaService.post($scope.Ruta);            
+            promise = rutaService.post(formData);            
         }
         
         promise.then(function(d) {                        

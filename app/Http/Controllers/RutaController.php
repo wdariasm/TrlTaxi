@@ -50,13 +50,17 @@ class RutaController extends Controller
             $ruta->trDepartamento = $data["trDepartamento"];
             $ruta->trCiudad = $data["trCiudad"];
             $ruta->trEstado = $data["trEstado"];
-            $ruta->trImagen = "http://".$_SERVER['HTTP_HOST'].'/image/'.$data["rtCodigo"].".jpg";
+            $ruta->trImagen = "";
             $ruta->rtPlantilla = $data["rtPlantilla"];
             $ruta->save();
             
-             if ($request->hasFile('imagen')) {
-                $request->file('imagen')->move("../image/",$data["rtCodigo"].'.jpg');    
+            $ruta->trImagen = "http://".$_SERVER['HTTP_HOST'].'/img/ruta/'.$ruta->rtCodigo.".jpg";
+            $ruta->save();
+            
+            if ($request->hasFile('trImagen')) {
+                $request->file('trImagen')->move("../img/ruta", $ruta->rtCodigo.".jpg");
             }
+                        
             return JsonResponse::create(array('message' => "Ruta guardada correctamente", "request" =>json_encode($ruta->rtCodigo)), 200);
         } catch (Exception $exc) {    
             return JsonResponse::create(array('message' => "No se pudo guardar", "request" =>json_encode($exc->getMessage())), 401);
