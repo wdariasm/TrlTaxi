@@ -2,6 +2,7 @@ app.controller("detalleMantenimientoController", ["$scope", "detalleMantenimient
 function ($scope,detalleMantenimientoService, mantenimientoService, toaster,ngTableParams) {
     $scope.DetalleMantenimiento= {};
     $scope.DetalleMantenimientos= [];
+    
     $scope.Mantenimientos= [];
     $scope.IdDetManGlobal="";
     $scope.editMode = false;
@@ -16,19 +17,13 @@ function ($scope,detalleMantenimientoService, mantenimientoService, toaster,ngTa
         $scope.DetalleMantenimiento = {
             detCodigo:"",
             detActividad:"",
-            detValor:"0",
-            detFecha:moment().format('L')
-            
-           
+            detValor:"0"
         };   
        
     }
     initDetalleMantenimiento();
     
-     $scope.Cambiarformato= function (variable){
-        console.log(variable);
-        $scope.DetalleMantenimiento[variable] = moment($scope.DetalleMantenimiento[variable]).format('L');
-    };
+   
 
     function loadDetalleMantenimiento (){
         var promise = detalleMantenimientoService.getAll();

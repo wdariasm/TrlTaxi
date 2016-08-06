@@ -1,0 +1,118 @@
+<div ng-controller="mantenimientoController"  class="container-fluid">
+    <div class="row">
+        <div class="col-xs-4">            
+            <form name="frmMantenimiento" id="frmMantenimiento" novalidate>
+                 <h5 class="text-primary">{{title}}</h5>
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="form-group">
+                            <label for="txtMantenimiento">Descripción *</label>
+                             <div class="input-group">    
+                                 <div class="input-group-addon"><i class="fa fa-gitlab text-success"></i></div>
+                                 <input type="text" required="" class="form-control" ng-model="Mantenimiento.Descripcion" maxlength="255" id="txtMantenimiento" placeholder="Mantenimiento">
+                       
+                             </div>
+                        </div>
+                    </div>
+                    
+            
+                     <div class="col-xs-3">
+                        <div class="form-group">
+                            <label for="txtFecha">Fecha *</label>
+                                 <div class="input-group">    
+                                    <div class="input-group-addon"><i class="fa fa-calendar-o text-success"></i></div>
+                                    <input type="text" required="" id="txtFecha" ng-model="Mantenimiento.Fecha"  name="txtFecha" class="form-control" ng-change="Cambiarformato('Fecha')"  value=""  >
+                                </div>
+                        </div>
+                    </div> 
+                    
+                    
+                     <div class="col-xs-10">
+                        <div class="form-group">
+                            <label  for="cboTipoVehiculo">Tipo Vehiculo *</label>
+                                <div class="input-group">    
+                                    <div class="input-group-addon"><i class="fa fa-car text-success"></i></div>
+                                       <select ng-model="VehiculoSelect" class="form-control" id="cboTipoVehiculo" ng-options="item as item.Placa for item in Vehiculos track by item.IdVehiculo" required></select>           
+                                </div> 
+                        </div>   
+                    </div>
+                    
+                    <div class="col-xs-10">
+                        <div class="form-group">
+                            <label  for="cboTipoMant">Tipo Mantenimiento *</label>
+                                <div class="input-group">    
+                                    <div class="input-group-addon"><i class="fa fa-car text-success"></i></div>
+                                       <select ng-model="TipoSelect" class="form-control" id="cboTipoMant" ng-options="item as item.tmDescripcion for item in TipoMantenimientos track by item.tmCodigo" required></select>           
+                                </div> 
+                        </div>   
+                    </div>
+                    
+                    
+                    <div class="col-xs-4">
+                        <div class="form-group">
+                            <label for="txttrValor"> Total Factura *</label>
+                                 <div class="input-group">    
+                                     <div class="input-group-addon"><i class="fa fa-hashtag text-success"></i></div>
+                                     <input required="" type="text" class="form-control" ng-model="Mantenimiento.TotalFactura" id="txttrValor"  fcsa-number="{ min: 0,  maxDecimals: 0  }" maxlength="11" solo-numeros >
+                                  </div> 
+                        </div>
+                    </div>
+                    
+                    
+                     <div class="col-xs-12">
+                        <div class="form-group">
+                            <label for="txtDetMantenimiento">Detalle Mantenimiento *</label>
+                             <div class="input-group">    
+                                 <div class="input-group-addon"><i class="fa fa-gitlab text-success"></i></div>
+                                 <input type="text" required="" class="form-control" ng-model="DetalleMantenimiento.detActividad" maxlength="255" id="txtDetMantenimiento" placeholder=" Detalle Mantenimiento">
+                       
+                             </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-xs-4">
+                        <div class="form-group">
+                            <label for="txtValor">Valor Detalle *</label>
+                                 <div class="input-group">    
+                                     <div class="input-group-addon"><i class="fa fa-hashtag text-success"></i></div>
+                                     <input required="" type="text" class="form-control" ng-model="DetalleMantenimiento.detValor" id="txtValor"  fcsa-number="{ min: 0,  maxDecimals: 0  }" maxlength="11" solo-numeros >
+                                  </div> 
+                        </div>
+                    </div>
+                    
+                    
+                    <div class="row">
+                         <br/>
+                        <div class="col-xs-5 col-xs-offset-1">                                                                    
+                            <button   class="btn btn-success btn-block btn-addon"   type="button"  title="Nuevo / Cancelar" ng-click="nuevo()"><i class="fa fa-pencil"></i> Nuevo</button>
+                        </div>
+                        <div class="col-xs-5">
+                            <button ng-disabled="frmMantenimiento.$invalid"  class="btn btn-primary btn-block btn-addon"   type="button"  title="Registrar Mantenimiento" ng-click="Guardar()"><i class="fa fa-check"></i>Guardar</button>
+                        </div>
+                    </div>
+                    
+                </div>   
+                    
+            </form>
+        </div>
+        
+       
+    </div>
+</div>
+<script>
+  
+$(function() {
+    
+        $('input[name="txtFecha"]').daterangepicker({
+            singleDatePicker: true,
+            showDropdowns: true,         
+            dateFormat: 'dd/mm/yyyy'
+        }, 
+        function(start, end, label) {            
+            $('#txtFecha').val(end.format('DD/MM/YYYY'));         
+        });
+        
+    });
+
+</script>
+    

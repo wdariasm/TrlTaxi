@@ -23,6 +23,30 @@ app.service("mantenimientoService",[ '$http', function ($http) {
         var req = $http.get(uri+'/api/mantenimientos');
         return req;
     };
+    
+    // DETALLE MANTENIMIENTO
+
+    this.getDetalle = function (id) {
+        var req = $http.get(uri+'/api/mantenimiento/' + id+'/detalleMantenimientos');
+        return req;
+    };
+       
+    this.getAllDetalle = function () {
+        var req = $http.get(uri+'/api/detalleMantenimiento');
+        return req;
+    };                
+        
+    this.postDetalle = function (detalleMantenimiento) { 
+        var req = $http.post(uri+'/api/mantenimiento/detalleMantenimiento',detalleMantenimiento); 
+        return req; 
+    };
+          
+    this.putDetalle = function (id,detalleMantenimiento) {        
+        var req = $http.put(uri+'/api/mantenimiento/detalleMantenimiento/' + id, detalleMantenimiento);
+        return req;        
+    };
+    
+  
 }]);
 
 
