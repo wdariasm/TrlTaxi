@@ -16,9 +16,9 @@ class RutaController extends Controller
      */
     public function index()
     {
-       $result = DB::select("SELECT r.rtCodigo, r.rtNombre, r.rtDescripcion,r.trValor,r.trEstado, c.tvDescripcion, m.muNombre,"
-                . " d.dtNombre from ruta r,clasevehiculo c,municipio m,departamento d"
-                . " where r.trTipoVehiculo=c.tvCodigo and r.trCiudad=m.muCodigo and m.muDepartamento=d.dtCodigo and r.trEstado <>'BORRADO' ");
+       $result = DB::select("SELECT r.rtCodigo, r.rtNombre, r.rtDescripcion,r.rtValor,r.rtEstado, c.tvDescripcion, m.muNombre,"
+                . " d.dtNombre, r.rtImagen from ruta r,clasevehiculo c,municipio m,departamento d"
+                . " where r.rtTipoVehiculo=c.tvCodigo and r.rtCiudad=m.muCodigo and m.muDepartamento=d.dtCodigo and r.rtEstado <>'BORRADO' ");
         return $result; 
     }
 
@@ -45,20 +45,20 @@ class RutaController extends Controller
             $ruta= new Ruta();                        
             $ruta->rtNombre = $data["rtNombre"];
             $ruta->rtDescripcion = $data["rtDescripcion"];
-            $ruta->trTipoVehiculo = $data["trTipoVehiculo"];
-            $ruta->trValor = $data["trValor"];
-            $ruta->trDepartamento = $data["trDepartamento"];
-            $ruta->trCiudad = $data["trCiudad"];
-            $ruta->trEstado = $data["trEstado"];
-            $ruta->trImagen = "";
+            $ruta->rtTipoVehiculo = $data["rtTipoVehiculo"];
+            $ruta->rtValor = $data["rtValor"];
+            $ruta->rtDepartamento = $data["rtDepartamento"];
+            $ruta->rtCiudad = $data["rtCiudad"];
+            $ruta->rtEstado = $data["rtEstado"];
+            $ruta->rtImagen = "";
             $ruta->rtPlantilla = $data["rtPlantilla"];
             $ruta->save();
             
-            $ruta->trImagen = "http://".$_SERVER['HTTP_HOST'].'/img/ruta/'.$ruta->rtCodigo.".jpg";
+            $ruta->rtImagen = "http://".$_SERVER['HTTP_HOST'].'/img/ruta/'.$ruta->rtCodigo.".jpg";
             $ruta->save();
             
-            if ($request->hasFile('trImagen')) {
-                $request->file('trImagen')->move("../img/ruta", $ruta->rtCodigo.".jpg");
+            if ($request->hasFile('rtImagen')) {
+                $request->file('rtImagen')->move("../img/ruta", $ruta->rtCodigo.".jpg");
             }
                         
             return JsonResponse::create(array('message' => "Ruta guardada correctamente", "request" =>json_encode($ruta->rtCodigo)), 200);
@@ -103,11 +103,11 @@ class RutaController extends Controller
             $ruta= Ruta::find($rtCodigo);
             $ruta->rtNombre = $data["rtNombre"];
             $ruta->rtDescripcion = $data["rtDescripcion"];
-            $ruta->trTipoVehiculo = $data["trTipoVehiculo"];
-            $ruta->trValor = $data["trValor"];
-            $ruta->trDepartamento = $data["trDepartamento"];
-            $ruta->trCiudad = $data["trCiudad"];
-            $ruta->trEstado = $data["trEstado"];
+            $ruta->rtTipoVehiculo = $data["rtTipoVehiculo"];
+            $ruta->rtValor = $data["rtValor"];
+            $ruta->rtDepartamento = $data["rtDepartamento"];
+            $ruta->rtCiudad = $data["rtCiudad"];
+            $ruta->rtEstado = $data["rtEstado"];
             $ruta->rtPlantilla = $data["rtPlantilla"];
             $ruta->save();
 
@@ -122,7 +122,7 @@ class RutaController extends Controller
             $data = $request->all();
             $ruta = Ruta::find($data["id"]);
             $id = $ruta->rtCodigo;
-            $ruta->trImagen = "http://".$_SERVER['HTTP_HOST'].'/image/'.$id.".jpg";            
+            $ruta->rtImagen = "http://".$_SERVER['HTTP_HOST'].'/image/'.$id.".jpg";            
             $ruta->save();
                         
             if ($request->hasFile('imagen')) {
@@ -152,7 +152,7 @@ class RutaController extends Controller
         try {
             $data = $request->all();
             $ruta = Ruta::find($rtCodigo);
-            $ruta->trEstado = $data['trEstado'];
+            $ruta->rtEstado = $data['rtEstado'];
             $ruta->save();
             return JsonResponse::create(array('message' => "Datos Actualizados Correctamente", "request" =>json_encode($rtCodigo)), 200);
         } catch (Exception $ex) {

@@ -16,24 +16,28 @@ function ($scope,rutaService, tipoVehiculoService,departamentoService, toaster,n
     $scope.MunSelect={};
     $scope.TablaRuta = {};
    
-    $scope.$parent.SetTitulo("RUTA");
+    $scope.$parent.SetTitulo("GESTIÓN DE RUTAS");
     initRuta();  
+    loadDepartamento();
+    loadPlantilla();
+    loadRuta();
     function initRuta() {
         $scope.Ruta = {
             rtCodigo:"",
             rtNombre:"",
             rtDescripcion:"",
-            trTipoVehiculo:"",
-            trValor:"0",
-            trDepartamento:"",
-            trCiudad:"",
+            rtTipoVehiculo:"",
+            rtValor:"0",
+            rtDepartamento:"",
+            rtCiudad:"",
             trEstado : "ACTIVO",
-            trImagen :'',
-            rtPlantilla:'0'
+            rtImagen :'',
+            rtPlantilla:'0',
+            Imagen : ""
         };           
         $scope.estadoImg =false;
     }
-    initRuta();
+    
 
     function loadRuta (){
         var promise = rutaService.getAll();
@@ -72,10 +76,9 @@ function ($scope,rutaService, tipoVehiculoService,departamentoService, toaster,n
                 toaster.pop('error','¡Error!',"Error al cargar Plantillas");           
                 console.log("Some Error Occured " + JSON.stringify(err));
         }); 
-    }
-    loadPlantilla();
+    }    
     
-     function loadDepartamento(){
+    function loadDepartamento(){
         var promise = departamentoService.getAll();
         promise.then(function(d) {                        
             $scope.Departamentos = d.data;
@@ -88,7 +91,7 @@ function ($scope,rutaService, tipoVehiculoService,departamentoService, toaster,n
                 console.log("Some Error Occured " + JSON.stringify(err));
         }); 
     }
-    loadDepartamento();
+    
     
      function loadMunicipio(dtCodigo){
         var promise = departamentoService.getMunicipios(dtCodigo);
@@ -103,24 +106,22 @@ function ($scope,rutaService, tipoVehiculoService,departamentoService, toaster,n
         }); 
     }
     
-    $scope.CambiaDept=function(){               
-       
-               loadMunicipio($scope.DeptSelect.dtCodigo);
+    $scope.CambiaDept=function(){                      
+        loadMunicipio($scope.DeptSelect.dtCodigo);
     };
    
    $scope.Guardar = function (){
-       
-       console.log($scope.Ruta.trImagen);
+              
         var formData=new FormData();
-        formData.append('trTipoVehiculo', $scope.VehiculoSelect.tvCodigo);
-        formData.append('trCiudad', $scope.MunSelect.muCodigo);
+        formData.append('rtTipoVehiculo', $scope.VehiculoSelect.tvCodigo);
+        formData.append('rtCiudad', $scope.MunSelect.muCodigo);
         formData.append('rtPlantilla', $scope.PlantillaSelect.plCodigo);
-        formData.append('trDepartamento', $scope.DeptSelect.dtCodigo);
+        formData.append('rtDepartamento', $scope.DeptSelect.dtCodigo);
         formData.append('rtNombre', $scope.Ruta.rtNombre.toUpperCase());
         formData.append('rtDescripcion', $scope.Ruta.rtDescripcion.toUpperCase());
-        formData.append('trValor', $scope.Ruta.trValor);
+        formData.append('rtValor', $scope.Ruta.rtValor);
         formData.append('trEstado', $scope.Ruta.trEstado);
-        formData.append('trImagen', $scope.Ruta.trImagen);
+        formData.append('rtImagen', $scope.Ruta.rtImagen);
        
         var promise;
         if($scope.editMode){            
@@ -152,7 +153,7 @@ function ($scope,rutaService, tipoVehiculoService,departamentoService, toaster,n
         $scope.editMode = true;
         $scope.title = "Editar Ruta"; 
         $scope.active = "active";    
-          $('#tabPanels a[href="#tabRegistroRuta"]').tab('show');
+        $('#tabPanels a[href="#tabRegistroRuta"]').tab('show');         
     };
      
     //Funcion que elimina
@@ -194,7 +195,7 @@ function ($scope,rutaService, tipoVehiculoService,departamentoService, toaster,n
                     return a.rtCodigo.toLowerCase().indexOf(c) > -1 ||
                            a.rtNombre.toLowerCase().indexOf(c) > -1 ||
                            a.rtDescripcion.toLowerCase().indexOf(c) > -1 ||
-                           a.trCiudad.toLowerCase().indexOf(c) > -1 ||  
+                           a.rtCiudad.toLowerCase().indexOf(c) > -1 ||  
                            a.trEstado.toLowerCase().indexOf(c) > -1 
                 })) : f = $scope.Rutas, f = b.sorting() ? f : f, b.total(f.length), a.resolve(f.slice((b.page() - 1) * b.count(), b.page() * b.count()))
             }
@@ -205,10 +206,10 @@ function ($scope,rutaService, tipoVehiculoService,departamentoService, toaster,n
     
    $scope.modificarImagen = function(){
         var formData=new FormData();
-        formData.append('imagen',$scope.Ruta.trImagen);
+        formData.append('imagen',$scope.Ruta.rtImagen);
         formData.append('id', $scope.Ruta.rtCodigo);
         
-        if (!$scope.Ruta.trImagen){        
+        if (!$scope.Ruta.rtImagen){        
             $scope.estadoImg =true;
             return;
         }
@@ -222,7 +223,7 @@ function ($scope,rutaService, tipoVehiculoService,departamentoService, toaster,n
             console.log(JSON.stringify(err));
         });
     };   
-    loadRuta();
+    
 }]);
 
 
