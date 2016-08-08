@@ -90,7 +90,11 @@ function ($scope,mantenimientoService,toaster,ngTableParams,vehiculoService,tipo
             promise = mantenimientoService.put($scope.Mantenimiento.IdMantenimiento, $scope.Mantenimiento);
         }else {
             promise = mantenimientoService.post($scope.Mantenimiento);            
-        }
+       }
+//        else {
+//            $scope.Mantenimiento.DetalleMantenimientos=$scope.DetalleMantenimientos;
+//            promise =mantenimientoService.post($scope.Conductor);            
+//        }
         
         promise.then(function(d) {                        
             
@@ -107,6 +111,7 @@ function ($scope,mantenimientoService,toaster,ngTableParams,vehiculoService,tipo
    
    $scope.nuevo = function (){
        initMantenimiento();
+       initDetalleMantenimiento();  
        $scope.editMode =false;
        $scope.title = "Nuevo Mantenimiento"; 
    };
@@ -114,10 +119,11 @@ function ($scope,mantenimientoService,toaster,ngTableParams,vehiculoService,tipo
     //edita la Mantenimiento
     $scope.get = function(item) {
         $scope.Mantenimiento=item;
+        $scope.Mantenimiento.Fecha = moment($scope.Mantenimiento.Fecha).format("L");
         $scope.editMode = true;
         $scope.title = "Editar Mantenimiento"; 
         $scope.active = "active";    
-        
+        loadDetalleMantenimiento(item.IdMantenimiento);
     };
       function initTabla() {
         $scope.TablaMantenimiento = new ngTableParams({
@@ -141,7 +147,7 @@ function ($scope,mantenimientoService,toaster,ngTableParams,vehiculoService,tipo
         });
     };
     initTabla();
-    loadMantenimiento();
+    
     
     
     
@@ -171,11 +177,10 @@ function ($scope,mantenimientoService,toaster,ngTableParams,vehiculoService,tipo
     loadDetalleMantenimiento();
    
       $scope.GuardarDetalle = function (){
-       //$scope.DetalleMantenimiento.detMantenimiento = $scope.MantSelect.IdMantenimiento;
        $scope.DetalleMantenimiento.detActividad= $scope.DetalleMantenimiento.detActividad.toUpperCase();   
       
         var promise;
-        if($scope.editMode){            
+        if($scope.editDetalle){            
             promise = mantenimientoService.put($scope.DetalleMantenimiento.detCodigo, $scope.DetalleMantenimiento);
         }else {
             promise = mantenimientoService.post($scope.DetalleMantenimiento);            
@@ -192,7 +197,7 @@ function ($scope,mantenimientoService,toaster,ngTableParams,vehiculoService,tipo
         }); 
        
    };
-    
+    loadMantenimiento();
 }]);
 
 

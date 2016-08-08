@@ -95,6 +95,10 @@ var app;
                 templateUrl: 'views/contratos/contrato.html'
             })
             
+            .when("/2/mantenimiento",{
+                templateUrl: 'views/proceso/mantenimiento.html'
+            })
+            
             .when("/2/salir",{
                 templateUrl: 'views/proceso/salir.html'
             })
