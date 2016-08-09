@@ -1,5 +1,5 @@
-app.controller("contratoController", ["$scope", 'tipoVehiculoService', "toaster", "clienteService",  "tiposervicioService", "plantillaService",
-    function ($scope, tipoVehiculoService,toaster, clienteService, tiposervicioService, plantillaService) {
+app.controller("contratoController", ["$scope", 'tipoVehiculoService', "toaster", "clienteService",  "tiposervicioService", "plantillaService", "funcionService", "contratoService",
+    function ($scope, tipoVehiculoService,toaster, clienteService, tiposervicioService, plantillaService, funcionService, contratoService) {
         
     $scope.Contrato = {};   
     $scope.Contatos = [];
@@ -8,9 +8,15 @@ app.controller("contratoController", ["$scope", 'tipoVehiculoService', "toaster"
     
     $scope.TipoServicio = [];
     $scope.titlePlantilla = "";
+    $scope.TipoContrato = [];
     
     getServicios();
+    getTipoContrato();
     init();
+    // select //
+    $scope.TipoContratoSelect = {};
+        
+    $scope.FormaPago = funcionService.FormaPago();
     
     function getServicios (){
         var promise = tiposervicioService.getActivos();
@@ -22,10 +28,19 @@ app.controller("contratoController", ["$scope", 'tipoVehiculoService', "toaster"
         });
     }
     
-    $scope.imChanged = function(){
-        $scope.testValue = $scope.Contrato.TipoVehiculo.join(',');        
-    };
-        
+    function getTipoContrato (){
+        var promise = contratoService.getTipoContrato();
+        promise.then(function(d) {                        
+            $scope.TipoContrato = d.data;
+            if(d.data){
+                $scope.TipoContratoSelect = d.data[0];
+            }
+        }, function(err) {           
+            toaster.pop('error','¡Error!',"Error al cargar tipos de contrato");
+            console.log("Some Error Occured " + JSON.stringify(err));
+        });
+    }
+                
     function init (){
         $scope.Contrato = {
             ctClienteId : "",
@@ -43,7 +58,9 @@ app.controller("contratoController", ["$scope", 'tipoVehiculoService', "toaster"
             ctUsuarReg : $scope.$parent.Login.Login,
             ctMovilPpal :"",
             TipoServicio : [],
-            Plantillas : []
+            Plantillas : [],
+            FormaPago : [],
+            ctTipoContrato :""
         };      
     }
     
@@ -81,6 +98,10 @@ app.controller("contratoController", ["$scope", 'tipoVehiculoService', "toaster"
         console.log(checked);
         console.log($scope.Contrato.Plantillas);
     };        
+    
+    $scope.Guardar =  function (){
+        $scope.Contrato.ctTipoContrato = $scope.TipoContratoSelect.tpDescripcion;
+    };
         
         
     $scope.validarIdentificacion = function () {

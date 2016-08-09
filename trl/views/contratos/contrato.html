@@ -81,6 +81,17 @@
                                         </div>
                                     </div>
                                 </div>
+                                    
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label  for="cboTipoContrato">Tipo Contrato *</label>
+                                        <div class="input-group">
+                                            <div class="input-group-addon"><i class="fa fa-gitlab text-success"></i></div>
+                                            <select ng-model="TipoContratoSelect" class="form-control" id="cboTipoContrato" ng-options="item as item.tpDescripcion for item in TipoContrato track by item.IdTipo" required></select>
+                                        </div>
+                                    </div>
+                                </div>
+                                    
                                 </div>
                                 </div>
                                 
@@ -133,9 +144,20 @@
                                 </div>
                                 
                                 <div class="panel panel-default">
-                                    <div class="panel-heading">Formas de Pago</div>
+                                    <div class="panel-heading">Forma de Pago</div>
                                     <div class="panel-body">
-                                        
+                                        <div class="row">                        
+                                            <div class="col-md-12">
+                                                <div ng-repeat="fp in FormaPago">
+                                                    <div class="col-md-3">     
+                                                        <div class="checkbox checkbox-primary">                                        
+                                                             <input type="checkbox" id="fp{{$index}}" checklist-model="Contrato.FormaPago"  checklist-value="fp">
+                                                             <label for="fp{{$index}}">{{fp}}</label> 
+                                                        </div>
+                                                    </div> 
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                                     

@@ -18,6 +18,11 @@ app.service("contratoService",[ '$http', function ($http) {
         var req = $http.put(uri+'/api/contrato/' + id, contrato);
         return req;        
     };
+    
+    this.getTipoContrato = function () {
+        var req = $http.get(uri+'/api/tipoContrato');
+        return req;
+    };
          
 }]);
 

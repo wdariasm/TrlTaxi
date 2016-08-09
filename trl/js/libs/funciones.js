@@ -45,5 +45,10 @@
         }
         return module;
     };
+    
+    this.FormaPago = function (){
+        var forma = ["CREDITO" , "DEBITO", "EFECTIVO", "CHEQUE"];
+        return forma;
+    };        
 
 });
