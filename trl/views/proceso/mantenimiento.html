@@ -151,42 +151,43 @@
                                                    </div> 
                                          </div>
                                      </div>
+                                    
+                                    <div class="col-xs-3">
+                                        <div class="form-group">
+                                            <button type="button" ng-hide="editMode" class="btn btn-primary btn-addon" ng-click="AgregarDetalle()" style="margin-top:10%" ><i class="fa fa-book"></i> Agregar</button>
+                                            <button type="button" ng-show="editMode" class="btn btn-primary btn-addon" ng-click="GuardarDetalle()" style="margin-top:10%" ><i class="fa fa-check"></i> Guardar</button>
+                                        </div>
+                                   </div>
 
-                                     <div class="col-xs-3">
-                                         <div class="form-group">
-                                             <button type="button" ng-hide="editMode" class="btn btn-primary btn-addon" ng-click="AgregarDetalle()" style="margin-top:10%" ><i class="fa fa-book"></i> Agregar</button>
-                                         </div>
+                                    <div class="col-xs-12">
+                                        <div class="row">
+                                            <div class="col-xs-12">
+                                                 <table border="0" cellspacing="0" class="table table-striped" >
+                                                    <thead>
+                                                        <tr>                              
+                                                            <th>DESCRIPCIÓN</th>  
+                                                            <th>VALOR DETALLE</th>
+                                                            <th width="12%">ACCIÓN</th>
+                                                        </tr>
+                                                    </thead>
+
+                                                    <tbody>
+                                                         <tr data-ng-repeat="items in DetalleMantenimientos">
+                                                             <td>{{ items.detActividad }}</td>
+                                                             <td>{{items.detValor}}</td>
+
+                                                             <td>
+                                                                <center>
+                                                                    <a data-ng-click="getDetalle(items)" style="float: left; margin-left: 15px;" href="javascript:;"  title="Editar"><i class=" fa fa-1x fa-pencil text-success"></i></a>
+                                                                </center>
+                                                             </td>
+                                                         </tr>
+                                                    </tbody>
+                                                  </table>
+                                            </div>                               
                                      </div>
-
-                                     <div class="col-xs-12">
-                                 <div class="row">
-                                     <div class="col-xs-12">
-                                          <table border="0" cellspacing="0" class="table table-striped" >
-                                             <thead>
-                                                 <tr>                              
-                                                     <th>DESCRIPCIÓN</th>  
-                                                     <th>VALOR DETALLE</th>
-                                                     <th width="12%">ACCIÓN</th>
-                                                 </tr>
-                                             </thead>
-
-                                             <tbody>
-                                                  <tr data-ng-repeat="items in DetalleMantenimientos">
-                                                      <td>{{ items.detActividad }}</td>
-                                                      <td>{{items.detValor}}</td>
-
-                                                      <td>
-                                                         <center>
-                                                             <a data-ng-click="getDetalle(items)" style="float: left; margin-left: 15px;" href="javascript:;"  title="Editar"><i class=" fa fa-1x fa-pencil text-success"></i></a>
-                                                         </center>
-                                                      </td>
-                                                  </tr>
-                                             </tbody>
-                                           </table>
-                                     </div>                               
-                              </div>
-                         </div>
-                        </div>
+                                   </div>
+                               </div>
                        </div>
                         <div class=" panel panel-default">
                             <div class="panel-heading">Archivos</div>
@@ -197,7 +198,6 @@
                     </form>
                 </div>
             </div>
-            
         </div>
     </div>
 </div>

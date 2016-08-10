@@ -81,22 +81,22 @@ app.controller('parametroController',[ '$scope', 'parametroService', 'toaster',
     $scope.guardar = function (){
         
         var object = {                        
-            latitud: $scope.Parametro.parLatitud,
-            longitud: $scope.Parametro.parLongitud,
             parCedula: $scope.Parametro.parCedula,
             parEmpresa : $scope.Parametro.parEmpresa,
             parCiudad: $scope.Parametro.parCiudad,
             parFirma :  $scope.Parametro.parFirma,
             parConsecutivo: $scope.Parametro.parConsecutivo,
             parFormato: $scope.Parametro.parFormato,
-            parTipoDoc: $scope.Parametro.parTipoDoc
+            parTipoDoc: $scope.Parametro.parTipoDoc,
+            latitud: $scope.Parametro.parLatitud,
+            longitud: $scope.Parametro.parLongitud
             
         };          
         
         var promise  = parametroService.put(1,object);            
                                                             
         promise.then(function(d) {            
-            toaster.pop(d.data.message+'..!!', 4000, 'rounded');
+            toaster.pop('success!!', 4000, 'rounded',d.data.message);
             $scope.nuevo();                     
         }, function(err) {           
                 toaster.pop('error','Error!','Error al actualizar datos');           

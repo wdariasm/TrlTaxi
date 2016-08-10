@@ -159,19 +159,15 @@
                          </div> 
                     
                     
-                         <div class="col-xs-3">
-                             <div class="form-group">
-                                 <label for="txtTelefono3">Teléfono</label>
-                                     <div class="input-group">    
-                                          <div class="input-group-addon"><i class="fa fa-phone text-success"></i></div>
-                                             <input type="text" class="form-control" maxlength="10" solo-numeros ng-model="Conductor.TelefonoTres" id="txtTelefonoTres" placeholder="Teléfono">
-                                     </div>
-                                <div class="error" ng-show="frmConductor.txtMovil.$dirty && frmConductor.txtMovil.$invalid">
-                                    <small ng-show="frmConductor.txtMovil.$error.required">Movil es Requerido</small>
-                                    <small  ng-show="frmConductor.txtMovil.$error.pattern">Solo Numeros</small>
-                                </div>
-                              </div>
-                          </div> 
+                        <div class="col-xs-3">
+                            <div class="form-group">
+                                <label for="txtTelefono3">Teléfono</label>
+                                    <div class="input-group">    
+                                         <div class="input-group-addon"><i class="fa fa-phone text-success"></i></div>
+                                            <input type="text" class="form-control" maxlength="10" solo-numeros ng-model="Conductor.TelefonoTres" id="txtTelefonoTres" placeholder="Teléfono">
+                                    </div>
+                             </div>
+                        </div> 
                     
                     
                          <div class="col-xs-6">
@@ -355,7 +351,7 @@
                                               <td>
                                                  <center>
                                                      <a data-ng-click="getNovedad(items)" style="float: left; margin-left: 15px;" href="javascript:;"  title="Editar"><i class=" fa fa-1x fa-pencil text-success"></i></a>
-                                                     <a ng-click="Cancelar(items.idCategoria,'INACTIVA')"  style="float: left; margin-left: 15px;" href="javascript:;"  title="Cancelar"><i class="fa fa-1x fa-ban text-warning"></i></a>
+                                                     <!--<a ng-click="Cancelar(items.idCategoria,'INACTIVA')"  style="float: left; margin-left: 15px;" href="javascript:;"  title="Cancelar"><i class="fa fa-1x fa-ban text-warning"></i></a>-->
                                                  </center>
                                               </td>
                                           </tr>

@@ -91,11 +91,11 @@ class MantenimientoController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $IdMantenimiento)
     {
        try{
             $data = $request->all();
-            $mantenimiento = Mantenimiento::find($id);   
+            $mantenimiento = Mantenimiento::find($IdMantenimiento);   
             $mantenimiento->Descripcion = $data["Descripcion"];
             $mantenimiento->TotalFactura = $data["TotalFactura"]; 
             $date1 = new \DateTime($data["Fecha"]);
@@ -107,11 +107,11 @@ class MantenimientoController extends Controller
 
             return JsonResponse::create(array('message' => "Datos actualizados correctamente", "request" =>json_encode($mantenimiento->IdMantenimiento)), 200);
         } catch (Exception $exc) {
-            return JsonResponse::create(array('message' => "No se pudo guardar", "request" =>json_encode($exc->getMessage())), 401);
+            return JsonResponse::create(array('message' => "No se pudo actualizar correctamentes", "request" =>json_encode($exc->getMessage())), 401);
         }
     }
     
-      public function updateDetalle(Request $request, $detCodigo){
+    public function updateDetalle(Request $request, $detCodigo){
        try{
             $data = $request->all();
             $insert = DetalleMantenimiento::find($detCodigo);
@@ -125,6 +125,22 @@ class MantenimientoController extends Controller
         } 
     }
 
+    
+      //guardarDetalle
+    public function GuardarDetalle(Request $request){
+        try{  
+                $data = $request->all(); 
+                $insert = new DetalleMantenimiento();
+                $insert->detActividad=$data["detActividad"];
+                $insert->detValor=$data["detValor"];
+                $insert->detMantenimiento=$data["detMantenimiento"];
+
+                $insert->save();
+            return JsonResponse::create(array('message' => "Detalle  guardado correctamente", "request" =>json_encode($insert->detCodigo)), 200);
+        } catch (\Exception $exc) {    
+            return JsonResponse::create(array('message' => "No se pudo guardar", "request" =>json_encode($exc->getMessage())), 401);
+        }
+    }
     /**
      * Remove the specified resource from storage.
      *

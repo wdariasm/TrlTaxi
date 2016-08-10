@@ -37,7 +37,10 @@ app.service("mantenimientoService",[ '$http', function ($http) {
         return req;        
     };
     
-  
+   this.postNovedad =function(detalle){
+       var req = $http.post(uri+'/api/mantenimiento/detalle' ,detalle);
+        return req;  
+    };
 }]);
 
 

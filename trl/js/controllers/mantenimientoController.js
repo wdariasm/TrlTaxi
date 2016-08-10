@@ -77,13 +77,14 @@ function ($scope,mantenimientoService,toaster,ngTableParams,vehiculoService,tipo
             return;
         }
         
-        $scope.Mantenimiento.DetalleMantenimientos=$scope.DetalleMantenimientos;
+       
         
       
         var promise;
         if($scope.editMode){            
             promise = mantenimientoService.put($scope.Mantenimiento.IdMantenimiento, $scope.Mantenimiento);
-        }else {                       
+        }else { 
+             $scope.Mantenimiento.DetalleMantenimientos=$scope.DetalleMantenimientos;
             promise = mantenimientoService.post($scope.Mantenimiento);                              
        }
         
@@ -187,6 +188,40 @@ function ($scope,mantenimientoService,toaster,ngTableParams,vehiculoService,tipo
        $scope.DetalleMantenimientos.push($scope.Detalle);
        $scope.Detalle={};
    };
+   
+   
+   
+    $scope.GuardarDetalle = function (){
+      if (!$scope.Detalle.detActividad){
+           toaster.pop('warning', "Ingresa el detalle"); 
+           return;
+       } 
+       
+       if (!$scope.Detalle.detValor){
+           toaster.pop('warning', "Ingresa el valor");
+           return;
+       } 
+        $scope.Detalle.detActividad = $scope.Detalle.detActividad.toUpperCase();
+        $scope.Detalle.detMantenimiento = $scope.Mantenimiento.IdMantenimiento;
+        
+        var promise;
+        if($scope.editDetalle){            
+            promise = mantenimientoService.putDetalle($scope.Detalle.detCodigo, $scope.Detalle);
+        }else {           
+            promise = mantenimientoService.postDetalle($scope.Detalle);            
+        }
+        
+        promise.then(function(d) {                        
+            loadDetalleMantenimiento($scope.Mantenimiento.IdMantenimiento);
+           toaster.pop('success', "Control de Información", d.data.message); 
+             
+        }, function(err) {           
+                toaster.pop('error', "Error", "Error al procesar solicitud");         
+                console.log("Some Error Occured " + JSON.stringify(err));
+        });    
+    };
+   
+   
    
     $scope.ValidarPlaca = function () {
         $scope.Mantenimiento.mtVehiculo = 0;

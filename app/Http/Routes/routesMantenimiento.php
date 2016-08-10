@@ -3,4 +3,4 @@
 Route::resource("api/mantenimiento","MantenimientoController");
 Route::get('api/mantenimiento/{detCodigo}/detalle','MantenimientoController@detallePorId');
 Route::put('api/mantenimiento/detalle/{detCodigo}','MantenimientoController@updateDetalle');
-
+Route::post('api/mantenimiento/detalle','MantenimientoController@GuardarDetalle');
