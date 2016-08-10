@@ -22,12 +22,7 @@ app.service("tipoMantenimientoService",[ '$http', function ($http) {
     this.updateEstado=function(id, object){
         var req = $http.put(uri+'/api/tipoMantenimiento/updateEstado/' + id, object);
         return req;
-    };      
-    
-    this.getByNombre = function () {
-        var req = $http.get(uri+'/api/tipoMantenimientos');
-        return req;
-    };
+    };              
 }]);
 
 

@@ -99,6 +99,10 @@ var app;
                 templateUrl: 'views/proceso/mantenimiento.html'
             })
             
+            .when("/0/parametro",{
+                templateUrl: 'views/configuracion/parametro.html'
+            })
+            
             .when("/2/salir",{
                 templateUrl: 'views/proceso/salir.html'
             })

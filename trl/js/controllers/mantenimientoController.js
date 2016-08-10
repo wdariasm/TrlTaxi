@@ -6,7 +6,7 @@ function ($scope,mantenimientoService,toaster,ngTableParams,vehiculoService,tipo
     $scope.TipoMantenimientos=[];
     $scope.editMode = false;
     
-    $scope.DetalleMantenimiento= {};
+    $scope.Detalle= {};
     $scope.DetalleMantenimientos= [];
     $scope.editDetalle=false;
     
@@ -16,22 +16,23 @@ function ($scope,mantenimientoService,toaster,ngTableParams,vehiculoService,tipo
     $scope.TipoSelect={};
     $scope.TablaMantenimiento = {};
    
-    $scope.$parent.SetTitulo(" MANTENIMIENTO");
+    $scope.$parent.SetTitulo("GESTIONAR  MANTENIMIENTO DE VEHÍCULOS");
+    loadMantenimiento();
+    loadTipoMantenimiento();
     initMantenimiento();  
     
     function initMantenimiento() {
-        $scope.Mantenimiento = {
-            
+        $scope.Mantenimiento = {            
             IdMantenimiento:"",
             Descripcion:"",
             TotalFactura:"0",
-            mtVehiculo:'',
+            mtVehiculo: 0,
+            Placa : "",
             mtTipoMantenimiento:'',
             Fecha:moment().format('L')
         };   
        
-    }
-    initMantenimiento();
+    }    
     
      $scope.Cambiarformato= function (variable){
         console.log(variable);
@@ -47,25 +48,9 @@ function ($scope,mantenimientoService,toaster,ngTableParams,vehiculoService,tipo
                 toaster.pop('error','¡Error!',"Error al cargar  Mantenimientos");           
                 console.log("Some Error Occured " + JSON.stringify(err));
         }); 
-    }
-    loadMantenimiento();
-    
-     function loadVehiculo (){
-        var promise = vehiculoService.getAll();
-        promise.then(function(d) {                        
-            $scope.Vehiculos = d.data;
-              if(d.data){
-               $scope.VehiculoSelect= d.data[0];
-            }
-        }, function(err) {                        
-                toaster.pop('error', '¡Error!', 'Error al cargar Vehiculos');
-                console.log("Some Error Occured " + JSON.stringify(err));
-        }); 
-            
-    }
-      loadVehiculo();
+    }       
       
-      function loadTipoMantenimiento(){
+    function loadTipoMantenimiento(){
         var promise = tipoMantenimientoService.getAll();
         promise.then(function(d) {                        
             $scope.TipoMantenimientos = d.data;
@@ -77,29 +62,35 @@ function ($scope,mantenimientoService,toaster,ngTableParams,vehiculoService,tipo
                 console.log("Some Error Occured " + JSON.stringify(err));
         }); 
     }
-    loadTipoMantenimiento();
+    
  
    $scope.Guardar = function (){
-       $scope.Mantenimiento.mtVehiculo = $scope.VehiculoSelect.IdVehiculo;
+       if($scope.Mantenimiento.mtVehiculo === 0){
+           toaster.pop("error","¡Error!", "Placa no existe en el sistema.")
+           return;
+       };
        $scope.Mantenimiento.mtTipoMantenimiento = $scope.TipoSelect.tmCodigo;
        $scope.Mantenimiento.Descripcion= $scope.Mantenimiento.Descripcion.toUpperCase();
+        
+        if($scope.DetalleMantenimientos.length === 0){
+            toaster.pop('warning','¡Alerta!', 'Ingrese el detalle del manteniemto');
+            return;
+        }
+        
+        $scope.Mantenimiento.DetalleMantenimientos=$scope.DetalleMantenimientos;
         
       
         var promise;
         if($scope.editMode){            
             promise = mantenimientoService.put($scope.Mantenimiento.IdMantenimiento, $scope.Mantenimiento);
-        }else {
-            promise = mantenimientoService.post($scope.Mantenimiento);            
+        }else {                       
+            promise = mantenimientoService.post($scope.Mantenimiento);                              
        }
-//        else {
-//            $scope.Mantenimiento.DetalleMantenimientos=$scope.DetalleMantenimientos;
-//            promise =mantenimientoService.post($scope.Conductor);            
-//        }
         
         promise.then(function(d) {                        
             
             toaster.pop('success', "Control de Información", d.data.message); 
-            initMantenimiento();
+            $scope.nuevo();
             loadMantenimiento();
         }, function(err) {           
                 toaster.pop('error', "¡Error!", "Error al guardar  Mantenimiento");         
@@ -124,6 +115,7 @@ function ($scope,mantenimientoService,toaster,ngTableParams,vehiculoService,tipo
         $scope.title = "Editar Mantenimiento"; 
         $scope.active = "active";    
         loadDetalleMantenimiento(item.IdMantenimiento);
+        $('#tabPanels a[href="#tabMantenimiento"]').tab('show');
     };
       function initTabla() {
         $scope.TablaMantenimiento = new ngTableParams({
@@ -155,48 +147,66 @@ function ($scope,mantenimientoService,toaster,ngTableParams,vehiculoService,tipo
     //DETALLE MANTENIMIENTO
     initDetalleMantenimiento();  
     function initDetalleMantenimiento() {
-        $scope.DetalleMantenimiento = {
+        $scope.Detalle = {
             detCodigo:"",
             detActividad:"",
             detValor:"0"
         };   
        
     }
+    
+     $scope.getDetalle = function(item) {
+        $scope.Detalle=item;
+        $scope.editDetalle= true;
+        $scope.active = "active";    
+    };
+    
     initDetalleMantenimiento();
     
-     function loadDetalleMantenimiento (){
-        var promise = mantenimientoService.getAll();
+     function loadDetalleMantenimiento (id){
+        var promise = mantenimientoService.getDetalle(id);
         promise.then(function(d) {                        
-            $scope.DetalleMantenimientos = d.data;
-            
+            $scope.DetalleMantenimientos = d.data; 
         }, function(err) {           
                 toaster.pop('error','¡Error!',"Error al cargar Detalle Mantenimiento");           
                 console.log("Some Error Occured " + JSON.stringify(err));
         }); 
     }
-    loadDetalleMantenimiento();
-   
-      $scope.GuardarDetalle = function (){
-       $scope.DetalleMantenimiento.detActividad= $scope.DetalleMantenimiento.detActividad.toUpperCase();   
-      
-        var promise;
-        if($scope.editDetalle){            
-            promise = mantenimientoService.put($scope.DetalleMantenimiento.detCodigo, $scope.DetalleMantenimiento);
-        }else {
-            promise = mantenimientoService.post($scope.DetalleMantenimiento);            
-        }
-        
-        promise.then(function(d) {                        
-            
-            toaster.pop('success', "Control de Información", d.data.message); 
-            initDetalleMantenimiento();
-            loadDetalleMantenimiento();
-        }, function(err) {           
-                toaster.pop('error', "¡Error!", "Error al guardar Detalle Mantenimiento");         
-                console.log("Some Error Occured " + JSON.stringify(err));
-        }); 
+    
+    $scope.AgregarDetalle = function (){
+       if (!$scope.Detalle.detActividad){
+           toaster.pop('warning', "Ingresa el detalle"); 
+           return;
+       } 
        
+       if (!$scope.Detalle.detValor){
+           toaster.pop('warning', "Ingresa el valor");
+           return;
+       }  
+       $scope.Detalle.detActividad = $scope.Detalle.detActividad.toUpperCase();
+       $scope.DetalleMantenimientos.push($scope.Detalle);
+       $scope.Detalle={};
    };
+   
+    $scope.ValidarPlaca = function () {
+        $scope.Mantenimiento.mtVehiculo = 0;
+        if (!$scope.Mantenimiento.Placa) {
+            return;
+        }
+        var promiseGet = vehiculoService.validarPlaca($scope.Mantenimiento.Placa);
+        promiseGet.then(function (d) {            
+            if (!d.data) {                
+                toaster.pop('error', '¡Error!', 'Placa no se encuentra registrada en el sistema.');
+            }else{
+                $scope.Mantenimiento.mtVehiculo = d.data.IdVehiculo;
+            }
+            
+        }, function (err) {
+            toaster.pop('error', '¡Error!', 'Error al validar placa.');
+            console.log("Some Error Occured " + JSON.stringify(err));
+        });
+    };
+    
     loadMantenimiento();
 }]);
 

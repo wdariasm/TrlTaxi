@@ -1,105 +1,212 @@
 <div ng-controller="mantenimientoController"  class="container-fluid">
     <div class="row">
-        <div class="col-xs-4">            
-            <form name="frmMantenimiento" id="frmMantenimiento" novalidate>
-                 <h5 class="text-primary">{{title}}</h5>
-                <div class="row">
-                    <div class="col-xs-12">
-                        <div class="form-group">
-                            <label for="txtMantenimiento">Descripción *</label>
-                             <div class="input-group">    
-                                 <div class="input-group-addon"><i class="fa fa-edit text-success"></i></div>
-                                 <input type="text" required="" class="form-control" ng-model="Mantenimiento.Descripcion" maxlength="255" id="txtMantenimiento" placeholder="Mantenimiento">
-                       
-                             </div>
-                        </div>
+        <div class="col-md-12">  
+            <div class="tabbable-line">
+                    <ul class="nav nav-tabs nav-justified" id="tabPanels">
+                        <li class="active"> <a href="#tabListado" data-toggle="tab">Listado mantenimiento de Vehículos </a></li>
+                        <li><a href="#tabMantenimiento" data-toggle="tab">{{title}}</a></li>
+                    </ul>
+             </div>
+            <div class="tab-content">
+                <br/><br/>
+                <div class="tab-pane active" id="tabListado">
+                    <div class="row">
+                        <div class="col-xs-6">
+                            <label  for="search">Filtro</label>
+                                <div class="input-group">
+                                    <div class="input-group-addon"><i class="fa  fa-search text-primary"></i></div>
+                                    <input  class="form-control" id="search" type="search" placeholder="" ng-model="TablaMantenimiento.filter()['busqueda']">
+                                </div>
+                       </div>
+                       <div class="" style="float:width; margin-top:30px;">
+                                <label class=" text-primary" style="font-size: 18px;">Total: {{Mantenimientos.length}}</label>
+                       </div>
                     </div>
                     
-            
-                     <div class="col-xs-12">
-                        <div class="form-group">
-                            <label for="txtFecha">Fecha *</label>
-                                 <div class="input-group">    
-                                    <div class="input-group-addon"><i class="fa fa-calendar-o text-success"></i></div>
-                                    <input type="text" required="" id="txtFecha" ng-model="Mantenimiento.Fecha"  name="txtFecha" class="form-control" ng-change="Cambiarformato('Fecha')"  value=""  >
+                    <table class="table table-hover table-condensed" ng-table="TablaMantenimiento" style="float:height; margin-top: 50px;">
+                        <thead>
+                            <tr>
+                                <th>DESCRIPCIÓN</th>
+                                <th>VEHÍCULO</th>                                        
+                                <th>TIPO MANTENIMIENTO</th>
+                                <th>TOTAL FACTURA</th>
+                                <th>FECHA</th>
+                                <th>DETALLE</th>
+                                <th>VALOR DETALLE</th>
+                                <th width="12%">ACCION</th>
+
+
+                            </tr>
+                        </thead>
+                         <tbody>
+                         <tr data-ng-repeat="items in $data">
+                        <td >{{ items.Descripcion}}</td>
+                        <td>{{ items.Placa }}</td>
+                        <td>{{ items.tmDescripcion}}</td> 
+                        <td>{{ items.TotalFactura}}</td> 
+                        <td>{{items.Fecha}}</td>
+                        <td>{{ items.detActividad}}</td> 
+                        <td>{{ items.detValor}}</td> 
+                        <td>
+                                <center>
+                                    <a data-ng-click="get(items)" style="float: left; margin-left: 15px;" href="javascript:;"  title="Editar"><i class="fa  fa-1x fa-lg fa-pencil text-success"></i></a>
+                                </center>
+                        </td>
+                          </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="tab-pane" id="tabMantenimiento">   
+                    <form name="frmMantenimiento" id="frmMantenimiento" novalidate>
+                        <div class=" panel panel-default">
+                            <div class=" panel-heading">{{title}} </div>
+                                <div class="panel-body">
+
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label  for="cboTipoMant">Tipo Mantenimiento *</label>
+                                                    <div class="input-group">    
+                                                        <div class="input-group-addon"><i class="fa fa-car text-success"></i></div>
+                                                           <select ng-model="TipoSelect" class="form-control" id="cboTipoMant" ng-options="item as item.tmDescripcion for item in TipoMantenimientos track by item.tmCodigo" required></select>           
+                                                    </div> 
+                                            </div>   
+                                        </div>
+
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label  for="txtVehiculo">Placa Vehiculo *</label>
+                                                <div class="input-group">    
+                                                    <div class="input-group-addon"><i class="fa fa-car text-success"></i></div>
+                                                    <input type="text" required="" class="form-control" ng-model="Mantenimiento.Placa" maxlength="255" id="txtVehiculo" placeholder="Mantenimiento" ng-blur="ValidarPlaca()">
+                                                </div> 
+                                            </div>   
+                                        </div>
+
+                                        <div class="col-md-3">
+                                               <div class="form-group">
+                                                   <label for="txtFecha">Fecha *</label>
+                                                        <div class="input-group">    
+                                                           <div class="input-group-addon"><i class="fa fa-calendar-o text-success"></i></div>
+                                                           <input type="text" required="" id="txtFecha" ng-model="Mantenimiento.Fecha"  name="txtFecha" class="form-control" ng-change="Cambiarformato('Fecha')"  value=""  >
+                                                       </div>
+                                               </div>
+                                           </div>                                                                     
+
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label for="txttrValor"> Total Factura *</label>
+                                                    <div class="input-group">    
+                                                        <div class="input-group-addon"><i class="fa fa-usd text-success"></i></div>
+                                                        <input required="" type="text" class="form-control" ng-model="Mantenimiento.TotalFactura" id="txttrValor"  fcsa-number="{ min: 0,  maxDecimals: 0  }" maxlength="11" >
+                                                     </div> 
+                                            </div>
+                                        </div>
+
+
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="txtMantenimiento">Descripción *</label>
+                                                 <div class="input-group">    
+                                                     <div class="input-group-addon"><i class="fa fa-edit text-success"></i></div>                                             
+                                                     <textarea  id="txtMantenimiento" ng-model="Mantenimiento.Descripcion"  class="form-control" rows="2" maxlength="255" required></textarea>
+                                                 </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-2 col-md-offset-2"> 
+                                             <br/> <br/>
+                                            <button   class="btn btn-success btn-block btn-addon"   type="button"  title="Nuevo / Cancelar" ng-click="nuevo()"><i class="fa fa-pencil"></i> Nuevo</button>
+                                        </div>
+                                        <div class="col-md-2">
+                                             <br/> <br/>
+                                            <button ng-disabled="frmMantenimiento.$invalid"  class="btn btn-primary btn-block btn-addon"   type="button"  title="Registrar Mantenimiento" ng-click="Guardar()"><i class="fa fa-check"></i>Guardar</button>
+                                        </div>
+
+                                    </div>  
+                                </div>
+                         </div>  
+                        <div class="panel panel-default">
+                              <div class=" panel-heading">Descripción *</div>
+                                <div class="panel-body">
+                                    <div class="col-xs-6">
+                                         <div class="form-group">
+                                             <label for="txtDetMantenimiento">Detalle Mantenimiento *</label>
+                                              <div class="input-group">    
+                                                  <div class="input-group-addon"><i class="fa  fa-1x fa-pencil-square text-success"></i></div>
+                                                  <textarea class="form-control" ng-model="Detalle.detActividad" maxlength="255" id="txtDetMantenimiento" placeholder=" Detalle Mantenimiento"></textarea>
+
+                                              </div>
+                                         </div>
+                                     </div>
+
+                                     <div class="col-xs-2">
+                                         <div class="form-group">
+                                             <label for="txtValor">Valor Detalle *</label>
+                                                  <div class="input-group">    
+                                                      <div class="input-group-addon"><i class="fa fa-usd text-success"></i></div>
+                                                      <input  type="text" class="form-control" ng-model="Detalle.detValor" id="txtValor"  fcsa-number="{ min: 0,  maxDecimals: 0  }" maxlength="11" solo-numeros  >
+                                                   </div> 
+                                         </div>
+                                     </div>
+
+                                     <div class="col-xs-3">
+                                         <div class="form-group">
+                                             <button type="button" ng-hide="editMode" class="btn btn-primary btn-addon" ng-click="AgregarDetalle()" style="margin-top:10%" ><i class="fa fa-book"></i> Agregar</button>
+                                         </div>
+                                     </div>
+
+                                     <div class="col-xs-12">
+                                 <div class="row">
+                                     <div class="col-xs-12">
+                                          <table border="0" cellspacing="0" class="table table-striped" >
+                                             <thead>
+                                                 <tr>                              
+                                                     <th>DESCRIPCIÓN</th>  
+                                                     <th>VALOR DETALLE</th>
+                                                     <th width="12%">ACCIÓN</th>
+                                                 </tr>
+                                             </thead>
+
+                                             <tbody>
+                                                  <tr data-ng-repeat="items in DetalleMantenimientos">
+                                                      <td>{{ items.detActividad }}</td>
+                                                      <td>{{items.detValor}}</td>
+
+                                                      <td>
+                                                         <center>
+                                                             <a data-ng-click="getDetalle(items)" style="float: left; margin-left: 15px;" href="javascript:;"  title="Editar"><i class=" fa fa-1x fa-pencil text-success"></i></a>
+                                                         </center>
+                                                      </td>
+                                                  </tr>
+                                             </tbody>
+                                           </table>
+                                     </div>                               
+                              </div>
+                         </div>
+                        </div>
+                       </div>
+                        <div class=" panel panel-default">
+                            <div class="panel-heading">Archivos</div>
+                                <div class="panel-body">
+
                                 </div>
                         </div>
-                    </div> 
-                    
-                    
-                     <div class="col-xs-12">
-                        <div class="form-group">
-                            <label  for="cboTipoVehiculo">Tipo Vehiculo *</label>
-                                <div class="input-group">    
-                                    <div class="input-group-addon"><i class="fa fa-car text-success"></i></div>
-                                       <select ng-model="VehiculoSelect" class="form-control" id="cboTipoVehiculo" ng-options="item as item.Placa for item in Vehiculos track by item.IdVehiculo" required></select>           
-                                </div> 
-                        </div>   
-                    </div>
-                    
-                    <div class="col-xs-12">
-                        <div class="form-group">
-                            <label  for="cboTipoMant">Tipo Mantenimiento *</label>
-                                <div class="input-group">    
-                                    <div class="input-group-addon"><i class="fa fa-car text-success"></i></div>
-                                       <select ng-model="TipoSelect" class="form-control" id="cboTipoMant" ng-options="item as item.tmDescripcion for item in TipoMantenimientos track by item.tmCodigo" required></select>           
-                                </div> 
-                        </div>   
-                    </div>
-                    
-                    
-                    <div class="col-xs-12">
-                        <div class="form-group">
-                            <label for="txttrValor"> Total Factura *</label>
-                                 <div class="input-group">    
-                                     <div class="input-group-addon"><i class="fa fa-usd text-success"></i></div>
-                                     <input required="" type="text" class="form-control" ng-model="Mantenimiento.TotalFactura" id="txttrValor"  fcsa-number="{ min: 0,  maxDecimals: 0  }" maxlength="11" solo-numeros >
-                                  </div> 
-                        </div>
-                    </div>
-                    
-                    
-                     <div class="col-xs-12">
-                        <div class="form-group">
-                            <label for="txtDetMantenimiento">Detalle Mantenimiento *</label>
-                             <div class="input-group">    
-                                 <div class="input-group-addon"><i class="fa fa-gitlab text-success"></i></div>
-                                 <input type="text" required="" class="form-control" ng-model="DetalleMantenimiento.detActividad" maxlength="255" id="txtDetMantenimiento" placeholder=" Detalle Mantenimiento">
-                       
-                             </div>
-                        </div>
-                    </div>
-                    
-                    <div class="col-xs-12">
-                        <div class="form-group">
-                            <label for="txtValor">Valor Detalle *</label>
-                                 <div class="input-group">    
-                                     <div class="input-group-addon"><i class="fa fa-usd text-success"></i></div>
-                                     <input required="" type="text" class="form-control" ng-model="DetalleMantenimiento.detValor" id="txtValor"  fcsa-number="{ min: 0,  maxDecimals: 0  }" maxlength="11" solo-numeros >
-                                  </div> 
-                        </div>
-                    </div>
-                    
-                    
-                    <div class="row">
-                         <br/>
-                        <div class="col-xs-5 col-xs-offset-1">                                                                    
-                            <button   class="btn btn-success btn-block btn-addon"   type="button"  title="Nuevo / Cancelar" ng-click="nuevo()"><i class="fa fa-pencil"></i> Nuevo</button>
-                        </div>
-                        <div class="col-xs-5">
-                            <button ng-disabled="frmMantenimiento.$invalid"  class="btn btn-primary btn-block btn-addon"   type="button"  title="Registrar Mantenimiento" ng-click="Guardar()"><i class="fa fa-check"></i>Guardar</button>
-                        </div>
-                    </div>
-                    
-                </div>   
-                    
-            </form>
+                    </form>
+                </div>
+            </div>
+            
         </div>
-        
-       
     </div>
 </div>
 <script>
+      $('#tabPanels a').click(function (e) {
+        e.preventDefault();
+        $(this).tab('show');
+        
+    });
   
 $(function() {
     

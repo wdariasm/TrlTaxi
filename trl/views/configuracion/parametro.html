@@ -1,0 +1,147 @@
+<div ng-controller="parametroController" class="container-fluid">
+    <div class="row">
+        <div class="col-md-4">
+            <form  name="frmParametro" id="frmParametro" novalidate>
+                <br/>
+                <div class="row"> 
+                        <div class="col-md-9">
+                            <div class="form-group">
+                                <label for="txtTipo">Tipo Documento *</label>
+                                 <div class="input-group">    
+                                     <div class="input-group-addon"><i class="fa fa-list-ul text-success"></i></div>
+                                     <select required="" type="text" class="form-control" ng-model="Parametro.parTipoDoc" id="txtTipo" placeholder="tipo">
+                                    <option value="C.C">C.C</option>
+                                    <option value="NIT">NIT</option>
+                                    <option value="DNI">DNI</option>
+                                </select>
+
+                                 </div>
+                            </div>
+                        </div>
+                    
+                        <div class="col-md-9">
+                            <div class="form-group">
+                                <label for="txtCedula">Cédula *</label>
+                                 <div class="input-group">    
+                                     <div class="input-group-addon"><i class="fa fa-hashtag text-success"></i></div>
+                                     <input  solo-numeros type="text" required="" class="form-control" ng-model="Parametro.parCedula" maxlength="11" id="txtCedula" placeholder="cédula">
+
+                                 </div>
+                            </div>
+                        </div>
+                    
+                        <div class="col-md-9">
+                           <div class="form-group">
+                               <label for="txtEmpresa">Empresa *</label>
+                                <div class="input-group">    
+                                    <div class="input-group-addon"><i class="fa fa-university text-success"></i></div>
+                                    <input type="text" required="" class="form-control" ng-model="Parametro.parEmpresa" maxlength="60" id="txtEmpresa" placeholder="empresa">
+
+                                </div>
+                           </div>
+                        </div>
+                    
+                        <div class="col-md-9">
+                           <div class="form-group">
+                               <label for="txtCiudad">Ciudad *</label>
+                                <div class="input-group">    
+                                    <div class="input-group-addon"><i class="fa fa-globe text-success"></i></div>
+                                    <input type="text" required="" class="form-control" ng-model="Parametro.parCiudad" maxlength="30" id="txtCiudad" placeholder="ciudad">
+                                </div>
+                           </div>
+                        </div>
+                    
+                        <div class="col-md-9">
+                           <div class="form-group">
+                               <label for="txtFirma">Firma *</label>
+                                <div class="input-group">    
+                                    <div class="input-group-addon"><i class="fa fa-pencil text-success"></i></div>
+                                    <input type="text" required="" class="form-control" ng-model="Parametro.parFirma"  id="txtFirma" placeholder="firma">
+
+                                </div>
+                           </div>
+                        </div>
+                    
+                        <div class="col-md-9">
+                           <div class="form-group">
+                               <label for="txtConsecutivo">Consecutivo*</label>
+                                <div class="input-group">    
+                                    <div class="input-group-addon"><i class="fa fa-road text-success"></i></div>
+                                    <input type="text" required="" class="form-control" ng-model="Parametro.parConsecutivo" maxlength="11" id="txtConsecutivo" placeholder="" solo-numeros>
+
+                                </div>
+                           </div>
+                        </div>
+
+                        <div class="col-md-9">
+                            <div class="form-group">
+                                <label for="txtFormato">Formato *</label>
+                                 <div class="input-group">    
+                                     <div class="input-group-addon"><i class="fa fa-list-ul text-success"></i></div>
+                                     <select required="" type="text" class="form-control" ng-model="Parametro.parFormato" id="txtFormato" placeholder="Formato">
+                                    <option value="PDF1">PDF1</option>
+                                    <option value="PDF2">PDF2</option>
+                                </select>
+
+                                 </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-9">
+                            <div class="form-group">
+                                <label class="{{active}}}" for="txtLatitud">Ubicacion*</label>
+                                 <div class="input-group">    
+                                     <div class="input-group-addon"><i class="fa fa-map-marker text-success"></i></div>
+                                     <input type="text" class="form-control" ng-model="Parametro.parLatitud"   id="txtLatitud"  name="txtLatitud" placeholder="Latitud">
+
+                                 </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-9">
+                            <div class="form-group">
+                                <label class="{{active}}}" for="txtLongitud"></label>
+                                 <div class="input-group">    
+                                     <div class="input-group-addon"><i class="fa fa-map-marker text-success"></i></div>
+                                     <input type="text" class="form-control" ng-model="Parametro.parLongitud"   id="txtLongitud" name="txtLongitud" placeholder="Longitud">
+
+                                 </div>
+                            </div>
+                        </div>
+
+
+                        <div class="row">
+                            <div class="col-md-5 col-md-offset-1">
+                                <br/> <br/>
+                                <button ng-disabled="frmParametro.$invalid"  class="btn btn-primary btn-block btn-addon"   type="button" title="Registrar Parametros" ng-click="guardar()">
+                                  <i class="fa fa-check"></i> Registrar
+                                </button> 
+                            </div>
+                        </div> 
+
+
+                </div>
+               
+           </form>
+        </div>
+        <div class="col-md-8">
+            <div class="row">
+                <br/>
+                <div class="row">
+                    <div class="col-md-7">
+                        <br/>
+                        <label style="padding-left: 50px;">UBICACION</label>                            
+                           <p class="nota">  <label style="padding-left: 50px;">NOTA:   </label>    
+                               Debe Habilitar la Localización de su Navegador</p>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-11">
+                        <div id="mapaSetting" style="margin-left:4%; margin-top: 10px; width: 97%; height: 420px; margin-bottom: 10px; " ng-model="mapConfig"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

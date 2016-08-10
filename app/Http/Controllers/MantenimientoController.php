@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Mantenimiento;
 use App\DetalleMantenimiento;
+use Illuminate\Http\JsonResponse;
+use DB;
+
 
 class MantenimientoController extends Controller
 {
@@ -15,17 +18,14 @@ class MantenimientoController extends Controller
      */
     public function index()
     {
-        return Mantenimiento::all();
+           $result = DB::select("SELECT m.Descripcion, m.TotalFactura,  m.Fecha, de.detActividad, de.detValor, p.Placa,"
+                . "  tm.tmDescripcion FROM mantenimiento m INNER JOIN vehiculo p ON m.mtVehiculo= p.IdVehiculo"
+                . " INNER JOIN tipomantenimiento tm ON m.mtTipoMantenimiento=tm.tmCodigo INNER JOIN detallemantenimiento de ON de.detMantenimiento=m.IdMantenimiento");
+        return $result; 
     }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+    
+    public function detallePorId($idMantenimiento){
+        return DetalleMantenimiento::where('detMantenimiento', $idMantenimiento)->get();
     }
 
     /**
@@ -47,16 +47,16 @@ class MantenimientoController extends Controller
             $mantenimiento->mtTipoMantenimiento = $data["mtTipoMantenimiento"]; 
             $mantenimiento->save();
             
-              $detalle = $data["Detalles"];
+            $detalle = $data["DetalleMantenimientos"];
             foreach ($detalle as $d){
-                $detMantenimiento = new DetalleMantenimiento();
-                $detMantenimiento->detMantenimiento=$mantenimiento->IdMantenimiento;
-                $detMantenimiento->detActividad = $d["detActividad"];
-                $detMantenimiento->detValor = $d["detValor"];          
-                $detMantenimiento->save();                        
+                $insert = new DetalleMantenimiento();
+                $insert->detMantenimiento=$mantenimiento->IdMantenimiento;
+                $insert->detActividad = $d["detActividad"];
+                $insert->detValor = $d["detValor"];          
+                $insert->save();                        
             }
             
-            return JsonResponse::create(array('message' => "Novedad guardada correctamente", "request" =>json_encode($mantenimiento->IdMantenimiento)), 200);
+            return JsonResponse::create(array('message' => "Mantenimiento guardado correctamente", "request" =>json_encode($mantenimiento->IdMantenimiento)), 200);
         } catch (Exception $exc) {    
             return JsonResponse::create(array('message' => "No se pudo guardar", "request" =>json_encode($exc->getMessage())), 401);
         }
@@ -114,12 +114,12 @@ class MantenimientoController extends Controller
       public function updateDetalle(Request $request, $detCodigo){
        try{
             $data = $request->all();
-            $detMantenimiento = DetalleMantenimiento::find($detCodigo);
-            $detMantenimiento->detActividad = $data["detActividad"];
-            $detMantenimiento->detValor = $data["detValor"];          
-            $detMantenimiento->save();                       
+            $insert = DetalleMantenimiento::find($detCodigo);
+            $insert->detActividad = $data["detActividad"];
+            $insert->detValor = $data["detValor"];          
+            $insert->save();                       
             
-            return JsonResponse::create(array('message' => " Detalle Actualizado Correctamente", "request" =>json_encode($detMantenimiento->detCodigo)), 200);
+            return JsonResponse::create(array('message' => " Detalle Actualizado Correctamente", "request" =>json_encode($insert->detCodigo)), 200);
         } catch (\Exception $exc) {
             return JsonResponse::create(array('message' => "No se pudo guardar", "request" =>json_encode($exc->getMessage())), 401);
         } 

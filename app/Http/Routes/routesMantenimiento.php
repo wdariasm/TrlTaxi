@@ -1,6 +1,6 @@
 <?php
 
 Route::resource("api/mantenimiento","MantenimientoController");
-
-Route::put('api/conductor/detalleMantenimiento/{detCodigo}','MantenimientoController@updateDetalle');
+Route::get('api/mantenimiento/{detCodigo}/detalle','MantenimientoController@detallePorId');
+Route::put('api/mantenimiento/detalle/{detCodigo}','MantenimientoController@updateDetalle');
 
