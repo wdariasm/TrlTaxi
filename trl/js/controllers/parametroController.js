@@ -18,8 +18,8 @@ app.controller('parametroController',[ '$scope', 'parametroService', 'toaster',
         
     function init(){
         
-        if (!$scope.$parent.Configuracion){
-            $scope.Parametro  = $scope.$parent.Configuracion;
+        if (!$scope.$parent.Parametro){
+            $scope.Parametro  = $scope.$parent.Parametro;
         } else {            
             $scope.Parametro = config.getConfig();
         }
@@ -67,7 +67,9 @@ app.controller('parametroController',[ '$scope', 'parametroService', 'toaster',
         $scope.mapConfig = new google.maps.Map(document.getElementById("mapaSetting"), mapOptions);     
            google.maps.event.addListener($scope.mapConfig, "click", function(evento) {
               var latitud = evento.latLng.lat();
-              var longitud = evento.latLng.lng();        
+              var longitud = evento.latLng.lng();   
+                $scope.Parametro.parLatitud = latitud;
+                $scope.Parametro.parLongitud = longitud;
                 $("#txtLatitud").val(latitud);
                 $("#txtLongitud").val(longitud);                    
             var coordenada = new google.maps.LatLng(latitud, longitud); 
@@ -88,16 +90,15 @@ app.controller('parametroController',[ '$scope', 'parametroService', 'toaster',
             parConsecutivo: $scope.Parametro.parConsecutivo,
             parFormato: $scope.Parametro.parFormato,
             parTipoDoc: $scope.Parametro.parTipoDoc,
-            latitud: $scope.Parametro.parLatitud,
-            longitud: $scope.Parametro.parLongitud
+            parLatitud: $scope.Parametro.parLatitud,
+            parLongitud: $scope.Parametro.parLongitud
             
         };          
         
         var promise  = parametroService.put(1,object);            
                                                             
-        promise.then(function(d) {            
-            toaster.pop('success!!', 4000, 'rounded',d.data.message);
-            $scope.nuevo();                     
+        promise.then(function(d) { 
+            toaster.pop('success', "Control de Información", d.data.message, 4000);            
         }, function(err) {           
                 toaster.pop('error','Error!','Error al actualizar datos');           
                 console.log("Some Error Occured " + JSON.stringify(err));

@@ -89,10 +89,10 @@
 
                         <div class="col-md-9">
                             <div class="form-group">
-                                <label class="{{active}}}" for="txtLatitud">Ubicacion*</label>
+                                <label class="{{active}}}" for="txtLatitud">Latitud *</label>
                                  <div class="input-group">    
                                      <div class="input-group-addon"><i class="fa fa-map-marker text-success"></i></div>
-                                     <input type="text" class="form-control" ng-model="Parametro.parLatitud"   id="txtLatitud"  name="txtLatitud" placeholder="Latitud">
+                                     <input type="text"  required class="form-control" ng-model="Parametro.parLatitud"   id="txtLatitud"   placeholder="Latitud">
 
                                  </div>
                             </div>
@@ -100,10 +100,10 @@
 
                         <div class="col-md-9">
                             <div class="form-group">
-                                <label class="{{active}}}" for="txtLongitud"></label>
+                                <label class="{{active}}}" for="txtLongitud">Longitud *</label>
                                  <div class="input-group">    
                                      <div class="input-group-addon"><i class="fa fa-map-marker text-success"></i></div>
-                                     <input type="text" class="form-control" ng-model="Parametro.parLongitud"   id="txtLongitud" name="txtLongitud" placeholder="Longitud">
+                                     <input type="text" required class="form-control" ng-model="Parametro.parLongitud"   id="txtLongitud"  placeholder="Longitud">
 
                                  </div>
                             </div>
@@ -125,7 +125,6 @@
            </form>
         </div>
         <div class="col-md-8">
-            <div class="row">
                 <br/>
                 <div class="row">
                     <div class="col-md-7">
@@ -141,7 +140,6 @@
                         <div id="mapaSetting" style="margin-left:4%; margin-top: 10px; width: 97%; height: 420px; margin-bottom: 10px; " ng-model="mapConfig"></div>
                     </div>
                 </div>
-            </div>
         </div>
     </div>
 </div>
