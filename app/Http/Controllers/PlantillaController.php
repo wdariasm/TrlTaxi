@@ -61,7 +61,7 @@ class PlantillaController extends Controller
     public function show($id)
     {
         return Plantilla::where('plTipoServicio',$id)->where('plEstado','=','ACTIVO')
-                ->select('plCodigo', 'plDescripcion')->get();
+                ->select('plCodigo', 'plDescripcion', 'plTipoServicio')->get();
     }
 
     

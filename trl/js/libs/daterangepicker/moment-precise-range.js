@@ -13,10 +13,10 @@ if (typeof moment === "undefined" && require) {
         days: 'días',
         hour: 'hora',
         hours: 'horas',
-        minute: 'minute',
-        minutes: 'minutes',
-        second: 'second',
-        seconds: 'seconds',
+        minute: 'minuto',
+        minutes: 'minutos',
+        second: 'segundo',
+        seconds: 'segundos',
         delimiter: ' '
     };
 
@@ -68,8 +68,8 @@ if (typeof moment === "undefined" && require) {
             firstDateWasLater = true;
         } else {
             firstDateWasLater = false;
-        }
-
+        }        
+        
         var yDiff = m2.year() - m1.year();
         var mDiff = m2.month() - m1.month();
         var dDiff = m2.date() - m1.date();
