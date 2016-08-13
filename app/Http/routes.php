@@ -44,3 +44,4 @@ include 'Routes/PlantillaRoutes.php';
 include 'Routes/routesMantenimiento.php';
 include 'Routes/routesDetalleMantenimiento.php';
 include 'Routes/routesParametro.php';
+include 'Routes/routesReporte.php';
