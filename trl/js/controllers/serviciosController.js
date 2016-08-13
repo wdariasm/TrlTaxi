@@ -1,4 +1,5 @@
-app.controller('serviciosController',['$scope', 'zonaService', 'ngTableParams', 'toaster', function ($scope,  zonaService, ngTableParams, toaster) {
+app.controller('serviciosController',['$scope', 'zonaService', 'ngTableParams', 'toaster', "contratoService",
+    function ($scope,  zonaService, ngTableParams, toaster, contratoService) {
     $scope.Zonas = [];       
     $scope.Zona = {};
     $scope.funcion = null;
@@ -55,7 +56,18 @@ app.controller('serviciosController',['$scope', 'zonaService', 'ngTableParams', 
     function init(){
         $scope.Servicio = {
             Origen : "",
-            Destino : ""
+            Destino : "",
+            ContratoId : 0,
+            NumeroContrato:"",
+            ClienteId : 0,
+            Nit : "",
+            Nombre: "",
+            Telefono : "", 
+            TipoServicio : [],
+            FechaInicio : "", 
+            FechaFin : "",
+            Estado : "",
+            Tipo : {}
         };
     }
         
@@ -99,7 +111,7 @@ app.controller('serviciosController',['$scope', 'zonaService', 'ngTableParams', 
         });
     }
     
-     function initAutocompleteDestino (){       
+    function initAutocompleteDestino (){       
         var input = document.getElementById('txtDestino');    
                  
         $scope.AutocompleteDestino = new google.maps.places.Autocomplete(input, options);                        
@@ -137,21 +149,7 @@ app.controller('serviciosController',['$scope', 'zonaService', 'ngTableParams', 
             destinoPlaceId = place.place_id;
             route(origenPlaceId, destinoPlaceId, travelMode,directionsService, directionsDisplay);
         });
-    }
-    
-        
-       
-    function loadZona() {
-        var promiseGet = zonaService.getAll(); //The Method Call from service
-        promiseGet.then(function(pl) {
-            $scope.Zonas = pl.data;
-            $scope.tbZona.reload();
-        },
-        function(errorPl) {
-            toaster.pop("error","¡Error!", "Eror al cargar zonas");
-            console.log('failure loading Zona', errorPl);
-        });
-    }
+    }                      
     
     function geolocate() {
         if (navigator.geolocation) {
@@ -313,116 +311,57 @@ app.controller('serviciosController',['$scope', 'zonaService', 'ngTableParams', 
         $scope.Zona = item;        
         getPuntos(item.znCodigo);        
     };
-    
-    function getPuntos(codigo){        
-        var promiseGet = zonaService.getPuntos(codigo); //The Method Call from service
-        promiseGet.then(function(pl) {
-            $scope.Puntos = pl.data;
-            if ($scope.Puntos){
-                var limits = new google.maps.LatLngBounds();
-                var contP=0;
-                $.each($scope.Puntos, function(i, item){
-                    contP +=1;                                       
-                    var coordenadas = new google.maps.LatLng(item.ptLatitud, item.ptLongitud);                    
-                    var marcador = new google.maps.Marker(
-                        {
-                            position: coordenadas,
-                            map: $scope.mapServicio, 
-                            animation: google.maps.Animation.DROP, 
-                            title:"Punto # "+ contP
-                        }
-                    );
-                    limits.extend(marcador.position);
-                    var po = new Poligono();
-                    po.coordenadas = coordenadas;
-                    po.marcador = marcador;
-
-                    $scope.vecPoligono.push(po);
-              });          
-              dibujarPoligono();
-              $scope.mapServicio.fitBounds(limits);  
-            }  
-        },
-        function(errorPl) {
-            toaster.pop('error', "¡Error!", errorPl.data.request);  
-            console.log('failure loading Zona', errorPl);
-        });                               
-                
-    }
-   
-
-    $scope.guardar = function (){
-        
-        if($scope.vecPoligono.length < 3){
-            toaster.pop('info', '¡Alerta!', 'Es necesario por lo menos 3 puntos en la región.. Verifique !!');
+           
+    $scope.BuscarContrato =  function (){
+        $scope.Servicio.ContratoId =0;
+        if (!$scope.Servicio.NumeroContrato){
+            toaster.pop('info', "Estimado usuario(a), por favor ingrese el número de contrato");
             return;
         }
         
-        var inicial = "";
-        var vecTemp = [];
-        var spuntos = "";
-        for(var i = 0; i < $scope.vecPoligono.length ; i++){
-            if (i===0){
-                inicial += $scope.vecPoligono[i].coordenadas.lat() + " ";
-                inicial += $scope.vecPoligono[i].coordenadas.lng();
-            }
-            spuntos += $scope.vecPoligono[i].coordenadas.lat() + " ";
-            spuntos += $scope.vecPoligono[i].coordenadas.lng() + ", ";           
-            var object = {
-                lt : $scope.vecPoligono[i].coordenadas.lat(),
-                lg : $scope.vecPoligono[i].coordenadas.lng()
-            };
-            vecTemp.push(object);
-        }
-        spuntos += inicial;  
+        toaster.pop('wait','Consultando informacioón....', 0);
         
-        var object = {            
-            znNombre: $scope.Zona.znNombre.toUpperCase(),            
-            znArea: spuntos,
-            znEstado : $scope.Zona.znEstado,
-            puntos : vecTemp           
-        };          
-        
-        var promise;
-        if($scope.editMode){            
-            promise = zonaService.put($scope.Zona.znCodigo, object);
-        }else {
-            promise = zonaService.post(object);            
-        }
-                                                    
-        promise.then(function(d) {            
-            toaster.pop('success','¡Información!', d.data.message);
-            $scope.nuevo();
-            loadZona();           
-        }, function(err) {           
-            toaster.pop('error', "¡Error!", err.data.request);   
-            console.log("Some Error Occured " + JSON.stringify(err));
-        });  
-    };
-    
-     $scope.VerEliminar= function(znCodigo) {
-        $scope.znCodigo =znCodigo;
-        
-        $('#mdConfirmacion').modal('show');         
-    };
-    
-    //Funcion que elimina
-     $scope.eliminar = function() {
-         var objetc = {
-            znCodigo :$scope.znCodigo
-        };
-            $('#mdConfirmacion').modal('hide'); 
-            var promiseDel  = zonaService.delete($scope.znCodigo, objetc);        
-                promiseDel.then(function (d) {                
-                 toaster.pop('success', "Control de Información", d.data.message);                 
-                 loadZona();
-            }, function (err) {                              
-                     toaster.pop('error', "¡Error!", err.data.request);
-                    console.log("Some Error Occured "+ JSON.stringify(err));
-            }); 
+        var promise = contratoService.getPorNumeroCto($scope.Servicio.NumeroContrato);
+        promise.then(function(d) {                
+            if(d.data){
+                toaster.clear();
+                $scope.Servicio.ContratoId = d.data.IdContrato;
+                $scope.Servicio.Nombre = d.data.ctContratante;
+                $scope.Servicio.ClienteId = d.data.ctClienteId;
+                $scope.Servicio.Nit = d.data.ctNitCliente;
+                $scope.Servicio.Telefono =  d.data.ctTelefono;
+                $scope.Servicio.FechaFin = new Date(d.data.ctFechaFinal).toLocaleDateString('en-GB'); 
+                $scope.Servicio.FechaInicio =   new Date(d.data.ctFechaInicio).toLocaleDateString('en-GB');               
+                $scope.Servicio.Estado = d.data.ctEstado;
+                $scope.Servicio.TipoServicio = d.data.TipoServicio;
+                if($scope.Servicio.TipoServicio === 0){
+                    toaster.pop('error', 'No se encontraón servicios asociados a este contrato', 0);
+                }
                 
+            }else{
+                toaster.pop('error', "Número de contrato no existe");
+            }
+            
+        }, function(err) {           
+                toaster.pop('error','¡Error!',err, 0);
+                console.log("Some Error Occured " + JSON.stringify(err));
+        });                
     };
-           
+    
+    $scope.TipoServicioCheck = function(value) {
+        console.log($scope.Servicio.Tipo);     
+        if($scope.Servicio.Tipo.csPlantilla==="SI"){
+            $scope.titlePlantilla = "Plantillas " + $scope.Servicio.Tipo.csDescripcion;
+            //loadPlantillas(value.svCodigo);
+            $scope.VerPlantilla = true;
+        }else{
+            $scope.titlePlantilla = "Dispobilidad ";
+           // loadDisponibilidad();
+            $scope.VerPlantilla = false;
+        }
+        
+    };
+                       
 }]);
 
 

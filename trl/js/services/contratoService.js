@@ -23,6 +23,11 @@ app.service("contratoService",[ '$http', function ($http) {
         var req = $http.get(uri+'/api/tipoContrato');
         return req;
     };
+    
+    this.getPorNumeroCto = function (numero) {
+        var req = $http.get(uri+'/api/contrato/' + numero + '/tiposervicio');
+        return req;
+    };
          
 }]);
 

@@ -10,6 +10,8 @@ use App\Contrato;
 use App\Parametro;
 use App\ContratoDisponibilidad;
 use App\ContratoPlantilla;
+use App\ContratoTipoServicio;
+
 
 class ContratoController extends Controller
 {
@@ -20,8 +22,16 @@ class ContratoController extends Controller
     
     public function tipoContrato (){
         return DB::select("select * from tipocontrato");
-    }    
+    }
     
+    public function  getPorNumeroContrato($contrato){
+        $result =  Contrato::where('ctNumeroContrato', $contrato)->first();
+        if(!empty($result)){
+            $result->TipoServicio = ContratoTipoServicio::where('csContratoId', $result->IdContrato)->get();
+        }
+        return $result;
+    }
+
     public function store(Request $request)
     {
         try{  
@@ -66,7 +76,7 @@ class ContratoController extends Controller
     private function llenarServicios($idContrato, $tipoServicio, $disponibilidad, $plantillas){
         try{            
             foreach ($tipoServicio as $ts) {
-                $insert = new ContratoPlantilla();
+                $insert = new ContratoTipoServicio();
                 $insert->csContratoId =$idContrato;
                 $insert->csTipoServicioId = $ts['svCodigo'];
                 $insert->csDescripcion = $ts['svDescripcion'];

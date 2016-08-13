@@ -181,7 +181,7 @@
                                         
                                         <h5 class="text-center text-success" style="margin-bottom: 0px;">{{titlePlantilla}}</h5>
                                         <hr style="margin-top: 1px;">
-                                        <div class="row" >
+                                        <div class="row" ng-show="VerPlantilla" >
                                             <div class="col-md-12">                                                
                                                 <div ng-repeat="item in Plantillas">
                                                     <div class="col-md-4">     
@@ -209,7 +209,7 @@
                                             </div>
                                         </div>
                                         
-                                        <div class="row" >
+                                        <div class="row" ng-hide="VerPlantilla">
                                             <div class="col-md-12">                                                
                                                 <div ng-repeat="item in Disponibilidades">
                                                     <div class="col-md-4">     
