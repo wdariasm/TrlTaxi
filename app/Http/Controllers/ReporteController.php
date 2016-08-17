@@ -159,7 +159,8 @@ class ReporteController extends Controller
         $pdf::Text(120,181,'NUMERO TARJETA OPERACION');
         $pdf::Rect(8,176,193,7); // #27
         
-        $pdf::SetFont('Times','',12);
+        $pdf::SetFont('Times','B',12);
+        $pdf::SetTextColor(0,0,153);
         $pdf::Cell(35,260.9,$pdf::Text(34,188,'0000'),0,'C'); //NUMERO INTERNO 
         $pdf::Rect(8,183,96,7); // #28
         
@@ -167,25 +168,68 @@ class ReporteController extends Controller
         $pdf::Rect(8,183,193,7); // #29
         
         $pdf::Ln(0);
+        $pdf::SetTextColor(0,0,0);
         $pdf::SetFont('Times','',10);
         $pdf::Text(10,196,'Conductor 1');
         $pdf::Rect(8,190,27,10); // #30
+        
         $pdf::Text(10,204,'Responsable del');
         $pdf::Text(10,208,'contratante');
         $pdf::Rect(8,200,27,10); // #31
 
+        $pdf::SetFont('Times','B',9);
+        $pdf::Text(37,194,'Nombres y Apellidos: '); 
+        $pdf::Rect(8,190,100,10); //rectangulo de nombres y apellido Conductor 1 #32 
+        $pdf::Text(37,204,'Nombres y Apellidos: '); 
+        $pdf::Rect(8,200,100,10); // rectangulo de nombres y apellidos del responsable contratante#33
+        $pdf::Text(110,194,'No. Cedula: '); 
+        $pdf::Rect(8,190,130,10); // rectangulo numero de cedula del conductor #33
+        $pdf::Text(110,204,'No. Cedula: '); 
+        $pdf::Rect(8,200,130,10); // rectangulo numero de cedula responsable#34
+        $pdf::Text(140,194,'No. Licencia: '); 
+        $pdf::Rect(8,190,160,10); // rectangulo numero de licencia del conductor #35
+        $pdf::Text(140,204,'Telefono: '); 
+        $pdf::Rect(8,200,160,10); // rectangulo numero de telefono del responsable #36
+        $pdf::Text(170,194,'Vigencia: '); 
+        $pdf::Rect(8,190,193,10); // rectangulo de vigencial conductor #37
+        $pdf::Text(170,204,'Direccion: '); 
+        $pdf::Rect(8,200,193,10); // rectangulo de la direccion del responsable #38
         
-        $pdf::Cell(35,260.9,$pdf::Text(34,188,'0000'),0,'C'); //NUMERO INTERNO 
-        $pdf::Rect(8,183,96,7); // #28
-        
-        $pdf::Cell(35,260.9,$pdf::Text(120,188,'100000'),0,'C'); //NUMERO TARJETA OPERACION
-        $pdf::Rect(8,183,193,7); // #29
+        $pdf::SetFont('Times','',10);
+       
+        $pdf::Cell(35,260.9,$pdf::Text(37,199,'LIA MARTINES'),0,'C');//CONDUCTOR 1
+        $pdf::Cell(35,260.9,$pdf::Text(37,209,'LIS CARRASCAL'),0,'C'); //RESPONSABLE DEL CONTRATANTE
+        $pdf::Cell(35,260.9,$pdf::Text(110,199,'108977'),0,'C'); //NUMERO CEDULA DEL CONDUCTOR 
+        $pdf::Cell(35,260.9,$pdf::Text(110,209,'08877'),0,'C'); //NUMERO DE CEDULA DEL RESPONSABLE
+        $pdf::Cell(35,260.9,$pdf::Text(140,199,'09-97-97'),0,'C'); //NUMERO DE LICENCIA 
+        $pdf::Cell(35,260.9,$pdf::Text(140,209,'796252'),0,'C'); //TELEFONO
+        $pdf::Cell(35,260.9,$pdf::Text(170,199,'2016 -'),0,'C'); //VIGENCIA "fecha"
+        $pdf::Cell(35,260.9,$pdf::Text(170,209,'CRR 36 BIS 16 C 51'),0,'C'); //DIRECCION DEL RESPONSABLE
         
         
         $pdf::SetFont('Times','B',12);
-        $pdf::Text(10,215,'FORMATO UNICO EXTRACTO DE CONTRATO');
-        $pdf::Rect(8,210,193,7); // #30
+        $pdf::Text(55,215,'FORMATO UNICO EXTRACTO DE CONTRATO');
+        $pdf::Rect(8,210,193,7); // #39
         
+        $pdf::Cell(35,260.9,$pdf::Text(25,235,'HOLA'),0,'C'); //DATOS EMPRESA 
+        $pdf::Rect(8,217,96,59); // #40
+        
+        $pdf::Cell(35,260.9,$pdf::Text(115,235,'FIRMA'),0,'C'); //FIRMA
+        $pdf::Rect(8,217,193,59); // #41
+        
+        $pdf::SetFont('Times','',9);
+        $pdf::Text(10,282,'Verificacion Online: '); 
+        $pdf::SetFont('Times','',12);
+        $pdf::Text(87,282,'NOTA: Area Verificaciones '); 
+        $pdf::SetFont('Times','B',12);
+        $pdf::Text(140,282,'Valido hasta:  '); 
+        
+        $pdf::SetFont('Times','',12);
+        $pdf::SetTextColor(0,0,153);
+        $pdf::Cell(35,260.9,$pdf::Text(37,282,'http://'),0,'C'); //RUTA HTTP
+        $pdf::SetTextColor(255,0,0);
+        $pdf::Cell(35,260.9,$pdf::Text(165,282,'2081'),0,'C'); //fecha de Validez
+        $pdf::Rect(8,276,193,9); // #42
         $pdf::Output();
         exit();
     }
@@ -197,8 +241,7 @@ class ReporteController extends Controller
      */
     public function index()
     {
-        //
-        
+        //       
     }
     
     
