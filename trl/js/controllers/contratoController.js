@@ -101,9 +101,10 @@ app.controller("contratoController", ["$scope", 'tipoVehiculoService', "toaster"
             TipoServicio : [],
             Plantillas : [],
             Disponibilidad : [],
-            FormaPago : [],
+            ctFormaPago : [],
             ctTipoContrato :"",   
-            ctRecorridos : ""            
+            ctRecorridos : "",
+            Validar : "0"
         };      
     }               
     
@@ -159,7 +160,7 @@ app.controller("contratoController", ["$scope", 'tipoVehiculoService', "toaster"
             return false;
         }
         
-        if($scope.Contrato.FormaPago.length === 0){
+        if($scope.Contrato.ctFormaPago.length === 0){
             toaster.pop("info","¡Alerta!", "Seleccione la forma de pago");
             return false;
         }
@@ -191,14 +192,14 @@ app.controller("contratoController", ["$scope", 'tipoVehiculoService', "toaster"
         var promise = contratoService.post($scope.Contrato);                                                            
         promise.then(function(d) {            
             toaster.pop('success','¡Información!', d.data.message);
+            $scope.Contrato.Validar ="";
             $scope.Boton.Guardar =true;
             $scope.Boton.Imprimir = false;
               
         }, function(err) {           
             toaster.pop('error', "¡Error!", err.data.request, 0);   
             console.log("Some Error Occured " + JSON.stringify(err));
-        });  
-                
+        });                  
     };
         
         

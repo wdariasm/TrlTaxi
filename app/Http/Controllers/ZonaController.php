@@ -13,7 +13,7 @@ class ZonaController extends Controller
 {
      public function index()
     {
-        return Zona::select('znCodigo', 'znNombre', 'znEstado')->get();
+        return Zona::select('znCodigo', 'znNombre', 'znEstado')->where('znEstado', '<>','BORRADO')->get();                 
     }
 
     public function getPuntos($zona)
@@ -135,7 +135,7 @@ class ZonaController extends Controller
     public function destroy($id)
     {
         try {
-            DB::delete("DELETE FROM zona WHERE znCodigo = $id");
+            DB::update("update zona set znEstado = 'BORRADO'  WHERE znCodigo = $id");
              return JsonResponse::create(array('message' => 'Zona Eliminada Correctamente'), 200);
         }catch (\Exception $exc) {
             return JsonResponse::create(array('message' => "No se pudo Eliminar", 'request'=>$exc), 401);

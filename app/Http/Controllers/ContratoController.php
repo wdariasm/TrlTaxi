@@ -52,6 +52,7 @@ class ContratoController extends Controller
             $contrato->ctNumVehiculos = $data["ctNumVehiculos"];
             $contrato->ctTipoContrato = $data["ctTipoContrato"];
             $contrato->ctUsuarReg = $data["ctUsuarReg"];
+            $contrato->ctFormaPago = json_encode($data["ctFormaPago"]);            
             $contrato->save();
             
             $numeroCto = $this->numeroContrato($contrato->IdContrato);

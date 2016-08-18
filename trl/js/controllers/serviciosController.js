@@ -67,7 +67,8 @@ app.controller('serviciosController',['$scope', 'zonaService', 'ngTableParams', 
             FechaInicio : "", 
             FechaFin : "",
             Estado : "",
-            Tipo : {}
+            Tipo : {},
+            Responsable : ""
         };
     }
         

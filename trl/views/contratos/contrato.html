@@ -75,6 +75,7 @@
                                     </div>
                                                                                                                 
                                     <div class="col-md-2">
+                                        <input type="hidden" required="" ng-model="Contrato.Validar"/>
                                         <div ng-if= "Boton.Guardar = frmContrato.$invalid" ></div>
                                         <button style="width: 130px"   ng-disabled="Boton.Guardar" class="btn btn-primary btn-block btn-addon"   type="button"  title="Registrar Servicio" ng-click="Guardar()"> <i class="fa fa-check"></i>Guardar</button>
                                     </div>
@@ -232,7 +233,7 @@
                                                 <div ng-repeat="fp in FormaPago">
                                                     <div class="col-md-3">     
                                                         <div class="checkbox checkbox-primary">                                        
-                                                             <input type="checkbox" id="fp{{$index}}" checklist-model="Contrato.FormaPago"  checklist-value="fp">
+                                                             <input type="checkbox" id="fp{{$index}}" checklist-model="Contrato.ctFormaPago"  checklist-value="fp">
                                                              <label for="fp{{$index}}">{{fp}}</label> 
                                                         </div>
                                                     </div> 
