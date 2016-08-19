@@ -100,7 +100,7 @@ class ConductorController extends Controller
      */
     public function show($IdConductor)
     {
-        //
+        return Conductor::find($IdConductor);
     }
 
     /**

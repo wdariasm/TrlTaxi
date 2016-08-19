@@ -1,5 +1,5 @@
-app.controller("conductorController", ["$scope", "conductorService", "tipoDocumentoService", "escolaridadService","toaster", "ngTableParams", "vehiculoService",
-   function ($scope, conductorService,tipoDocumentoService,escolaridadService,toaster,ngTableParams,vehiculoService) {
+app.controller("conductorController", ["$scope", "conductorService", "tipoDocumentoService", "escolaridadService","toaster", "ngTableParams", "vehiculoService", "funcionService",
+   function ($scope, conductorService,tipoDocumentoService,escolaridadService,toaster,ngTableParams,vehiculoService, funcionService) {
    $scope.Conductor = {};
    $scope.Conductores = [];
    $scope.Novedad={};
@@ -19,12 +19,14 @@ app.controller("conductorController", ["$scope", "conductorService", "tipoDocume
    $scope.editMode = false;
    $scope.editNovedad = false;
    
+   $scope.SelEscolaridad = {};      
    $scope.$parent.SetTitulo("GESTION DE CONDUCTOR");
-
-   
+  
     initialize();
     initNovedad();
     initLicencia();
+    loadEscolaridades();
+    
    function initialize() {
         $scope.Conductor = {
             IdConductor :"",
@@ -57,8 +59,23 @@ app.controller("conductorController", ["$scope", "conductorService", "tipoDocume
     function loadConductor (){
         var promise = conductorService.getAll();
         promise.then(function(d) {                        
-            $scope.Conductores = d.data;
+            $scope.Conductores = d.data;            
             $scope.TablaConductor.reload();
+        }, function(err) {           
+                toaster.pop('error','¡Error!',"Error al cargar Conductores");           
+                console.log("Some Error Occured " + JSON.stringify(err));
+        }); 
+    }
+    
+    function  getConductor(id){
+        var promise = conductorService.get(id);
+        promise.then(function(d) {                        
+            $scope.Conductor = d.data;            
+            $scope.Conductor.FechaNacimiento = moment($scope.Conductor.FechaNacimiento).format("L");
+            $scope.Conductor.FechaIngreso = moment($scope.Conductor.FechaIngreso).format("L");
+            var pos = funcionService.arrayObjectIndexOf($scope.Escolaridades,d.data.Escolaridad, 'esCodigo');            
+            $scope.SelEscolaridad =$scope.Escolaridades[pos];
+            
         }, function(err) {           
                 toaster.pop('error','¡Error!',"Error al cargar Conductores");           
                 console.log("Some Error Occured " + JSON.stringify(err));
@@ -69,12 +86,15 @@ app.controller("conductorController", ["$scope", "conductorService", "tipoDocume
         var promise = escolaridadService.getAll();
         promise.then(function(d) {                        
             $scope.Escolaridades = d.data;
+            if(d.data){
+                $scope.SelEscolaridad = d.data[0];
+            }
         }, function(err) {           
                 toaster.pop('error','¡Error!',"Error al cargar Escolaridad");       
                 console.log("Some Error Occured " + JSON.stringify(err));
         }); 
     }
-   loadEscolaridades();
+   
    
    
    
@@ -124,6 +144,7 @@ app.controller("conductorController", ["$scope", "conductorService", "tipoDocume
         $scope.Conductor.Observacion = $scope.Conductor.Observacion.toUpperCase();
         $scope.Conductor.Escolaridad = $scope.Conductor.Escolaridad.toUpperCase();
         $scope.Conductor.CdPlaca = $scope.Conductor.CdPlaca.toUpperCase();
+        $scope.Conductor.Escolaridad = $scope.SelEscolaridad.esCodigo;
            //$scope.Novedad.nvDescripcion=$scope.Novedad.nvDescripcion.toUpperCase();
 		   
             if ($scope.valCedula){
@@ -156,14 +177,11 @@ app.controller("conductorController", ["$scope", "conductorService", "tipoDocume
    
     //Editar Conductor
     $scope.get = function(item) {
-        $scope.Conductor=item;
-        $scope.Conductor.FechaNacimiento = moment($scope.Conductor.FechaNacimiento).format("L");
-        $scope.Conductor.FechaIngreso = moment($scope.Conductor.FechaIngreso).format("L");
+        getConductor(item.IdConductor);                
         $scope.editMode = true;
-        $scope.title = "Editar Conductor"; 
-        $scope.active = "active";
-        $('#tabPanels a[href="#tabRegistro"]').tab('show');
+        $scope.title = "Editar Conductor";        
         loadNovedad(item.IdConductor);
+        $('#tabPanels a[href="#tabRegistro"]').tab('show');
     };
    
    

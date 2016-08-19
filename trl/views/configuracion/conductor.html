@@ -197,10 +197,8 @@
                              <div class="form-group">
                                     <label  for="cboEscolaridad">Escolaridad *</label>
                                         <div class="input-group">    
-                                             <div class="input-group-addon"><i class="fa fa-mortar-board text-success"></i></div>
-                                                <select ng-model="Conductor.Escolaridad" name="cboEscolaridad" id="cboEscolaridad" style="width: 105%" class="form-control"  required >
-                                                     <option  ng-repeat="itemc in Escolaridades" value="{{itemc.esCodigo}}"> {{itemc.esDescripcion}}</option>
-                                                </select>                                                
+                                             <div class="input-group-addon"><i class="fa fa-mortar-board text-success"></i></div>                                                                                             
+                                             <select ng-model="SelEscolaridad" class="form-control" id="cboClase" ng-options="item as item.esDescripcion for item in Escolaridades track by item.esCodigo" required></select>
                                         </div> 
                              </div>   
                          </div>
