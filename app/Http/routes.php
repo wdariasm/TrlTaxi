@@ -45,3 +45,4 @@ include 'Routes/routesMantenimiento.php';
 include 'Routes/routesDetalleMantenimiento.php';
 include 'Routes/routesParametro.php';
 include 'Routes/routesReporte.php';
+include 'Routes/routesPdfContrato.php';
