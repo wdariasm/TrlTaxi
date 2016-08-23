@@ -30,7 +30,7 @@ function ($scope,rutaService, tipoVehiculoService,departamentoService, toaster,n
             rtValor:"0",
             rtDepartamento:"",
             rtCiudad:"",
-            trEstado : "ACTIVO",
+            rtEstado : "ACTIVO",
             rtImagen :'',
             rtPlantilla:'0',
             Imagen : ""

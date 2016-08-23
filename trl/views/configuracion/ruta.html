@@ -134,7 +134,7 @@
                                 <td>{{ items.rtValor}}</td> 
                                 <td>{{ items.dtNombre}}</td> 
                                 <td>{{ items.muNombre}}</td>
-                                <td>{{ items.trEstado}}</td>
+                                <td>{{ items.rtEstado}}</td>
                                 <td>
                                         <center>
                                             <a data-ng-click="get(items)" style="float: left; margin-left: 15px;" href="javascript:;"  title="Editar"><i class="fa  fa-1x fa-lg fa-pencil text-success"></i></a>
@@ -156,7 +156,7 @@
                                         <div class="modal-body">
                                             <div class="row">
                                                 <div class="col-xs-12">
-                                                    <label>¿Está seguro de ejecutar esta acción? '{{trEstado}}' </label>
+                                                    <label>¿Está seguro de ejecutar esta acción? '{{rtEstado}}' </label>
                                                 </div>
                                             </div>
                                         </div>
@@ -267,7 +267,7 @@
                                         <label for="txtEstado">Estado *</label>
                                             <div class="input-group">    
                                                 <div class="input-group-addon"><i class="fa fa-list-ul text-success"></i></div>
-                                                <select type="text" required="" class="form-control" ng-model="Ruta.trEstado" id="txtEstado" placeholder="Estado">
+                                                <select type="text" required="" class="form-control" ng-model="Ruta.rtEstado" id="txtEstado" placeholder="Estado">
                                                         <option value="ACTIVO">ACTIVO</option>
                                                         <option value="INACTIVO">INACTIVO</option>
                                                         <option value="BORRADO">BORRADO</option>
