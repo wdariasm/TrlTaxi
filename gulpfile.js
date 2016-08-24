@@ -11,12 +11,24 @@ gulp.task('controllers', function () {
     gulp.src(["trl/js/services/*.js", "trl/js/controllers/*.js"])
         .pipe(concat('vendors.js'))
         .pipe(uglify().on('error', gutil.log))
-        .pipe(gulp.dest('trl/dist/'))        
+        .pipe(gulp.dest('trl/dist/'));        
 });
 
 gulp.task('watch', function () {
-    gulp.watch('trl/js/controllers/*.js', ['controllers']);
-    gulp.watch('trl/js/services/*.js', ['services']);
+    gulp.watch('trl/js/controllers/*.js', ['controllers']);    
+});
+
+gulp.task('ctrlCliente', function () {
+    gulp.src(["cliente/js/services/*.js", "cliente/js/controllers/*.js"])
+        .pipe(concat('vendors.js'))
+        .pipe(uglify().on('error', gutil.log))
+        .pipe(gulp.dest('cliente/dist/'));
+});
+
+gulp.task('watch1', function () {
+    gulp.watch('cliente/js/controllers/*.js', ['ctrlCliente']);    
 });
 
 gulp.task('default', ['controllers', 'watch']);
+
+gulp.task('cliente', ['ctrlCliente', 'watch1']);

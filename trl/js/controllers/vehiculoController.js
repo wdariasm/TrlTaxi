@@ -1,5 +1,5 @@
-app.controller("vehiculoController", ["$scope", "vehiculoService", "marcaService", "tipoVehiculoService","ngTableParams", "toaster", "novedadService",
-    function ($scope, vehiculoService, marcaService, tipoVehiculoService, ngTableParams, toaster, novedadService) {
+app.controller("vehiculoController", ["$scope", "vehiculoService", "marcaService", "tipoVehiculoService","ngTableParams", "toaster", "novedadService","funcionService",
+    function ($scope, vehiculoService, marcaService, tipoVehiculoService, ngTableParams, toaster, novedadService, funcionService) {
    $scope.Vehiculo = {};
    $scope.Vehiculos = [];
    $scope.Marcas = [];
@@ -18,22 +18,31 @@ app.controller("vehiculoController", ["$scope", "vehiculoService", "marcaService
    $scope.MarcaSelect = {};
    $scope.ClaseSelect = {};
    
+   $scope.$parent.SetTitulo("GESTION DE VEHÍCULOS");
+   
    function init (){
-       $scope.Vehiculo = {
-            Placa : "",
+        $scope.Vehiculo = {            
             IdVehiculo : 0,
+            Placa : "",
+            Modelo :"",
             Color : "",
             Cilindraje : "",
             Movil : "",
             Estado : "ACTIVO", 
-            Tipo : "PROPIO",
-            FechaArriendo :  moment().format('L'),
-            NumPasajeros : 4, 
+            Propiedad : "PROPIO",            
+            FechaArriendo :  moment().format('L'),            
             ClaseVehiculo : 1,
+            Tipo : "",
             Runt : "", 
             FProxMantenimiento : moment().format('L'),
-            Marca : ""            
-       };        
+            Marca : "",
+            NumMotor : "",
+            NumSerie : "", 
+            NumVin  :"",
+            Linea: "",
+            TipoContrato : "",
+            Empresa: ""            
+        };        
     } 
     
     function initNovedad  (){
@@ -98,7 +107,7 @@ app.controller("vehiculoController", ["$scope", "vehiculoService", "marcaService
     function initTabla() {
         $scope.TablaVehiculo = new ngTableParams({
             page: 1,
-            count: 20,
+            count: 12,
             sorting: undefined
         }, {
             filterDelay: 50,
@@ -125,6 +134,11 @@ app.controller("vehiculoController", ["$scope", "vehiculoService", "marcaService
         $scope.Vehiculo.FProxMantenimiento = moment($scope.Vehiculo.FProxMantenimiento).format("L");
         $scope.editMode = true;
         $scope.Titulo = "Editando ";
+        var pos = funcionService.arrayObjectIndexOf($scope.ClaseVehiculo,$scope.Vehiculo.ClaseVehiculo, 'tvCodigo');            
+            $scope.ClaseSelect =$scope.ClaseVehiculo[pos];
+            
+        var pos1 = funcionService.arrayObjectIndexOf($scope.Marcas,$scope.Vehiculo.Marca, 'maCodigo');            
+            $scope.MarcaSelect =$scope.Marcas[pos1];
         $('#tabPanels a[href="#tabRegistro"]').tab('show');
     };
     
@@ -212,7 +226,7 @@ app.controller("vehiculoController", ["$scope", "vehiculoService", "marcaService
     $scope.AgregarNovedad = function (){                
         //$scope.Novedades.push($scope.Novedad);
         if(!$scope.Vehiculo.IdVehiculo){
-            toaster.pop("warning",'Validación','No existe un veículo seleccionado');
+            toaster.pop("warning",'Validación','No existe un vehículo seleccionado');
             return;
         }
         $scope.Novedad.Entidad =$scope.Novedad.Entidad.toUpperCase();

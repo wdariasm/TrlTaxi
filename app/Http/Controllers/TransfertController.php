@@ -5,17 +5,16 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Transfert;
 use Illuminate\Http\JsonResponse;
+use DB;
 
 class TransfertController extends Controller
 {
     
     public function index()
     {                
-        return Transfert::join('clasevehiculo', 'transfert.tfTipoVehiculo', '=', 'clasevehiculo.tvCodigo')
-                ->join('zona', 'transfert.tfOrigen', '=', 'zona.znCodigo')
-                ->where('transfert.tfEstado', '<>', 'BORRADO')
-                ->select('transfert.*','clasevehiculo.tvDescripcion', 'zona.znNombre')                
-                ->get();
+        return DB::select("SELECT t.*, cv.tvDescripcion, z.znNombre, zd.znNombre AS destino FROM transfert AS t "
+                . " INNER JOIN ClaseVehiculo AS cv ON t.tfTipoVehiculo = cv.tvCodigo INNER JOIN zona z ON t.tfOrigen = "
+                . " z.znCodigo INNER JOIN zona zd ON t.tfDestino = zd.znCodigo WHERE t.tfEstado <> 'BORRADO'");
     }
     
     public function  GetTarifasActivas(){

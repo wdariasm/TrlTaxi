@@ -147,12 +147,12 @@ app.controller("conductorController", ["$scope", "conductorService", "tipoDocume
         $scope.Conductor.Escolaridad = $scope.SelEscolaridad.esCodigo;
            //$scope.Novedad.nvDescripcion=$scope.Novedad.nvDescripcion.toUpperCase();
 		   
-            if ($scope.valCedula){
-           toaster.pop('error','¡Error!', 'N° de Cedula ya existe'); 
+        if ($scope.valCedula){
+            toaster.pop('error','¡Error!', 'N° de Cedula ya existe'); 
             return;
-             }
+         }
              
-           if($scope.valPlaca){
+        if($scope.valPlaca){
             toaster.pop('error','¡Error!', 'Placa no se encuentra registrada');
             return;
         }

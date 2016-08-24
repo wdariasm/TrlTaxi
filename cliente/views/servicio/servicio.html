@@ -1,157 +1,211 @@
-<div ng-controller="servicioController" class="contenedor">   
-    <div class="row white">
-        <div class="col s12 z-depth-1">           
-            <div class="row">
-                <br/>
-                <div class="col s8">
-                    <h2>Solicitar Servicio</h2> 
-                </div>                    
-                <div class="col s2">
-                    <a class="btn-floating btn-small waves-effect waves-light red" title="Mi Posición" href="javascript:void(0)" ng-click="ubicacionAutomatica()" style="margin-right: 10px;">
-                        <i class="mdi-maps-my-location">add</i></a>
-                    <a class="btn-floating btn-small waves-effect waves-light amber accent-4" title="Direcciones Favoritas" href="javascript:void(0)" ><i class="mdi-action-event">add</i></a>
-                </div>               
-            </div>
-            
-            <div class="row">
-                <div class="col s8">
-                   <!-- <a style="z-index: 10; position: absolute;  float: right; margin-top: 10px; margin-left: 45%" class="btn-floating btn-small waves-effect waves-light red" title="Mi Posición" href="javascript:void(0)" ng-click="ubicacionAutomatica()">
-                        <i class="mdi-maps-my-location">add</i></a>-->
-                    <div id="map" style="width: 100%;height: 500px;">                       
-                        
+<style>
+    input{
+        text-transform: none;
+    }
+</style>
+<div ng-controller="serviciosController"  class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">                                                     
+            <form name="frmServicio" novalidate  >
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Datos del Contrato</h3>
                     </div>
-                   
+                    <div class="panel-body">
+
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label  for="txtNumero" >N° Contrato *</label>
+                            <div class="input-group">   
+                                <select ng-model="ContratoSelect" class="form-control" ng-change="BuscarContrato('COMBO')" id="cboMarca" ng-options="item as item.ctNumeroContrato for item in Contratos track by item.IdContrato" required></select>
+                                <!--<input  type="text" class="form-control" required="" ng-model="Servicio.NumeroContrato" maxlength="11" solo-numeros id="txtNumero" placeholder="Seleccionar Contrato"  >-->
+                                <span class="input-group-btn">
+                                    <button type="button"  class="btn btn-info btn-md "   ng-click="GetContratos()" data-toggle="tooltip" data-placement="right" title="Actualizar mis contratos"><i class=" fa fa-search"></i></button>
+                                </span>
+                            </div> 
+                        </div>
+                    </div>                                                                   
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="txtNombre">Nombre Completo </label>
+                            <div class="input-group">    
+                                <div class="input-group-addon"><i class="fa fa-user text-success"></i></div>
+                                <input type="text"  class="form-control" required="" ng-model="Servicio.Nombre" maxlength="100" id="txtNombre" placeholder="Nombre Completo" disabled>
+                            </div>
+                        </div>
+                    </div>                                                                                                   
+
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <label for="txtTelefonoPpal">Teléfono </label>
+                            <div class="input-group">    
+                                <div class="input-group-addon"><i class="fa fa-mobile text-success"></i></div>
+                                <input type="text" class="form-control" ng-model="Servicio.Telefono"  required="" maxlength="10" solo-numeros id="txtTelefonoPpal" placeholder="Teléfono" disabled>
+                            </div>
+                       </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="txtFechaInicio">Fecha Inicio</label>
+                            <div class="input-group">    
+                                <div class="input-group-addon"><i class="fa fa-calendar-minus-o text-success"></i></div>
+                                <input type="text" class="form-control" ng-model="Servicio.FechaInicio"  required="" maxlength="10"  id="txtFechaInicio" placeholder="Inicio" disabled>
+                            </div>
+                       </div>
+                    </div>
+
+                   <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="txtFechaVen">Feccha Vencimiento</label>
+                            <div class="input-group">    
+                                <div class="input-group-addon"><i class="fa fa-calendar-times-o text-success"></i></div>
+                                <input type="text" class="form-control" ng-model="Servicio.FechaFin"  required="" maxlength="10"  id="txtFechaVen" placeholder="F. Final" disabled>
+                            </div>
+                       </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="txtEstado">Estado</label>
+                            <div class="input-group">    
+                                <div class="input-group-addon"><i class="fa fa-check text-success"></i></div>
+                                <input type="text" class="form-control" ng-model="Servicio.Estado"  required="" maxlength="10"  id="txtEstado" placeholder="Estado" disabled>
+                            </div>
+                       </div>
+                    </div>
+                    
+
+                                                                                                                                                                    
+                    </div>
                 </div>
-                
-                <div class="col s4">
-                    <form  name="frmServicio" id="frmServicio" novalidate>
-                        <input ng-model="Servicio.latitud"  id="txtLatitud" type="hidden" required>
-                        <input ng-model="Servicio.longitud"  id="txtLongitud" type="hidden" required > 
-                        
-                        <!--<div class="row">
-                            <label style="margin-left: 1rem; font-weight: normal; font-size: 11px; ">UBICACION &nbsp;</label> 
-                            <div class="col s12">
-
-                                <input name="rbUbicacion"  type="radio"  id="rbDirNO" value="actual" ng-model="Servicio.ubicacion"/>
-                                <label for="rbDirNO" class="black-text">Actual (Navegador) </label>              
-
-                                <input name="rbUbicacion" type="radio" id="rbDirSI" value="global"  ng-model="Servicio.ubicacion" checked/>
-                                <label for="rbDirSI" class="black-text">Predeterminada</label>
-
-                            </div>                               
-                        </div>-->                                                                                                                   
-                    
-                        
-                        
-                        <div class="row" >
-                            <div class="input-field col s12">
-                                <input type="text" id = "txtDireccion" ng-model="Servicio.direccion" required maxlength="30" placeholder="Dirección">
-                                <label class="active" for="txtDireccion" >DIRECCIÓN</label>
-                            </div>                            
-                        </div>
-                    
-                    <!--<label class="active" for="cboDireccion" style="margin-left: 1rem; margin-top: -10px; font-weight: normal; font-size: 11px; ">DIRECCIÓN</label>-->
-                    <div class="row" style="margin-top: -10px; margin-bottom: 5px; display: none">
-                        <div class="input-field col s4">                                
-                            <select ng-model="Servicio.dir0" name="cboCiudad" id="cboCiudad" style="width: 112%" class="browser-default"  required  ng-change="direccion()">                                            
-                                <option value="Carrera">Cra</option>    
-                                <option value="Calle">Cll</option> 
-                                <option value="Diagonal">Diag</option>                                
-                                <option value="Transversal">Tranv</option>
-                                <option value="Avenida">Av</option> 
-                                <option value="Vía">Vía</option> 
-                            </select>                               
-                        </div>
-
-                        <div class="input-field col s3">
-                            <input ng-model="Servicio.dir1" name="txtDir1"  id="txtDir1" type="text" required ng-keyup="direccion()" maxlength="8" >
-                            <div class="error" ng-show="frmServicio.txtDir1.$dirty && frmServicio.txtDir1.$invalid">
-                                <small ng-show="frmServicio.txtDir1.$error.required">Requerido</small>
-                            </div>
-                        </div>
-
-                        <div class="input-field col s3">                                 
-                            <input ng-model="Servicio.dir2" name="txtDir2" id="txtDir2" type="text" required ng-keyup="direccion()" maxlength="8">
-                             <label class="active" for="txtDir2">##</label>
-                             <div class="error" ng-show="frmServicio.txtDir2.$dirty && frmServicio.txtDir2.$invalid">
-                                <small ng-show="frmServicio.txtDir2.$error.required">Requerido</small>
-                            </div>
-                        </div>
-
-                        <div class="input-field col s2">
-                            <input ng-model="Servicio.dir3"  name="txtDir3" id="txtDir3" type="text" required ng-keyup="direccion()" maxlength="4">  
-                            <label class="active" for="txtDir2">--</label>
-                            <div class="error" ng-show="frmServicio.txtDir3.$dirty && frmServicio.txtDir3.$invalid">
-                                <small ng-show="frmServicio.txtDir3.$error.required">Requerido</small>
-                            </div>
-                        </div>
+                            
+                            
+                <div class="panel panel-default" ng-show="Servicio.TipoServicio.length">
+                    <div class="panel-heading">
+                      <h3 class="panel-title">Seleccionar Servicio</h3>
                     </div>
-                                                            
-                        <div class="row" style="margin-top: -20px">                            
-                            <div class="input-field col s4">                                
-                                <select ng-model="Servicio.dir4"  id="cboDir4" style="width: 112%" class="browser-default"  ng-change="direccionOP()" >                                            
-                                    <option value=""></option>
-                                    <option value="APTO">Apto</option>    
-                                    <option value="CASA">Casa</option> 
-                                    <option value="EDIFICIO">Edificio</option> 
-                                    <option value="BLOQUE">Bloque</option> 
-                                    <option value="CLINICA">Clinica</option>  
-                                </select>                               
-                            </div>
-
-                            <div class="input-field col s8">
-                                <input ng-model="Servicio.dir5"  id="txtDir5" type="text" ng-keyup="direccionOP()">
-                            </div>                                                       
-                        </div>
-                    
-                        <div class="row">
-                            <div class="input-field col s12">                                
-                                <select ng-model="Servicio.ciudad" name="cboCiudad" id="cboCiudad" style="width: 101%" class="browser-default"  required >                                            
-                                    <option ng-repeat="itemc in $parent.vecCiudad" value="{{itemc}}"> {{itemc}}</option>                                    
-                                </select>
-                                <label class="active" for="cboCiudad">CIUDAD *</label>
-                                <div class="error" ng-show="frmServicio.cboCiudad.$dirty && frmServicio.cboCiudad.$invalid">
-                                    <small ng-show="frmServicio.cboCiudad.$error.required">Ciudad es Requerida</small>
+                    <div class="panel-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <div class="form-group">
+                                        <label for="txtResponsable">Responsable del Servicio </label>
+                                        <div class="input-group">    
+                                            <div class="input-group-addon"><i class="fa fa-user text-success"></i></div>
+                                            <input type="text"  class="form-control" required="" ng-model="Servicio.Responsable" maxlength="100" id="txtResponsable" placeholder="Responsable del servicio" >
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label  for="txtFechaServicio">Fecha Servicio*</label>
+                                        <div class="input-group">
+                                            <div class="input-group-addon"><i class="fa fa-calendar-check-o text-success"></i></div>
+                                            <input type="text" id="txtFechaServicio" ng-model="Servicio.FechaServicio" name="txtFechaServicio" class="form-control" value="" ng-change="CambiarFormato('FProxMantenimiento')" required>                                                                                            
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    
-                    <div class="row">
-                        <div class="col s12">                            
-                            <input type="checkbox" id="chkDireccion"  class="right" ng-model="Servicio.guardarDir"/>
-                            <label for="chkDireccion" class="left">Guardar Dirección</label>                                                        
-                        </div>
-                    </div>
-                    
-                    <div class="row" ng-show="Servicio.guardarDir">
-                        <div class="col s12">                           
-                            <label for="txtLugar" class="active">Nombre Lugar</label>
-                            <input ng-model="Servicio.lugar"  id="txtLugar" name="txtLugar" type="text">                             
-                        </div>
-                    </div>
-                                       
-                    <div class="row">
-                        <div class="input-field col s12">
-                            <textarea ng-model="Servicio.descripcion" id="txtDescripcion" maxlength="200" rows="1" placeholder="Observaciones .. No debe pasar de 200 Caracteres"></textarea>
-                            <label class="active" for="txtDescripcion">DESCRIPCION </label>
-                        </div>
-                    </div>
-                    
-                    <div class="row">
-                        <div class="col s12">                                
-                            <button ng-disabled="frmServicio.$invalid" class="btn waves-effect waves-light red" style="display: block; width: 100%" type="button" title="Pedir Taxi" ng-click="registrar()">
-                                <i class="mdi-content-send right"></i>PEDIR TAXI
-                            </button> 
-                        </div>
-                    </div> 
-                    </form>                    
-                </div>               
-            </div>
-        </div>
-   </div>
-</div>
-<script>
-    var alto = $(window).height();
-    document.getElementById("map").style.height = alto-200+"px";
- </script>
 
+                            <div class="row">       
+                                <div class="col-md-2">
+                                    <label style="margin-top: 10px;">Tipo de Servicio</label>
+                                </div>
+                                <div class="col-md-10">
+                                    <div ng-repeat="ts in Servicio.TipoServicio">
+                                        <div class="col-md-3">     
+                                            <div class="radio radio-danger">                                                                                                    
+                                                <input type="radio" id="ts{{ts.csCodigo}}" ng-model="Servicio.Tipo" ng-change="TipoServicioCheck()" ng-value="ts">
+                                                <label for="ts{{ts.csCodigo}}">{{$index + 1}}. &nbsp; {{ts.csDescripcion}}</label>  
+                                            </div>
+                                        </div> 
+                                    </div>
+                                </div>
+                            </div>
+
+                            <hr>
+
+                            <div ng-show="Servicio.Tipo.csTipoServicioId ==1">
+                            <div class="row">                                    
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label  for="txtOrigen">Dirección de origen *</label>     
+                                        <div class="input-group">  
+                                             <div class="input-group-addon"><i class="fa fa-street-view"></i></div>                                
+                                            <input class="form-control" ng-model="Servicio.Origen"  id="txtOrigen" type="text" required maxlength="255"  placeholder="Ingresa tu ubicación">                                              
+                                        </div>    
+                                    </div>                                
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label  for="txtDestino">Dirección de destino *</label>     
+                                        <div class="input-group">  
+                                             <div class="input-group-addon"><i class="fa fa-globe"></i></div>                                
+                                            <input class="form-control" ng-model="Servicio.Destino"  id="txtDestino" type="text" required maxlength="255"  placeholder="Ingresa tu ubicación">                                              
+                                        </div>    
+                                    </div>                                
+                                </div>
+                            </div>
+                            
+                                
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div id="dvMapaServicio" style="width: 100%; height: 440px; margin-top: 10px;" ng-model="mapServicio">
+
+                                    </div>
+                                </div>
+                            </div>                        
+                            </div>
+                            
+                            
+                            <div ng-show="Servicio.Tipo.csTipoServicioId ==2">
+                                
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <label  for="txtNumPasajeros">N° Pasajeros *</label>     
+                                        <div class="input-group">  
+                                             <div class="input-group-addon"><i class="fa fa-users"></i></div>                                
+                                            <input class="form-control" ng-model="Servicio.NumPasajeros" solo-numeros id="txtNumPasajeros" type="text" required maxlength="3"  placeholder="Pasajeros">                                              
+                                        </div>    
+                                    </div> 
+                                </div>
+                            </div>
+                                
+                            </div>
+                        </div>                       
+                    </div>                                  
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>                    
+</div>
+
+<script type="text/javascript">
+     $('#tabPanels a').click(function (e) {
+        e.preventDefault();
+        $(this).tab('show');
+    });
+    
+    $(function () {
+        $('input[name="txtFechaServicio"]').daterangepicker({
+            singleDatePicker: true,
+            showDropdowns: true           
+        }, 
+        function(start, end, label) {
+            $('#txtFechaServicio').val(end.format('DD/MM/YYYY'));         
+        });
+        
+        
+        $('[data-toggle="tooltip"]').tooltip();
+    });
+    
+    
+        
+</script>

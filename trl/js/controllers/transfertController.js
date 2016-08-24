@@ -110,7 +110,8 @@ app.controller('transfertController',['$scope', 'zonaService', 'ngTableParams', 
                 f = [];
                 c ? (c = c.toLowerCase(), f = $scope.Transferts.filter(function (a) {
                     return a.tfNombre.toLowerCase().indexOf(c) > -1 ||
-                           a.tvDescripcion.toLowerCase().indexOf(c) > -1                                                       
+                           a.tvDescripcion.toLowerCase().indexOf(c) > -1 ||
+                            a.znNombre.toLowerCase().indexOf(c) > -1
                 })) : f = $scope.Transferts, f = b.sorting() ? f : f, b.total(f.length), a.resolve(f.slice((b.page() - 1) * b.count(), b.page() * b.count()))
             }
         });

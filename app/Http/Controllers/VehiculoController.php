@@ -70,7 +70,7 @@ class VehiculoController extends Controller
      */
     public function show($id)
     {
-        //
+        return  Vehiculo::find($id);
     }
    
 

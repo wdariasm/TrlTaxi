@@ -226,7 +226,7 @@ class UsuarioController extends Controller
 
             DB::update("UPDATE usuario SET FechaCnx = NOW(), DirIp=$dirIp, Sesion='INICIADA' WHERE IdUsuario = ".$user['IdUsuario']."");
 
-            return JsonResponse::create(array('message' =>"Correcto", "request" =>json_encode($usuario)), 200);
+            return JsonResponse::create(array('message' =>"Correcto", "request" =>json_encode($usuario[0])), 200);
 
         } catch (\DecryptException $e) {
             return JsonResponse::create(array('message' => "No se puedo autenticar el usuario", "request" =>json_encode($e->getMessage())), 401);

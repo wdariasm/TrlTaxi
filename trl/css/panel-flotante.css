@@ -1,0 +1,121 @@
+﻿.fijar {
+    position: fixed !important;
+    top: 10px !important;
+    z-index: 100;
+    right: 12px;
+}    
+
+    .borrador {
+        background-color: #3F51B5;
+    }
+
+    .borrador:hover {
+        background-color: #5C6BC0;
+
+    }
+
+    .confirmar {
+        background-color: #EC407A;
+    }
+
+    .confirmar:hover {
+        background-color: #F06292;
+    }
+
+    .editar {
+        background-color: #F44336;
+    }
+
+        .editar:hover {
+            background-color: #EF5350;
+        }
+
+    .cancelar {
+        background-color: #FF5722;
+    }
+
+        .cancelar:hover {
+            background-color: #FF7043;
+        }
+
+    .pdf {
+        background-color: #26A69A;
+    }
+
+        .pdf:hover {
+            background-color: #4DB6AC;
+        }
+
+    .volver {
+        background-color: #fad733;
+    }
+
+    .volver:hover {
+        background-color: #FFEE58;
+    }
+    
+/* botones */
+
+
+.btn-floating {
+    color: #fff;
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+    width: 40px;
+    height: 40px;
+    line-height: 27px;
+    padding: 0;
+    border-radius: 50%;
+    -moz-transition: .3s;
+    -o-transition: .3s;
+    -webkit-transition: .3s;
+    transition: .3s;
+    cursor: pointer;
+    vertical-align: middle;
+    margin: 10px;
+    box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+}
+
+.btn-floating i {
+    width: inherit;
+    display: inline-block;
+    text-align: center;
+    color: #fff;
+    font-size: 1.7rem;
+    line-height: 27px;
+}
+
+.btn-floating:before {
+    border-radius: 0;
+}
+
+.btn-floating.btn-large {
+    width: 50px;
+    height: 50px;
+}
+
+.btn-floating.btn-large i {
+    line-height: 45.5px;
+}
+
+  button.btn-floating {
+      border: none;
+  }
+
+  .btn-floating:hover {
+      box-shadow: 0 5px 11px 0 rgba(0, 0, 0, 0.18), 0 4px 15px 0 rgba(0, 0, 0, 0.15);
+  }
+
+  .btn-floating:disabled {
+      background-color: rgba(0, 0, 0, 0.18) !important;
+  }
+
+  .texto {
+        margin-top: -5px;
+        display: block;
+    }
+
+
+
+ 

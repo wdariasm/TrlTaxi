@@ -1,12 +1,12 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-12">  
-            <div class="tabbable-line">
-                   <ul class="nav nav-tabs nav-justified" id="tabPanels">
-                       <li class="active"> <a href="#tabPlantilla" data-toggle="tab">Plantillas Transfert </a></li>
-                       <li><a href="#tabRegistro" data-toggle="tab">Transfert </a></li>
-                   </ul>
-            </div>
+            
+            <ul class="nav nav-tabs nav-justified" id="tabPanels">
+                <li class="active"> <a href="#tabPlantilla" data-toggle="tab">Plantillas Transfert </a></li>
+                <li><a href="#tabRegistro" data-toggle="tab">Transfert </a></li>
+            </ul>
+            
         </div>
         
         <div class="tab-content">            
@@ -193,16 +193,15 @@
                 </div>
 
                 <div class="col-xs-8">
-                    <div class="row">
-                        <div class="col-xs-8">
-                            <label  for="search">Filtro</label>
+                    <div class="row" style="margin-top: 10px;">
+                        <div class="col-xs-8">                            
                              <div class="input-group">
                                  <div class="input-group-addon"><i class="fa  fa-search text-primary"></i></div>
-                                 <input  class="form-control" id="search" type="search" placeholder="" ng-model="tbTransfert.filter()['busqueda']">
+                                 <input  class="form-control" id="search" type="search" placeholder="Buscar" ng-model="tbTransfert.filter()['busqueda']">
                              </div>
 
                         </div>
-                         <div class="" style="float:width; margin-top:30px;">
+                         <div class="" style=" margin-top:7px;">
                              <label class=" text-primary" style="font-size: 18px;">Total: {{Transferts.length}}</label>
                          </div>
                         <br/>
@@ -225,7 +224,7 @@
                             <tr ng-repeat="item in $data">                        
                                 <td>{{ item.tfNombre}}</td>
                                 <td>{{ item.znNombre }}</td>
-                                <td >{{ item.tfDestino }}</td>
+                                <td >{{ item.destino }}</td>
                                 <td>{{ item.tvDescripcion}}</td>
                                 <td >{{ item.tfValor | currency : "$" : 0}}</td>                        
                                 <td>{{ item.tfEstado}}</td>
