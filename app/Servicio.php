@@ -7,6 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 class Servicio extends Model
 {
     protected $table = "servicio";   
-    protected $primaryKey = 'svCodigo';
+    protected $primaryKey = 'IdServicio';
     public $timestamps = false;
 }

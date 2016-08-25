@@ -21,6 +21,14 @@ class TransfertController extends Controller
         return Transfert::where('tfEstado', 'ACTIVO')->get();
     }
     
+    public function getPrecioTransfert($plantilla, $tipovehiculo, $origen, $destino){
+        return Transfert::select('tfCodigo', 'tfNombre', 'tfValor')
+                ->where('tfPlantilla', $plantilla)
+                ->where('tfTipoVehiculo', $tipovehiculo)
+                ->where('tfOrigen', $origen)
+                ->where('tfDestino', $destino)->first();
+    }
+    
     /**
      * Display the specified resource.
      *

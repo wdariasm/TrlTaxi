@@ -35,19 +35,37 @@ class ServicioController extends Controller
       try{  
             $data = $request->all(); 
             $servicio= new Servicio();                        
-            $servicio->svDescripcion = $data["svDescripcion"];
-            $servicio->svEstado = $data["svEstado"];                     
+            $servicio->ContratoId = $data["ContratoId"]; 
+            $servicio->NumeroContrato = $data["NumeroContrato"]; 
+            $servicio->ClienteId = $data["ClienteId"]; 
+            $servicio->Nit = $data["Nit"];
+            $servicio->Responsable = $data["Responsable"]; 
+            $servicio->Telefono = $data["Telefono"]; 
+            $servicio->TipoServicidoId = $data["TipoServicidoId"]; 
+            //$date = new \DateTime(str_replace("/", "-", $data["FechaServicio"]));
+            $servicio->FechaServicio = $data["FechaServicio"];
+            $servicio->Hora= $data["Hora"]; 
+            $servicio->Valor= $data["Valor"]; 
+            $servicio->NumPasajeros= $data["NumPasajeros"];
+            $servicio->NumHoras= $data["NumHoras"];
+            $servicio->Estado= "SOLICITADO";
+            $servicio->FormaPago= $data["FormaPago"];
+            $servicio->DireccionOrigen= $data["DireccionOrigen"];
+            $servicio->DireccionDestino= $data["DireccionDestino"];
+            $servicio->ZonaOrigen= $data["ZonaOrigen"];
+            $servicio->ZonaDestino= $data["ZonaDestino"];
+            $servicio->LatOrigen= $data["LatOrigen"];
+            $servicio->LngOrigen= $data["LngOrigen"];
+            $servicio->LatDestino= $data["LatDestino"];
+            $servicio->LngDestino= $data["LngDestino"];
+            $servicio->PlantillaId= $data["PlantillaId"];
+            $servicio->Calificacion= 0;
+            $servicio->UserReg= $data["UserReg"];
+            //$date2 = new \DateTime(str_replace("/", "-",$data["FechaMod"]));            
+            $servicio->FechaMod = new \DateTime();
             $servicio->save();
-            $tipos = $data["TipoVehiculo"];             
-            for ($index = 0; $index < count($tipos); $index++) {
-                $insert = new ServicioClaseVehiculo();
-                $insert->scvServicio =$servicio->svCodigo;
-                $insert->scvClaseVehiculo = $tipos[$index];
-                $insert->scvEstado ='ACTIVO';
-                $insert->save();
-            }      
-            
-            return JsonResponse::create(array('message' => "Servicio guardado correctamente", "request" =>json_encode($servicio->svCodigo)), 200);
+                                    
+            return JsonResponse::create(array('message' => "Servicio guardado correctamente", "request" =>json_encode($servicio->IdServicio)), 200);
         } catch (Exception $exc) {    
             return JsonResponse::create(array('message' => "No se pudo guardar", "request" =>json_encode($exc->getMessage())), 401);
         }

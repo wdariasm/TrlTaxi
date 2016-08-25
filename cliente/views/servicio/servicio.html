@@ -40,7 +40,7 @@
                             <label for="txtNombre">Nombre Completo </label>
                             <div class="input-group">    
                                 <div class="input-group-addon"><i class="fa fa-user text-success"></i></div>
-                                <input type="text"  class="form-control" required="" ng-model="Servicio.Nombre" maxlength="100" id="txtNombre" placeholder="Nombre Completo" disabled>
+                                <input type="text"  class="form-control" required="" ng-model="Contrato.Nombre" maxlength="100" id="txtNombre" placeholder="Nombre Completo" disabled>
                             </div>
                         </div>
                     </div>                                                                                                   
@@ -60,7 +60,7 @@
                             <label for="txtFechaInicio">Fecha Inicio</label>
                             <div class="input-group">    
                                 <div class="input-group-addon"><i class="fa fa-calendar-minus-o text-success"></i></div>
-                                <input type="text" class="form-control" ng-model="Servicio.FechaInicio"  required="" maxlength="10"  id="txtFechaInicio" placeholder="Inicio" disabled>
+                                <input type="text" class="form-control" ng-model="Contrato.FechaInicio"  required="" maxlength="10"  id="txtFechaInicio" placeholder="Inicio" disabled>
                             </div>
                        </div>
                     </div>
@@ -70,7 +70,7 @@
                             <label for="txtFechaVen">Fecha Vencimiento</label>
                             <div class="input-group">    
                                 <div class="input-group-addon"><i class="fa fa-calendar-times-o text-success"></i></div>
-                                <input type="text" class="form-control" ng-model="Servicio.FechaFin"  required="" maxlength="10"  id="txtFechaVen" placeholder="F. Final" disabled>
+                                <input type="text" class="form-control" ng-model="Contrato.FechaFin"  required="" maxlength="10"  id="txtFechaVen" placeholder="F. Final" disabled>
                             </div>
                        </div>
                     </div>
@@ -80,7 +80,7 @@
                             <label for="txtEstado">Estado</label>
                             <div class="input-group">    
                                 <div class="input-group-addon"><i class="fa fa-check text-success"></i></div>
-                                <input type="text" class="form-control" ng-model="Servicio.Estado"  required="" maxlength="10"  id="txtEstado" placeholder="Estado" disabled>
+                                <input type="text" class="form-control" ng-model="Contrato.Estado"  required="" maxlength="10"  id="txtEstado" placeholder="Estado" disabled>
                             </div>
                        </div>
                     </div>
@@ -89,6 +89,18 @@
                         <div class="form-group">
                             <h2 for="txtValor" class="text-primary text-center">{{Servicio.Valor  | currency : "$" : 0}}</h2>
                        </div>
+                    </div>
+                        
+                    <div class="row">
+                        <div class="col-md-2 col-md-offset-7">                                        
+                            <br/>
+                            <button   class="btn btn-success btn-block btn-addon"   type="button"  title="Nuevo / Cancelar" ng-click="Nuevo()"><i class="fa fa-pencil"></i> Nuevo</button>
+                        </div>
+                        <div class="col-md-2">
+                            <!-- ng-disabled="frmVehiculo.$invalid" -->
+                            <br/>
+                            <button ng-disabled="frmServicio.$invalid"   class="btn btn-primary btn-block btn-addon"   type="button"  title="Solicitar Servicio" ng-click="Guardar()"><i class="fa fa-check"></i> Guardar</button>
+                        </div>
                     </div>
                         
                     </div>
@@ -168,17 +180,17 @@
                                             </div>    
                                         </div> 
                                     </div>
-                                    <div class="col-md-6" ng-show="Servicio.Tipo.csTipoServicioId ==2">
+                                    <div class="col-md-6">
                                         <div class="form-group">
                                             <label  for="txtNumHoras">N° Horas *</label>     
                                             <div class="input-group">  
                                                  <div class="input-group-addon"><i class="fa fa-clock-o"></i></div>                                
-                                                <input class="form-control" ng-model="Servicio.NumHoras" solo-numeros id="txtNumHoras" type="text" required maxlength="3"  placeholder="Horas">                                              
+                                                 <input class="form-control" ng-model="Servicio.NumHoras" solo-numeros id="txtNumHoras" ng-disabled="Servicio.Tipo.csTipoServicioId !==2" type="text" required maxlength="3"  placeholder="Horas">
                                             </div>    
                                         </div> 
                                     </div>
                                         
-                                    <div class="col-md-6">    
+                                    <div class="col-md-8">    
                                         <div class="form-group">
                                             <label  for="txtTipoVehiculo" >Tipo de Vehículo *</label>
                                             <div class="input-group">   
@@ -186,7 +198,14 @@
                                                 <select ng-model="TipoSelect" class="form-control"  id="txtTipoVehiculo" ng-options="item as item.tvDescripcion for item in Contrato.TipoVehiculo track by item.tvCodigo" required></select>
                                             </div> 
                                         </div>
-                                    </div>  
+                                    </div>
+                                        
+                                    <div class="col-md-4">    
+                                        <div class="form-group">     
+                                            <br>
+                                            <button type="button" class="btn btn-primary btn-block" style="margin-top: 4%;" ng-click="ConsultarPrecio()">Consultar Precio</button>
+                                        </div>
+                                    </div>
                                         
                                     </div> 
                                     
@@ -194,7 +213,7 @@
                                     
                                         <div class="col-md-10 col-md-offset-1">
                                             <div>
-                                                <img  src="{{TipoSelect.tvRuta}}" alt="Tipo Vehículo" class="img-responsive img-thumbnail text-centers" style="height: 250px; width: 250px;" >
+                                                <img  src="{{TipoSelect.tvRuta}}" alt="Tipo Vehículo" class="img-responsive img-thumbnail text-centers" style="height: 220px; width: 220px;" >
                                             </div>
                                         </div>                                        
                                     </div>
@@ -208,7 +227,7 @@
                                                 <label  for="txtOrigen">Dirección de origen *</label>     
                                                 <div class="input-group">  
                                                      <div class="input-group-addon"><i class="fa fa-street-view"></i></div>                                
-                                                    <input class="form-control" ng-model="Servicio.Origen"  id="txtOrigen" type="text" required maxlength="255"  placeholder="Ingresa tu ubicación">                                              
+                                                    <input class="form-control" ng-model="Servicio.DireccionOrigen"  id="txtOrigen" type="text"  maxlength="255"  placeholder="Ingresa tu ubicación">                                              
                                                 </div>    
                                             </div>                                
                                         </div>
@@ -218,7 +237,7 @@
                                                 <label  for="txtDestino">Dirección de destino *</label>     
                                                 <div class="input-group">  
                                                      <div class="input-group-addon"><i class="fa fa-globe"></i></div>                                
-                                                    <input class="form-control" ng-model="Servicio.Destino"  id="txtDestino" type="text" required maxlength="255"  placeholder="Ingresa tu ubicación">                                              
+                                                    <input class="form-control" ng-model="Servicio.DireccionDestino"  id="txtDestino" type="text"  maxlength="255"  placeholder="Ingresa tu ubicación">                                              
                                                 </div>    
                                             </div>                                
                                         </div>
