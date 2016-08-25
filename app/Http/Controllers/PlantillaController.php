@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Plantilla;
 use Illuminate\Http\JsonResponse;
+use DB;
 
 class PlantillaController extends Controller
 {
@@ -42,7 +43,7 @@ class PlantillaController extends Controller
     
     
     /*
-     * Obtener todad las plantillas por tipo de servicio
+     * Obtener todas las plantillas por tipo de servicio
      */
     public function getPlantillaporTipo($id){
         
@@ -50,6 +51,15 @@ class PlantillaController extends Controller
                 ->where('plTipoServicio', $id)
                 ->select('plantilla.*','tiposervicio.svDescripcion')                
                 ->get();                
+    }
+        
+    /*
+     * Obtener Tipos de Vehiculos por plantilla
+     */
+    public function getTiposVehiculo($id) {
+        $result = DB::select("SELECT DISTINCT t.tfTipoVehiculo,cv.tvCodigo, cv.tvDescripcion , cv.tvNumPasajero, cv.tvRuta FROM "
+            . " transfert t INNER JOIN ClaseVehiculo cv ON  t.tfTipoVehiculo=cv.tvCodigo WHERE tfPlantilla = $id");        
+        return $result;        
     }
     
 

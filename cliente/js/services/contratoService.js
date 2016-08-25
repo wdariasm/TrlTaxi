@@ -8,7 +8,13 @@ app.service("contratoService",[ '$http', function ($http) {
         var req = $http.get(uri+'/api/cliente/' + id + '/contratos');
         return req;
     };
-           
+    
+    this.getTipoVehiculo = function (id) {
+        var req = $http.get(uri+'/api/plantilla/' + id + '/tipovehiculo');
+        return req;
+    };
+    
+    
     
     this.getPorNumeroCto = function (numero) {
         var req = $http.get(uri+'/api/contrato/' + numero + '/tiposervicio');

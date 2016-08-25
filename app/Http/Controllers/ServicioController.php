@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use App\Servicio;
 use Illuminate\Http\JsonResponse;
 use DB;
-use App\ServicioClaseVehiculo;
+
 class ServicioController extends Controller
 {
     /**

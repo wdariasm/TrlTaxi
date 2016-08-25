@@ -9,25 +9,14 @@ app.service("zonaService", ['$http', function ($http) {
         return req;
     };
     
-    this.getNumTaxi = function (id) {
-        var req = $http.get(uri+'/api/zona/' + id + '/taxis');
+    this.getZona = function (latitud, longitud) {
+        var req = $http.get(uri+'/api/zona/' + latitud + '/' +longitud);
         return req;
     };
     
-    this.getTaxistas = function (id) {
-        var req = $http.get(uri+'/api/zona/' + id + '/taxistas');
-        return req;
-    };
-       
-    this.getAll = function () {
-        var req = $http.get(uri+'/api/zona');
-        return req;
-    };                
+             
               
             
-    this.getByNombre = function () {
-        var req = $http.get(uri+'/api/zonas');
-        return req;
-    };
+    
 }]);
 

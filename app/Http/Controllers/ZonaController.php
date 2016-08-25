@@ -43,6 +43,10 @@ class ZonaController extends Controller
 
         return $result;
     }
+    
+    public function getZonaByPunto($latitud, $longitud) {        
+        return DB::select("SELECT znCodigo,znNombre FROM zona WHERE st_contains(znArea, POINT($latitud, $longitud)) LIMIT 1");
+    }
 
 
     /**

@@ -28,6 +28,10 @@ class ContratoController extends Controller
         $result =  Contrato::where('ctNumeroContrato', $contrato)->first();
         if(!empty($result)){
             $result->TipoServicio = ContratoTipoServicio::where('csContratoId', $result->IdContrato)->get();
+            $result->Plantilla = ContratoPlantilla::join("plantilla", 'contratoplantilla.pcPlantillaId', '=', 'plantilla.plCodigo')
+                    ->select("contratoplantilla.pcCodigo","contratoplantilla.pcTipoServicio","plantilla.plCodigo", "plantilla.plDescripcion")
+                    ->where('pcContratoId', $result->IdContrato)->get();
+            
         }
         return $result;
     }

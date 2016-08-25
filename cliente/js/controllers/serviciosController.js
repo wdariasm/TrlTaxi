@@ -1,8 +1,9 @@
-app.controller('serviciosController',['$scope', 'zonaService', 'ngTableParams', 'toaster', "contratoService",
-    function ($scope,  zonaService, ngTableParams, toaster, contratoService) {
+app.controller('serviciosController',['$scope', 'zonaService', 'ngTableParams', 'toaster', "contratoService","funcionService",
+    function ($scope,  zonaService, ngTableParams, toaster, contratoService, funcionService) {
     $scope.Zonas = [];       
     $scope.Zona = {};
     
+    $scope.Contrato = {};
     $scope.Contratos = [];
     $scope.ContratoSelect = {};
     $scope.Boton = {"Cargando":true};
@@ -16,14 +17,14 @@ app.controller('serviciosController',['$scope', 'zonaService', 'ngTableParams', 
     $scope.mapServicio;      
     $scope.markerOrigen = null;    
     var markerDestino = null;    
-//    var infowindow = new google.maps.InfoWindow();
-//    var options = {  componentRestrictions: {country: 'co'} };
-//    
-//    var origenPlaceId = null;
-//    var destinoPlaceId = null;
-//    var travelMode = google.maps.TravelMode.DRIVING;
-//    var directionsService = new google.maps.DirectionsService;
-//    var directionsDisplay = new google.maps.DirectionsRenderer;
+    var infowindow = new google.maps.InfoWindow();
+    var options = {  componentRestrictions: {country: 'co'} };
+    
+    var origenPlaceId = null;
+    var destinoPlaceId = null;
+    var travelMode = google.maps.TravelMode.DRIVING;
+    var directionsService = new google.maps.DirectionsService;
+    var directionsDisplay = new google.maps.DirectionsRenderer;
     
     
     $scope.vecPoligono = new Array(); /// Vector de Poligonos
@@ -44,11 +45,10 @@ app.controller('serviciosController',['$scope', 'zonaService', 'ngTableParams', 
     $scope.AutocompleteOrigen=null;   
     $scope.AutocompleteDestino =null;
     
-//    geolocate();   
-//    iniciarMapaZ(); 
-//    initAutocomplete();    
-//    initAutocompleteDestino();
-//    initTablaZona();
+    geolocate();   
+    iniciarMapaZ(); 
+    initAutocomplete();    
+    initAutocompleteDestino();    
     init();
         
     function Poligono() {
@@ -58,21 +58,32 @@ app.controller('serviciosController',['$scope', 'zonaService', 'ngTableParams', 
     
     
     function init(){
+        $scope.Contrato = {
+            TipoServicio :[],
+            Plantilla: [],
+            TipoVehiculo : []
+        };
+        
         $scope.Servicio = {
             Origen : "",
             Destino : "",
             ContratoId : 0,
-            NumeroContrato:"",
-            ClienteId : 0,
+            NumeroContrato:"",            
             Nit : "",
             Nombre: "",
-            Telefono : "", 
-            TipoServicio : [],
+            Telefono : "",             
             FechaInicio : "", 
             FechaFin : "",
             Estado : "",
             Tipo : {},
-            Responsable : ""
+            Responsable : "",
+            Hora:"",
+            Valor : "0",
+            NumHoras : "0",
+            NumPasajeros : "0",
+            ClienteId : $scope.$parent.Login.ClienteId,
+            ZonaOrigen :"",
+            ZonaDestino : ""
         };
     }               
     
@@ -91,12 +102,13 @@ app.controller('serviciosController',['$scope', 'zonaService', 'ngTableParams', 
             }
             expandViewportToFitPlace($scope.mapServicio, place);                        
             $scope.markerOrigen.setIcon("images/origen.png");
+            
             $scope.markerOrigen.setPosition(place.geometry.location);
             $scope.markerOrigen.setVisible(true);
                 if(!$scope.popup){
                     $scope.popup = new google.maps.InfoWindow();
                 }
-
+            console.log($scope.markerOrigen);
             var address = '';
             if (place.address_components) {
               address = [
@@ -239,7 +251,22 @@ app.controller('serviciosController',['$scope', 'zonaService', 'ngTableParams', 
             map.setCenter(place.geometry.location);
             map.setZoom(17);
         }
-  }
+    }
+    
+    function buscarZona(lat, lng, opcion){
+        var promise = zonaService.getZona(lat, lng);
+        promise.then(function(d) {    
+            if(opcion ==="Origen"){
+                $scope.Servicio.ZonaOrigen = d.data.znCodigo;            
+            }else{
+                $scope.Servicio.ZonaDestino = d.data.znCodigo; 
+            }
+            
+        }, function(err) {           
+                toaster.pop('error','¡Error!',"Error al cargar tipos de vehículo",0);           
+                console.log("Some Error Occured " + JSON.stringify(err));
+        });  
+    }
               
     
     // GESTIONAR POLYGONOS ///
@@ -280,6 +307,16 @@ app.controller('serviciosController',['$scope', 'zonaService', 'ngTableParams', 
         }
         dibujarPoligono();
     };
+    
+    function getTipoVehiculo(id){
+        var promise = contratoService.getTipoVehiculo(id);
+        promise.then(function(d) {                        
+            $scope.Contrato.TipoVehiculo = d.data;            
+        }, function(err) {           
+                toaster.pop('error','¡Error!',"Error al cargar tipos de vehículo",0);           
+                console.log("Some Error Occured " + JSON.stringify(err));
+        });  
+    }
        
     $scope.nuevo = function() {       
         $scope.editMode = false;
@@ -313,17 +350,18 @@ app.controller('serviciosController',['$scope', 'zonaService', 'ngTableParams', 
         var promise = contratoService.getPorNumeroCto(numero);
         promise.then(function(d) {                
             if(d.data){
-                toaster.clear();
+                toaster.clear();                
                 $scope.Servicio.ContratoId = d.data.IdContrato;
                 $scope.Servicio.Nombre = d.data.ctContratante;
-                $scope.Servicio.ClienteId = d.data.ctClienteId;
+                //$scope.Servicio.ClienteId = d.data.ctClienteId;
                 $scope.Servicio.Nit = d.data.ctNitCliente;
                 $scope.Servicio.Telefono =  d.data.ctTelefono;
                 $scope.Servicio.FechaFin = new Date(d.data.ctFechaFinal).toLocaleDateString('en-GB'); 
                 $scope.Servicio.FechaInicio =   new Date(d.data.ctFechaInicio).toLocaleDateString('en-GB');               
                 $scope.Servicio.Estado = d.data.ctEstado;
-                $scope.Servicio.TipoServicio = d.data.TipoServicio;
-                if($scope.Servicio.TipoServicio === 0){
+                $scope.Contrato.TipoServicio = d.data.TipoServicio;
+                $scope.Contrato.Plantilla = d.data.Plantilla;
+                if($scope.Contrato.TipoServicio === 0){
                     toaster.pop('error', 'No se encontraón servicios asociados a este contrato', 0);
                 }
                 
@@ -340,9 +378,21 @@ app.controller('serviciosController',['$scope', 'zonaService', 'ngTableParams', 
     $scope.TipoServicioCheck = function(value) {
         console.log($scope.Servicio.Tipo);     
         if($scope.Servicio.Tipo.csPlantilla==="SI"){
+            
+            if($scope.Servicio.Tipo.csTipoServicioId ===1){
+                iniciarMapaZ();
+            }
+            
             $scope.titlePlantilla = "Plantillas " + $scope.Servicio.Tipo.csDescripcion;
-            //loadPlantillas(value.svCodigo);
-            $scope.VerPlantilla = true;
+            if($scope.Contrato.Plantilla.length ===0){
+                toaster.pop('error','¡Error!', "No se definieron plantillas para este contrato");
+                return;
+            }
+            
+            var plantilla = funcionService.arrayObjectIndexOf($scope.Contrato.Plantilla,$scope.Servicio.Tipo.csTipoServicioId, 'pcTipoServicio');
+            if(plantilla !== -1){
+                getTipoVehiculo($scope.Contrato.Plantilla[plantilla].plCodigo);
+            }
         }else{
             $scope.titlePlantilla = "Dispobilidad ";
            // loadDisponibilidad();
@@ -351,8 +401,10 @@ app.controller('serviciosController',['$scope', 'zonaService', 'ngTableParams', 
         
     };
     
+    
+    
     $scope.GetContratos = function  (){
-        var promise = contratoService.getByCliente(1);
+        var promise = contratoService.getByCliente($scope.Servicio.ClienteId);
         promise.then(function(d) {                        
             $scope.Contratos = d.data;            
         }, function(err) {           
