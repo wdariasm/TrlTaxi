@@ -36,20 +36,16 @@ app.controller('sesionController', ['$scope' , 'sesionService', 'toaster', funct
                 sessionStorage.setItem("usuario","");
                 
                 sessionStorage.setItem("usuario",btoa(d.data.request));  
-                var sesion = JSON.parse(d.data.request);                
-                switch (sesion.TipoAcceso) {                     
-                    case 1:                            
-                        location.href = "../trl/index.html";
-                        break;
-                    case 3:
-                        location.href = "../conductor/index.html";
-                        break;
-                    case 4:
-                        location.href = "../cliente/index.html";
-                        break;                                                
-                    default:                            
-                        toaster.pop('error', '¡Error!', "Tipo de acceso no permitido");
-                        break;
+                var sesion = JSON.parse(d.data.request);    
+                
+                if(sesion.TipoAcceso == "1" || sesion.TipoAcceso == "2"){
+                    location.href = "../trl/index.html";                        
+                }else if (sesion.TipoAcceso == "3"){
+                    location.href = "../conductor/index.html";                        
+                }else if (sesion.TipoAcceso == "4" || sesion.TipoAcceso == "5"){
+                    location.href = "../cliente/index.html";                                                                      
+                }else{
+                    toaster.pop('error', '¡Error!', "Tipo de acceso no permitido");                        
                 }               
                 
             } else{

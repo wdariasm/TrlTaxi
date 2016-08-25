@@ -212,13 +212,14 @@ class UsuarioController extends Controller
             if(strcmp($data['clave'], $clave) !== 0 ){                 
                 return JsonResponse::create(array('message' => "error", "request" =>'Credenciales no validas'), 200);
             }            
-            if($user['Sesion'] == 'INICIADA'){
+            
+           /* if($user['Sesion'] == 'INICIADA'){
                 $result = DB::Select("SELECT DirIp, IF(DATE(FechaCnx) = CURRENT_DATE(), 'SI', 'NO') entrar"
                         . " FROM usuario WHERE IdUsuario= '".$user['IdUsuario']."'");                
                 if ($result[0]->entrar == 'SI' && $dirIp!=$result[0]->DirIp ){
                     return JsonResponse::create(array('message' => "error", "request" =>'Usted Tiene una Sesion iniciada Ya'), 200);
                 }
-            }
+            }*/
             
             $usuario = DB::select("SELECT us.IdUsuario,  us.ConductorId, us.ClienteId, us.PersonaId, us.Nombre, us.Login, us.Estado, us.TipoAcceso, "
                     . " us.Modulo, GROUP_CONCAT(up.IdPermiso SEPARATOR ',') permisos FROM usuario us INNER JOIN "

@@ -17,10 +17,10 @@ class ServicioController extends Controller
      */
     public function index()
     {
-        $servicio = DB::select("SELECT s.svDescripcion, s.svEstado, s.svCodigo, GROUP_CONCAT(sc.scvClaseVehiculo) AS TipoVehiculo "
-                . " FROM  servicio s LEFT JOIN servicio_clasevehiculo sc ON s.svCodigo = sc.scvServicio AND sc.scvEstado ='ACTIVO' "
-                . " WHERE s.svEstado <> 'BORRADO' GROUP BY s.svCodigo");
-        return $servicio;
+        $servicio = DB::select("SELECT s.IdServicio, s.ContratoId, s.ClienteId, s.NumeroContrato, s.Responsable,"
+                . " s.Telefono, s.TipoServicidoId, ts.svDescripcion, s.FechaServicio, s.Hora, s.Valor, s.Estado, "
+                . " s.DescVehiculo FROM servicio s INNER JOIN  tiposervicio ts ON s.TipoServicidoId=ts.svCodigo");
+        return $servicio;            
     }
     
 
@@ -42,8 +42,8 @@ class ServicioController extends Controller
             $servicio->Responsable = $data["Responsable"]; 
             $servicio->Telefono = $data["Telefono"]; 
             $servicio->TipoServicidoId = $data["TipoServicidoId"]; 
-            //$date = new \DateTime(str_replace("/", "-", $data["FechaServicio"]));
-            $servicio->FechaServicio = $data["FechaServicio"];
+            $date = new \DateTime(str_replace("/", "-", $data["FechaServicio"]." 00:00:00"));
+            $servicio->FechaServicio = $date->format('Y-m-d');
             $servicio->Hora= $data["Hora"]; 
             $servicio->Valor= $data["Valor"]; 
             $servicio->NumPasajeros= $data["NumPasajeros"];
@@ -59,9 +59,10 @@ class ServicioController extends Controller
             $servicio->LatDestino= $data["LatDestino"];
             $servicio->LngDestino= $data["LngDestino"];
             $servicio->PlantillaId= $data["PlantillaId"];
+            $servicio->TipoVehiculoId= $data["TipoVehiculoId"];
+            $servicio->DescVehiculo= $data["DescVehiculo"];            
             $servicio->Calificacion= 0;
             $servicio->UserReg= $data["UserReg"];
-            //$date2 = new \DateTime(str_replace("/", "-",$data["FechaMod"]));            
             $servicio->FechaMod = new \DateTime();
             $servicio->save();
                                     

@@ -32,7 +32,7 @@
                                             <div class="input-group-addon"><i class="fa fa-sort-numeric-asc text-success"></i></div>
                                             <input  type="text" class="form-control" required="" ng-model="Servicio.NumeroContrato" maxlength="11" solo-numeros id="txtNumero" placeholder="Número de Contrato"  >
                                             <span class="input-group-btn">
-                                                <button class="btn btn-info btn-md "   ng-click="BuscarContrato()" data-toggle="tooltip" data-placement="right" title="Buscar Contrato"><i class=" fa fa-search"></i></button>
+                                                <button class="btn btn-info btn-md "  type="button"  ng-click="BuscarContrato()" data-toggle="tooltip" data-placement="right" title="Buscar Contrato"><i class=" fa fa-search"></i></button>
                                             </span>
                                         </div> 
                                     </div>
@@ -183,7 +183,71 @@
                 </div>
                 
                 <div class="tab-pane" id="tabListado">
-                    
+                    <br/>
+                    <div class="row">
+                        <div class="col-md-6">
+
+                            <div class="input-group">
+                                 <div class="input-group-addon"><i class="fa  fa-search text-primary"></i></div>
+                                 <input  class="form-control" id="search" type="search" placeholder="Buscar Servicio" ng-model="TablaServicio.filter()['busqueda']">
+                            </div>
+
+                        </div>
+                                               
+                        
+                        <div class="col-md-2" style="margin-top: 5px;">
+                             <label class="text-center text-primary" style="font-size: 18px;">Total: {{Servicios.length}}</label>
+                         </div>
+                        
+                        <div class="col-md-2 col-md-offset-1">
+                            <button type="button" class="btn btn-success btn-addon" ng-click="GetServicios()" ><i class="fa fa-refresh"></i> Actualizar</button>
+                        </div>
+                        <br/>
+                        
+                        
+                        <div class="col-md-12">
+                        <table class="table table-striped table-condensed" ng-table="TablaServicio"  style="margin-top: 15px;">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>CONTRATO</th>
+                                    <th>RESPONSABLE</th>
+                                    <th>TELEFONO</th>                                            
+                                    <th>T.SERVICIO</th>
+                                    <th>T.VEHICULO</th>
+                                    <th>$ PRECIO</th>
+                                    <th>FECHA</th>
+                                    <th>HORA</th>
+                                    <th>ESTADO</th>
+                                    <th width="9%">ACCION</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                 <tr ng-repeat="item in $data">
+                                     <td>{{ item.IdServicio}}</td>
+                                     <td>{{ item.NumeroContrato }}</td>
+                                     <td>{{ item.Responsable}}</td>
+                                     <td >{{ item.Telefono }}</td>
+                                     <td>{{ item.svDescripcion}}</td>
+                                     <td>{{ item.DescVehiculo}}</td>                                     
+                                     <td >{{ item.Valor | currency : "$" : 0}}</td>  
+                                     <td>{{ item.FechaServicio}}</td>
+                                    <td>{{ item.Hora}}</td>                                     
+                                    <td>{{ item.Estado}}</td>
+                                    <td>
+                                         <center>
+                                             <a ng-click="" style="float: left; margin-left: 3px;" href="javascript:;"  title="Editar"><i class="fa fa-pencil fa-1x text-success"></i></a>
+                                             <a ng-click=""  style="float: left; margin-left: 7px;" href="javascript:;"  title="Eliminar"><i class="fa fa-power-off fa-1x text-warning"></i></a>
+                                             <a  ng-click="" style="float: left; margin-left: 7px;" href="javascript:;"  title="Novedades"><i class="fa fa-book text-danger fa-1x"></i></a>
+                                         </center>
+                                     </td>
+                                 </tr>
+                            </tbody>
+                        </table>
+                        </div>
+                        
+                    </div>
                 </div>
                 
             </div>            

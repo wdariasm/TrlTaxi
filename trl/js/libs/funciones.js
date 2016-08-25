@@ -49,6 +49,14 @@
     this.FormaPago = function (){
         var forma = ["CREDITO" , "DEBITO", "EFECTIVO", "CHEQUE"];
         return forma;
-    };        
+    };  
+        
+    
+    this.FormatFecha= function(f,horas) {
+        var fecha = new Date(f);               
+        var addTime = horas*3600;
+        fecha.setSeconds(addTime);    
+        return fecha;
+    };
 
 });

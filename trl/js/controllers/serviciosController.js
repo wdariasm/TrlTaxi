@@ -1,5 +1,5 @@
-app.controller('serviciosController',['$scope', 'zonaService', 'ngTableParams', 'toaster', "contratoService",
-    function ($scope,  zonaService, ngTableParams, toaster, contratoService) {
+app.controller('serviciosController',['$scope', 'zonaService', 'ngTableParams', 'toaster', "contratoService", "servicioService",
+    function ($scope,  zonaService, ngTableParams, toaster, contratoService, servicioService) {
     $scope.Zonas = [];       
     $scope.Zona = {};
     $scope.funcion = null;
@@ -8,6 +8,8 @@ app.controller('serviciosController',['$scope', 'zonaService', 'ngTableParams', 
     
     $scope.Puntos = [];    
     $scope.editMode = false;
+    $scope.Servicios = [];
+    $scope.TablaServicio ={};
     
     $scope.mapServicio;      
     $scope.markerOrigen = null;    
@@ -46,6 +48,7 @@ app.controller('serviciosController',['$scope', 'zonaService', 'ngTableParams', 
     initAutocompleteDestino();
     initTablaZona();
     init();
+    initTabla();
     
     function Poligono() {
         this.coordenadas = null;
@@ -299,6 +302,28 @@ app.controller('serviciosController',['$scope', 'zonaService', 'ngTableParams', 
         }
         dibujarPoligono();
     };
+    
+    function initTabla() {
+        $scope.TablaServicio = new ngTableParams({
+            page: 1,
+            count: 10,
+            sorting: undefined
+        }, {
+            filterDelay: 50,
+            total: 1000,
+            counts : [],
+            getData: function (a, b) {
+                var c = b.filter().filtro;
+                f = [];
+                c ? (c = c.toLowerCase(), f = $scope.Servicios.filter(function (a) {
+                    return a.Responsable.toLowerCase().indexOf(c) > -1 ||
+                           a.NumeroContrato.indexOf(c) > -1 ||
+                           a.svDescripcion.toLowerCase().indexOf(c) > -1 ||
+                           a.Estado.toLowerCase().indexOf(c) > -1                                                       
+                })) : f = $scope.Servicios, f = b.sorting() ? f : f, b.total(f.length), a.resolve(f.slice((b.page() - 1) * b.count(), b.page() * b.count()))
+            }
+        });
+    };
        
     $scope.nuevo = function() {       
         $scope.editMode = false;
@@ -362,6 +387,19 @@ app.controller('serviciosController',['$scope', 'zonaService', 'ngTableParams', 
         }
         
     };
+    
+    $scope.GetServicios = function (){
+         var promise = servicioService.getAll();
+        promise.then(function(d) {                        
+            $scope.Servicios = d.data;
+            $scope.TablaServicio.reload();             
+        }, function(err) {           
+                toaster.pop('error','¡Error!',"Error al cargar Clientes");           
+                console.log("Some Error Occured " + JSON.stringify(err));
+        }); 
+    };
+    
+    $scope.GetServicios();
                        
 }]);
 

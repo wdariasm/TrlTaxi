@@ -79,7 +79,7 @@ app.controller('serviciosController',['$scope', 'zonaService', 'ngTableParams', 
             Telefono : "",
             Tipo : {},
             Responsable : "",
-            FechaServicio:"",
+            FechaServicio: moment().format('L'),
             Hora:"",
             Valor : 0,
             NumHoras : "0",
@@ -368,6 +368,11 @@ app.controller('serviciosController',['$scope', 'zonaService', 'ngTableParams', 
                 console.log("Some Error Occured " + JSON.stringify(err));
         });
     }
+    
+    $scope.CambiarFormato=function (variable){
+        $scope.Servicio[variable] = funcionService.FormatFecha($scope.Servicio[variable],5);        
+        $scope.Servicio[variable] = moment($scope.Servicio[variable]).format('L');        
+    };
 
     $scope.Nuevo = function() {
         $scope.editMode = false;
@@ -407,7 +412,7 @@ app.controller('serviciosController',['$scope', 'zonaService', 'ngTableParams', 
                 $scope.Contrato.Nombre = d.data.ctContratante;                
                 $scope.Servicio.Nit = d.data.ctNitCliente;
                 $scope.Servicio.Telefono =  d.data.ctTelefono;
-                $scope.Servicio.NumeroContrato = d.data.ctNumeroContrato;
+                $scope.Servicio.NumeroContrato = $scope.ContratoSelect.ctNumeroContrato;
                 $scope.Contrato.FormaPago =  angular.copy(d.data.ctFormaPago);
                 $scope.Contrato.FechaFin = new Date(d.data.ctFechaFinal).toLocaleDateString('en-GB');
                 $scope.Contrato.FechaInicio =   new Date(d.data.ctFechaInicio).toLocaleDateString('en-GB');
@@ -512,6 +517,9 @@ app.controller('serviciosController',['$scope', 'zonaService', 'ngTableParams', 
             return;
         }
         
+        $scope.Servicio.TipoVehiculoId = $scope.TipoSelect.tvCodigo;
+        $scope.Servicio.DescVehiculo = $scope.TipoSelect.tvDescripcion;
+        $scope.Servicio.NumeroContrato = $scope.ContratoSelect.ctNumeroContrato;
         $scope.Servicio.TipoServicidoId = $scope.Servicio.Tipo.csTipoServicioId;
         $scope.Servicio.PlantillaId= $scope.Plantilla.plCodigo;
         $scope.Servicio.FormaPago = "EFECTIVO";
@@ -520,6 +528,7 @@ app.controller('serviciosController',['$scope', 'zonaService', 'ngTableParams', 
         var promise = servicioService.post($scope.Servicio);
         promise.then(function(d) {
             toaster.pop('success','¡Información!', d.data.message);
+            $scope.ContratoSelect = {};
             $scope.Nuevo();
         }, function(err) {
                 toaster.pop('error','¡Error!',err.data.request);
