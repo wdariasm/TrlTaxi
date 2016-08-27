@@ -24,9 +24,11 @@ class UsuarioController extends Controller
     }
     
     public  function GetPermisos ($user){
-        return UsuarioPermiso::join('permiso', 'usuariopermiso.IdPermiso', '=' , 'permiso.IdPermiso')
+        
+        $permiso = UsuarioPermiso::join('permiso', 'usuariopermiso.IdPermiso', '=' , 'permiso.IdPermiso')
                 ->where('usuariopermiso.IdUsuario', $user)
-                ->select( 'permiso.IdPermiso', 'pmNombre', 'pmModulo')->get();        
+                ->select( 'permiso.IdPermiso', 'pmNombre', 'pmModulo')->get();         
+        return $permiso;
     }
 
    
@@ -60,6 +62,7 @@ class UsuarioController extends Controller
             $usuario->TipoAcceso =  $data["TipoAcceso"];
             $usuario->KeyConf = uniqid('TrL',true);
             $usuario->Contrato =  $data["Contrato"];
+            $usuario->Email = $data["Correo"];
             $usuario->save();
             
             $permisos = $data["Permisos"];            
@@ -96,7 +99,7 @@ class UsuarioController extends Controller
           <h1> ¡Bienvenido a Transporte Ruta Libre!</h1>
           <p>Hola, $nombre </p><br/>
           <p> Por favor sigue este enlace para confirmar sus Datos de Usuario</p>
-          <p><a href='http://".$_SERVER['HTTP_HOST']."/inicio/index.html#/0/confirmar/$idUsuario/$key' target='_blank'>Click Aqui, Para Confirmar tus Datos </a></p> 
+          <p><a href='http://".$_SERVER['HTTP_HOST']."/inicio/index.html#/confirmar/$idUsuario/$key' target='_blank'>Click Aqui, Para Confirmar tus Datos </a></p> 
           <br/>    
           <p>Usuario TRL: $user</p>
           <p>Contraseña TRL: $clave</p>

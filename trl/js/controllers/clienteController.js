@@ -1,5 +1,5 @@
-app.controller("clienteController", ["$scope", "clienteService", "tipoDocumentoService","toaster", "ngTableParams", "funcionService",
-function ($scope, clienteService, tipoDocumentoService,toaster,ngTableParams, funcionService) {
+app.controller("clienteController", ["$scope", "clienteService", "tipoDocumentoService","toaster", "ngTableParams", "funcionService", "usuarioService",
+function ($scope, clienteService, tipoDocumentoService,toaster,ngTableParams, funcionService, usuarioService) {
    $scope.Cliente = {};
    $scope.Clientes = [];
    $scope.TablaCliente = {};
@@ -32,11 +32,11 @@ function ($scope, clienteService, tipoDocumentoService,toaster,ngTableParams, fu
         };         
     }
     
-      $scope.Nuevo = function (){
+    $scope.Nuevo = function (){
         initialize();
         $scope.editMode =false;
         $scope.title = "Nuevo Cliente"; 
-   };
+    };
    
     initialize();
     function loadCliente (){
@@ -111,14 +111,54 @@ function ($scope, clienteService, tipoDocumentoService,toaster,ngTableParams, fu
         }
         
         promise.then(function(d) {                        
-            loadCliente();
-           toaster.pop('success', "Control de Información", d.data.message); 
+            if (d.data.request > 0  && !$scope.editMode){                
+                guardarUsuario(d.data.request);
+            }else{
+                toaster.pop('success', 'Control de información', d.data.message);
+                $scope.Nuevo();            
+            }     
+            
+            loadCliente();           
              
         }, function(err) {           
                  toaster.pop('error', "Error", "ERROR AL PROCESAR SOLICITUD");            
                 console.log("Some Error Occured " + JSON.stringify(err));
         });       
    };
+   
+   function guardarUsuario (item){  
+        var object = {
+            Login : $scope.Cliente.Identificacion,
+            Nombre : $scope.Cliente.Nombres,
+            Modulo : "01000",
+            ClienteId : item,
+            TipoAcceso : 4,
+            Contrato : 0,
+            ConductorId : null,
+            PersonaId : null,
+            Correo : $scope.Cliente.Correo,
+            Permisos :[
+                {
+                    IdPermiso : 3
+                },
+                {
+                    IdPermiso : 7
+                },{
+                    IdPermiso : 8
+                }
+            ]
+        };
+               
+        var promise = usuarioService.post(object);                            
+        promise.then(function(d) {                         
+            toaster.pop('success', 'Control de información', d.data.message);
+            $scope.Nuevo();                        
+            $('#tabPanels a[href="#tabListado"]').tab('show');
+        }, function(err) {           
+            toaster.pop('error', "¡Error!", err.data.request);          
+            console.log("Some Error Occured " + JSON.stringify(err));
+        });        
+    }
    
    //edita la Cliente
     $scope.get = function(item) {

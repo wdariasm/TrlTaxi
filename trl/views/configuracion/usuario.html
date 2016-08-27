@@ -121,7 +121,7 @@
                                 <input type="hidden"  ng-model="Usuario.ClienteId"  id="txtClienteId" >
                                 <input type="hidden"  ng-model="Usuario.PersonaId"   id="txtPersonaId" >
                                 <input type="hidden"  ng-model="Usuario.ConductorId" id="txtConductorId" >
-                                <input type="text" class="form-control"  ng-model="Usuario.Identificacion" maxlength="10" solo-numeros id="txtIdentificacion" placeholder="Identificación" ng-blur="BuscarIdentificacion()" required>
+                                <input type="text" class="form-control"  ng-model="Usuario.Identificacion" maxlength="12" solo-numeros id="txtIdentificacion" placeholder="Identificación" ng-blur="BuscarIdentificacion()" required>
                             </div>
                         </div>
                     </div> 
@@ -179,7 +179,7 @@
                             <div ng-repeat="tpv in Permisos">
                                 <div class="col-xs-4">     
                                     <div class="checkbox checkbox-primary">                                        
-                                         <input type="checkbox" checklist-model="Usuario.Permisos" checklist-value="tpv">
+                                         <input type="checkbox" id="{{tpv.IdPermiso}}" checklist-model="Usuario.Permisos" checklist-value="tpv">
                                          <label for="{{tpv.IdPermiso}}">{{tpv.pmNombre}}</label> 
                                     </div>
                                 </div> 
