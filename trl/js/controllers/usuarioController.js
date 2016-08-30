@@ -294,10 +294,11 @@ function($scope, usuarioService,toaster,ngTableParams , perfilService, personaSe
     };
         
     
-     $scope.CambiarPass = function(id, nombre) {         
+     $scope.CambiarPass = function(id, nombre, login) {         
         $scope.User = {
             IdUsuario : id, 
             Nombre : nombre,
+            Login : login,
             Clave : "", 
             claveConf : ""
         };
@@ -309,6 +310,7 @@ function($scope, usuarioService,toaster,ngTableParams , perfilService, personaSe
         $scope.User = {
             IdUsuario : "", 
             Nombre : "",
+            Login : "",
             Clave : "", 
             claveConf : ""
         };
@@ -317,20 +319,34 @@ function($scope, usuarioService,toaster,ngTableParams , perfilService, personaSe
     
     $scope.guardarPass = function (){
         $scope.valPass = false;
-        if ($scope.User.Clave != $scope.User.claveConf){
-            $scope.valPass = true;
+        
+        if(!$scope.User.IdUsuario){
+            toaster.pop('info', "¡Alerta!", "Seleccione un usuario para realizar este procedimiento.");
             return;
         }
-            
-        var object = {            
+                
+        if ($scope.User.Clave !== $scope.User.claveConf){
+            $scope.valPass = true;
+             toaster.pop('info', "¡Alerta!", "Contraseñas no coinciden.. verifique");
+            return;
+        }
+                            
+        var object = { 
+            Id : $scope.User.IdUsuario,
             Clave:$scope.User.Clave            
         };
         
-        var promise = usuarioService.udpatePass($scope.User.IdUsuario, object);       
+        var promise = usuarioService.udpatePass(object);       
         promise.then(function(d) {            
-            $scope.cancelar();            
+            if (d.data.message === "Correcto"){
+                toaster.pop('success', "¡Información!", d.data.request);
+                $scope.cancelar();            
+            }else{
+                toaster.pop('error', "¡Error!", d.data.request);
+            }
+            
         }, function(err) {           
-                 toaster.pop('error', "Error", "ERROR AL CAMBIAR CONTRASEÑA");         
+                 toaster.pop('error', "¡Error!", err.request,0);         
                 console.log("Some Error Occured " + JSON.stringify(err));
         });     
         

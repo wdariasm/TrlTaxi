@@ -196,6 +196,12 @@ input{
   border-color: #cfdadd;
 }
 
+.error{
+    margin-left: 7px;        
+    color:red;    
+    font-weight: 700;
+}
+
 
 
 

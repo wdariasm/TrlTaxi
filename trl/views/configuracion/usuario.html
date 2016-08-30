@@ -48,11 +48,11 @@
                                <td>{{ items.FechaCnx}}</td> 
                                <td>{{ items.Estado}}</td> 
                                <td>
-                                       <center>
-                                           <a data-ng-click="get(items)" style="float: left; margin-left: 15px;" href="javascript:;"  title="Editar"><i class="fa fa-lg fa-pencil"></i></a>
-                                           <a data-ng-click="VerDesactivar(items.IdUsuario, 'BORRADO')"  style="float: left; margin-left: 15px;" href="javascript:;"  title="Borrar"><i class="fa fa-lg fa-trash"></i></a>
-                                           <a data-ng-click="CambiarPass(items.IdUsuario,  items.Nombre)" style="float: left; margin-left: 15px;" href="javascript:;"  title="Cambiar Contraseña"><i class="fa fa-lg fa-refresh text-warning"></i></a>
-                                       </center>
+                                    <center>
+                                        <a ng-click="get(items)" style="float: left; margin-left: 15px;" href="javascript:;"  title="Editar"><i class="fa fa-lg fa-pencil"></i></a>                                           
+                                        <a ng-click="CambiarPass(items.IdUsuario,  items.Nombre, items.Login)" style="float: left; margin-left: 15px;" href="javascript:;"  title="Cambiar Contraseña"><i class="fa fa-lg fa-refresh text-warning"></i></a>
+                                        <a ng-click="VerDesactivar(items.IdUsuario, 'BORRADO')"  style="float: left; margin-left: 15px;" href="javascript:;"  title="Borrar"><i class="fa fa-lg fa-trash text-danger"></i></a>
+                                    </center>
                                </td>
                             </tr>
 
@@ -308,84 +308,90 @@
                   
                  
             <div class="tab-pane" id="tabCambiarC">
-                <form class="col-xs-10 col-xs-offset-1" name="frmCambiarC" id="frmCambiarC" novalidate>
-                      <div class="row">
-                            <div class="card  darken-1">
-                            <div class="card-content">
-                              <span class="card-title teal-text">{{User.Nombre}} </span>
+                 <br/>      
+                <form class="col-md-6 col-md-offset-3" name="frmCambiarC" id="frmCambiarC" novalidate>
+                    <div class="panel panel-default">
+                        <div class="panel-heading">Cambiar Contraseña </div>
+                         <div class="panel-body">                             
+                        <div class="row">                                                                  
+                            <div class="col-md-8 col-md-offset-2">
+                                <h4>{{User.Nombre}}</h4>
+                            </div>                            
+                            
+                            <br/>                             
+                            <div class="col-md-8 col-md-offset-2">
+                               <div class="form-group">
+                                   <label class="active" for="txtLogin2" >Login *</label>
+                                    <div class="input-group">    
+                                         <div class="input-group-addon"><i class="fa fa-hashtag"></i></div>
+                                         <input type="hidden"  disabled="" class="form-control" ng-model="User.IdUsuario" id="txtCodigo" >
+                                         <input type="text"  disabled="" class="form-control" ng-model="User.Login" id="txtLogin2" >
+                                    </div> 
+                               </div>
+                            </div>
                               
-                              <div class="col-xs-3">
-                                 <div class="form-group">
-                                     <label class="active" for="txtCodigo1" >Id Usuario</label>
-                                         <div class="input-group">    
-                                             <div class="input-group-addon"><i class="fa fa-hashtag"></i></div>
-                                                 <input type="text"  disabled="" class="form-control" ng-model="User.IdUsuario" id="txtCodigo1" >
-                                         </div> 
-                                 </div>
-                              </div>
                               
+                            <div class="col-md-8 col-md-offset-2">
+                              <div class="form-group">
+                                    <label>Nueva Contraseña *</label>
+                                    <div class="input-group">    
+                                        <div class="input-group-addon"><i class="fa fa-key"></i></div>
+                                        <input ng-model="User.Clave" class="form-control" type="password" name="txtClave1"  maxlength="15" required ng-pattern="/(?=^.{6,}$)(?=.*\d)(?![.\n])(?=.*[a-zA-Z]).*$/">
+                                    </div> 
+                                    <div class="error" ng-show="frmCambiarC.txtClave1.$dirty && frmCambiarC.txtClave1.$invalid">
+                                        <small ng-show="frmCambiarC.txtClave1.$error.required">Contraseña es Requerida</small>
+                                        <small  ng-show="frmCambiarC.txtClave1.$error.pattern">Minimo 6 Caracteres [Números y Letras]</small>
+                                    </div>
+                                </div>
+                           </div>
                               
-                               <div class="col-xs-3">
-                                 <div class="form-group">
-                                     <label  >Nueva Contraseña *</label>
-                                         <div class="input-group">    
-                                             <div class="input-group-addon"><i class="fa fa-key"></i></div>
-                                                 <input ng-model="User.Clave" class="form-control" type="password" name="txtClave1"  maxlength="15" required ng-pattern="/(?=^.{6,}$)(?=.*\d)(?![.\n])(?=.*[a-zA-Z]).*$/">
-                                         </div> 
-                                     <div class="error" ng-show="frmCambiarC.txtClave1.$dirty && frmCambiarC.txtClave1.$invalid">
-                                            <small ng-show="frmCambiarC.txtClave1.$error.required">Contraseña es Requerida</small>
-                                            <small  ng-show="frmCambiarC.txtClave1.$error.pattern">Minimo 6 Caracteres[Números y Letras]</small>
-                                     </div>
-                                 </div>
-                              </div>
-                              
-                               <div class="col-xs-3">
-                                 <div class="form-group">
-                                     <label>Confirmar Contraseña</label>
-                                         <div class="input-group">    
-                                             <div class="input-group-addon"><i class="fa fa-key"></i></div>
-                                                <input ng-model="User.claveConf" class="form-control" type="password" name="txtClave2"  maxlength="15" required ng-pattern="/(?=^.{6,}$)(?=.*\d)(?![.\n])(?=.*[a-zA-Z]).*$/" >                                
-                                         </div> 
-                                      <div class="error" ng-show="frmCambiarC.txtClave2.$dirty && frmCambiarC.txtClave2.$invalid">
-                                            <small ng-show="frmCambiarC.txtClave2.$error.required">Contraseña es Requerida</small>
-                                            <small  ng-show="frmCambiarC.txtClave1.$error.pattern">Minimo 6 Caracteres[Números y Letras]</small>
-                                        </div>   
+                            <div class="col-md-8 col-md-offset-2">
+                              <div class="form-group">
+                                  <label>Confirmar Contraseña *</label>
+                                    <div class="input-group">    
+                                        <div class="input-group-addon"><i class="fa fa-key"></i></div>
+                                        <input ng-model="User.claveConf" class="form-control" type="password" name="txtClave2"  maxlength="15" required ng-pattern="/(?=^.{6,}$)(?=.*\d)(?![.\n])(?=.*[a-zA-Z]).*$/" >                                
+                                    </div> 
+                                    <div class="error" ng-show="frmCambiarC.txtClave2.$dirty && frmCambiarC.txtClave2.$invalid">
+                                        <small ng-show="frmCambiarC.txtClave2.$error.required">Contraseña es Requerida</small>
+                                        <small  ng-show="frmCambiarC.txtClave2.$error.pattern">Minimo 6 Caracteres[Números y Letras]</small>
+                                    </div>   
+                                  
                                     <div class="error">
                                         <small  ng-show="valPass">Contraseñas, No son Iguales</small>
                                     </div>
-                                 </div>
                               </div>
+                           </div>
                               
-                            </div>  
+                            
                                 
-                          <div class="card-action" style="padding-bottom:50%; ">  
-                          <div class="row">
-                             <div class="col-xs-1 col-xs-offset-8">                                        
-                                 <br/>
-                                    <a  data-ng-click="cancelar()" href="javascript:;" class="btn-floating btn-large waves-effect waves-light red right"  title="Cancelar Operación">
-                                    <i class="fa fa-lg fa-ban text-warning">Back</i>
-                                </a>
-                             </div>
-                             <div class="col-xs-1">          
-                                 <br/>
-                                <button  ng-disabled="frmCambiarC.$invalid" class="btn-floating btn-large waves-effect waves-light red right"  type="button" title="Guardar Contraseña" ng-click="guardarPass()">
-                                    <i class="fa fa-lg fa-check text-primary"></i>
-                                </button>                             
-                             </div>
-                         </div>
-                          </div>    
+                         
+                            <div class="row">
+                                
+                               <div class="col-md-4 col-md-offset-2">                                        
+                                   <br/>
+                                   <button  type="button" ng-click="cancelar()" style="float: right; width: 90%" class="btn btn-danger btn-addon"  title="Cancelar Operación">
+                                      <i class="fa  fa-ban"></i> Cancelar
+                                   </button>
+                               </div>
+                               <div class="col-md-4"> 
+                                   <br/>
+                                   <button ng-disabled="frmCambiarC.$invalid" style="float: left; width: 90%" class="btn btn-primary btn-addon "  type="button" title="Guardar Contraseña" ng-click="guardarPass()">
+                                      <i class="fa fa-check"></i> Guardar
+                                  </button>                             
+                               </div>
+                           </div>
+                          
                            
-                        </div> 
-                   
+                        
+                        </div>    
+                         </div>     
                      </div>                                
-                  </form>
-                     
-                      
-                     
-                 </div>
-         </div>
-     </div>
-   </div>
+                    </form>                                                                
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
      
@@ -395,6 +401,7 @@
         $(this).tab('show');
         
     });
+    $('#tabPanels a[href="#tabCambiarC"]').tab('show');
             
     
     $('input[name="txtFechaConexion"]').daterangepicker({

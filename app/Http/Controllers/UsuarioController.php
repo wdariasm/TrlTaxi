@@ -321,11 +321,11 @@ class UsuarioController extends Controller
         return array('message' => "Correcto", "request" =>'');
     }
     
-     public function updatePassword(Request $request, $id)
+    public function updatePassword(Request $request, $id)
     {        
         try{                                                  
             $data = $request->all();             
-        $verificar =  $this->vefiricarKey($id, $data["Codigo"], $data["Key"]);
+            $verificar =  $this->vefiricarKey($id, $data["Codigo"], $data["Key"]);
             
             if ($verificar['message'] != "Correcto"){
                 return $verificar;
@@ -340,7 +340,44 @@ class UsuarioController extends Controller
             $user = $usuario->Login;
             $para  = $usuario->Email;
             $nombre = $usuario->Nombre;
-            // título
+            
+            $this->enviarEmailClave($user, $para, $nombre, $clave);
+                    
+            return JsonResponse::create(array('message' => "Correcto", "request" =>'Contraseña modificada correctamente'), 200);
+        } catch (Exception $exc) {            
+            return JsonResponse::create(array('message' => "No se pudo Modificar la Contraseña", "request" =>json_encode($exc)), 401);
+        }
+    }
+    
+    public function cambiarClave(Request $request)
+    {        
+        try{                                                  
+            $data = $request->all();                                           
+            $clave = $data["Clave"];
+            $id = $data["Id"];
+            $usuario = Usuario::find($id);
+            if(empty($usuario)){
+                return JsonResponse::create(array('message' => 'error', 'request' =>'Usuario no se encuentra registrado en el sistema.'));
+            }
+            $usuario->Clave =  Crypt::encrypt($clave);            
+            $usuario->Sesion = 'CERRADA';
+            $usuario->save();            
+            
+            $user = $usuario->Login;
+            $para  = $usuario->Email;
+            $nombre = $usuario->Nombre;
+            
+            
+            $this->enviarEmailClave($user, $para, $nombre, $clave);
+            
+            return JsonResponse::create(array('message' => "Correcto", "request" =>'Contraseña modificada correctamente'), 200);
+        } catch (Exception $exc) {            
+            return JsonResponse::create(array('message' => "No se pudo Modificar la Contraseña", "request" =>json_encode($exc)), 401);
+        }
+    }
+    
+    private function enviarEmailClave($user, $para, $nombre, $clave){
+         // título
             $título = utf8_encode("Cambio de Contraseña [TRL Transporte]");
             // mensaje
             $mensaje = "
@@ -365,15 +402,10 @@ class UsuarioController extends Controller
             $cabeceras .= 'Content-type: text/html; charset=UTF-8' . "\r\n";
             $cabeceras .= 'To: '.$nombre.' <'.$para.'>' . "\r\n";
             $cabeceras .= 'From: Transporte Ruta Libre <info@trl.com.co>' . "\r\n";  
-            mail($para, $título, $mensaje, $cabeceras);            
-            return JsonResponse::create(array('message' => "Correcto", "request" =>'Contraseña modificada correctamente'), 200);
-        } catch (Exception $exc) {            
-            return JsonResponse::create(array('message' => "No se pudo Modificar la Contraseña", "request" =>json_encode($exc)), 401);
-        }
+            mail($para, $título, $mensaje, $cabeceras);       
     }
-    
-    
-       public function updateEstado(Request $request, $IdUsuario){
+
+    public function updateEstado(Request $request, $IdUsuario){
        try {
            $data = $request->all();
            $usuario = Usuario::find($IdUsuario);

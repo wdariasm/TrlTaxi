@@ -27,8 +27,8 @@ app.service("usuarioService", ['$http', function ($http) {
     };
     
      //Cambiar Contraseña
-    this.udpatePass = function (id,usuario) {        
-        var req = $http.put(uri+'/api/usuario/updatePassword/' + id, usuario);
+    this.udpatePass = function (usuario) {        
+        var req = $http.post(uri+'/api/usuario/cambiar', usuario);
         return req;        
     };
     
