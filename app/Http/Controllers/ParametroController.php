@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use DB;
 use App\Parametro;
 use Illuminate\Http\JsonResponse;
 
@@ -17,21 +16,8 @@ class ParametroController extends Controller
      */
     public function index()
     {
-        //
-    }
-
-   
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        
-    }
-
+        return Parametro::first();
+    }      
   
   
 

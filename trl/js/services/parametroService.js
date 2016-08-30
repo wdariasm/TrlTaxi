@@ -8,12 +8,7 @@ app.service("parametroService",[ '$http', function ($http) {
     this.getAll = function () {
         var req = $http.get(uri+'/api/parametro');
         return req;
-    };                
-        
-    this.post = function (parametro) { 
-        var req = $http.post(uri+'/api/parametro',parametro); 
-        return req; 
-    };
+    };                           
         
     this.put = function (id,parametro) {        
         var req = $http.put(uri+'/api/parametro/' + id, parametro);

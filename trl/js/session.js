@@ -28,4 +28,42 @@ var session = {
     }               
 };
 
+var config = {
+    setConfig: function(config){      
+       sessionStorage.setItem("trlconfig", config);       
+    },
+    
+    /// Obtiene todos los Datos del Config
+    getConfig: function(){      
+        return this.validarObjectLocal("trlconfig")? JSON.parse(atob(sessionStorage.getItem("trlconfig"))) :  null;       
+    },
+    
+    validarObjectLocal: function(string){        
+        return sessionStorage.getItem(string) !== "" && sessionStorage.getItem(string) !== undefined && sessionStorage.getItem(string) !== null;        
+    },
+           
+    
+    //Obtener NOMBRE CLIENTE
+    getLatitud:function(){
+        var obj = sessionStorage.getItem("trlconfig");        
+        if (obj){            
+            return obj.parLatitud;
+        }
+    },         
+    
+    getLongitud: function(){
+        var obj = sessionStorage.getItem("trlconfig");        
+        if (obj){            
+            return obj.parLongitud;
+        }  
+    }, 
+   
+    getEmail: function(){
+        var obj = JSON.parse(sessionStorage.getItem("trlconfig"));        
+        if (obj){            
+            return (obj.Email);
+        }  
+    }
+};
+
 

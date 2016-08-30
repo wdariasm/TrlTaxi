@@ -18,10 +18,10 @@ app.controller('parametroController',[ '$scope', 'parametroService', 'toaster',
         
     function init(){
         
-        if (!$scope.$parent.Parametro){
-            $scope.Parametro  = $scope.$parent.Parametro;
+        if (!$scope.$parent.Configuracion){
+            $scope.Parametro  = $scope.$parent.Configuracion;
         } else {            
-            $scope.Parametro = config.getConfig();
+            $scope.Parametro = config.getConfig();            
         }
 
     }
@@ -99,8 +99,9 @@ app.controller('parametroController',[ '$scope', 'parametroService', 'toaster',
                                                             
         promise.then(function(d) { 
             toaster.pop('success', "Control de Información", d.data.message, 4000);            
+            $scope.$parent.getConfiguracion();
         }, function(err) {           
-                toaster.pop('error','Error!','Error al actualizar datos');           
+                toaster.pop('error','Error!',err.data.request,0);           
                 console.log("Some Error Occured " + JSON.stringify(err));
         });  
     };

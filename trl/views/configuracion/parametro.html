@@ -1,10 +1,10 @@
 <div ng-controller="parametroController" class="container-fluid">
     <div class="row">
-        <div class="col-md-4">
+        <div class="col-md-5">
             <form  name="frmParametro" id="frmParametro" novalidate>
                 <br/>
                 <div class="row"> 
-                        <div class="col-md-9">
+                        <div class="col-md-5">
                             <div class="form-group">
                                 <label for="txtTipo">Tipo Documento *</label>
                                  <div class="input-group">    
@@ -19,7 +19,7 @@
                             </div>
                         </div>
                     
-                        <div class="col-md-9">
+                        <div class="col-md-7">
                             <div class="form-group">
                                 <label for="txtCedula">Cédula *</label>
                                  <div class="input-group">    
@@ -30,7 +30,7 @@
                             </div>
                         </div>
                     
-                        <div class="col-md-9">
+                        <div class="col-md-8">
                            <div class="form-group">
                                <label for="txtEmpresa">Empresa *</label>
                                 <div class="input-group">    
@@ -41,39 +41,7 @@
                            </div>
                         </div>
                     
-                        <div class="col-md-9">
-                           <div class="form-group">
-                               <label for="txtCiudad">Ciudad *</label>
-                                <div class="input-group">    
-                                    <div class="input-group-addon"><i class="fa fa-globe text-success"></i></div>
-                                    <input type="text" required="" class="form-control" ng-model="Parametro.parCiudad" maxlength="30" id="txtCiudad" placeholder="ciudad">
-                                </div>
-                           </div>
-                        </div>
-                    
-                        <div class="col-md-9">
-                           <div class="form-group">
-                               <label for="txtFirma">Firma *</label>
-                                <div class="input-group">    
-                                    <div class="input-group-addon"><i class="fa fa-pencil text-success"></i></div>
-                                    <input type="text" required="" class="form-control" ng-model="Parametro.parFirma"  id="txtFirma" placeholder="firma">
-
-                                </div>
-                           </div>
-                        </div>
-                    
-                        <div class="col-md-9">
-                           <div class="form-group">
-                               <label for="txtConsecutivo">Consecutivo*</label>
-                                <div class="input-group">    
-                                    <div class="input-group-addon"><i class="fa fa-road text-success"></i></div>
-                                    <input type="text" required="" class="form-control" ng-model="Parametro.parConsecutivo" maxlength="11" id="txtConsecutivo" placeholder="" solo-numeros>
-
-                                </div>
-                           </div>
-                        </div>
-
-                        <div class="col-md-9">
+                        <div class="col-md-4">
                             <div class="form-group">
                                 <label for="txtFormato">Formato *</label>
                                  <div class="input-group">    
@@ -85,11 +53,36 @@
 
                                  </div>
                             </div>
-                        </div>
+                        </div>                                            
 
-                        <div class="col-md-9">
+                    
+                        <div class="col-md-6">
+                           <div class="form-group">
+                               <label for="txtCiudad">Ciudad *</label>
+                                <div class="input-group">    
+                                    <div class="input-group-addon"><i class="fa fa-globe text-success"></i></div>
+                                    <input type="text" required="" class="form-control" ng-model="Parametro.parCiudad" maxlength="30" id="txtCiudad" placeholder="ciudad">
+                                </div>
+                           </div>
+                        </div>  
+                    
+                        <div class="col-md-6">
+                           <div class="form-group">
+                               <label for="txtConsecutivo">Consecutivo*</label>
+                                <div class="input-group">    
+                                    <div class="input-group-addon"><i class="fa fa-sort-numeric-asc text-success"></i></div>
+                                    <input type="text" required="" class="form-control" ng-model="Parametro.parConsecutivo" maxlength="11" id="txtConsecutivo" placeholder="" solo-numeros>
+
+                                </div>
+                           </div>
+                        </div>
+                    
+                       
+                       
+
+                        <div class="col-md-6">
                             <div class="form-group">
-                                <label class="{{active}}}" for="txtLatitud">Latitud *</label>
+                                <label  for="txtLatitud">Latitud *</label>
                                  <div class="input-group">    
                                      <div class="input-group-addon"><i class="fa fa-map-marker text-success"></i></div>
                                      <input type="text"  required class="form-control" ng-model="Parametro.parLatitud"   id="txtLatitud"   placeholder="Latitud">
@@ -98,9 +91,9 @@
                             </div>
                         </div>
 
-                        <div class="col-md-9">
+                        <div class="col-md-6">
                             <div class="form-group">
-                                <label class="{{active}}}" for="txtLongitud">Longitud *</label>
+                                <label  for="txtLongitud">Longitud *</label>
                                  <div class="input-group">    
                                      <div class="input-group-addon"><i class="fa fa-map-marker text-success"></i></div>
                                      <input type="text" required class="form-control" ng-model="Parametro.parLongitud"   id="txtLongitud"  placeholder="Longitud">
@@ -108,13 +101,24 @@
                                  </div>
                             </div>
                         </div>
+                    
+                      <div class="col-md-9">
+                           <div class="form-group">
+                               <label for="txtFirma">Firma *</label>
+                                <div class="input-group">    
+                                    <div class="input-group-addon"><i class="fa fa-pencil text-success"></i></div>
+                                    <input type="text" required="" class="form-control" ng-model="Parametro.parFirma"  id="txtFirma" placeholder="firma">
+
+                                </div>
+                           </div>
+                        </div>
 
 
                         <div class="row">
-                            <div class="col-md-5 col-md-offset-1">
-                                <br/> <br/>
+                            <div class="col-md-5 col-md-offset-2">
+                                <br/> 
                                 <button ng-disabled="frmParametro.$invalid"  class="btn btn-primary btn-block btn-addon"   type="button" title="Registrar Parametros" ng-click="guardar()">
-                                  <i class="fa fa-check"></i> Registrar
+                                  <i class="fa fa-check"></i> Guardar
                                 </button> 
                             </div>
                         </div> 
@@ -124,20 +128,18 @@
                
            </form>
         </div>
-        <div class="col-md-8">
+        <div class="col-md-7">
                 <br/>
                 <div class="row">
-                    <div class="col-md-7">
+                    <div class="col-md-12">
                         <br/>
-                        <label style="padding-left: 50px;">UBICACION</label>                            
-                           <p class="nota">  <label style="padding-left: 50px;">NOTA:   </label>    
-                               Debe Habilitar la Localización de su Navegador</p>
+                        <label style="padding-left: 20px;">UBICACION: &nbsp;</label>Debe Habilitar la Localización de su Navegador
                     </div>
                 </div>
 
                 <div class="row">
-                    <div class="col-md-11">
-                        <div id="mapaSetting" style="margin-left:4%; margin-top: 10px; width: 97%; height: 420px; margin-bottom: 10px; " ng-model="mapConfig"></div>
+                    <div class="col-md-12">
+                        <div id="mapaSetting" style="margin-left:1%; margin-top: 10px; width: 99%; height: 320px; margin-bottom: 10px; " ng-model="mapConfig"></div>
                     </div>
                 </div>
         </div>

@@ -1,9 +1,25 @@
-app.controller("homeController", ["$scope", function ($scope) {
+app.controller("homeController", ["$scope", "parametroService",  function ($scope, parametroService) {
         
     $scope.Titulo = "BIENVENIDOS"; 
     $scope.Login = {};
-        
+    $scope.Configuracion = {};
+     
     var click = 1;    
+    
+    
+    $scope.getConfiguracion= function (){
+        var promiseGet = parametroService.getAll(); 
+        promiseGet.then(function(pl) {            
+            $scope.Configuracion = pl.data;
+            config.setConfig(btoa(JSON.stringify(pl.data)));
+        },
+        function(errorPl) {
+            console.log('failure loading usuarios', errorPl);
+        });
+    };
+    
+    $scope.getConfiguracion();
+   
         
     $scope.mostrarOcultarMenu = function(){    
         if(click===1){               
