@@ -1,6 +1,6 @@
 app.controller("homeController", ["$scope", "parametroService",  function ($scope, parametroService) {
         
-    $scope.Titulo = "BIENVENIDOS"; 
+    $scope.Titulo = "BIENVENIDO"; 
     $scope.Login = {};
     $scope.Configuracion = {};
      
@@ -12,6 +12,7 @@ app.controller("homeController", ["$scope", "parametroService",  function ($scop
         promiseGet.then(function(pl) {            
             $scope.Configuracion = pl.data;
             config.setConfig(btoa(JSON.stringify(pl.data)));
+            validarVista();
         },
         function(errorPl) {
             console.log('failure loading usuarios', errorPl);
@@ -47,8 +48,18 @@ app.controller("homeController", ["$scope", "parametroService",  function ($scop
     };
     
     function validarUser (){        
-        $scope.Login = session.getUser();                               
+        $scope.Login = session.getUser();         
     }
+    
+    function validarVista(){
+        if($scope.Login){
+            if($scope.Login.ValidarClave ==="SI"){
+                location.href = "#/2/usuario/clave";                
+            }else{
+                 location.href = "#/1/servicios";   
+            }
+        }
+    };
     
     validarUser();        
 }]);
@@ -64,7 +75,7 @@ app.controller('salirController',['$scope', 'usuarioService', 'toaster', functio
             sessionStorage.removeItem("usuario"); 
             $scope.mensaje = "Su sesión ha finalizado correctamente";
             toaster.pop('success','¡Información!',"Su sesión ha terminado.");
-            setTimeout ('location.href = "../inicio/index.html#/login"', 3000);                       
+            setTimeout ('location.href = "../inicio/index.html#/login"', 2000);
         },
         function(errorPl) {
             toaster.pop('error','¡Error!',errorPl.data.request);

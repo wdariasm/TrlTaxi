@@ -225,7 +225,7 @@ class UsuarioController extends Controller
             }*/
             
             $usuario = DB::select("SELECT us.IdUsuario,  us.ConductorId, us.ClienteId, us.PersonaId, us.Nombre, us.Login, us.Estado, us.TipoAcceso, "
-                    . " us.Modulo, GROUP_CONCAT(up.IdPermiso SEPARATOR ',') permisos FROM usuario us INNER JOIN "
+                    . " us.Modulo, GROUP_CONCAT(up.IdPermiso SEPARATOR ',') permisos, us.ValidarClave FROM usuario us INNER JOIN "
                     . " usuariopermiso up ON us.IdUsuario=up.IdUsuario WHERE us.IdUsuario='".$user['IdUsuario']."' GROUP BY us.IdUsuario ");
 
             DB::update("UPDATE usuario SET FechaCnx = NOW(), DirIp=$dirIp, Sesion='INICIADA' WHERE IdUsuario = ".$user['IdUsuario']."");
@@ -361,6 +361,7 @@ class UsuarioController extends Controller
             }
             $usuario->Clave =  Crypt::encrypt($clave);            
             $usuario->Sesion = 'CERRADA';
+            $usuario->ValidarClave = 'NO';            
             $usuario->save();            
             
             $user = $usuario->Login;
@@ -402,7 +403,7 @@ class UsuarioController extends Controller
             $cabeceras .= 'Content-type: text/html; charset=UTF-8' . "\r\n";
             $cabeceras .= 'To: '.$nombre.' <'.$para.'>' . "\r\n";
             $cabeceras .= 'From: Transporte Ruta Libre <info@trl.com.co>' . "\r\n";  
-            mail($para, $título, $mensaje, $cabeceras);       
+           // mail($para, $título, $mensaje, $cabeceras);       
     }
 
     public function updateEstado(Request $request, $IdUsuario){

@@ -107,8 +107,16 @@ var app;
                 templateUrl: 'views/proceso/salir.html'
             })
             
+            .when("/iniciando",{
+                templateUrl: 'views/proceso/inicio.html'                        
+            })
+            
+            .when("/2/usuario/clave",{
+                templateUrl: 'views/proceso/cambiarClave.html'                        
+            })
+            
             .otherwise({
-                redirectTo:"/"               
+                redirectTo:"/iniciando"               
             });
                           
     }]);
