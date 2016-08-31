@@ -228,8 +228,8 @@
                                 <div ng-repeat="tpv in Permisos">
                                     <div class="col-xs-6">     
                                         <div class="checkbox checkbox-primary">                                        
-                                             <input type="checkbox" checklist-model="Perfil.Permisos" checklist-value="tpv.IdPermiso">
-                                             <label for="{{tpv.IdPermiso}}">{{tpv.pmNombre}}</label> 
+                                             <input id="txtp{{tpv.IdPermiso}}" type="checkbox" checklist-model="Perfil.Permisos" checklist-value="tpv">
+                                             <label for="txtp{{tpv.IdPermiso}}">{{tpv.pmNombre}}</label> 
                                         </div>
                                     </div> 
                                 </div>
@@ -263,7 +263,7 @@
                                 <tr ng-repeat="pr in Perfiles">
                                    <td>{{ pr.IdRol}}</td>
                                    <td>{{ pr.Descripcion }}</td>
-                                   <td>{{ pr.Estado}}</td>                                    
+                                   <td>{{ pr.rEstado}}</td>                                    
                                    <td>
                                         <center>
                                            <a data-ng-click="get(pr)" style="float: left; margin-left: 15px;" href="javascript:;"  title="Editar"><i class="fa fa-lg fa-pencil text-success"></i></a>
@@ -401,7 +401,7 @@
         $(this).tab('show');
         
     });
-    //$('#tabPanels a[href="#tabCambiarC"]').tab('show');
+    $('#tabPanels a[href="#tabRoles"]').tab('show');
             
     
     $('input[name="txtFechaConexion"]').daterangepicker({

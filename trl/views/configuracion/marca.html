@@ -46,7 +46,7 @@
         <div class="col-xs-8">
             <div class="row">
                 <div class="col-xs-12">
-                    <table border="0" cellspacing="0" class="table table-striped" >
+                    <table border="0" cellspacing="0" class="table table-striped" ng-table="TablaMarca">
                         <thead>
                             <tr>
                                 <th class="center">CODIGO</th>                                
@@ -57,16 +57,16 @@
                         </thead>
 
                         <tbody>
-                            <tr data-ng-repeat="items in Marcas">
+                            <tr data-ng-repeat="items in $data">
                                 <td class="center">{{ items.maCodigo}}</td>
                                 <td>{{ items.maDescripcion }}</td>
                                 <td>{{ items.maEstado}}</td>
                                 <td>
-                                        <center>
-                                            <a data-ng-click="get(items)" style="float: left; margin-left: 15px;" href="javascript:;"  title="Editar"><i class="fa fa-lg fa-pencil"></i></a>
-                                            <a data-ng-click="VerDesactivar(items.maCodigo, 'BORRADO')"  style="float: left; margin-left: 15px;" href="javascript:;"  title="Eliminar"><i class="fa fa-lg fa-trash text-danger"></i></a>
-                                        </center>
-                                    </td> 
+                                    <center>
+                                        <a data-ng-click="get(items)" style="float: left; margin-left: 15px;" href="javascript:;"  title="Editar"><i class="fa fa-lg fa-pencil"></i></a>
+                                        <a data-ng-click="VerDesactivar(items.maCodigo, 'BORRADO')"  style="float: left; margin-left: 15px;" href="javascript:;"  title="Eliminar"><i class="fa fa-lg fa-trash text-danger"></i></a>
+                                    </center>
+                                </td> 
                             </tr>
                         </tbody>
                     </table>

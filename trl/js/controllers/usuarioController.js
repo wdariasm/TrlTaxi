@@ -436,7 +436,7 @@ app.controller('perfilController', ['$scope', 'perfilService', 'toaster',functio
     function loadPermisos(){
         var promiseGet = perfilService.getPermisos(); //The Method Call from service        
         promiseGet.then(function (item) {
-            $scope.Permisos = item.data;            
+            $scope.Permisos = item.data;                
         },
         function (errorPl) {
             toaster.pop('error','¡Error!', "Error al cargar permisos");  
@@ -466,9 +466,8 @@ app.controller('perfilController', ['$scope', 'perfilService', 'toaster',functio
         $scope.Perfil.Permisos = [];
         var promiseGet = perfilService.getPermisoByPerfil(id); 
         promiseGet.then(function (d) {                             
-            if(d.data.length){                               
-                var tipos = JSON.parse("[" + d.data[0].permisos + "]");                          
-                $scope.Perfil.Permisos = angular.copy(tipos);
+            if(d.data){                                                                         
+                $scope.Perfil.Permisos = angular.copy(d.data);                               
             }
         },
         function (errorPl) {
@@ -502,8 +501,8 @@ app.controller('perfilController', ['$scope', 'perfilService', 'toaster',functio
             toaster.pop('success', "Control de Información", d.data.message);
             init();
         }, function(err) {           
-                toaster.pop('error', "¡Error!", err.data.request);         
-                console.log("Some Error Occured " + JSON.stringify(err));
+            toaster.pop('error', "¡Error!", err.data.request,0);         
+            console.log("Some Error Occured " + JSON.stringify(err));
         });          
     };
     

@@ -157,8 +157,8 @@
                             <div ng-repeat="tpv in Permisos">
                                 <div class="col-xs-4">     
                                     <div class="checkbox checkbox-primary">                                        
-                                         <input type="checkbox" checklist-model="Persona.Permisos" checklist-value="tpv">
-                                         <label for="{{tpv.IdPermiso}}">{{tpv.pmNombre}}</label> 
+                                        <input id="{{tpv.IdPermiso}}" type="checkbox" checklist-model="Persona.Permisos" checklist-value="tpv">
+                                        <label for="{{tpv.IdPermiso}}">{{tpv.pmNombre}}</label> 
                                     </div>
                                 </div> 
                             </div>

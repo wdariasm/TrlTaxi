@@ -8,5 +8,5 @@ class Permiso extends Model
 {
     protected $table = "permiso";   
     protected $primaryKey = 'IdPermiso';
-    public $timestamps = false;
+    public $timestamps = false;    
 }

@@ -18,8 +18,7 @@ class ConductorController extends Controller
     public function index()       
     {
          $result = DB::select("SELECT co.IdConductor, co.Cedula,  co.Nombre, co.TelefonoPpal, co.Direccion, co.Estado,"
-                . " es.esDescripcion FROM conductor co INNER JOIN escolaridad es ON co.Escolaridad = es.esCodigo"
-                . " WHERE  co.Estado <> 'RETIRADO' ");
+                . " co.CdPlaca FROM conductor co  WHERE  co.Estado <> 'RETIRADO' ");
         return $result; 
     }
 
@@ -56,7 +55,8 @@ class ConductorController extends Controller
             $conductor->CdPlaca = $data["CdPlaca"]; 
             $conductor->Observacion = $data["Observacion"]; 
             $conductor->Escolaridad = $data["Escolaridad"]; 
-            $conductor->TipoDocumento = $data["TipoDocumento"]; 
+            $conductor->TipoDocumento = $data["TipoDocumento"];
+            $conductor->VehiculoId = $data["VehiculoId"];
             $conductor->save();
             
             $novedad = $data["Novedades"];
@@ -116,6 +116,7 @@ class ConductorController extends Controller
         try{
             $data = $request->all();
             $conductor = Conductor::find($IdConductor);
+            $conductor->Cedula = $data["Cedula"];
             $conductor->Nombre = $data["Nombre"]; 
             $conductor->Direccion = $data["Direccion"]; 
             $conductor->TelefonoPpal = $data["TelefonoPpal"]; 
@@ -132,6 +133,7 @@ class ConductorController extends Controller
             $conductor->Observacion = $data["Observacion"]; 
             $conductor->Escolaridad = $data["Escolaridad"]; 
             $conductor->TipoDocumento = $data["TipoDocumento"]; 
+            $conductor->VehiculoId = $data["VehiculoId"];
             $conductor->save();
             
             return JsonResponse::create(array('message' => "Conductor Actualizado Correctamente", "request" =>json_encode($conductor->IdConductor)), 200);

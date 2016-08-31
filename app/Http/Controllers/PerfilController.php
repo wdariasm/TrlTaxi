@@ -35,7 +35,7 @@ class PerfilController extends Controller
     public  function GetPermisosByPerfil($perfil){
         return PerfilPermiso::join('permiso', 'rolpermiso.IdPermiso', '=' , 'permiso.IdPermiso')
                 ->where('rolpermiso.IdRol', $perfil)
-                ->select( 'permiso.IdPermiso', 'pmNombre', 'pmModulo')->get();        
+                ->select( 'permiso.IdPermiso', 'permiso.pmNombre', 'permiso.pmModulo')->get();              
     }
 
     /**
@@ -51,14 +51,14 @@ class PerfilController extends Controller
             $perfil = new Perfil();            
             $perfil->Descripcion = $data["Descripcion"];
             $perfil->rEstado  = $data["rEstado"];            
-            $perfil->save();                  
+            $perfil->save();                                          
             $permisos = $data["Permisos"];            
-            for ($index = 0; $index < count($permisos); $index++) {
+            foreach ($permisos as $p) {
                 $insert = new PerfilPermiso();
                 $insert->IdRol =$perfil->id;
-                $insert->IdPermiso = $permisos[$index];                
+                $insert->IdPermiso = $p['IdPermiso'];
                 $insert->save();
-            }   
+            }
             
             return JsonResponse::create(array('message' => "Perfil Guardado Correctamente", "request" =>json_encode($perfil->id)), 200);
             
@@ -79,18 +79,17 @@ class PerfilController extends Controller
     {
         try {            
             $data = $request->all();            
-            $perfil = Perfil::find($id);
-            //$perfil->Descripcion = $data["Descripcion"];
+            $perfil = Perfil::find($id);            
             $perfil->rEstado  = 'ACTIVO';
-            $perfil->save();
-            $permisos = $data["Permisos"];
-            PerfilPermiso::where('IdRol',$id)->delete();                      
-            for ($index = 0; $index < count($permisos); $index++) {
+            $perfil->save();            
+            PerfilPermiso::where('IdRol',$id)->delete();
+            $permisos = $data["Permisos"];            
+            foreach ($permisos as $p) {
                 $insert = new PerfilPermiso();
                 $insert->IdRol =$id;
-                $insert->IdPermiso = $permisos[$index];                
+                $insert->IdPermiso = $p['IdPermiso'];
                 $insert->save();
-            }   
+            }
             
             
             return JsonResponse::create(array('message' => "Perfil Modificado Correctamente", "request" =>json_encode($id)), 200);

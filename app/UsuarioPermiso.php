@@ -9,4 +9,5 @@ class UsuarioPermiso extends Model
     protected $table = "usuariopermiso";   
     protected $primaryKey = 'upCodigo';
     public $timestamps = false;
+    protected $casts = ['IdPermiso' => 'integer' ];
 }

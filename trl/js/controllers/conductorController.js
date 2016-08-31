@@ -45,7 +45,9 @@ app.controller("conductorController", ["$scope", "conductorService", "tipoDocume
             CdPlaca:"",
             Observacion:"",
             TipoDocumento:"",
-            Escolaridad:""
+            Escolaridad:"",
+            VehiculoId : 0,
+            Novedades : []
         };        
         
     }
@@ -56,7 +58,7 @@ app.controller("conductorController", ["$scope", "conductorService", "tipoDocume
     };  
     
    
-    function loadConductor (){
+    $scope.loadConductor =  function  (){
         var promise = conductorService.getAll();
         promise.then(function(d) {                        
             $scope.Conductores = d.data;            
@@ -65,7 +67,7 @@ app.controller("conductorController", ["$scope", "conductorService", "tipoDocume
                 toaster.pop('error','¡Error!',"Error al cargar Conductores");           
                 console.log("Some Error Occured " + JSON.stringify(err));
         }); 
-    }
+    };
     
     function  getConductor(id){
         var promise = conductorService.get(id);
@@ -114,7 +116,7 @@ app.controller("conductorController", ["$scope", "conductorService", "tipoDocume
     function initTabla() {
         $scope.TablaConductor = new ngTableParams({
             page: 1,
-            count: 10,
+            count: 11,
             sorting: undefined
         }, {
             filterDelay: 50,
@@ -141,10 +143,9 @@ app.controller("conductorController", ["$scope", "conductorService", "tipoDocume
         
         $scope.Conductor.Nombre = $scope.Conductor.Nombre.toUpperCase();
         $scope.Conductor.Direccion = $scope.Conductor.Direccion.toUpperCase();
-        $scope.Conductor.Observacion = $scope.Conductor.Observacion.toUpperCase();
-        $scope.Conductor.Escolaridad = $scope.Conductor.Escolaridad.toUpperCase();
+        $scope.Conductor.Observacion = $scope.Conductor.Observacion.toUpperCase();        
         $scope.Conductor.CdPlaca = $scope.Conductor.CdPlaca.toUpperCase();
-        $scope.Conductor.Escolaridad = $scope.SelEscolaridad.esCodigo;
+        $scope.Conductor.Escolaridad = $scope.SelEscolaridad.esCodigo;       
            //$scope.Novedad.nvDescripcion=$scope.Novedad.nvDescripcion.toUpperCase();
 		   
         if ($scope.valCedula){
@@ -152,7 +153,7 @@ app.controller("conductorController", ["$scope", "conductorService", "tipoDocume
             return;
          }
              
-        if($scope.valPlaca){
+        if($scope.Conductor.VehiculoId === 0){
             toaster.pop('error','¡Error!', 'Placa no se encuentra registrada');
             return;
         }
@@ -165,8 +166,9 @@ app.controller("conductorController", ["$scope", "conductorService", "tipoDocume
             promise = conductorService.post($scope.Conductor);            
         }
         
-        promise.then(function(d) {                        
-            loadConductor();
+        promise.then(function(d) {                                    
+            $scope.loadConductor();
+            $scope.Nuevo();
            toaster.pop('success', "Control de Información", d.data.message); 
              
         }, function(err) {           
@@ -183,6 +185,13 @@ app.controller("conductorController", ["$scope", "conductorService", "tipoDocume
         loadNovedad(item.IdConductor);
         $('#tabPanels a[href="#tabRegistro"]').tab('show');
     };
+    $scope.Nuevo = function (){
+        initialize();
+        initNovedad();
+        $scope.editMode = false;
+        $scope.title = "Nuevo Conductor";
+    };
+    
    
    
    // NOVEDADES
@@ -219,14 +228,7 @@ app.controller("conductorController", ["$scope", "conductorService", "tipoDocume
        $scope.Novedad.nvDescripcion = $scope.Novedad.nvDescripcion.toUpperCase();
        $scope.Novedades.push($scope.Novedad);
        $scope.Novedad={};
-   };
-   
-    $scope.Nuevo = function (){
-        initialize();
-        initNovedad();
-        $scope.editMode = false;
-        $scope.title = "Nuevo Conductor";
-    };
+   };      
     
 	
        //Editar Novedad
@@ -255,7 +257,7 @@ app.controller("conductorController", ["$scope", "conductorService", "tipoDocume
             var promisePut  = conductorService.updateEstado($scope.IdConductorGlobal, objetc);        
                 promisePut.then(function (d) {                
                  toaster.pop('success', "Control de Información", d.data.message);                 
-                loadConductor(); 
+                $scope.loadConductor(); 
             }, function (err) {                              
                      toaster.pop('error', "Error", "Error al descativar Conductor"); ;
                     console.log("Some Error Occured "+ JSON.stringify(err));
@@ -316,18 +318,20 @@ app.controller("conductorController", ["$scope", "conductorService", "tipoDocume
     };
   
     $scope.ValidarPlaca = function () {
-        $scope.valPlaca = false;
-        if (!$scope.Conductor.CdPlaca|| $scope.editMode) {
+        $scope.Conductor.VehiculoId = 0;        
+        if (!$scope.Conductor.CdPlaca) {
+            toaster.pop('info',"¡Información!", "Ingrese la placa");
             return;
         }
         var promiseGet = vehiculoService.validarPlaca($scope.Conductor.CdPlaca);
         promiseGet.then(function (d) {
-            if (!d.data.Placa) {
-                $scope.valPlaca = true;
+            if (!d.data.Placa) {                              
                 toaster.pop('info', '¡Alerta!', 'Esta placa no existe');
+            }else{
+                $scope.Conductor.VehiculoId  = d.data.IdVehiculo;
             }
         }, function (err) {
-            toaster.pop('error', '¡Error!', 'Error al validar placa.');
+            toaster.pop('error', '¡Error!', err);
             console.log("Some Error Occured " + JSON.stringify(err));
         });
     };
@@ -433,7 +437,7 @@ app.controller("conductorController", ["$scope", "conductorService", "tipoDocume
     };
     
     
-     $scope.validarNumero = function () {
+     $scope.validarNumero = function () {        
         $scope.valNumero = false;
         if (!$scope.LicenciaConduccion.Numero) {
             return;
@@ -474,7 +478,7 @@ app.controller("conductorController", ["$scope", "conductorService", "tipoDocume
    
      };
   
-    loadConductor(); 
+    $scope.loadConductor(); 
     
 }]);
 

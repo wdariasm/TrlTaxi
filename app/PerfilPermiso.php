@@ -6,7 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class PerfilPermiso extends Model
 {
-     protected $table = "rolpermiso";   
+    protected $table = "rolpermiso";   
     protected $primaryKey = 'Id';
     public $timestamps = false;
+    protected $casts = ['IdPermiso' => 'integer' ];
 }
