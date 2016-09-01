@@ -13,7 +13,11 @@ var app;
             })
             
             .when("/1/contratos",{
-                templateUrl: 'views/contratos/contrato.html'
+                templateUrl: 'views/servicio/contrato.html'
+            })
+            
+            .when("/1/historial",{
+                templateUrl: 'views/servicio/historial.html'
             })
                        
             

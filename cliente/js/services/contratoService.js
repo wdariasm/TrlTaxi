@@ -10,8 +10,8 @@ app.service("contratoService",[ '$http', function ($http) {
         return req;
     };
 
-    this.getByCliente = function (id) {
-        var req = $http.get(uri+'/api/cliente/' + id + '/contratos');
+    this.getByCliente = function (id, estado) {
+        var req = $http.get(uri+'/api/cliente/' + id + '/contratos/' + estado);
         return req;
     };
 

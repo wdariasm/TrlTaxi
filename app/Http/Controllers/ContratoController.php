@@ -36,8 +36,13 @@ class ContratoController extends Controller
         return $result;
     }
     
-    function getContratoByCliente($id) {
-        return Contrato::where('ctClienteId', $id)->where('ctEstado','ACTIVO')->get();
+    function getContratoByCliente($id, $estado) {
+        
+        if ($estado === "Todos"){
+            return Contrato::where('ctClienteId', $id)->get();
+        }else{
+            return Contrato::where('ctClienteId', $id)->where('ctEstado',$estado)->get();
+        }
     }
 
     public function store(Request $request)

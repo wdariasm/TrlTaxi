@@ -334,6 +334,7 @@ class UsuarioController extends Controller
             $usuario = Usuario::find($id);
             $usuario->Clave =  Crypt::encrypt($clave);            
             $usuario->Sesion = 'CERRADA';
+            $usuario->ValidarClave = 'NO';
             $usuario->save();
             DB::update("UPDATE recuperacion SET estado ='VENCIDO' WHERE Id = ".$data['Codigo']." and keyConf='".$data["Key"]."'");            
             
@@ -361,7 +362,7 @@ class UsuarioController extends Controller
             }
             $usuario->Clave =  Crypt::encrypt($clave);            
             $usuario->Sesion = 'CERRADA';
-            $usuario->ValidarClave = 'NO';            
+            $usuario->ValidarClave = 'NO'; 
             $usuario->save();            
             
             $user = $usuario->Login;

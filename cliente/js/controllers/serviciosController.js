@@ -486,7 +486,7 @@ app.controller('serviciosController',['$scope', 'zonaService', 'ngTableParams', 
 
     $scope.GetContratos = function  (){
         init();
-        var promise = contratoService.getByCliente($scope.Servicio.ClienteId);
+        var promise = contratoService.getByCliente($scope.Servicio.ClienteId, "ACTIVO");
         promise.then(function(d) {
             $scope.Contratos = d.data;
         }, function(err) {

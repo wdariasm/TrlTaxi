@@ -5,4 +5,4 @@
     Route::get('api/tipoContrato','ContratoController@tipoContrato');
 
     //Obtener contratod de un cliente //
-    Route::get('api/cliente/{id}/contratos','ContratoController@getContratoByCliente');
+    Route::get('api/cliente/{id}/contratos/{estado}','ContratoController@getContratoByCliente');
