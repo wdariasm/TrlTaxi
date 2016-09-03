@@ -163,6 +163,7 @@ app.controller('personaController', ['$scope', 'personaService', 'tipoDocumentoS
         item.ConductorId = null;
         item.TipoAcceso =2;
         item.Contrato = 0;
+        item.Email  = $scope.Persona.Correo;
         var promise = usuarioService.post(item);                            
         promise.then(function(d) {                         
             toaster.pop('success', 'Control de información', d.data.message);

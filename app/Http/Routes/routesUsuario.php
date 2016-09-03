@@ -13,3 +13,6 @@
     
     /* Cambiar contraseña desde el administrador */
     Route::post('api/usuario/cambiar','UsuarioController@cambiarClave');
+    
+    /*usuarios por cliente*/
+    Route::get('api/cliente/{id}/usuarios','UsuarioController@getUserByCliente');

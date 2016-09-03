@@ -136,7 +136,7 @@ function ($scope, clienteService, tipoDocumentoService,toaster,ngTableParams, fu
             Contrato : 0,
             ConductorId : null,
             PersonaId : null,
-            Correo : $scope.Cliente.Correo,
+            Email : $scope.Cliente.Correo,
             Permisos :[
                 {
                     IdPermiso : 3

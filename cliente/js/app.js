@@ -19,6 +19,10 @@ var app;
             .when("/1/historial",{
                 templateUrl: 'views/servicio/historial.html'
             })
+            
+            .when("/1/usuarios",{
+                templateUrl: 'views/cliente/usuario.html'
+            })
                        
             
             .when("/2/salir",{

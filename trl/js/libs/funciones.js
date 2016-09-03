@@ -58,5 +58,10 @@
         fecha.setSeconds(addTime);    
         return fecha;
     };
-
+    
+    this.PermisoCliente = function (){
+        var permisos = [ { IdPermiso : 3 },  { IdPermiso : 7 },{ IdPermiso : 8 }];
+        return permisos;
+    };
+    
 });

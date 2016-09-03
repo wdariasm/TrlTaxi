@@ -489,6 +489,7 @@ app.controller('serviciosController',['$scope', 'zonaService', 'ngTableParams', 
         var promise = contratoService.getByCliente($scope.Servicio.ClienteId, "ACTIVO");
         promise.then(function(d) {
             $scope.Contratos = d.data;
+            $scope.ContratoSelect ={};
         }, function(err) {
                 toaster.pop('error','¡Error!',"Error al cargar contratos");
                 console.log("Some Error Occured " + JSON.stringify(err));

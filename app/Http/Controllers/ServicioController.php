@@ -23,6 +23,17 @@ class ServicioController extends Controller
         return $servicio;            
     }
     
+    public function getServicioCliente($id, $rol, $usuario)
+    {
+        $condicion = " WHERE  s.ClienteId = ".$id;
+        if($rol==="SUBCLIENTE"){
+            $condicion = " WHERE  s.UserReg = '".$usuario ."'";
+        }        
+        $servicio = DB::select("SELECT s.IdServicio, s.ContratoId, s.ClienteId, s.NumeroContrato, s.Responsable,"
+                . " s.Telefono, s.TipoServicidoId, ts.svDescripcion, s.FechaServicio, s.Hora, s.Valor, s.Estado, "
+                . " s.DescVehiculo FROM servicio s INNER JOIN  tiposervicio ts ON s.TipoServicidoId=ts.svCodigo ".$condicion);
+        return $servicio;     
+    }    
 
     /**
      * Store a newly created resource in storage.

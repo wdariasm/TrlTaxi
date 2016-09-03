@@ -30,6 +30,12 @@ class UsuarioController extends Controller
                 ->select( 'permiso.IdPermiso', 'pmNombre', 'pmModulo')->get();         
         return $permiso;
     }
+    
+    public function getUserByCliente($id){
+        return Usuario::where('ClienteId', $id)
+                ->select('IdUsuario', 'Login', 'Nombre',  'Estado', 'Modulo', 'Sesion', 'FechaCnx','ValidarClave',
+                'ClienteId', 'PersonaId', 'ConductorId', 'TipoAcceso', 'Contrato', 'Email')->get();
+    }
 
    
     /**
@@ -62,7 +68,7 @@ class UsuarioController extends Controller
             $usuario->TipoAcceso =  $data["TipoAcceso"];
             $usuario->KeyConf = uniqid('TrL',true);
             $usuario->Contrato =  $data["Contrato"];
-            $usuario->Email = $data["Correo"];
+            $usuario->Email = $data["Email"];
             $usuario->save();
             
             $permisos = $data["Permisos"];            
@@ -83,7 +89,7 @@ class UsuarioController extends Controller
     
     public function EnviarEmail($data, $idUsuario,  $clave, $key ){                  
         $user = $data['Login'];                
-        $para  = $data['Correo'];
+        $para  = $data['Email'];
         $nombre = $data['Nombre'];
         // título
         $título = 'Confirmacion Email [Transporte Ruta Libre]';

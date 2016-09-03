@@ -58,7 +58,7 @@ class PlantillaController extends Controller
      */
     public function getTiposVehiculo($id) {
         $result = DB::select("SELECT DISTINCT t.tfTipoVehiculo,cv.tvCodigo, cv.tvDescripcion , cv.tvNumPasajero, cv.tvRuta FROM "
-            . " transfert t INNER JOIN ClaseVehiculo cv ON  t.tfTipoVehiculo=cv.tvCodigo WHERE tfPlantilla = $id");        
+            . " transfert t INNER JOIN clasevehiculo cv ON  t.tfTipoVehiculo=cv.tvCodigo WHERE tfPlantilla = $id");        
         return $result;        
     }
     
