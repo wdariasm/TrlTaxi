@@ -60,24 +60,7 @@ class ZonaController extends Controller
             array_push($poligono, explode("," ,$ptZona[0]));            
             echo contains($punto,$poligono)?'IN':'OUT';
             
-        }
-        
-       $polygon = array(
-    array(10.442487502405,-75.527321174741),
-    array(10.44139018212,-75.514231994748),
-    array(10.453629304362,-75.513073280454),
-    array(10.442487502405,-75.527321174741)
-);
-
-$point1 = array(10.4264108,-78.5127286);
- 
-echo contains($point1,$polygon)?'IN':'OUT';
-echo "<br />";
- 
-// The last point's coordinates must be the same as the first one's, to "close the loop"
-//foreach($points as $key => $point) {
-//    echo "point " . ($key+1) . " ($point): " . $pointLocation->pointInPolygon($point, $polygon) . "<br>";
-//}
+        }      
 
     }
 

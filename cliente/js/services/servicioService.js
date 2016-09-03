@@ -5,6 +5,11 @@ app.service("servicioService",[ '$http', function ($http) {
         return req; 
     };
     
+     this.getAll = function (id, rol, user) {
+        var req = $http.get(uri+'/api/cliente/' + id + "/servicios/" + rol + "/" + user );
+        return req;
+    };   
+    
 }]);
 
 

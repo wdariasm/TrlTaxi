@@ -26,7 +26,7 @@ class ServicioController extends Controller
     public function getServicioCliente($id, $rol, $usuario)
     {
         $condicion = " WHERE  s.ClienteId = ".$id;
-        if($rol==="SUBCLIENTE"){
+        if($rol==="5"){
             $condicion = " WHERE  s.UserReg = '".$usuario ."'";
         }        
         $servicio = DB::select("SELECT s.IdServicio, s.ContratoId, s.ClienteId, s.NumeroContrato, s.Responsable,"

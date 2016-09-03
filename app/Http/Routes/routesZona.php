@@ -7,7 +7,7 @@
     //Gestion de puntos por zona
     Route::get('api/zona/{id}/puntos','ZonaController@getPuntos');
     
-    Route::get('api/zona/{latitud}/{longitud}','ZonaController@getZonaByPunto');
+    Route::get('api/zona/{latitud}/{longitud}','CalcularZonaController@getZonaByPunto');
                 
 
 

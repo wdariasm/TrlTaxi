@@ -45,9 +45,8 @@ app.controller('serviciosController',['$scope', 'zonaService', 'ngTableParams', 
 
     $scope.AutocompleteOrigen=null;
     $scope.AutocompleteDestino =null;
-
     geolocate();
-    iniciarMapaZ();
+    iniciarMapaZ();     
     initAutocomplete();
     initAutocompleteDestino();
     init();
@@ -271,9 +270,9 @@ app.controller('serviciosController',['$scope', 'zonaService', 'ngTableParams', 
 
     function buscarZona(lat, lng, opcion){
         var promise = zonaService.getZona(lat, lng);
-        promise.then(function(d) {
-            if(d.data.length>0){
-                $scope.Servicio[opcion] = d.data[0].znCodigo;
+        promise.then(function(d) {            
+            if(d.data !== 0){                
+                $scope.Servicio[opcion] = d.data;
             }else {
                 $scope.Servicio[opcion] = "";
                 toaster.pop('error','No se encontro la zona');
@@ -363,6 +362,9 @@ app.controller('serviciosController',['$scope', 'zonaService', 'ngTableParams', 
         var promise = contratoService.getTipoVehiculo(id);
         promise.then(function(d) {
             $scope.Contrato.TipoVehiculo = d.data;
+            if(d.data){
+                $scope.TipoSelect = d.data[0];
+            }
         }, function(err) {
                 toaster.pop('error','¡Error!',"Error al cargar tipos de vehículo",0);
                 console.log("Some Error Occured " + JSON.stringify(err));
@@ -421,8 +423,7 @@ app.controller('serviciosController',['$scope', 'zonaService', 'ngTableParams', 
                 $scope.Contrato.Plantilla = d.data.Plantilla;
                 if($scope.Contrato.TipoServicio === 0){
                     toaster.pop('error', 'No se encontraón servicios asociados a este contrato', 0);
-                }
-                console.log($scope.Contrato.FormaPago);
+                }                
 
             }else{
                 toaster.pop('error', "Número de contrato no existe");
@@ -435,11 +436,16 @@ app.controller('serviciosController',['$scope', 'zonaService', 'ngTableParams', 
     };
 
     $scope.TipoServicioCheck = function(value) {
-        console.log($scope.Servicio.Tipo);
+        //console.log($scope.Servicio.Tipo);
         if($scope.Servicio.Tipo.csPlantilla==="SI"){
 
-            if($scope.Servicio.Tipo.csTipoServicioId ===1){
-                iniciarMapaZ();
+            if($scope.Servicio.Tipo.csTipoServicioId ===1){                
+                document.getElementById('dvMapaServicio').style.display="block";
+                geolocate();
+                iniciarMapaZ();     
+                initAutocomplete();
+                initAutocompleteDestino();
+                
             }
 
             $scope.titlePlantilla = "Plantillas " + $scope.Servicio.Tipo.csDescripcion;
@@ -462,7 +468,8 @@ app.controller('serviciosController',['$scope', 'zonaService', 'ngTableParams', 
     };
 
     $scope.ConsultarPrecio = function (){
-        switch ($scope.Servicio.Tipo.csTipoServicioId) {
+        var codigo = parseInt($scope.Servicio.Tipo.csTipoServicioId);
+        switch (codigo) {
             case 1:
                     buscarTransfert();
                 break;
