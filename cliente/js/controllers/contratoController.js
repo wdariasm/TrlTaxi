@@ -60,10 +60,10 @@ app.controller("contratoController", ["$scope",  "toaster",  "contratoService","
         var promise = contratoService.getPorNumeroCto(contrato);
         promise.then(function(d) {
             if(d.data){
+                $("#dvDetalle").show();
                 toaster.clear();
                 $scope.Contrato = d.data;
-                $scope.Contrato.FormaPago = JSON.parse($scope.Contrato.ctFormaPago);
-                console.log($scope.Contrato.FormaPago);
+                $scope.Contrato.FormaPago = JSON.parse($scope.Contrato.ctFormaPago);                
             }else{
                 toaster.pop('error', "Número de contrato no existe");
             }

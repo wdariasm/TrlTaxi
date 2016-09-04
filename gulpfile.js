@@ -8,7 +8,7 @@ var gulp = require('gulp'),
 * Configuración de la tarea 'demo'
 */
 gulp.task('controllers', function () {
-    gulp.src(["trl/js/services/*.js", "trl/js/controllers/*.js"])
+    gulp.src(["trl/js/services/*.js", "trl/js/controllers/*.js",  "trl/js/session.js" , "trl/js/libs/funciones.js"])
         .pipe(concat('vendors.js'))
         .pipe(uglify().on('error', gutil.log))
         .pipe(gulp.dest('trl/dist/'));        
@@ -19,10 +19,10 @@ gulp.task('watch', function () {
 });
 
 gulp.task('ctrlCliente', function () {
-    gulp.src(["cliente/js/services/*.js", "cliente/js/controllers/*.js"])
-        .pipe(concat('vendors.js'))
-        .pipe(uglify().on('error', gutil.log))
-        .pipe(gulp.dest('cliente/dist/'));
+    gulp.src(["trl/js/libs/funciones.js", "cliente/js/services/*.js", "cliente/js/controllers/*.js", "trl/js/session.js"])
+    .pipe(concat('vendors.js'))
+    .pipe(uglify().on('error', gutil.log))
+    .pipe(gulp.dest('cliente/dist/'));
 });
 
 gulp.task('watch1', function () {

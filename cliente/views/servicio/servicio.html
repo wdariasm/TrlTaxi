@@ -163,6 +163,30 @@
                                     </div>
                                 </div>
                             </div>
+                            
+                            <div class="row">
+                                <div class="col-md-2">
+                                     <label style="margin-top: 10px;">Forma de Pago</label>
+                                </div>
+                                                               
+                                <div class="col-md-6">                                   
+                                    <div ng-repeat="fp in Contrato.FormaPago" >
+                                        <div class="col-md-3">     
+                                            <div class="radio radio-success">                                                                                                    
+                                                <input type="radio" id="fpago{{$index}}" ng-model="Servicio.FormaPago"  ng-value="fp">
+                                                <label for="fpago{{$index}}">{{fp}}</label>  
+                                            </div>
+                                        </div> 
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label  style=" display: inline-block; margin-top: 10px;" >Valor Servicio * </label><h2 for="txtValor" class="text-primary text-center" style="display: inline-block; margin-top: -35px; margin-left: 10px;">{{  Servicio.Valor  | currency : "$" : 0}}</h2>
+                                    </div>
+                                </div>
+                            </div>
+                                
 
                             <hr>
                             

@@ -90,7 +90,8 @@ app.controller('serviciosController',['$scope', 'zonaService', 'ngTableParams', 
             LngOrigen: "",
             LatDestino : "",
             LngDestino :"" ,
-            UserReg : $scope.$parent.Login.Login
+            UserReg : $scope.$parent.Login.Login,
+            FormaPago :""
         };
     }
 
@@ -415,7 +416,7 @@ app.controller('serviciosController',['$scope', 'zonaService', 'ngTableParams', 
                 $scope.Servicio.Nit = d.data.ctNitCliente;
                 $scope.Servicio.Telefono =  d.data.ctTelefono;
                 $scope.Servicio.NumeroContrato = $scope.ContratoSelect.ctNumeroContrato;
-                $scope.Contrato.FormaPago =  angular.copy(d.data.ctFormaPago);
+                $scope.Contrato.FormaPago =  angular.copy(JSON.parse(d.data.ctFormaPago));
                 $scope.Contrato.FechaFin = new Date(d.data.ctFechaFinal).toLocaleDateString('en-GB');
                 $scope.Contrato.FechaInicio =   new Date(d.data.ctFechaInicio).toLocaleDateString('en-GB');
                 $scope.Contrato.Estado = d.data.ctEstado;
@@ -423,7 +424,7 @@ app.controller('serviciosController',['$scope', 'zonaService', 'ngTableParams', 
                 $scope.Contrato.Plantilla = d.data.Plantilla;
                 if($scope.Contrato.TipoServicio === 0){
                     toaster.pop('error', 'No se encontraón servicios asociados a este contrato', 0);
-                }                
+                }      
 
             }else{
                 toaster.pop('error', "Número de contrato no existe");
@@ -525,14 +526,17 @@ app.controller('serviciosController',['$scope', 'zonaService', 'ngTableParams', 
             return;
         }
         
+        if($scope.Servicio.FormaPago ===""){
+            toaster.pop('info', '¡Alerta!', "Estimado Usuario(a), por favor seleccione la forma de Pago");
+            return;
+        }
+        
         $scope.Servicio.TipoVehiculoId = $scope.TipoSelect.tvCodigo;
         $scope.Servicio.DescVehiculo = $scope.TipoSelect.tvDescripcion;
         $scope.Servicio.NumeroContrato = $scope.ContratoSelect.ctNumeroContrato;
         $scope.Servicio.TipoServicidoId = $scope.Servicio.Tipo.csTipoServicioId;
-        $scope.Servicio.PlantillaId= $scope.Plantilla.plCodigo;
-        $scope.Servicio.FormaPago = "EFECTIVO";
-        
-                
+        $scope.Servicio.PlantillaId= $scope.Plantilla.plCodigo;        
+                        
         var promise = servicioService.post($scope.Servicio);
         promise.then(function(d) {
             toaster.pop('success','¡Información!', d.data.message);

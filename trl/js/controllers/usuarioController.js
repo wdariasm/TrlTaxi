@@ -531,6 +531,7 @@ app.controller('cambiarClaveController', ['$scope', 'usuarioService', 'toaster',
     
     $scope.User = {};    
     initUser();
+    $scope.$parent.SetTitulo("CAMBIAR CONTRASEÑA");
     
     function initUser(){
         $scope.User = {

@@ -1,9 +1,23 @@
-app.controller("homeController", ["$scope", function ($scope) {
+app.controller("homeController", ["$scope", "parametroService", function ($scope,parametroService) {
         
     $scope.Titulo = "BIENVENIDOS"; 
     $scope.Login = {};
         
     var click = 1;    
+    
+     $scope.getConfiguracion= function (){
+        var promiseGet = parametroService.getAll(); 
+        promiseGet.then(function(pl) {            
+            $scope.Configuracion = pl.data;
+            config.setConfig(btoa(JSON.stringify(pl.data)));
+            validarVista();
+        },
+        function(errorPl) {
+            console.log('failure loading usuarios', errorPl);
+        });
+    };
+    
+    $scope.getConfiguracion();
         
     $scope.mostrarOcultarMenu = function(){    
         if(click===1){               
@@ -30,6 +44,16 @@ app.controller("homeController", ["$scope", function ($scope) {
     function validarUser (){        
         $scope.Login = session.getUser();               
     }
+    
+    function validarVista(){
+        if($scope.Login){
+            if($scope.Login.ValidarClave ==="SI"){
+                location.href = "#/2/usuario/clave";                
+            }else{
+                 location.href = "#/1/servicio";   
+            }
+        }
+    };
     
     validarUser();        
 }]);

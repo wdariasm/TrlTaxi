@@ -20,17 +20,24 @@ var app;
                 templateUrl: 'views/servicio/historial.html'
             })
             
-            .when("/1/usuarios",{
+            .when("/2/usuarios",{
                 templateUrl: 'views/cliente/usuario.html'
             })
-                       
             
+            .when("/2/usuario/clave",{
+                templateUrl: 'views/cliente/cambiarClave.html'
+            })
+                                   
             .when("/2/salir",{
                 templateUrl: 'views/cliente/salir.html'
             })
             
+            .when("/iniciando",{
+                templateUrl: 'views/cliente/inicio.html'                        
+            })
+            
             .otherwise({
-                redirectTo:"/"               
+                redirectTo:"/iniciando"               
             });
                           
     }]);
