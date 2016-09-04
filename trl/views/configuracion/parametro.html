@@ -112,10 +112,35 @@
                                 </div>
                            </div>
                         </div>
+                    
+                        <div class="col-md-4">
+                            <div class="form-group" data-toggle="tooltip" data-placement="top" title="Enviar E-mail de notificación, cuando el cliente solicita un servicio">
+                                <label for="txtEnviarEmail">Notificación  *</label>
+                                 <div class="input-group">    
+                                    <div class="input-group-addon"><i class="fa fa-list-ul text-success"></i></div>
+                                        <select required type="text" class="form-control" ng-model="Parametro.parEnviarEmail" id="txtEnviarEmail" placeholder="Formato" >
+                                            <option value="SI">SI</option>
+                                            <option value="NO">NO</option>
+                                        </select>
+
+                                 </div>
+                            </div>
+                        </div> 
+                    
+                        <div class="col-md-8">
+                           <div class="form-group">
+                               <label for="txtEmail">Email Notificación *</label>
+                                <div class="input-group">    
+                                    <div class="input-group-addon"><i class="fa fa-envelope-o text-success"></i></div>
+                                    <input type="text"  class="form-control" ng-model="Parametro.parEmail"  id="txtEmail" placeholder="Email de notificación">
+
+                                </div>
+                           </div>
+                        </div>
 
 
                         <div class="row">
-                            <div class="col-md-5 col-md-offset-2">
+                            <div class="col-md-5 col-md-offset-5">
                                 <br/> 
                                 <button ng-disabled="frmParametro.$invalid"  class="btn btn-primary btn-block btn-addon"   type="button" title="Registrar Parametros" ng-click="guardar()">
                                   <i class="fa fa-check"></i> Guardar
@@ -145,3 +170,8 @@
         </div>
     </div>
 </div>
+<script>
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip();
+    });
+</script>

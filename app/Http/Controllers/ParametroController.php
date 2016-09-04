@@ -42,11 +42,13 @@ class ParametroController extends Controller
             $param->parTipoDoc = $data["parTipoDoc"];
             $param->parLatitud = $data["parLatitud"];
             $param->parLongitud = $data["parLongitud"];
+            $param->parEnviarEmail = $data["parEnviarEmail"];
+            $param->parEmail = $data["parEmail"];
             
             $param->save();                      
             return JsonResponse::create(array('message' => "Datos Guardados correctamente", "request" =>json_encode($param->id)), 200);
         } catch (Exception $exc) {            
-            return JsonResponse::create(array('message' => "No se pudo guardar", "request" =>json_encode($request)), 401);
+            return JsonResponse::create(array('message' => "No se pudo guardar", "request" =>json_encode($exc)), 401);
         }
     }
 

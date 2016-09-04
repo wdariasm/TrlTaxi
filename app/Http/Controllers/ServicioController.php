@@ -76,9 +76,13 @@ class ServicioController extends Controller
             $servicio->UserReg= $data["UserReg"];
             $servicio->FechaMod = new \DateTime();
             $servicio->save();
+            
+            if($data["EnviarEmail"]==="SI"){
+                $this->EnviarEmail($servicio->IdServicio, $data["NumeroContrato"], $data["Responsable"], $data["ParEmail"] );
+            }
                                     
             return JsonResponse::create(array('message' => "Servicio guardado correctamente", "request" =>json_encode($servicio->IdServicio)), 200);
-        } catch (Exception $exc) {    
+        } catch (\Exception $exc) {    
             return JsonResponse::create(array('message' => "No se pudo guardar", "request" =>json_encode($exc->getMessage())), 401);
         }
     }
@@ -150,5 +154,39 @@ class ServicioController extends Controller
         } catch (Exception $ex) {
             return JsonResponse::create(array('message' => "No se pudo modificar el Taxista", "exception"=>$ex->getMessage(), "request" =>json_encode($svCodigo)), 401);
         }
+    }
+    
+    private function EnviarEmail($idServicio, $contrato,  $responsable, $email){
+        // título
+        $título = 'Solicitud de servicio [TRL]';
+        // mensaje
+        
+        $mensaje = "
+        <html>
+        <head>
+          <title>Solicitud de servicio</title>
+        </head>
+        <body>
+         <img style='height:60px; width:200px;' src='http://".$_SERVER['HTTP_HOST']."/trl/images/logo.png' alt=''/>
+          <h1> ¡Solicitud de servicio!</h1>
+         
+          <p> Datos del servicio:</p>          
+          <br/>    
+          <p>N° Servicio: $idServicio</p>
+          <p>N° Contrato : $contrato</p>
+          <p>Responsable : $responsable</p>
+           <br/>
+          <p>Atentamente</p>
+          <p>Tu equipo de Transporte Ruta Libre</p>
+        </body>
+        </html>
+        ";
+       
+        $cabeceras  = 'MIME-Version: 1.0' . "\r\n";
+        $cabeceras .= 'Content-type: text/html; charset=UTF-8' . "\r\n";       
+        $cabeceras .= 'To: '.$responsable.' <'.$email.'>' . "\r\n";
+        $cabeceras .= 'From: Transporte Ruta Libre <info@trl.co>' . "\r\n";        
+               
+        mail($email, $título, $mensaje, $cabeceras);
     }
 }

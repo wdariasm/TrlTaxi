@@ -91,7 +91,9 @@ app.controller('serviciosController',['$scope', 'zonaService', 'ngTableParams', 
             LatDestino : "",
             LngDestino :"" ,
             UserReg : $scope.$parent.Login.Login,
-            FormaPago :""
+            FormaPago :"",
+            EnviarEmail : $scope.$parent.Configuracion.parEnviarEmail,
+            ParEmail : $scope.$parent.Configuracion.parEmail
         };
     }
 
@@ -543,7 +545,7 @@ app.controller('serviciosController',['$scope', 'zonaService', 'ngTableParams', 
             $scope.ContratoSelect = {};
             $scope.Nuevo();
         }, function(err) {
-                toaster.pop('error','¡Error!',err.data.request);
+                toaster.pop('error','¡Error!',err.data.request, 0);
                 console.log("Some Error Occured " + JSON.stringify(err));
         });
         

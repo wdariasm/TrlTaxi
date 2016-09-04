@@ -80,22 +80,28 @@ app.controller('parametroController',[ '$scope', 'parametroService', 'toaster',
         });    
     };
     
+    function validarEmail(email) {
+        var expr = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+        return expr.test(email);         
+    }
+    
     $scope.guardar = function (){
+              
+        if($scope.Parametro.parEnviarEmail ==="SI" && !$scope.Parametro.parEmail){
+            toaster.pop("info", "¡Alerta!", "Estimado Usuario(a), por favor ingrese el E-mail \n\
+                            donde se enviara las notificaciones de servicios.");
+            return;
+        }
         
-        var object = {                        
-            parCedula: $scope.Parametro.parCedula,
-            parEmpresa : $scope.Parametro.parEmpresa,
-            parCiudad: $scope.Parametro.parCiudad,
-            parFirma :  $scope.Parametro.parFirma,
-            parConsecutivo: $scope.Parametro.parConsecutivo,
-            parFormato: $scope.Parametro.parFormato,
-            parTipoDoc: $scope.Parametro.parTipoDoc,
-            parLatitud: $scope.Parametro.parLatitud,
-            parLongitud: $scope.Parametro.parLongitud
-            
-        };          
+        if($scope.Parametro.parEnviarEmail ==="SI"){
+            if(!validarEmail($scope.Parametro.parEmail)){
+                toaster.pop("info", "¡Alerta!", "Estimado Usuario(a), el email ingresado es incorrecto.");
+                return;
+            }
+               
+        }
         
-        var promise  = parametroService.put(1,object);            
+        var promise  = parametroService.put(1,$scope.Parametro);            
                                                             
         promise.then(function(d) { 
             toaster.pop('success', "Control de Información", d.data.message, 4000);            
@@ -105,5 +111,7 @@ app.controller('parametroController',[ '$scope', 'parametroService', 'toaster',
                 console.log("Some Error Occured " + JSON.stringify(err));
         });  
     };
+    
+    
 }]);
 

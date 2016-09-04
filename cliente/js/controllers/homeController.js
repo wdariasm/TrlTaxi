@@ -2,6 +2,7 @@ app.controller("homeController", ["$scope", "parametroService", function ($scope
         
     $scope.Titulo = "BIENVENIDOS"; 
     $scope.Login = {};
+    $scope.Configuracion = {};
         
     var click = 1;    
     
