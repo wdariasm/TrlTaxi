@@ -2,7 +2,7 @@ app.controller('serviciosController',['$scope', 'zonaService', 'ngTableParams', 
     function ($scope,  zonaService, ngTableParams, toaster, contratoService, funcionService, servicioService) {
     $scope.Zonas = [];
     $scope.Zona = {};
-
+    $scope.Parada = {};    
     $scope.Contrato = {};
     $scope.Contratos = [];
     $scope.ContratoSelect = {};
@@ -41,14 +41,14 @@ app.controller('serviciosController',['$scope', 'zonaService', 'ngTableParams', 
     $scope.$parent.SetTitulo("GESTIÓN DE SERVICIOS");
     //loadZona();
 
-    //
-
+    //    
     $scope.AutocompleteOrigen=null;
-    $scope.AutocompleteDestino =null;
+    $scope.AutocompleteDestino =null;    
     geolocate();
     iniciarMapaZ();     
     initAutocomplete();
     initAutocompleteDestino();
+    initAutocompleteParada();
     init();
 
     function Poligono() {
@@ -92,9 +92,20 @@ app.controller('serviciosController',['$scope', 'zonaService', 'ngTableParams', 
             LngDestino :"" ,
             UserReg : $scope.$parent.Login.Login,
             FormaPago :"",
-            EnviarEmail : $scope.$parent.Configuracion.parEnviarEmail,
-            ParEmail : $scope.$parent.Configuracion.parEmail
+            EnviarEmail : config.getEnviarEmail(),
+            ParEmail : config.getEmail(),
+            Paradas : [],
+            Parada : "NO"
         };
+        
+        $scope.Parada = {
+           prDireccion : "",
+           prLatiud : "",
+           prLongitud : "",
+           prValor : 0,
+           prFecha : ""
+        };
+        console.log($scope.Servicio);
     }
 
     function initAutocomplete (){
@@ -284,6 +295,38 @@ app.controller('serviciosController',['$scope', 'zonaService', 'ngTableParams', 
         }, function(err) {
                 toaster.pop('error','¡Error!',"Error al buscar zona ",0);
                 console.log("Some Error Occured " + JSON.stringify(err));
+        });
+    }
+    
+    function initAutocompleteParada (){
+        var input = document.getElementById('txtParada');
+
+        var autocompleteParada = new google.maps.places.Autocomplete(input, options);
+        //$scope.AutocompleteDestino.bindTo('bounds', $scope.mapServicio);
+
+        autocompleteParada.addListener('place_changed', function() {            
+            //markerDestino.setVisible(false);
+            var place = autocompleteParada.getPlace();
+            if (!place.geometry) {
+                toaster.pop('error','¡Error!','No pudo resolver la  posición');
+                return;
+            }
+
+//            expandViewportToFitPlace($scope.mapServicio, place);
+//            markerDestino.setIcon("images/destino.png");
+//            markerDestino.setPosition(place.geometry.location);
+//            markerDestino.setVisible(true);
+//                if(!$scope.popup){
+//                    $scope.popup = new google.maps.InfoWindow();
+//                }
+
+            $scope.Parada.prLatiud = place.geometry.location.lat();
+            $scope.Parada.prLongitud  = place.geometry.location.lng();            
+            $scope.Parada.prDireccion =  place.formatted_address;                             
+
+//            infowindow.setContent('<div><strong>' + place.name + '</strong><br>' + address);
+//            infowindow.open($scope.mapServicio, markerDestino);
+           
         });
     }
 
@@ -538,6 +581,7 @@ app.controller('serviciosController',['$scope', 'zonaService', 'ngTableParams', 
         $scope.Servicio.NumeroContrato = $scope.ContratoSelect.ctNumeroContrato;
         $scope.Servicio.TipoServicidoId = $scope.Servicio.Tipo.csTipoServicioId;
         $scope.Servicio.PlantillaId= $scope.Plantilla.plCodigo;        
+        $scope.Servicio.Parada = $scope.Servicio.Paradas.length > 0 ? "SI" : "NO";                
                         
         var promise = servicioService.post($scope.Servicio);
         promise.then(function(d) {
@@ -552,5 +596,23 @@ app.controller('serviciosController',['$scope', 'zonaService', 'ngTableParams', 
     };
     
     $scope.GetContratos();
+    
+    // FUNCIONES DE PARADAS
+    
+    $scope.AgregarParada = function (){
+        if (!$scope.Parada.prDireccion){
+            toaster.pop("info","¡Alerta!", "Por favor ingrese la dirección de parada");
+            return;
+        }        
+        $scope.Parada.prValor = $scope.Servicio.Tipo.csValor;
+        $scope.Parada.prFecha = $scope.Servicio.FechaServicio;
+        $scope.Servicio.Paradas.push($scope.Parada);
+        $scope.Parada = {};
+    };
+    
+    $scope.QuitarParada =  function (index){        
+        $scope.Servicio.Paradas.splice(index,1);
+        
+    };
 
 }]);

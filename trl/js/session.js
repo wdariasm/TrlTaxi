@@ -58,10 +58,19 @@ var config = {
         }  
     }, 
    
+    getEnviarEmail: function(){
+        var cf = sessionStorage.getItem("trlconfig");        
+        if (cf){   
+            var obj  = JSON.parse(atob(cf));
+            return obj.parEnviarEmail;
+        }  
+    },
+    
     getEmail: function(){
-        var obj = JSON.parse(sessionStorage.getItem("trlconfig"));        
-        if (obj){            
-            return (obj.Email);
+        var cf = sessionStorage.getItem("trlconfig");        
+        if (cf){   
+            var obj  = JSON.parse(atob(cf));
+            return obj.parEmail;
         }  
     }
 };

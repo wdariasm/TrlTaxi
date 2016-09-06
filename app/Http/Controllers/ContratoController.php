@@ -94,7 +94,8 @@ class ContratoController extends Controller
                 $insert->csContratoId =$idContrato;
                 $insert->csTipoServicioId = $ts['svCodigo'];
                 $insert->csDescripcion = $ts['svDescripcion'];
-                $insert->csPlantilla = $ts['svPlantilla'];                
+                $insert->csPlantilla = $ts['svPlantilla'];
+                $insert->csValor = $ts['csValor'];
                 $insert->save();
             }
             

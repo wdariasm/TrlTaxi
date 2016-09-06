@@ -14,6 +14,7 @@ app.controller("servicioController", ["$scope", "tiposervicioService", "toaster"
 	    svDescripcion:"",
             svEstado:"ACTIVO",
             svCodigo : 0,
+            svValorParada  : 0,
             TipoVehiculo : []
         };          
     }
@@ -44,7 +45,7 @@ app.controller("servicioController", ["$scope", "tiposervicioService", "toaster"
       
     $scope.Guardar = function (){
        
-        if ($scope.Servicio.TipoVehiculo.length == 0){
+        if ($scope.Servicio.TipoVehiculo.length === 0){
             toaster.pop('error', '¡Error!', 'Seleccione el tipo de vehículo');
             return;
         }
@@ -62,7 +63,7 @@ app.controller("servicioController", ["$scope", "tiposervicioService", "toaster"
              toaster.pop('success', "Control de Información", d.data.message);
              
         }, function(err) {           
-                toaster.pop('error', "¡Error!", err.data.message);         
+                toaster.pop('error', "¡Error!", err.data.message,0);         
                 console.log("Some Error Occured " + JSON.stringify(err));
         });  
         initServicio();

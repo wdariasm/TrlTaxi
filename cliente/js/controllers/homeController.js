@@ -9,7 +9,7 @@ app.controller("homeController", ["$scope", "parametroService", function ($scope
      $scope.getConfiguracion= function (){
         var promiseGet = parametroService.getAll(); 
         promiseGet.then(function(pl) {            
-            $scope.Configuracion = pl.data;
+            $scope.Configuracion = pl.data;            
             config.setConfig(btoa(JSON.stringify(pl.data)));
             validarVista();
         },

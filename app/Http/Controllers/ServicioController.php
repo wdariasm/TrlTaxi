@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Servicio;
+use App\Parada;
 use Illuminate\Http\JsonResponse;
 use DB;
 
@@ -71,12 +72,18 @@ class ServicioController extends Controller
             $servicio->LngDestino= $data["LngDestino"];
             $servicio->PlantillaId= $data["PlantillaId"];
             $servicio->TipoVehiculoId= $data["TipoVehiculoId"];
-            $servicio->DescVehiculo= $data["DescVehiculo"];            
+            $servicio->DescVehiculo= $data["DescVehiculo"];
+            $servicio->Parada= $data["Parada"];            
             $servicio->Calificacion= 0;
             $servicio->UserReg= $data["UserReg"];
             $servicio->FechaMod = new \DateTime();
             $servicio->save();
             
+            $paradas= $data["Paradas"];
+            if(count($paradas)> 0){
+                $this->guardarParada($servicio->IdServicio, $paradas);
+            }
+                                    
             if($data["EnviarEmail"]==="SI"){
                 $this->EnviarEmail($servicio->IdServicio, $data["NumeroContrato"], $data["Responsable"], $data["ParEmail"] );
             }
@@ -84,6 +91,20 @@ class ServicioController extends Controller
             return JsonResponse::create(array('message' => "Servicio guardado correctamente", "request" =>json_encode($servicio->IdServicio)), 200);
         } catch (\Exception $exc) {    
             return JsonResponse::create(array('message' => "No se pudo guardar", "request" =>json_encode($exc->getMessage())), 401);
+        }
+    }
+    
+    private function guardarParada($idservicio, $paradas){
+        foreach ($paradas as $p) {
+            $insert = new Parada();
+            $insert->prServicio = $idservicio;
+            $insert->prDireccion = $p['prDireccion'];
+            $insert->prLatiud = $p['prLatiud'];
+            $insert->prLongitud = $p['prLongitud'];
+            $insert->prValor = $p['prValor'];
+            $insert->prFecha = $p['prFecha'];            
+            $insert->prEstado = 'ACTIVO';
+            $insert->save();
         }
     }
 

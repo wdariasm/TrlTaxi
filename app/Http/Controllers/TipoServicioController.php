@@ -13,14 +13,14 @@ class TipoServicioController extends Controller
       
     public function index()
     {
-        $servicio = DB::select("SELECT s.svDescripcion, s.svEstado, s.svCodigo, GROUP_CONCAT(sc.scvClaseVehiculo) AS TipoVehiculo "
+        $servicio = DB::select("SELECT s.svDescripcion, s.svEstado, s.svCodigo, GROUP_CONCAT(sc.scvClaseVehiculo) AS TipoVehiculo, s.svValorParada "
                 . " FROM  tiposervicio s LEFT JOIN servicio_clasevehiculo sc ON s.svCodigo = sc.scvServicio AND sc.scvEstado ='ACTIVO' "
                 . " WHERE s.svEstado <> 'BORRADO' GROUP BY s.svCodigo");
         return $servicio;
     }
     
     public function getActivos(){
-        return TipoServicio::where('svEstado','ACTIVO')->select('svCodigo', 'svDescripcion', 'svPlantilla')->get();
+        return TipoServicio::where('svEstado','ACTIVO')->select('svCodigo', 'svDescripcion', 'svPlantilla', 'svValorParada')->get();
     }
     
 
@@ -36,7 +36,8 @@ class TipoServicioController extends Controller
             $data = $request->all(); 
             $servicio= new TipoServicio();                        
             $servicio->svDescripcion = $data["svDescripcion"];
-            $servicio->svEstado = $data["svEstado"];                     
+            $servicio->svEstado = $data["svEstado"];
+            $servicio->svValorParada = $data["svValorParada"];            
             $servicio->save();
             $tipos = $data["TipoVehiculo"];             
             for ($index = 0; $index < count($tipos); $index++) {
@@ -78,6 +79,7 @@ class TipoServicioController extends Controller
             $servicio = TipoServicio::find($svCodigo);
             $servicio->svDescripcion = $data["svDescripcion"];
             $servicio->svEstado = $data["svEstado"];
+            $servicio->svValorParada = $data["svValorParada"];
             $servicio->save();
             
             $tipos = $data["TipoVehiculo"]; 
