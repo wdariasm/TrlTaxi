@@ -1,16 +1,138 @@
 <!DOCTYPE html>
-<!--
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
--->
-<html>
+<html ng-app="trlConductor" lang="es">
     <head>
-        <title>TODO supply a title</title>
+        <title>Cliente | Trl</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="../trl/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+        <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,300,600,700,900,400italic' rel='stylesheet' type='text/css'>
+        <link href="../trl/css/daterangepicker.css" rel="stylesheet" type="text/css"/>
+        <link href="../trl/css/ng-table.css" rel="stylesheet" type="text/css"/>
+        <link href="../trl/css/menu.css" rel="stylesheet" type="text/css"/>        
+        <link href="../trl/css/font-awesome.min.css" rel="stylesheet" type="text/css"/>
+        <link href="../trl/css/awesome-checkbox.css" rel="stylesheet" type="text/css"/>
+        <link href="../trl/css/toaster.css" rel="stylesheet" type="text/css"/>      
+        <link href="../trl/css/fileinput.min.css" rel="stylesheet" type="text/css"/>
+        <link href="../resources/css/jquery.bsPhotoGallery.css" rel="stylesheet" type="text/css"/>
+        <link href="../trl/css/style.css" rel="stylesheet" type="text/css"/>
+        <link href="../trl/css/clockpicker.css" rel="stylesheet" type="text/css"/>
+        <link href="css/style.css" rel="stylesheet" type="text/css"/>
     </head>
-    <body>
-        <div>TODO write content</div>
+    <body id="cuerpo">
+       
+        <div ng-controller="homeController">
+            <!-- Overlay for fixed sidebar -->
+             
+            <nav class="navbar navbar-default" style="height: 56px; background-color: #F36F23; margin-bottom: 0; z-index: 0;">
+                <div class="container-fluid">
+                  <div class="navbar-header">
+                      <a class="navbar-brand" style="color: #ffffff;" href="javascript:;" ng-click="mostrarOcultarMenu()">
+                        <i class="fa fa-bars" style="color: #ffffff; margin-right: 10px;"></i>Transporte Ruta Libre
+                    </a>
+                      
+                  </div>
+                    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-4"  >                         
+                        <p class="navbar-text"  >{{Titulo}}</p>                                                 
+                        <ul class="nav navbar-nav navbar-right">
+                            <li><a href="#">Salir</a></li>
+                        
+                        </ul>
+                    </div>
+                                                           
+                </div>
+            </nav>
+            
+            <toaster-container toaster-options=" {'position-class': 'toast-top-right', 'close-button':true, 'time-out': 4000}"></toaster-container>
+                                    
+
+            <!-- Material sidebar -->
+            <div id="cont-menu">
+            <aside id="sidebar" class="sidebar sidebar-default open  " role="navigation">
+                <!-- Sidebar header -->
+                <div class="sidebar-header" >
+                    
+                    <!-- Sidebar brand image -->
+                    <div class="sidebar-logo">
+                        <img src="../trl/images/logo.png" alt="logo"/>                        
+                    </div>
+                    <!-- Sidebar brand name -->
+                      <div class="sidebar-text">{{Login.Nombre}}</div> 
+                    
+                </div>
+
+                <!-- Sidebar navigation -->
+                <ul class="nav sidebar-nav">
+                    
+                    <li>
+                        <a href="#/1/servicio"> <i class="sidebar-icon fa fa-street-view"></i> Solicitar Servicio </a>
+                    </li>
+                    
+                    <li>
+                        <a href="#/1/historial"> <i class="sidebar-icon fa fa-file-pdf-o"></i>Mis Servicios</a>
+                    </li>
+                    
+                    <li>
+                        <a href="#/1/contratos"> <i class="sidebar-icon fa fa-file-text-o"></i>Mis Contratos   </a>
+                    </li> 
+                    
+                    <li>
+                        <a href="#/2/usuarios"> <i class="sidebar-icon fa fa-users"></i> Usuarios   </a>
+                    </li> 
+                                                                               
+                    
+                    <li class="divider"></li>
+                     <li>
+                        <a href="#/1/perfil"> <i class="sidebar-icon fa fa-user"></i> Perfil  </a>
+                    </li>
+                    
+                    <li>
+                        <a href="#/2/salir"> <i class="sidebar-icon fa fa-sign-out"></i> Salir </a>
+                    </li>
+                </ul>
+                
+
+                <!-- Sidebar text 
+                <div class="sidebar-text">Text</div> -->
+            </aside>
+        </div>
+            
+            
+            <div id="contenido" class="contenido-normal">
+                    <div ng-view></div>
+            </div>
+            
+            
+                        
+        </div>
+        
+        
+        
+        
+        <script src="../trl/js/libs/jquery/jquery-1.11.0.min.js" type="text/javascript"></script>
+        <script src="../trl/js/libs/bootstrap.min.js" type="text/javascript"></script>
+        <script src="http://maps.googleapis.com/maps/api/js?&key=AIzaSyB7llQeUPhJjG7QcUphCXmQEPm2Mk-Lxd8&region=co&libraries=places" type="text/javascript"></script>
+        <script src="js/angular/angular.min.js" type="text/javascript"></script>
+        <script src="js/angular/angular-resource.min.js" type="text/javascript"></script>
+        <script src="js/angular/angular-route.min.js" type="text/javascript"></script>
+        <script src="js/angular/ng-currency.min.js" type="text/javascript"></script>
+        <script src="js/angular/angular-sanitize.min.js" type="text/javascript"></script>
+        <script src="js/angular/angular-locale_es-co.js" type="text/javascript"></script>
+        <script src="js/angular/angular-animate.min.js" type="text/javascript"></script>
+        <script src="../trl/js/libs/ng-table.min.js" type="text/javascript"></script>
+        <script src="../trl/js/libs/checklist-model.js" type="text/javascript"></script>
+                
+        <script src="../trl/js/libs/daterangepicker/moment.min.js" type="text/javascript"></script>        
+        <script src="../trl/js/libs/daterangepicker/moment-locales-es.js" type="text/javascript"></script>  
+        <script src="../trl/js/libs/daterangepicker/moment-precise-range.js" type="text/javascript"></script>
+        <script src="../trl/js/libs/daterangepicker/daterangepicker.js" type="text/javascript"></script>
+        <script src="../trl/js/libs/daterangepicker/clockpicker.min.js" type="text/javascript"></script>
+        <script src="../trl/js/libs/angular/toaster.js" type="text/javascript"></script>
+        <script src="../trl/js/libs/fcsaNumber.js" type="text/javascript"></script>                       
+        <script src="../trl/js/libs/fileInput/fileinput.min.js" type="text/javascript"></script>
+        <script src="../resources/js/jquery.bsPhotoGallery.js" type="text/javascript"></script>
+        <script src="js/app.js" type="text/javascript"></script>         
+        <script src="dist/vendors.js" type="text/javascript"></script>
+        
     </body>
 </html>
+

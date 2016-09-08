@@ -1,31 +1,84 @@
-app.controller('homeController',function ($scope, configuracionService){  
-    $scope.nombres = session.getNombre();
-    $scope.telefono = session.getTelefono();
+app.controller("homeController", ["$scope", "parametroService", function ($scope,parametroService) {
+        
+    $scope.Titulo = "BIENVENIDOS"; 
+    $scope.Login = {};
+    $scope.Configuracion = {};
+        
+    var click = 1;    
     
-    $scope.Configuracion = {};   
-    $scope.vecCiudad = [];    
-            
-    getConfiguracion();   
-       
-    function getConfiguracion(){
-        var promiseGet = configuracionService.getAll(); 
-        promiseGet.then(function(pl) {
+     $scope.getConfiguracion= function (){
+        var promiseGet = parametroService.getAll(); 
+        promiseGet.then(function(pl) {            
             $scope.Configuracion = pl.data;            
-            $scope.vecCiudad = pl.data.Ciudad.split("-");
+            config.setConfig(btoa(JSON.stringify(pl.data)));
+            validarVista();
         },
         function(errorPl) {
             console.log('failure loading usuarios', errorPl);
         });
+    };
+    
+    $scope.getConfiguracion();
+        
+    $scope.mostrarOcultarMenu = function(){    
+        if(click===1){               
+            document.getElementById("cont-menu").className = "menuLeft";
+            var div1  =  document.getElementById("contenido");
+            div1.classList.remove('contenido-normal');   
+            div1.classList.add('contenido-expandido');                
+            click += 1;
+        } else{                       
+            var div1  =  document.getElementById("contenido");
+            div1.classList.remove('contenido-expandido');   
+            div1.classList.add('contenido-normal');
+
+            document.getElementById("cont-menu").className = "menuRight";            
+            click = 1;
+        }
+    };
+    
+    //ESTABLECER TITULO PRINCIPAL
+    $scope.SetTitulo = function (title){
+        $scope.Titulo = title;
+    };
+    
+    function validarUser (){        
+        $scope.Login = session.getUser();               
     }
     
-    $scope.setNombre= function (valor){
-        $scope.nombres = valor;
+    function validarVista(){
+        if($scope.Login){
+            if($scope.Login.ValidarClave ==="SI"){
+                location.href = "#/2/usuario/clave";                
+            }else{
+                 location.href = "#/1/servicio";   
+            }
+        }
     };
     
-    $scope.setTelefono = function (valor){
-        $scope.telefono = valor;
-    };
-});
+    validarUser();        
+}]);
 
-
+app.controller('salirController',['$scope', 'usuarioService', 'toaster', function ($scope, usuarioService, toaster) {
+        
+    $scope.$parent.SetTitulo("CERRANDO SESIÓN");
+    $scope.mensaje = "Cerrando sesión ....";
+    function cerrarSession (){
+        var promise = usuarioService.cerrarSesion($scope.$parent.Login.IdUsuario); 
+        promise.then(function(pl) {                       
+            sessionStorage.setItem("usuario","");
+            sessionStorage.removeItem("usuario"); 
+            $scope.mensaje = "Su sesión ha finalizado correctamente";
+            toaster.pop('success','¡Información!',"Su sesión ha terminado.");
+            setTimeout ('location.href = "../inicio/index.html#/login"', 3000);                       
+        },
+        function(errorPl) {
+            toaster.pop('error','¡Error!',errorPl.data.request);
+            console.log('failure loading usuarios', errorPl);
+        });        
+    }   
+    
+    cerrarSession();
+   
+}]);
 
