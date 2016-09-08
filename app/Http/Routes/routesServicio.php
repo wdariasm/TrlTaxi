@@ -4,3 +4,6 @@
 
      //Obtener servicios de un cliente //
     Route::get('api/cliente/{id}/servicios/{rol}/{usuario}','ServicioController@getServicioCliente');
+    
+     //Obtener servicios de un cliente //
+    Route::get('api/conductor/{id}/servicios/{estado}','ServicioController@getServicioConductor');
