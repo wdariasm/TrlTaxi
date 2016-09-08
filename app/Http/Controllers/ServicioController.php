@@ -20,7 +20,7 @@ class ServicioController extends Controller
     {
         $servicio = DB::select("SELECT s.IdServicio, s.ContratoId, s.ClienteId, s.NumeroContrato, s.Responsable,"
                 . " s.Telefono, s.TipoServicidoId, ts.svDescripcion, s.FechaServicio, s.Hora, s.Valor, s.Estado, "
-                . " s.DescVehiculo FROM servicio s INNER JOIN  tiposervicio ts ON s.TipoServicidoId=ts.svCodigo"
+                . " s.DescVehiculo, s.TipoVehiculoId FROM servicio s INNER JOIN  tiposervicio ts ON s.TipoServicidoId=ts.svCodigo"
                 . " WHERE s.Estado <> 'FINALIZADO' AND s.Estado <> 'CANCELADO' order by s.IdServicio desc");
         return $servicio;            
     }
@@ -50,6 +50,16 @@ class ServicioController extends Controller
                 . " WHERE  s.ConductorId = $id ".$condicion . " order by s.IdServicio desc");
         return $servicio;     
     }    
+    
+    /* 
+     * Obtener conductores libres para asignarle un servicio
+     */
+    public function getConductores($tipo){
+        $result  =  DB::select("SELECT c.IdConductor, c.Cedula, c.Nombre, c.TelefonoPpal, c.Email, v.Placa,"
+                . "  v.IdVehiculo, c.Disposicion FROM conductor c INNER JOIN Vehiculo v "
+                . " ON c.VehiculoId =  v.IdVehiculo WHERE v.ClaseVehiculo = $tipo");
+        return $result;
+    }
     
     
 
@@ -122,6 +132,18 @@ class ServicioController extends Controller
             $insert->prFecha = $p['prFecha'];            
             $insert->prEstado = 'ACTIVO';
             $insert->save();
+        }
+    }
+    
+    public function asignar(Request $request){
+        try{  
+            $data = $request->all();             
+            $result = Servicio::where('IdServicio', $data["IdServicio"] )          
+                ->update(['ConductorId' => $data ['ConductorId'], 'Estado' => 'ASIGNADO' ]);                        
+        
+            return JsonResponse::create(array('message' => "Servicio asignado correctamente", "request" =>json_encode($result)), 200);
+        } catch (\Exception $exc) {    
+            return JsonResponse::create(array('message' => "No se pudo guardar", "request" =>json_encode($exc->getMessage())), 401);
         }
     }
 
@@ -212,6 +234,41 @@ class ServicioController extends Controller
           <br/>    
           <p>N° Servicio: $idServicio</p>
           <p>N° Contrato : $contrato</p>
+          <p>Responsable : $responsable</p>
+           <br/>
+          <p>Atentamente</p>
+          <p>Tu equipo de Transporte Ruta Libre</p>
+        </body>
+        </html>
+        ";
+       
+        $cabeceras  = 'MIME-Version: 1.0' . "\r\n";
+        $cabeceras .= 'Content-type: text/html; charset=UTF-8' . "\r\n";       
+        $cabeceras .= 'To: '.$responsable.' <'.$email.'>' . "\r\n";
+        $cabeceras .= 'From: Transporte Ruta Libre <info@trl.co>' . "\r\n";        
+               
+        mail($email, $título, $mensaje, $cabeceras);
+    }
+    
+    private function EnviarEmailAsignar($idServicio,  $responsable, $email){
+        // título
+        $título = 'Asignación de servicio [TRL]';
+        // mensaje
+        
+        $mensaje = "
+        <html>
+        <head>
+          <title>Asignación de servicio</title>
+        </head>
+        <body>
+         <img style='height:60px; width:200px;' src='http://".$_SERVER['HTTP_HOST']."/trl/images/logo.png' alt=''/>
+          <h1> ¡Asignacón de servicio!</h1>
+          
+          <p>Estimado conductor, se le  ha asignado un servicio, por favor confirma la aceptación del servicio.</p>
+
+          <p> Datos del servicio:</p>          
+          <br/>    
+          <p>N° Servicio: $idServicio</p>          
           <p>Responsable : $responsable</p>
            <br/>
           <p>Atentamente</p>

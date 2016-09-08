@@ -271,7 +271,7 @@ app.controller("conductorController", ["$scope", "conductorService", "tipoDocume
   
       $scope.validarIdentificacion = function () {
         $scope.valCedula = false;
-        if (!$scope.Conductor.Cedula) {
+        if (!$scope.Conductor.Cedula || $scope.editMode) {
             return;
         }        
         var promisePost = conductorService.validarIdentificacion($scope.Conductor.Cedula);

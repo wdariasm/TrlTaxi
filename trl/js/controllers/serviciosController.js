@@ -5,6 +5,8 @@ app.controller('serviciosController',['$scope', 'zonaService', 'ngTableParams', 
     $scope.funcion = null;
     
     $scope.Servicio  = {};
+    $scope.AsigServicio =  {};
+    $scope.Conductores = [];
     
     $scope.Puntos = [];    
     $scope.editMode = false;
@@ -394,12 +396,61 @@ app.controller('serviciosController',['$scope', 'zonaService', 'ngTableParams', 
             $scope.Servicios = d.data;
             $scope.TablaServicio.reload();             
         }, function(err) {           
-                toaster.pop('error','¡Error!',"Error al cargar Clientes");           
+                toaster.pop('error','¡Error!',"Error al cargar servicios");           
                 console.log("Some Error Occured " + JSON.stringify(err));
         }); 
     };
     
     $scope.GetServicios();
+    
+    $scope.VerAsignarServicio = function (item){
+        $scope.AsigServicio = item;
+        $scope.AsigServicio.Conductor = {};
+        $('#mdAsignar').modal('show');   
+        getConductores(item.TipoVehiculoId);
+    };
+    
+    function getConductores(tipo){
+        $scope.Conductores = [];
+        
+        var promise = servicioService.getDisponible(tipo);
+        promise.then(function(d) {                     
+            $scope.Conductores = d.data;                         
+        }, function(err) {           
+                toaster.pop('error','¡Error!',"Error al cargar conductores");           
+                console.log("Some Error Occured " + JSON.stringify(err));
+        }); 
+        
+    }
+    
+    $scope.AsigServicio = {
+        Conductor : {}
+    };
+    
+    $scope.AsignarServicio =  function (){
+        
+        if(!$scope.AsigServicio.Conductor){
+            toaster.pop('info', '¡Alerta!', "Estimado Usuario(a), por favor seleccione un conductor");
+            return;
+        }
+        toaster.pop('wait', '¡Espere', "Procesando información.....", 0);
+        var obj = {
+            IdServicio : $scope.AsigServicio.IdServicio,
+            ConductorId : $scope.AsigServicio.Conductor.IdConductor,
+            Email : $scope.AsigServicio.Conductor.Email
+        };
+        
+        var promise = servicioService.asignar(obj);
+        promise.then(function(d) {         
+            toaster.pop('success', '¡Información', d.data.message);
+            $scope.GetServicios();
+            $('#mdAsignar').modal('hide');   
+        }, function(err) {           
+                toaster.pop('error','¡Error!',err.data.request);           
+                console.log("Some Error Occured " + JSON.stringify(err));
+        }); 
+        
+    };
                        
 }]);
 

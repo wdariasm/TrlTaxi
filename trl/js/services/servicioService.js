@@ -10,6 +10,16 @@ app.service("servicioService",[ '$http', function ($http) {
         return req;
     };   
     
+    this.getDisponible = function (tipo){
+        var req = $http.get(uri+'/api/servicio/tipo/'+tipo+'/conductores');
+        return req;
+    };
+    
+    this.asignar =  function (servicio){
+        var req = $http.post(uri+'/api/servicio/asignar',servicio); 
+        return req;
+    };
+    
 }]);
 
 

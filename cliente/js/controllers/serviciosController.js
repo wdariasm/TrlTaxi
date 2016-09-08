@@ -127,7 +127,7 @@ app.controller('serviciosController',['$scope', 'zonaService', 'ngTableParams', 
             $scope.markerOrigen.setIcon("images/origen.png");
 
             $scope.markerOrigen.setPosition(place.geometry.location);
-            $scope.markerOrigen.setVisible(true);
+            //$scope.markerOrigen.setVisible(true);
                 if(!$scope.popup){
                     $scope.popup = new google.maps.InfoWindow();
                 }
@@ -172,7 +172,7 @@ app.controller('serviciosController',['$scope', 'zonaService', 'ngTableParams', 
             expandViewportToFitPlace($scope.mapServicio, place);
             markerDestino.setIcon("images/destino.png");
             markerDestino.setPosition(place.geometry.location);
-            markerDestino.setVisible(true);
+            //markerDestino.setVisible(true);
                 if(!$scope.popup){
                     $scope.popup = new google.maps.InfoWindow();
                 }
@@ -429,6 +429,7 @@ app.controller('serviciosController',['$scope', 'zonaService', 'ngTableParams', 
         $scope.editMode = false;
         $scope.title = "Nuevo Servicio";
         init();
+        iniciarMapaZ();
     };
 
     $scope.get = function(item) {

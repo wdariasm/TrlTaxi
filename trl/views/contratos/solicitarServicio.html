@@ -219,12 +219,12 @@
                                     <th>FECHA</th>
                                     <th>HORA</th>
                                     <th>ESTADO</th>
-                                    <th width="9%">ACCION</th>
+                                    <th width="6%">ACCION</th>
                                 </tr>
                             </thead>
 
                             <tbody>
-                                 <tr ng-repeat="item in $data">
+                                 <tr ng-repeat="item in $data"  ng-class="{'info': item.Estado == 'ASIGNADO', 'warning':  item.Estado == 'SOLICITADO' , 'success':  item.Estado != 'SOLICITADO' || item.Estado != 'ASIGNADO'  }">
                                      <td>{{ item.IdServicio}}</td>
                                      <td>{{ item.NumeroContrato }}</td>
                                      <td>{{ item.Responsable}}</td>
@@ -237,9 +237,8 @@
                                     <td>{{ item.Estado}}</td>
                                     <td>
                                          <center>
-                                             <a ng-click="" style="float: left; margin-left: 3px;" href="javascript:;"  title="Editar"><i class="fa fa-pencil fa-1x text-success"></i></a>
-                                             <a ng-click=""  style="float: left; margin-left: 7px;" href="javascript:;"  title="Eliminar"><i class="fa fa-power-off fa-1x text-warning"></i></a>
-                                             <a  ng-click="" style="float: left; margin-left: 7px;" href="javascript:;"  title="Novedades"><i class="fa fa-book text-danger fa-1x"></i></a>
+                                             <a ng-click="VerAsignarServicio(item)" style="float: left; margin-left: 3px;" href="javascript:;"  title="Asignar Servicio"><i class="fa fa-check fa-1x text-success"></i></a>
+                                             <a ng-click=""  style="float: left; margin-left: 7px;" href="javascript:;"  title="Cancelar"><i class="fa fa-power-off fa-1x text-warning"></i></a>                                            
                                          </center>
                                      </td>
                                  </tr>
@@ -248,7 +247,118 @@
                         </div>
                         
                     </div>
+                    
+                    <div class="modal fade bs-example-modal-sm" id="mdAsignar" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" style="margin-top: 2%;">
+                    <div class="modal-dialog modal-lg"  >                                   
+                        <div class="modal-content">
+
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                <div class="modal-title">Asignación de Servicio N° {{AsigServicio.IdServicio}}</div>
+                            </div>
+
+                            <div class="modal-body">
+                                <div class="panel panel-default">
+                                    <div class="panel-body" style="padding-bottom:3px;">
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label  for="txtServiceId" >N° Servicio </label>                                                                                        
+                                            <input  type="text" class="form-control" required="" ng-model="AsigServicio.IdServicio" maxlength="11"  id="txtServiceId" placeholder="N° Servicio" disabled >                                            
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label  for="txtCto" >Contrato </label>                                                                                            
+                                            <input  type="text" class="form-control" required="" ng-model="AsigServicio.NumeroContrato" maxlength="11"  id="txtCto" placeholder="N° Contrato" readonly="" >
+                                            
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label  for="txtRespon" >Responsable Servicio </label>                                                                                        
+                                            <input  type="text" class="form-control" required="" ng-model="AsigServicio.Responsable" maxlength="11"  id="txtRespon" placeholder="Responsable Servcio" disabled >                                          
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label  for="txtServiceId" >Tipo: &nbsp; </label>                                                                                        
+                                            <label class="text-primary">{{AsigServicio.svDescripcion}}</label>                                                                                 
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label  for="txtServiceId" >Tipo Vehiculo : &nbsp; </label>                                                                                        
+                                            <label class="text-primary">{{AsigServicio.DescVehiculo}}</label>                                                                                   
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label  for="txtServiceId" >Fecha y Hora: &nbsp; </label>                                                                                        
+                                            <label class="text-primary">{{AsigServicio.FechaServicio}} {{AsigServicio.Hora}}</label> 
+                                        </div>
+                                    </div>
+                                </div>
+                                    </div>
+                                </div>   
+                                
+                                 <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <h4 class="panel-title">Seleccionar Conductor</h4>
+                                    </div>
+                                     <div class="panel-body" style="padding-bottom:3px;">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <table class="table table-striped table-condensed" >
+                                                    <thead>
+                                                        <tr>                                                           
+                                                            <th>CONDUCTOR</th>                                                            
+                                                            <th>TELEFONO</th>                                                                                                        
+                                                            <th>DISPOSICIÓN</th>
+                                                            <th>PLACA</th>
+                                                            <th width="3%">SEL.</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr ng-repeat="item in Conductores">
+                                                            <td>{{item.Nombre}}</td>
+                                                            <td>{{item.TelefonoPpal}}</td>
+                                                            <td>{{item.Disposicion}}</td>
+                                                            <td>{{item.Placa}}</td>
+                                                            <td class="text-center">
+                                                                <div class="radio radio-success" style="margin-top: -1px;">                                        
+                                                                    <input id="cd{{item.IdConductor}}" type="radio" ng-model="AsigServicio.Conductor"  ng-value="item">
+                                                                    <label for="cd{{item.IdConductor}}"></label> 
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                                
+                                            </div>
+                                        </div>
+                                     </div>
+                                 </div>     
+                                
+                            </div>
+
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-danger btn-addon" data-dismiss="modal"> <i class="fa fa-ban"></i> Cancelar</button>
+                                <button type="button" class="btn btn-primary btn-addon" ng-click="AsignarServicio()"><i class="fa fa-check"></i>Asignar</button>
+                            </div>  
+
+                        </div>
+
+                    </div>
                 </div>
+                    
+                </div>
+                                                
                 
             </div>            
         </div>        
