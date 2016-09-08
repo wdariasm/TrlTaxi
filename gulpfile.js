@@ -29,6 +29,19 @@ gulp.task('watch1', function () {
     gulp.watch('cliente/js/controllers/*.js', ['ctrlCliente']);    
 });
 
+gulp.task('ctrlConductor', function () {
+    gulp.src(["trl/js/libs/funciones.js", "conductor/js/services/*.js", "conductor/js/controllers/*.js", "trl/js/session.js"])
+    .pipe(concat('vendors.js'))
+    .pipe(uglify().on('error', gutil.log))
+    .pipe(gulp.dest('conductor/dist/'));
+});
+
+gulp.task('watch2', function () {
+    gulp.watch('conductor/js/controllers/*.js', ['ctrlConductor']);    
+});
+
 gulp.task('default', ['controllers', 'watch']);
 
 gulp.task('cliente', ['ctrlCliente', 'watch1']);
+
+gulp.task('conductor', ['ctrlConductor', 'watch2']);
