@@ -16,7 +16,7 @@ app.service("usuarioService", ['$http', function ($http) {
     };
     
     this.getUsers = function (id){
-        var req = $http.get(uri+'/api/cliente/' + id +'/usuarios');
+        var req = $http.get(uri+'/api/conductor/' + id +'/usuarios');
         return req;
     };
     

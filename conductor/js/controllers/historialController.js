@@ -63,19 +63,19 @@ app.controller("historialController", ["$scope",  "toaster",  "servicioService",
         });
     };    
     
-    $scope.GetServicios = function (){
-         var promise = servicioService.getAll($scope.$parent.Login.ClienteId,
+    $scope.GetServiciosConductor = function (){
+         var promise = servicioService.getAll($scope.$parent.Login.ConductorId,
          $scope.$parent.Login.TipoAcceso, $scope.$parent.Login.Login);
         promise.then(function(d) {                        
             $scope.Servicios = d.data;
             $scope.TablaServicio.reload();             
         }, function(err) {           
-                toaster.pop('error','¡Error!',"Error al cargar Clientes");           
+                toaster.pop('error','¡Error!',"Error al cargar c");           
                 console.log("Some Error Occured " + JSON.stringify(err));
         }); 
     };
     
-    $scope.GetServicios();
+    $scope.GetServiciosConductor();
 }]);
 
 

@@ -1,5 +1,5 @@
-app.controller('usuarioController', ['$scope', 'usuarioService', 'toaster', "ngTableParams","funcionService", "clienteService","contratoService",
-function($scope, usuarioService,toaster,ngTableParams ,  funcionService, clienteService, contratoService) {
+app.controller('usuarioController', ['$scope', 'usuarioService', 'toaster', "ngTableParams","funcionService", "conductorService","contratoService",
+function($scope, usuarioService,toaster,ngTableParams ,  funcionService, conductorService, contratoService) {
     $scope.Usuario = {};  
     $scope.Usuarios = [];
     $scope.Perfiles = [];
@@ -32,10 +32,10 @@ function($scope, usuarioService,toaster,ngTableParams ,  funcionService, cliente
             Modulo: "",
             Sesion : 'CERRADA',            
             DirIp: "",
-            ClienteId: $scope.$parent.Login.ClienteId,
+            ClienteId: null,
             PersonaId: null,
-            ConductorId:null,
-            TipoAcceso: "5",            
+            ConductorId:$scope.$parent.Login.ConductorId,
+            TipoAcceso: "3",            
             ValidarClave : "SI",
             Email : "",
             Contrato : "",
@@ -45,7 +45,7 @@ function($scope, usuarioService,toaster,ngTableParams ,  funcionService, cliente
     }
          
     function loadUsuarios() {
-        var promiseGet = usuarioService.getUsers($scope.$parent.Login.ClienteId); //The Method Call from service
+        var promiseGet = usuarioService.getUsers($scope.$parent.Login.ConductorId); //The Method Call from service
         promiseGet.then(function(pl) {
             $scope.Usuarios = pl.data;
             $scope.TablaUsuario.reload();
@@ -94,7 +94,7 @@ function($scope, usuarioService,toaster,ngTableParams ,  funcionService, cliente
             return;
         }
         
-        if($scope.Usuario.TipoAcceso === "5" && !$scope.ContratoSelect){
+        if($scope.Usuario.TipoAcceso === "3" && !$scope.ContratoSelect){
             toaster.pop('info', '¡Alerta!', 'El tipo de usuario es SUBCLIENTE, por favor indique el contrato.');
             return;
         } 

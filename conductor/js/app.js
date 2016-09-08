@@ -21,19 +21,19 @@ var app;
             })
             
             .when("/2/usuarios",{
-                templateUrl: 'views/cliente/usuario.html'
+                templateUrl: 'views/conductor/usuario.html'
             })
             
             .when("/2/usuario/clave",{
-                templateUrl: 'views/cliente/cambiarClave.html'
+                templateUrl: 'views/conductor/cambiarClave.html'
             })
                                    
             .when("/2/salir",{
-                templateUrl: 'views/cliente/salir.html'
+                templateUrl: 'views/conductor/salir.html'
             })
             
             .when("/iniciando",{
-                templateUrl: 'views/cliente/inicio.html'                        
+                templateUrl: 'views/conductor/inicio.html'                        
             })
             
             .otherwise({

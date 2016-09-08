@@ -9,21 +9,34 @@ use Illuminate\Support\Facades\App;
 
 class PDFContratoController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+    public function getData() 
     {
-        //
+        $data =  [
+            'quantity'      => '1' ,
+            'description'   => 'some ramdom text',
+            'price'   => '500',
+            'total'     => '500'
+        ];
+        return $data;
+    }
+    public function pruebapdf(){
+      
+//        $pdf = \App::make('dompdf.wrapper');
+//        $view =  \View::make('pdfContrato')->render();
+//        //$pdf ->loadView('/resources/views/pdfContrato');
+//        $pdf->loadView($view);
+//        return $pdf->stream();
+        
+         $data = $this->getData();
+        $date = date('Y-m-d');
+        $invoice = "2222";
+        $view =  \View::make('pdfContrato', compact('date', 'invoice'))->render();
+        $pdf = \App::make('dompdf.wrapper');
+        $pdf->loadHTML($view);
+        return $pdf->download('test.pdf');              
     }
     
-    public function pruebapdf(){
-      $pdf = \App::make('dompdf.wrapper');
-      $pdf->loadHTML('<h1>hola mundo</h1>');
-      return $pdf->stream(); 
-    }
+    
 
 
 }
