@@ -1,4 +1,4 @@
-app.controller("historialController", ["$scope",  "toaster",  "servicioService","ngTableParams",
+app.controller("servicioController", ["$scope",  "toaster",  "servicioService","ngTableParams",
     function ($scope,toaster, servicioService, ngTableParams) {
         
     
@@ -6,7 +6,7 @@ app.controller("historialController", ["$scope",  "toaster",  "servicioService",
     $scope.TablaServicio = {};
     $scope.VerDetalle =false;
     
-    $scope.$parent.SetTitulo("HISTORIAL DE SERVICIOS");        
+    $scope.$parent.SetTitulo("MIS SERVICIOS");        
     initTabla();                           
     
     
@@ -42,35 +42,33 @@ app.controller("historialController", ["$scope",  "toaster",  "servicioService",
         $("#dvDetalle").hide();
     };       
         
-    $scope.Get =  function (contrato){
-        $scope.VerDetalle =  true;
-        $scope.Contrato.ctNumeroContrato = contrato;
-        toaster.pop('wait','Consulta', 'Consultando informacioón....', 0);        
-        var promise = contratoService.getPorNumeroCto(contrato);
-        promise.then(function(d) {
-            if(d.data){
-                toaster.clear();
-                $scope.Contrato = d.data;
-                $scope.Contrato.FormaPago = JSON.parse($scope.Contrato.ctFormaPago);
-                console.log($scope.Contrato.FormaPago);
-            }else{
-                toaster.pop('error', "Número de contrato no existe");
-            }
-
-        }, function(err) {
-                toaster.pop('error','¡Error!',err, 0);
-                console.log("Some Error Occured " + JSON.stringify(err));
-        });
-    };    
-    
+           
     $scope.GetServiciosConductor = function (){
-         var promise = servicioService.getAll($scope.$parent.Login.ConductorId,
-         $scope.$parent.Login.TipoAcceso, $scope.$parent.Login.Login);
+         var promise = servicioService.getAll($scope.$parent.Login.ConductorId, 'ACTIVO');
         promise.then(function(d) {                        
             $scope.Servicios = d.data;
             $scope.TablaServicio.reload();             
         }, function(err) {           
-                toaster.pop('error','¡Error!',"Error al cargar c");           
+                toaster.pop('error','¡Error!',"Error al cargar servicios");           
+                console.log("Some Error Occured " + JSON.stringify(err));
+        }); 
+    };
+    
+    $scope.CambiarEstado =  function (item, estado, enviar){
+        var obj = {
+            Estado : estado, 
+            Email : enviar,
+            ClienteId : item.ClienteId,
+            Responsable : item.Responsable,
+            Conductor : item.ConductorId
+        };
+        
+        var promise = servicioService.put(item.IdServicio, obj);
+        promise.then(function(d) {                        
+            toaster.pop('success','¡Información!', d.data.message);
+            $scope.GetServiciosConductor();
+        }, function(err) {           
+                toaster.pop('error','¡Error confirmar servicio!',err.data.request, 0);           
                 console.log("Some Error Occured " + JSON.stringify(err));
         }); 
     };

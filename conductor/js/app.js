@@ -10,19 +10,12 @@ var app;
                                  
             .when("/1/servicio",{
                 templateUrl: 'views/servicio/servicio.html'
-            })
-            
-            .when("/1/contratos",{
-                templateUrl: 'views/servicio/contrato.html'
-            })
+            })                       
             
             .when("/1/historial",{
                 templateUrl: 'views/servicio/historial.html'
             })
             
-            .when("/2/usuarios",{
-                templateUrl: 'views/conductor/usuario.html'
-            })
             
             .when("/2/usuario/clave",{
                 templateUrl: 'views/conductor/cambiarClave.html'

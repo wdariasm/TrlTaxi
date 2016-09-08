@@ -10,6 +10,11 @@ app.service("servicioService",[ '$http', function ($http) {
         return req;
     };   
     
+    this.put = function (id,objeto) {        
+        var req = $http.put(uri+'/api/servicio/' + id, objeto);
+        return req;                
+    };
+    
 }]);
 
 

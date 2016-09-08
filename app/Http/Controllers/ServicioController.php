@@ -8,6 +8,7 @@ use App\Servicio;
 use App\Parada;
 use Illuminate\Http\JsonResponse;
 use DB;
+use App\Cliente;
 
 class ServicioController extends Controller
 {
@@ -56,7 +57,7 @@ class ServicioController extends Controller
      */
     public function getConductores($tipo){
         $result  =  DB::select("SELECT c.IdConductor, c.Cedula, c.Nombre, c.TelefonoPpal, c.Email, v.Placa,"
-                . "  v.IdVehiculo, c.Disposicion FROM conductor c INNER JOIN Vehiculo v "
+                . "  v.IdVehiculo, c.Disposicion FROM conductor c INNER JOIN vehiculo v "
                 . " ON c.VehiculoId =  v.IdVehiculo WHERE v.ClaseVehiculo = $tipo");
         return $result;
     }
@@ -162,29 +163,24 @@ class ServicioController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $svCodigo
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $svCodigo)
+    public function update(Request $request, $id)
     {
        try{
-            $data = $request->all();
-            $servicio = Servicio::find($svCodigo);
-            $servicio->svDescripcion = $data["svDescripcion"];
-            $servicio->svEstado = $data["svEstado"];
-            $servicio->save();
+            $data = $request->all();            
+            $result = Servicio::where('IdServicio', $id )          
+                ->update(['Estado' => $data['Estado'] ]); 
             
-            $tipos = $data["TipoVehiculo"]; 
-            DB::update("UPDATE servicio_clasevehiculo SET scvEstado ='BORRADO' WHERE scvServicio = $svCodigo");
-            for ($index = 0; $index < count($tipos); $index++) {
-                $insert = new ServicioClaseVehiculo();
-                $insert->scvServicio =$svCodigo;
-                $insert->scvClaseVehiculo = $tipos[$index];
-                $insert->scvEstado ='ACTIVO';
-                $insert->save();
-            }                        
-            
-            return JsonResponse::create(array('message' => "Datos Actualizados correctamente", "request" =>json_encode($servicio->svCodigo)), 200);
+            if($data['Email'] =="SI"){
+                $cliente  = Cliente::where('IdCliente', $data["ClienteId"])->select('Correo')->first();
+                if (!empty($cliente)){
+                    $this->EmailConfirmacion($id, $data['Responsable'], $cliente->Correo);
+                }                
+            }
+                                              
+            return JsonResponse::create(array('message' => "Servicio actualizado correctamente", "request" =>json_encode($result)), 200);
         } catch (\Exception $exc) {
             return JsonResponse::create(array('message' => "No se pudo guardar", "request" =>json_encode($exc->getMessage())), 401);
         }
@@ -271,6 +267,44 @@ class ServicioController extends Controller
           <p>N° Servicio: $idServicio</p>          
           <p>Responsable : $responsable</p>
            <br/>
+          <p>Atentamente</p>
+          <p>Tu equipo de Transporte Ruta Libre</p>
+        </body>
+        </html>
+        ";
+       
+        $cabeceras  = 'MIME-Version: 1.0' . "\r\n";
+        $cabeceras .= 'Content-type: text/html; charset=UTF-8' . "\r\n";       
+        $cabeceras .= 'To: '.$responsable.' <'.$email.'>' . "\r\n";
+        $cabeceras .= 'From: Transporte Ruta Libre <info@trl.co>' . "\r\n";        
+               
+        mail($email, $título, $mensaje, $cabeceras);
+    }
+    
+    private function EmailConfirmacion($idServicio,  $responsable, $email){
+        // título
+        $título = 'Asignación de servicio [TRL]';
+        // mensaje
+        
+        $mensaje = "
+        <html>
+        <head>
+          <title>Asignación de servicio</title>
+        </head>
+        <body>
+         <img style='height:60px; width:200px;' src='http://".$_SERVER['HTTP_HOST']."/trl/images/logo.png' alt=''/>
+          <h1> ¡Asignacón de servicio!</h1>
+          
+          <p>Estimado usuariio(a), su solicitud de servicio ha sido confirmada. Por favor ingrese a la plataforma
+            para verificar los datos del conductor asignado.
+            </p>
+
+          <p> Datos del servicio:</p>          
+          <br/>    
+          <p>N° Servicio: $idServicio</p>          
+          <p>Responsable : $responsable</p>
+           <br/>
+           
           <p>Atentamente</p>
           <p>Tu equipo de Transporte Ruta Libre</p>
         </body>

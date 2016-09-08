@@ -38,7 +38,7 @@
                             </thead>
 
                             <tbody>
-                                 <tr ng-repeat="item in $data">
+                                 <tr ng-repeat="item in $data" ng-class="{'info': item.Estado == 'ASIGNADO', 'warning':  item.Estado == 'SOLICITADO' , 'success':  item.Estado != 'SOLICITADO' || item.Estado != 'ASIGNADO'  }">
                                      <td>{{ item.IdServicio}}</td>
                                      <td>{{ item.NumeroContrato }}</td>
                                      <td>{{ item.Responsable}}</td>
@@ -51,9 +51,8 @@
                                     <td>{{ item.Estado}}</td>
                                     <td>
                                          <center>
-                                             <a ng-click="" style="float: left; margin-left: 3px;" href="javascript:;"  title="Editar"><i class="fa fa-pencil fa-1x text-success"></i></a>
-                                             <a ng-click=""  style="float: left; margin-left: 7px;" href="javascript:;"  title="Eliminar"><i class="fa fa-power-off fa-1x text-warning"></i></a>
-                                             <a  ng-click="" style="float: left; margin-left: 7px;" href="javascript:;"  title="Novedades"><i class="fa fa-book text-danger fa-1x"></i></a>
+                                             <a ng-click="" style="float: left; margin-left: 3px;" href="javascript:;"  title="Ver Conductor Asignado"><i class="fa fa-user fa-1x text-success"></i></a>
+                                             <a ng-click=""  style="float: left; margin-left: 7px;" href="javascript:;"  title="Cancelar"><i class="fa fa-ban text-warning"></i></a>
                                          </center>
                                      </td>
                                  </tr>
