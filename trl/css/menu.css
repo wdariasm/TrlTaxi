@@ -36,9 +36,10 @@ body {
 }
 
 #contenido{    
-    padding: 10px;    
+    padding: 10px 0px 5px 0px;    
     border-left: 1px solid #ccc;
-    min-height: 900px;
+    min-height: 580px;
+    height: auto;        
 }
 
 .contenido-normal{
@@ -120,7 +121,7 @@ body {
   -webkit-transition: all 0.5s cubic-bezier(0.55, 0, 0.1, 1);
   -o-transition: all 0.5s cubic-bezier(0.55, 0, 0.1, 1);
   transition: all 0.5s cubic-bezier(0.55, 0, 0.1, 1);
-  min-height: 900px;
+  min-height: 580px;
 }
 .sidebar:before,
 .sidebar:after {

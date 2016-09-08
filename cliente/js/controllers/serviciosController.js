@@ -104,8 +104,10 @@ app.controller('serviciosController',['$scope', 'zonaService', 'ngTableParams', 
            prLongitud : "",
            prValor : 0,
            prFecha : ""
-        };
-        console.log($scope.Servicio);
+        }; 
+        $scope.ContratoSelect = {};
+        $scope.Subtotal = 0;
+        $scope.Total = 0;
     }
 
     function initAutocomplete (){
@@ -353,6 +355,7 @@ app.controller('serviciosController',['$scope', 'zonaService', 'ngTableParams', 
         promise.then(function(d) {
             if(d.data){
                 $scope.Servicio.Valor = d.data.tfValor;
+                $scope.Total = parseInt(d.data.tfValor);
                 $scope.Servicio.Codigo = d.data.tfCodigo;
             }else{
                toaster.pop('info','¡Alerta!',"Estimado Usuario(a), no se encontró el precio con estos " +
@@ -415,7 +418,7 @@ app.controller('serviciosController',['$scope', 'zonaService', 'ngTableParams', 
                 toaster.pop('error','¡Error!',"Error al cargar tipos de vehículo",0);
                 console.log("Some Error Occured " + JSON.stringify(err));
         });
-    }
+    }           
     
     $scope.CambiarFormato=function (variable){
         $scope.Servicio[variable] = funcionService.FormatFecha($scope.Servicio[variable],5);        
@@ -604,6 +607,12 @@ app.controller('serviciosController',['$scope', 'zonaService', 'ngTableParams', 
             toaster.pop("info","¡Alerta!", "Por favor ingrese la dirección de parada");
             return;
         }        
+        
+        if(!$scope.Servicio.Tipo.csValor){
+            toaster.pop("info","¡Alerta!", "Seleccione el tipo de servicio.");
+            return;
+        }
+        
         $scope.Parada.prValor = $scope.Servicio.Tipo.csValor;
         $scope.Parada.prFecha = $scope.Servicio.FechaServicio;
         $scope.Servicio.Paradas.push($scope.Parada);
@@ -611,8 +620,17 @@ app.controller('serviciosController',['$scope', 'zonaService', 'ngTableParams', 
     };
     
     $scope.QuitarParada =  function (index){        
-        $scope.Servicio.Paradas.splice(index,1);
-        
+        $scope.Servicio.Paradas.splice(index,1);        
+    };
+    
+    $scope.TotalParada =  function (){
+        var total = 0;
+        for (var i=0; i<$scope.Servicio.Paradas.length; i++) {            
+            total += parseInt($scope.Servicio.Paradas[i].prValor);
+        }          
+        $scope.Subtotal = total;
+        $scope.Total =  parseFloat($scope.Subtotal) + parseFloat($scope.Servicio.Valor);
+        return total;
     };
 
 }]);
