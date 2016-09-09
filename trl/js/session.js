@@ -44,18 +44,20 @@ var config = {
            
     
     //Obtener NOMBRE CLIENTE
-    getLatitud:function(){
-        var obj = sessionStorage.getItem("trlconfig");        
-        if (obj){            
+    getLatitud:function(){        
+        var cf = sessionStorage.getItem("trlconfig");        
+        if (cf){   
+            var obj  = JSON.parse(atob(cf));
             return obj.parLatitud;
-        }
+        }  
     },         
     
-    getLongitud: function(){
-        var obj = sessionStorage.getItem("trlconfig");        
-        if (obj){            
+    getLongitud: function(){               
+        var cf = sessionStorage.getItem("trlconfig");        
+        if (cf){   
+            var obj  = JSON.parse(atob(cf));
             return obj.parLongitud;
-        }  
+        }                  
     }, 
    
     getEnviarEmail: function(){

@@ -20,6 +20,7 @@ app.controller('serviciosController',['$scope', 'zonaService', 'ngTableParams', 
     var markerDestino = null;
     var infowindow = new google.maps.InfoWindow();
     var options = {  componentRestrictions: {country: 'co'} };
+    var mapa=null;
 
     var origenPlaceId = null;
     var destinoPlaceId = null;
@@ -32,14 +33,13 @@ app.controller('serviciosController',['$scope', 'zonaService', 'ngTableParams', 
     $scope.poly = null;
     $scope.tbZona = {}; // Para Paginacion
 
-    $scope.title = "Nuevo Servicio";
+    $scope.title = "Nuevo Servicio";    
     $scope.Posicion = {
-        Latitud : 10.4370725,
-        Longitud : -75.524795
+        Latitud : config.getLatitud(),
+        Longitud : config.getLongitud()
     };
 
-    $scope.$parent.SetTitulo("GESTIÓN DE SERVICIOS");
-    //loadZona();
+    $scope.$parent.SetTitulo("GESTIÓN DE SERVICIOS");    
 
     //    
     $scope.AutocompleteOrigen=null;
@@ -113,20 +113,19 @@ app.controller('serviciosController',['$scope', 'zonaService', 'ngTableParams', 
     function initAutocomplete (){
         var input = document.getElementById('txtOrigen');
         $scope.AutocompleteOrigen = new google.maps.places.Autocomplete(input, options);
-        $scope.AutocompleteOrigen.bindTo('bounds', $scope.mapServicio);
+        $scope.AutocompleteOrigen.bindTo('bounds', mapa);
 
         $scope.AutocompleteOrigen.addListener('place_changed', function() {
-            infowindow.close();
-            $scope.markerOrigen.setVisible(false);
+            //infowindow.close();
+            //$scope.markerOrigen.setVisible(false);
             var place = $scope.AutocompleteOrigen.getPlace();
             if (!place.geometry) {
                 toaster.pop('error','¡Error!','No pudo resolver la  posición');
                 return;
             }
-            expandViewportToFitPlace($scope.mapServicio, place);
-            $scope.markerOrigen.setIcon("images/origen.png");
-
-            $scope.markerOrigen.setPosition(place.geometry.location);
+            expandViewportToFitPlace(mapa, place);
+            //$scope.markerOrigen.setIcon("images/origen.png");
+            //$scope.markerOrigen.setPosition(place.geometry.location);
             //$scope.markerOrigen.setVisible(true);
                 if(!$scope.popup){
                     $scope.popup = new google.maps.InfoWindow();
@@ -136,17 +135,17 @@ app.controller('serviciosController',['$scope', 'zonaService', 'ngTableParams', 
             $scope.Servicio.LngOrigen  = place.geometry.location.lng();
             buscarZona($scope.Servicio.LatOrigen, $scope.Servicio.LngOrigen,"ZonaOrigen");
             $scope.Servicio.DireccionOrigen =  place.formatted_address;            
-            var address = '';
-            if (place.address_components) {
-              address = [
-                (place.address_components[0] && place.address_components[0].short_name || ''),
-                (place.address_components[1] && place.address_components[1].short_name || ''),
-                (place.address_components[2] && place.address_components[2].short_name || '')
-              ].join(' ');
-            }
+//            var address = '';
+//            if (place.address_components) {
+//              address = [
+//                (place.address_components[0] && place.address_components[0].short_name || ''),
+//                (place.address_components[1] && place.address_components[1].short_name || ''),
+//                (place.address_components[2] && place.address_components[2].short_name || '')
+//              ].join(' ');
+//            }
 
-            infowindow.setContent('<div><strong>' + place.name + '</strong><br>' + address);
-            infowindow.open($scope.mapServicio, $scope.markerOrigen);
+//            infowindow.setContent('<div><strong>' + place.name + '</strong><br>' + address);
+//            infowindow.open($scope.mapServicio, $scope.markerOrigen);
 
             origenPlaceId = place.place_id;
             route(origenPlaceId, destinoPlaceId, travelMode, directionsService, directionsDisplay);
@@ -158,41 +157,19 @@ app.controller('serviciosController',['$scope', 'zonaService', 'ngTableParams', 
         var input = document.getElementById('txtDestino');
 
         $scope.AutocompleteDestino = new google.maps.places.Autocomplete(input, options);
-        $scope.AutocompleteDestino.bindTo('bounds', $scope.mapServicio);
+        $scope.AutocompleteDestino.bindTo('bounds', mapa);
 
-        $scope.AutocompleteDestino.addListener('place_changed', function() {
-            infowindow.close();
-            markerDestino.setVisible(false);
+        $scope.AutocompleteDestino.addListener('place_changed', function() {            
             var place = $scope.AutocompleteDestino.getPlace();
             if (!place.geometry) {
                 toaster.pop('error','¡Error!','No pudo resolver la  posición');
                 return;
             }
-
-            expandViewportToFitPlace($scope.mapServicio, place);
-            markerDestino.setIcon("images/destino.png");
-            markerDestino.setPosition(place.geometry.location);
-            //markerDestino.setVisible(true);
-                if(!$scope.popup){
-                    $scope.popup = new google.maps.InfoWindow();
-                }
-
+            expandViewportToFitPlace(mapa, place);
             $scope.Servicio.LatDestino = place.geometry.location.lat();
             $scope.Servicio.LngDestino  = place.geometry.location.lng();
             buscarZona($scope.Servicio.LatDestino, $scope.Servicio.LngDestino, 'ZonaDestino');
             $scope.Servicio.DireccionDestino =  place.formatted_address;
-            var address = '';
-            if (place.address_components) {
-              address = [
-                (place.address_components[0] && place.address_components[0].short_name || ''),
-                (place.address_components[1] && place.address_components[1].short_name || ''),
-                (place.address_components[2] && place.address_components[2].short_name || '')
-              ].join(' ');
-            }                        
-
-            infowindow.setContent('<div><strong>' + place.name + '</strong><br>' + address);
-            infowindow.open($scope.mapServicio, markerDestino);
-
             destinoPlaceId = place.place_id;
             route(origenPlaceId, destinoPlaceId, travelMode,directionsService, directionsDisplay);
         });
@@ -214,48 +191,48 @@ app.controller('serviciosController',['$scope', 'zonaService', 'ngTableParams', 
                 radius: position.coords.accuracy
             });
             $scope.AutocompleteOrigen.setBounds(circle.getBounds());
+            $scope.AutocompleteDestino.setBounds(circle.getBounds());
           });
         }
     }
 
-    function iniciarMapaZ  () {
+    function iniciarMapaZ  () {        
         var mapOptions = {
-            zoom: 16,
-
-            //center: new google.maps.LatLng(config.getLatitud(), config.getLongitud()),
+            zoom: 16,          
             center: new google.maps.LatLng($scope.Posicion.Latitud, $scope.Posicion.Longitud),
             mapTypeId: google.maps.MapTypeId.ROADMAP
         };
 
-        $scope.mapServicio= new google.maps.Map(document.getElementById("dvMapaServicio"), mapOptions);
-        directionsDisplay.setMap($scope.mapServicio);
+        mapa= new google.maps.Map(document.getElementById("dvMapaServicio"), mapOptions);
+        directionsDisplay.setMap(mapa);
 
-        google.maps.event.addListener($scope.mapServicio, "click", function(evento) {
-            var latitud = evento.latLng.lat();
-            var longitud = evento.latLng.lng();
-            var coordenadas = new google.maps.LatLng(latitud, longitud);
-            var marcador = new google.maps.Marker(
-             {
-                 position: coordenadas,
-                 map: $scope.mapServicio,
-                 animation: google.maps.Animation.DROP,
-                 title:"Marcador"
-             }
-            );
+//        google.maps.event.addListener($scope.mapServicio, "click", function(evento) {
+//            var latitud = evento.latLng.lat();
+//            var longitud = evento.latLng.lng();
+//            var coordenadas = new google.maps.LatLng(latitud, longitud);
+//            var marcador = new google.maps.Marker(
+//             {
+//                 position: coordenadas,
+//                map: $scope.mapServicio,
+//                 animation: google.maps.Animation.DROP,
+//                 title:"Marcador"
+//             }
+//            );
+//
+//            var po = new Poligono();
+//                po.coordenadas = coordenadas;
+//                po.marcador = marcador;
+//            $scope.vecPoligono.push(po);
+//            dibujarPoligono();
+//        });
 
-            var po = new Poligono();
-                po.coordenadas = coordenadas;
-                po.marcador = marcador;
-            $scope.vecPoligono.push(po);
-            dibujarPoligono();
-        });
-
-        $scope.markerOrigen = new google.maps.Marker({
-             map: $scope.mapServicio
-        });
-        markerDestino = new google.maps.Marker({
-             map: $scope.mapServicio
-        });
+//        $scope.markerOrigen = new google.maps.Marker({
+//             map: $scope.mapServicio
+//        });
+//        markerDestino = new google.maps.Marker({
+//             map: mapa
+//        });        
+                
     };
 
     function route(origin_place_id, destination_place_id, travel_mode, directionsService, directionsDisplay) {
@@ -303,31 +280,16 @@ app.controller('serviciosController',['$scope', 'zonaService', 'ngTableParams', 
     function initAutocompleteParada (){
         var input = document.getElementById('txtParada');
 
-        var autocompleteParada = new google.maps.places.Autocomplete(input, options);
-        //$scope.AutocompleteDestino.bindTo('bounds', $scope.mapServicio);
-
-        autocompleteParada.addListener('place_changed', function() {            
-            //markerDestino.setVisible(false);
+        var autocompleteParada = new google.maps.places.Autocomplete(input, options);        
+        autocompleteParada.addListener('place_changed', function() {                        
             var place = autocompleteParada.getPlace();
             if (!place.geometry) {
                 toaster.pop('error','¡Error!','No pudo resolver la  posición');
                 return;
             }
-
-//            expandViewportToFitPlace($scope.mapServicio, place);
-//            markerDestino.setIcon("images/destino.png");
-//            markerDestino.setPosition(place.geometry.location);
-//            markerDestino.setVisible(true);
-//                if(!$scope.popup){
-//                    $scope.popup = new google.maps.InfoWindow();
-//                }
-
             $scope.Parada.prLatiud = place.geometry.location.lat();
             $scope.Parada.prLongitud  = place.geometry.location.lng();            
-            $scope.Parada.prDireccion =  place.formatted_address;                             
-
-//            infowindow.setContent('<div><strong>' + place.name + '</strong><br>' + address);
-//            infowindow.open($scope.mapServicio, markerDestino);
+            $scope.Parada.prDireccion =  place.formatted_address;
            
         });
     }
@@ -388,7 +350,7 @@ app.controller('serviciosController',['$scope', 'zonaService', 'ngTableParams', 
             fillColor: '#FF0000',
             fillOpacity: 0.25
         });
-        $scope.poly.setMap($scope.mapServicio);
+        $scope.poly.setMap(mapa);
     }
 
     $scope.eliminarUltimoPunto = function (){
@@ -423,6 +385,11 @@ app.controller('serviciosController',['$scope', 'zonaService', 'ngTableParams', 
     $scope.CambiarFormato=function (variable){
         $scope.Servicio[variable] = funcionService.FormatFecha($scope.Servicio[variable],5);        
         $scope.Servicio[variable] = moment($scope.Servicio[variable]).format('L');        
+    };
+    
+    $scope.CambiarPrecio =  function(){
+        $scope.Servicio.Valor = 0;
+        $scope.Total= parseInt ($scope.Servicio.Valor) +  parseInt($scope.Subtotal);
     };
 
     $scope.Nuevo = function() {
@@ -485,17 +452,15 @@ app.controller('serviciosController',['$scope', 'zonaService', 'ngTableParams', 
         });
     };
 
-    $scope.TipoServicioCheck = function(value) {
+    $scope.TipoServicioCheck = function() {
         //console.log($scope.Servicio.Tipo);
         if($scope.Servicio.Tipo.csPlantilla==="SI"){
-
-            if($scope.Servicio.Tipo.csTipoServicioId ===1){                
-                document.getElementById('dvMapaServicio').style.display="block";
-                geolocate();
-                iniciarMapaZ();     
-                initAutocomplete();
-                initAutocompleteDestino();
-                
+            
+            if($scope.Servicio.Tipo.csTipoServicioId == 1){                               
+                var div1 = document.getElementById('dvMapaServicio');                
+                div1.classList.remove('hidden');
+                div1.classList.add('visible');                                  
+                setTimeout(function (){ iniciarMapaZ();},200);                
             }
 
             $scope.titlePlantilla = "Plantillas " + $scope.Servicio.Tipo.csDescripcion;
@@ -632,6 +597,26 @@ app.controller('serviciosController',['$scope', 'zonaService', 'ngTableParams', 
         $scope.Subtotal = total;
         $scope.Total =  parseFloat($scope.Subtotal) + parseFloat($scope.Servicio.Valor);
         return total;
+    };
+    
+    
+    //DETERMINAR SI UN PUNTO ESTA DENTRO DE UN POLIGONO
+    
+    function loadZona() {
+        var promiseGet = zonaService.getPuntosAll(); //The Method Call from service
+        promiseGet.then(function(pl) {
+            $scope.Zonas = pl.data;               
+        },
+        function(errorPl) {
+            toaster.pop("error","¡Error!", "Eror al cargar zonas");
+            console.log('failure loading Zona', errorPl);
+        });
+    }
+    
+    loadZona();
+    
+    function buscarZonaLocal (lat, lont){
+        
     };
 
 }]);

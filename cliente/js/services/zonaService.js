@@ -14,8 +14,10 @@ app.service("zonaService", ['$http', function ($http) {
         return req;
     };
     
-             
-              
+    this.getPuntosAll = function () {
+        var req = $http.get(uri+'/api/zona/puntos');
+        return req;
+    };                               
             
     
 }]);

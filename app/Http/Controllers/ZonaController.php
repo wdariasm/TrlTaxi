@@ -44,23 +44,27 @@ class ZonaController extends Controller
         return $result;
     }
     
-    public function getZonaByPunto($latitud, $longitud) {        
+    public function getPuntosAll() {        
        //$result= DB::select("SELECT znCodigo,znNombre FROM zona WHERE st_contains(znArea, POINT($latitud, $longitud)) LIMIT 1");               
-        $punto = array($latitud, $longitud);
-            var_dump($punto);
-           // $pointLocation = new pointLocation();
-        $zona = DB::select("SELECT z.znCodigo, z.znNombre,  GROUP_CONCAT(ptLatitud ,',', ptLongitud SEPARATOR ';')"
-                . " AS ptArea FROM zona z INNER JOIN puntos p ON z.znCodigo = p.ptZona  WHERE z.znEstado='ACTIVO' GROUP BY z.znCodigo");
-        for ($index = 0; $index < count($zona); $index++) {
-            $ptZona = explode(";", $zona[$index]->ptArea);
-            $poligono = array();
-            for ($j = 0; $j < count($ptZona); $j++) {               
-                array_push($poligono, explode("," ,$ptZona[$j]));
-            }                      
-            array_push($poligono, explode("," ,$ptZona[0]));                      
-            
-        }      
-
+        
+        $lstZona =  array();        
+        $result = DB::select("SELECT z.znCodigo, z.znNombre,  GROUP_CONCAT(ptLatitud ,',', ptLongitud SEPARATOR ';')"
+                . " AS ptArea FROM zona z INNER JOIN puntos p ON z.znCodigo = p.ptZona  WHERE z.znEstado='ACTIVO' and z.znCodigo=24 GROUP BY z.znCodigo");
+        for ($index = 0; $index < count($result); $index++) {
+            $ptZona = explode(";", $result[$index]->ptArea);            
+            $puntos = array();
+            for ($j = 0; $j < count($ptZona); $j++) {
+                $p = explode("," ,$ptZona[$j]);                
+                $pos = ["latitud" => $p[0], "longitud"=> $p[1]];
+                array_push($puntos, $pos);
+            }                                              
+            $zona = array(
+                "Zona" => $result[$index]->znCodigo,
+                "Puntos" => $puntos
+            );                    
+            array_push($lstZona,$zona);            
+        }         
+        return $lstZona;
     }
 
 

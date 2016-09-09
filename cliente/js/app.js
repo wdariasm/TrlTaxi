@@ -20,6 +20,10 @@ var app;
                 templateUrl: 'views/servicio/historial.html'
             })
             
+            .when("/2/perfil",{
+                templateUrl: 'views/cliente/prueba.html'
+            })
+            
             .when("/2/usuarios",{
                 templateUrl: 'views/cliente/usuario.html'
             })
