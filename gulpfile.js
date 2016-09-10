@@ -19,7 +19,7 @@ gulp.task('watch', function () {
 });
 
 gulp.task('ctrlCliente', function () {
-    gulp.src(["trl/js/libs/funciones.js", "cliente/js/services/*.js", "cliente/js/controllers/*.js", "trl/js/session.js"])
+    gulp.src(["trl/js/session.js", "trl/js/libs/funciones.js", "cliente/js/services/*.js", "cliente/js/controllers/*.js"])
     .pipe(concat('vendors.js'))
     .pipe(uglify().on('error', gutil.log))
     .pipe(gulp.dest('cliente/dist/'));

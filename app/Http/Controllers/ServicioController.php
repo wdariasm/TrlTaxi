@@ -84,7 +84,8 @@ class ServicioController extends Controller
             $servicio->TipoServicidoId = $data["TipoServicidoId"]; 
             $date = new \DateTime(str_replace("/", "-", $data["FechaServicio"]." 00:00:00"));
             $servicio->FechaServicio = $date->format('Y-m-d');
-            $servicio->Hora= $data["Hora"]; 
+            $hora = \DateTime::createFromFormat( 'H:i A', $data["Hora"]);
+            $servicio->Hora= $hora->format('H:i:s'); 
             $servicio->Valor= $data["Valor"]; 
             $servicio->NumPasajeros= $data["NumPasajeros"];
             $servicio->NumHoras= $data["NumHoras"];
@@ -101,7 +102,9 @@ class ServicioController extends Controller
             $servicio->PlantillaId= $data["PlantillaId"];
             $servicio->TipoVehiculoId= $data["TipoVehiculoId"];
             $servicio->DescVehiculo= $data["DescVehiculo"];
-            $servicio->Parada= $data["Parada"];            
+            $servicio->Parada= $data["Parada"];
+            $servicio->ValorTotal= $data["ValorTotal"];
+            $servicio->Nota= $data["Nota"];            
             $servicio->Calificacion= 0;
             $servicio->UserReg= $data["UserReg"];
             $servicio->FechaMod = new \DateTime();

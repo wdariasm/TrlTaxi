@@ -17,16 +17,44 @@
     
 </style>
 <div ng-controller="serviciosController"  class="container-fluid">
-    <div class="row">
-        <div class="col-md-12">                                                     
-            <form name="frmServicio" novalidate  >
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <h3 class="panel-title">Datos del Contrato</h3>
-                    </div>
-                    <div class="panel-body">
+    <div id="paneldebotones" class="row text-right paneldebotones " style="position: absolute; margin-top: 30px; right: 15px; z-index: 100">
+        <div class="col-xs-12" style="padding-top: 6px;">
+           
 
-                    <div class="col-md-4">
+            <div class="row" style="margin-bottom: 8px;" >
+                <div class="col-xs-12 text-center">
+                    <button type="button" class="btn btn-floating  btn-large editar"  ng-click="Nuevo()" title="Cancelar Operación"><i class="fa fa-times"></i></button>
+                    <small class="texto">Cancelar</small>
+                </div>
+            </div>
+            
+            <div class="row" style="margin-bottom: 8px;" ng-show="Contrato.TipoServicio.length" >
+                <div class="col-xs-12 text-center">
+                    <button type="button" class="btn btn-floating  btn-large pdf"  ng-click="ConsultarPrecio()" title="Consultar valor del servicio"><i class="fa fa-usd"></i></button>
+                    <small class="texto">Consultar</small>
+                </div>
+            </div>
+
+            <div class="row" style="margin-bottom: 5px;">
+                <div class="col-xs-12 text-center">
+                    <button type="button" class="btn btn-floating  btn-large borrador" ng-disabled="frmServicio.$invalid"  ng-click="Validar()" title="Guardar"><i class="fa fa-check"></i></button>
+                    <small class="texto">Guardar</small>
+                </div>
+            </div>           
+
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-md-11 col-xs-12 col-lg-11">                                                     
+            <form name="frmServicio" novalidate  >
+                <div class="panel panel-default" >
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Seleccionar Contrato</h3>
+                    </div>
+                    <div class="panel-body" style="padding-bottom: 0px">
+
+                    <div class="col-md-3">
                         <div class="form-group">
                             <label  for="txtNumero" >N° Contrato *</label>
                             <div class="input-group">   
@@ -47,29 +75,9 @@
                                 <input type="text"  class="form-control" required="" ng-model="Contrato.Nombre" maxlength="100" id="txtNombre" placeholder="Nombre Completo" disabled>
                             </div>
                         </div>
-                    </div>                                                                                                   
-
-                    <div class="col-md-2">
-                        <div class="form-group">
-                            <label for="txtTelefonoPpal">Teléfono </label>
-                            <div class="input-group">    
-                                <div class="input-group-addon"><i class="fa fa-mobile text-success"></i></div>
-                                <input type="text" class="form-control" ng-model="Servicio.Telefono"  required="" maxlength="10" solo-numeros id="txtTelefonoPpal" placeholder="Teléfono" >
-                            </div>
-                       </div>
-                    </div>
-
+                    </div> 
+                        
                     <div class="col-md-3">
-                        <div class="form-group">
-                            <label for="txtFechaInicio">Fecha Inicio</label>
-                            <div class="input-group">    
-                                <div class="input-group-addon"><i class="fa fa-calendar-minus-o text-success"></i></div>
-                                <input type="text" class="form-control" ng-model="Contrato.FechaInicio"  required="" maxlength="10"  id="txtFechaInicio" placeholder="Inicio" disabled>
-                            </div>
-                       </div>
-                    </div>
-
-                   <div class="col-md-3">
                         <div class="form-group">
                             <label for="txtFechaVen">Fecha Vencimiento</label>
                             <div class="input-group">    
@@ -77,35 +85,19 @@
                                 <input type="text" class="form-control" ng-model="Contrato.FechaFin"  required="" maxlength="10"  id="txtFechaVen" placeholder="F. Final" disabled>
                             </div>
                        </div>
-                    </div>
-
-                    <div class="col-md-3">
-                        <div class="form-group">
-                            <label for="txtEstado">Estado</label>
-                            <div class="input-group">    
-                                <div class="input-group-addon"><i class="fa fa-check text-success"></i></div>
-                                <input type="text" class="form-control" ng-model="Contrato.Estado"  required="" maxlength="10"  id="txtEstado" placeholder="Estado" disabled>
-                            </div>
-                       </div>
-                    </div>
-                        
-                    <div class="col-md-3">
-                        <div class="form-group">
-                            <h2 for="txtValor" class="text-primary text-center">{{Servicio.Valor  | currency : "$" : 0}}</h2>
-                       </div>
-                    </div>
-                        
-                    <div class="row">
+                    </div>                                                       
+                   
+                   <!-- <div class="row">
                         <div class="col-md-2 col-md-offset-7">                                        
                             <br/>
                             <button   class="btn btn-success btn-block btn-addon"   type="button"  title="Nuevo / Cancelar" ng-click="Nuevo()"><i class="fa fa-pencil"></i> Nuevo</button>
                         </div>
                         <div class="col-md-2">
-                            <!-- ng-disabled="frmVehiculo.$invalid" -->
+                            <!-- ng-disabled="frmVehiculo.$invalid"
                             <br/>
                             <button ng-disabled="frmServicio.$invalid"   class="btn btn-primary btn-block btn-addon"   type="button"  title="Solicitar Servicio" ng-click="Guardar()"><i class="fa fa-check"></i> Guardar</button>
                         </div>
-                    </div>
+                    </div> -->
                         
                     </div>
                 </div>
@@ -121,7 +113,7 @@
                             
                             <div class="row">
                                 
-                                <div class="col-md-3">
+                                <div class="col-md-4">
                                     <div class="form-group">
                                         <label  for="cboTipoServicio">Tipo Servicio*</label>
                                         <div class="input-group">
@@ -131,7 +123,7 @@
                                     </div>
                                 </div>
                                 
-                                <div class="col-md-2">
+                                <div class="col-md-3">
                                     <div class="form-group">
                                         <label  for="txtFechaServicio">Fecha Servicio*</label>
                                         <div class="input-group">
@@ -149,16 +141,10 @@
                                             <input type="text" id="txtHora" ng-model="Servicio.Hora" name="txtHora" class="form-control" value="" required readonly>
                                         </div>
                                     </div>
-                                </div>
+                                </div> 
                                 
-                                <div class="col-md-5">
-                                    <div class="form-group">
-                                        <label for="txtResponsable">Responsable del Servicio* </label>
-                                        <div class="input-group">    
-                                            <div class="input-group-addon"><i class="fa fa-user text-success"></i></div>
-                                            <input type="text"  class="form-control" required="" ng-model="Servicio.Responsable" maxlength="100" id="txtResponsable" placeholder="Responsable del servicio" >
-                                        </div>
-                                    </div>
+                                <div class="col-md-3">
+                                    <h2 for="txtValor" class="text-success text-center" style=" margin-top: 11%; ">{{  Servicio.Valor  | currency : "$" : 0}}</h2>
                                 </div>
                                 
                             </div>
@@ -207,7 +193,7 @@
                                     <div class="col-md-4">    
                                         <div class="form-group">     
                                             <br>
-                                            <button type="button" class="btn btn-primary btn-block btn-addon" style="margin-top: 4%;" ng-click="ConsultarPrecio()" title="Consultar Precio"><i class="fa fa-usd"></i> Consultar</button>
+                                            <button type="button" class="btn btn-primary btn-block btn-addon" style="margin-top: 4%; " ng-click="ConsultarPrecio()" title="Consultar valor del servicio"><i class="fa fa-usd" style="margin-right: 7px;"></i>Consultar</button>
                                         </div>
                                     </div>
                                         
@@ -222,6 +208,7 @@
                                             </li>
                                         </ul>                                                                                                                       
                                     </div>
+                                    
                                 </div>
                                 
                                 <div class="col-md-7">
@@ -263,6 +250,47 @@
                                                                                                                                                                                                                                                                                                                                             
                         </div>                       
                     </div>                                  
+                    </div>
+                </div>
+                
+                <div class="panel panel-default" ng-show="Contrato.TipoServicio.length">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Responsable / nota de servicio</h3>
+                    </div>
+                    <div class="panel-body" style="padding-bottom: 0px">
+                        <div class="row">                            
+                            <div class="col-md-7">
+                                <div class="col-md-10">
+                                <div class="form-group">
+                                    <label for="txtResponsable">Responsable del Servicio* </label>
+                                    <div class="input-group">    
+                                        <div class="input-group-addon"><i class="fa fa-user text-success"></i></div>
+                                        <input type="text"  class="form-control" required="" ng-model="Servicio.Responsable" maxlength="100" id="txtResponsable" placeholder="Responsable del servicio" >
+                                    </div>
+                                </div>
+                                </div>
+                            
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="txtTelefonoPpal">Teléfono </label>
+                                        <div class="input-group">    
+                                            <div class="input-group-addon"><i class="fa fa-mobile text-success"></i></div>
+                                            <input type="text" class="form-control" ng-model="Servicio.Telefono"  required="" maxlength="10" solo-numeros id="txtTelefonoPpal" placeholder="Teléfono" >
+                                        </div>
+                                   </div>
+                                </div>                                                               
+                            </div>
+                            <div class="col-md-5">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label for="txtNota">Nota del Servicio </label>                                                                            
+                                        <textarea class="form-control" rows="4" id="txtNota" ng-model="Servicio.Nota" placeholder="Nota o descripción del servicio" maxlength="250"></textarea>
+
+                                   </div>
+
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 
@@ -348,7 +376,7 @@
                                 <label class="text-right" style="margin-top: 10px;" >Valor Servicio * </label>
                             </div>
                             <div class="col-md-8">
-                                <h2 for="txtValor" class="text-success text-right" style=" margin-top: 3px; ">{{  Servicio.Valor  | currency : "$" : 0}}</h2>
+                                <h3 for="txtValor" class="text-success text-right" style=" margin-top: 3px; ">{{  Servicio.Valor  | currency : "$" : 0}}</h3>
                             </div>
                         </div>
                         
@@ -357,7 +385,7 @@
                                 <label class="text-right" style="margin-top: 10px;" >Total Paradas * </label>
                             </div>
                             <div class="col-md-8">
-                                <h2 class="text-danger text-right" style=" margin-top: 3px; ">{{  Subtotal | currency : "$" : 0}}</h2>
+                                <h3 class="text-danger text-right" style=" margin-top: 3px; ">{{  Subtotal | currency : "$" : 0}}</h3>
                             </div>
                         </div>
                         
@@ -366,7 +394,7 @@
                                 <label class="text-right" style="margin-top: 10px;" >Total Servicio * </label>
                             </div>
                             <div class="col-md-8">
-                                <h2 class="text-primary text-right" style=" margin-top: 3px; ">{{  Total | currency : "$" : 0}}</h2>
+                                <h2 class="text-primary text-right" style=" margin-top: 3px; ">{{  Servicio.ValorTotal | currency : "$" : 0}}</h2>
                             </div>
                         </div>
                         
@@ -375,6 +403,50 @@
                 </div>
                 </div>
             </form>
+            <div class="modal fade bs-example-modal" id="mdConfirmacion" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" style="margin-top: 10%;">
+                <div class="modal-dialog modal-lg" style=" width: 40%">                                   
+                    <div class="modal-content">
+
+                        <div class="modal-header">
+                            <div class="modal-title">Confirmación de Servicio</div>
+                        </div>
+
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <br/>
+                                   <a target="_blank" href="">Ver condiciones de servicio</a>
+                                   <br/>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">                                     
+                                    <div class="checkbox checkbox-primary">                                        
+                                        <input type="checkbox" id="chkCondicion" ng-model="AceptarCondicion">
+                                        <label for="chkCondicion">He leido y acepto las condiciones de servicio.</label> 
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row" ng-show="enviando" >
+                                <div class="col-md-12">
+                                    <div class="text-center">
+                                        <i class="fa fa-spinner fa-pulse fa-fw fa-3x text-primary"></i><br/>
+                                        <label>Espere por favor .. procesando información</label>
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-danger btn-addon" data-dismiss="modal"><i class="fa fa-ban"></i> Cancelar</button>
+                            <button type="button" class="btn btn-primary btn-addon" ng-click="Guardar()" ng-disabled="!AceptarCondicion"><i class="fa fa-check"></i> Aceptar</button>
+                        </div>  
+
+                    </div>
+
+                </div>
+            </div>
         </div>
     </div>                    
 </div>
@@ -383,8 +455,7 @@
         display: block !important;
     }
 </style>
-<script type="text/javascript">
-    var ruta ="";
+<script type="text/javascript">    
      $('#tabPanels a').click(function (e) {
         e.preventDefault();
         $(this).tab('show');
@@ -393,7 +464,8 @@
     $(function () {
         $('input[name="txtFechaServicio"]').daterangepicker({
             singleDatePicker: true,
-            showDropdowns: true           
+            showDropdowns: true,
+            minDate: new Date()
         }, 
         function(start, end, label) {
             $('#txtFechaServicio').val(end.format('DD/MM/YYYY'));         
@@ -426,6 +498,16 @@
                                   
     });
     
-    
-        
+    $(function () {
+        var $win = $(window);        
+        var $pos = 120;
+        $win.scroll(function () {
+            if ($win.scrollTop() <= $pos)
+                $('.paneldebotones').removeClass('fijar');
+            else {
+                $('.paneldebotones').addClass('fijar');
+            }
+        });
+    });
+                
 </script>

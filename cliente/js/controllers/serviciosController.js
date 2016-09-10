@@ -50,6 +50,8 @@ app.controller('serviciosController',['$scope', 'zonaService', 'ngTableParams', 
     initAutocompleteDestino();
     initAutocompleteParada();
     init();
+    
+    $scope.AceptarCondicion = false;
 
     function Poligono() {
         this.coordenadas = null;
@@ -95,7 +97,9 @@ app.controller('serviciosController',['$scope', 'zonaService', 'ngTableParams', 
             EnviarEmail : config.getEnviarEmail(),
             ParEmail : config.getEmail(),
             Paradas : [],
-            Parada : "NO"
+            Parada : "NO",
+            ValorTotal :0,
+            Nota :""
         };
         
         $scope.Parada = {
@@ -107,7 +111,7 @@ app.controller('serviciosController',['$scope', 'zonaService', 'ngTableParams', 
         }; 
         $scope.ContratoSelect = {};
         $scope.Subtotal = 0;
-        $scope.Total = 0;
+        
     }
 
     function initAutocomplete (){
@@ -317,7 +321,7 @@ app.controller('serviciosController',['$scope', 'zonaService', 'ngTableParams', 
         promise.then(function(d) {
             if(d.data){
                 $scope.Servicio.Valor = d.data.tfValor;
-                $scope.Total = parseInt(d.data.tfValor);
+                $scope.Servicio.ValorTotal = parseInt(d.data.tfValor);
                 $scope.Servicio.Codigo = d.data.tfCodigo;
             }else{
                toaster.pop('info','¡Alerta!',"Estimado Usuario(a), no se encontró el precio con estos " +
@@ -389,7 +393,7 @@ app.controller('serviciosController',['$scope', 'zonaService', 'ngTableParams', 
     
     $scope.CambiarPrecio =  function(){
         $scope.Servicio.Valor = 0;
-        $scope.Total= parseInt ($scope.Servicio.Valor) +  parseInt($scope.Subtotal);
+        $scope.Servicio.ValorTotal= parseInt ($scope.Servicio.Valor) +  parseInt($scope.Subtotal);
     };
 
     $scope.Nuevo = function() {
@@ -434,8 +438,6 @@ app.controller('serviciosController',['$scope', 'zonaService', 'ngTableParams', 
                 $scope.Servicio.NumeroContrato = $scope.ContratoSelect.ctNumeroContrato;
                 $scope.Contrato.FormaPago =  angular.copy(JSON.parse(d.data.ctFormaPago));
                 $scope.Contrato.FechaFin = new Date(d.data.ctFechaFinal).toLocaleDateString('en-GB');
-                $scope.Contrato.FechaInicio =   new Date(d.data.ctFechaInicio).toLocaleDateString('en-GB');
-                $scope.Contrato.Estado = d.data.ctEstado;
                 $scope.Contrato.TipoServicio = d.data.TipoServicio;
                 $scope.Contrato.Plantilla = d.data.Plantilla;
                 if($scope.Contrato.TipoServicio === 0){
@@ -518,8 +520,8 @@ app.controller('serviciosController',['$scope', 'zonaService', 'ngTableParams', 
         });
     };   
     
-    $scope.Guardar = function (){
-                
+    $scope.Validar = function (){
+        $scope.AceptarCondicion = false;
         if(!$scope.Servicio.Tipo.csTipoServicioId){
             toaster.pop('info','¡Alerta!','Seleccione el tipo de servicio');
             return;
@@ -544,6 +546,17 @@ app.controller('serviciosController',['$scope', 'zonaService', 'ngTableParams', 
             toaster.pop('info', '¡Alerta!', "Estimado Usuario(a), por favor seleccione la forma de Pago");
             return;
         }
+        $("#mdConfirmacion").modal('show');
+    };
+    
+    
+    $scope.Guardar = function (){ 
+        
+        if(!$scope.AceptarCondicion){
+            toaster.pop("info", "¡Alerta!", "Estimado Usuario(a), por favor acepte las condiciones de servicio.");
+            return;
+        }
+        $scope.enviando = true;
         
         $scope.Servicio.TipoVehiculoId = $scope.TipoSelect.tvCodigo;
         $scope.Servicio.DescVehiculo = $scope.TipoSelect.tvDescripcion;
@@ -554,9 +567,12 @@ app.controller('serviciosController',['$scope', 'zonaService', 'ngTableParams', 
                         
         var promise = servicioService.post($scope.Servicio);
         promise.then(function(d) {
+            $scope.enviando = false;
+            $("#mdConfirmacion").modal('hide');
             toaster.pop('success','¡Información!', d.data.message);
             $scope.ContratoSelect = {};
             $scope.Nuevo();
+            
         }, function(err) {
                 toaster.pop('error','¡Error!',err.data.request, 0);
                 console.log("Some Error Occured " + JSON.stringify(err));
@@ -595,28 +611,9 @@ app.controller('serviciosController',['$scope', 'zonaService', 'ngTableParams', 
             total += parseInt($scope.Servicio.Paradas[i].prValor);
         }          
         $scope.Subtotal = total;
-        $scope.Total =  parseFloat($scope.Subtotal) + parseFloat($scope.Servicio.Valor);
+        $scope.Servicio.ValorTotal =  parseFloat($scope.Subtotal) + parseFloat($scope.Servicio.Valor);
         return total;
-    };
+    };            
     
-    
-    //DETERMINAR SI UN PUNTO ESTA DENTRO DE UN POLIGONO
-    
-    function loadZona() {
-        var promiseGet = zonaService.getPuntosAll(); //The Method Call from service
-        promiseGet.then(function(pl) {
-            $scope.Zonas = pl.data;               
-        },
-        function(errorPl) {
-            toaster.pop("error","¡Error!", "Eror al cargar zonas");
-            console.log('failure loading Zona', errorPl);
-        });
-    }
-    
-    loadZona();
-    
-    function buscarZonaLocal (lat, lont){
-        
-    };
 
 }]);

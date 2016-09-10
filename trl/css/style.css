@@ -23,6 +23,9 @@ body {
     background-color: #f3565d;
     border: 1px solid #761c19;
 }
+.btn:focus{    
+    outline: none !important;   
+}
 
 .btn:disabled {
     background-color: rgba(0, 0, 0, 0.18) !important;
