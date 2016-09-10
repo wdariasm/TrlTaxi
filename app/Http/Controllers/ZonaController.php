@@ -48,8 +48,8 @@ class ZonaController extends Controller
        //$result= DB::select("SELECT znCodigo,znNombre FROM zona WHERE st_contains(znArea, POINT($latitud, $longitud)) LIMIT 1");               
         
         $lstZona =  array();        
-        $result = DB::select("SELECT z.znCodigo, z.znNombre,  GROUP_CONCAT(ptLatitud ,',', ptLongitud SEPARATOR ';')"
-                . " AS ptArea FROM zona z INNER JOIN puntos p ON z.znCodigo = p.ptZona  WHERE z.znEstado='ACTIVO' and z.znCodigo=24 GROUP BY z.znCodigo");
+        $result = DB::select("SELECT z.znCodigo, z.znNombre,  GROUP_CONCAT(p.ptLatitud ,',', p.ptLongitud ORDER BY p.ptCodigo ASC SEPARATOR ';')"
+                . " AS ptArea FROM zona z INNER JOIN puntos p ON z.znCodigo = p.ptZona  WHERE z.znEstado='ACTIVO'  GROUP BY z.znCodigo");
         for ($index = 0; $index < count($result); $index++) {
             $ptZona = explode(";", $result[$index]->ptArea);            
             $puntos = array();
@@ -60,6 +60,7 @@ class ZonaController extends Controller
             }                                              
             $zona = array(
                 "Zona" => $result[$index]->znCodigo,
+                "Nombre" => $result[$index]->znNombre,
                 "Puntos" => $puntos
             );                    
             array_push($lstZona,$zona);            

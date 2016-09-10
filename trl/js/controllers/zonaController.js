@@ -2,6 +2,7 @@ app.controller('zonaController',['$scope', 'zonaService', 'ngTableParams', 'toas
     $scope.Zonas = [];       
     $scope.Zona = {};
     $scope.funcion = null;
+    var ZonasTodas = [];
     
     $scope.Puntos = [];    
     $scope.editMode = false;
@@ -78,10 +79,8 @@ app.controller('zonaController',['$scope', 'zonaService', 'ngTableParams', 'toas
           
     function iniciarMapaZ  () {        
         var mapOptions = { 
-            zoom: 16,
-            
-            //center: new google.maps.LatLng(config.getLatitud(), config.getLongitud()),
-            center: new google.maps.LatLng(10.4370725, -75.524795),
+            zoom: 16,                        
+            center: new google.maps.LatLng(config.getLatitud(), config.getLongitud()),
             mapTypeId: google.maps.MapTypeId.ROADMAP
         };
 
@@ -269,6 +268,84 @@ app.controller('zonaController',['$scope', 'zonaService', 'ngTableParams', 'toas
             }); 
                 
     };
+    
+    $scope.VerZonas =function (){
+        $("#mdZonas").modal('show');
+        setTimeout(function (){
+            iniciarMapaTodos();
+        }, 200);        
+        loadTodasZonas();
+    };
+    
+    var mapaTodos=null;
+    var polyTodos = null;
+    
+    function iniciarMapaTodos  () {        
+        var mapOptions = { 
+            zoom: 16,                        
+            center: new google.maps.LatLng(config.getLatitud(), config.getLongitud()),
+            mapTypeId: google.maps.MapTypeId.ROADMAP
+        };
+        mapaTodos= new google.maps.Map(document.getElementById("dvMapaTodos"), mapOptions);        
+    };
+    
+    function procesarZonas (){  
+        
+        if(polyTodos !== null){
+            polyTodos.setMap(null);
+        }
+        var limites = new google.maps.LatLngBounds();
+        $.each(ZonasTodas, function(i, zn){
+            var puntos = [];            
+            $.each(zn.Puntos, function(i, item){                     
+                var coordenadas = new google.maps.LatLng( item.latitud, item.longitud);                                    
+                puntos.push(coordenadas); 
+                limites.extend(coordenadas);
+                if (i === 0){
+                    var marker = new google.maps.Marker({
+                        position: coordenadas,
+                        map: mapaTodos,
+                        title: "Marcador " + zn.Nombre
+                    });
+                }
+            }); 
+            var color = getRandomColor();
+            var polyTodos = new google.maps.Polygon({
+                paths: puntos,     
+                strokeColor: color,
+                strokeOpacity: 0.8,
+                strokeWeight: 3,
+                fillColor: color,
+                fillOpacity: 0.5
+            });                               
+            polyTodos.setMap(mapaTodos);                                                        
+        });
+        mapaTodos.fitBounds(limites);
+        mapaTodos.setZoom(13);
+        
+    };
+
+
+    function loadTodasZonas() {
+        var promiseGet = zonaService.getPuntosAll(); //The Method Call from service
+        promiseGet.then(function(pl) {
+            ZonasTodas = pl.data;  
+            procesarZonas();            
+        },
+        function(errorPl) {
+            toaster.pop("error","¡Error!", "Error al cargar zonas");
+            console.log('failure loading Zona', errorPl);
+        });
+    }
+    
+    function getRandomColor() {
+        var letters = '0123456789ABCDEF';
+        var color = '#';
+        for (var i = 0; i < 6; i++ ) {
+            color += letters[Math.floor(Math.random() * 16)];
+        }
+        return color;
+    }
     
     
 //    $scope.eliminar = function(idZona) {

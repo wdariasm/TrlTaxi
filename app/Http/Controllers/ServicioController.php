@@ -21,7 +21,7 @@ class ServicioController extends Controller
     {
         $servicio = DB::select("SELECT s.IdServicio, s.ContratoId, s.ClienteId, s.NumeroContrato, s.Responsable,"
                 . " s.Telefono, s.TipoServicidoId, ts.svDescripcion, s.FechaServicio, s.Hora, s.Valor, s.Estado, "
-                . " s.DescVehiculo, s.TipoVehiculoId FROM servicio s INNER JOIN  tiposervicio ts ON s.TipoServicidoId=ts.svCodigo"
+                . " s.DescVehiculo, s.TipoVehiculoId, s.ValorTotal FROM servicio s INNER JOIN  tiposervicio ts ON s.TipoServicidoId=ts.svCodigo"
                 . " WHERE s.Estado <> 'FINALIZADO' AND s.Estado <> 'CANCELADO' order by s.IdServicio desc");
         return $servicio;            
     }
@@ -34,7 +34,7 @@ class ServicioController extends Controller
         }        
         $servicio = DB::select("SELECT s.IdServicio, s.ContratoId, s.ClienteId, s.NumeroContrato, s.Responsable,"
                 . " s.Telefono, s.TipoServicidoId, ts.svDescripcion, s.FechaServicio, s.Hora, s.Valor, s.Estado, "
-                . " s.DescVehiculo FROM servicio s INNER JOIN  tiposervicio ts ON s.TipoServicidoId=ts.svCodigo "
+                . " s.DescVehiculo, s.ValorTotal FROM servicio s INNER JOIN  tiposervicio ts ON s.TipoServicidoId=ts.svCodigo "
                 . $condicion ." order by s.IdServicio desc");
         return $servicio;     
     }    
@@ -47,7 +47,7 @@ class ServicioController extends Controller
         }        
         $servicio = DB::select("SELECT s.IdServicio, s.ContratoId, s.ClienteId, s.NumeroContrato, s.Responsable,"
                 . " s.Telefono, s.TipoServicidoId, ts.svDescripcion, s.FechaServicio, s.Hora, s.Valor, s.Estado, "
-                . " s.DescVehiculo FROM servicio s INNER JOIN  tiposervicio ts ON s.TipoServicidoId=ts.svCodigo "
+                . " s.DescVehiculo, s.ValorTotal FROM servicio s INNER JOIN  tiposervicio ts ON s.TipoServicidoId=ts.svCodigo "
                 . " WHERE  s.ConductorId = $id ".$condicion . " order by s.IdServicio desc");
         return $servicio;     
     }    

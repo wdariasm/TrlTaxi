@@ -102,12 +102,40 @@
                 </div>
                 
                 <div class="row" style="margin-top: 10px;">
-                    <div class="col-xs-12">
+                    <div class="col-md-8">
                         <a href="javascript:;" ng-click="funcion.init()" class="btn  btn-danger btn-addon" style="margin-left: 10px;"><i class="fa fa-trash"></i>Limpiar Todo</a>
                         <a href="javascript:;" ng-click="eliminarUltimoPunto()"  class="btn btn-warning btn-addon"><i class="fa fa-map-marker"></i>Eliminar último punto</a>                        
+                    </div>
+                    <div class="col-md-4 text-right">
+                        <a href="javascript:;" ng-click="VerZonas()"  class="btn btn-info btn-addon"><i class="fa fa-globe"></i>Ver Todas</a>
                     </div>
                 </div>
             </div>
         </div> 
+        
+        <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" id="mdZonas">
+            <div class="modal-dialog modal-lg" role="document" style="width: 85%">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <div class="modal-title">Listado de Zonas</div>
+                    </div>
+                    
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <label>Nota: El marcador indica en donde comienza cada zona.</label>
+                            </div>
+                            <div class="col-md-12">
+                                <div id="dvMapaTodos" style="width: 100%; height: 470px; margin-top: 10px;" >
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>                    
+                </div>
+            </div>
+        </div>
+        
     </div>        
 </div>

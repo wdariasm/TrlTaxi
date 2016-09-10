@@ -206,6 +206,8 @@ app.controller('serviciosController',['$scope', 'zonaService', 'ngTableParams', 
             center: new google.maps.LatLng($scope.Posicion.Latitud, $scope.Posicion.Longitud),
             mapTypeId: google.maps.MapTypeId.ROADMAP
         };
+        
+        directionsDisplay.set('directions', null);
 
         mapa= new google.maps.Map(document.getElementById("dvMapaServicio"), mapOptions);
         directionsDisplay.setMap(mapa);
@@ -235,7 +237,8 @@ app.controller('serviciosController',['$scope', 'zonaService', 'ngTableParams', 
 //        });
 //        markerDestino = new google.maps.Marker({
 //             map: mapa
-//        });        
+//        });    
+        
                 
     };
 

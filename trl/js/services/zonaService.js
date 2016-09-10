@@ -37,6 +37,11 @@ app.service("zonaService", ['$http', function ($http) {
     this.delete = function (id,zona) {        
         var req = $http.delete(uri+'/api/zona/' + id, zona);
         return req;        
-    };               
+    };    
+    
+    this.getPuntosAll = function () {
+        var req = $http.get(uri+'/api/zona/puntos');
+        return req;
+    };  
 }]);
 
