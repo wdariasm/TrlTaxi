@@ -51,8 +51,14 @@
                                     <td>{{ item.Estado}}</td>
                                     <td>
                                          <center>
-                                            <a ng-click="CambiarEstado(item,'CONFIRMADO', 'SI')" style="float: left; margin-left: 3px;" href="javascript:;"  title="Confirmar"><i class="fa fa-check fa-1x text-success"></i></a>
-                                            <a ng-click=""  style="float: left; margin-left: 7px;" href="javascript:;"  title="Cancelar"><i class="fa fa-times fa-1x text-danger"></i></a>                                             
+                                             
+                                            <div ng-switch="item.Estado">
+                                                <a ng-switch-when="ASIGNADO" ng-click="CambiarEstado(item,'CONFIRMADO', 'SI')" style="float: left; margin-left: 3px;" href="javascript:;"  title="Confirmar"><i class="fa fa-check fa-1x text-success"></i></a>
+                                                <a ng-switch-when="CONFIRMADO"  style="float: left; margin-left: 3px;" href="javascript:;"  title="Realizar Servicio"><i class="fa fa-road fa-1x text-success"></i></a> 
+                                            </div>
+                                             
+                                                
+                                                <a ng-click=""  style="float: left; margin-left: 7px;" href="javascript:;"  title="Cancelar"><i class="fa fa-times fa-1x text-danger"></i></a>                                             
                                          </center>
                                      </td>
                                  </tr>

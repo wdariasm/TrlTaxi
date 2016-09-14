@@ -5,6 +5,8 @@ app.controller("historialController", ["$scope",  "toaster",  "servicioService",
     $scope.Servicios = [];
     $scope.TablaServicio = {};
     $scope.VerDetalle =false;
+    $scope.ServicioDto = {};
+    $scope.Conductor = {};
     
     $scope.$parent.SetTitulo("HISTORIAL DE SERVICIOS");        
     initTabla();                           
@@ -74,6 +76,31 @@ app.controller("historialController", ["$scope",  "toaster",  "servicioService",
                 console.log("Some Error Occured " + JSON.stringify(err));
         }); 
     };
+    
+    $scope.VerConductor = function (item){
+        $('#mdConductor').modal({
+            backdrop: 'static',
+            keyboard: false,
+            show: true
+        });
+        $scope.ServicioDto = item;
+        getConductor(item.ConductorId);        
+    };
+    
+    function getConductor (id){
+        $scope.Conductor = {};
+        var promise = servicioService.getConductor(id);        
+        promise.then(function(d) {  
+            if (d.data){
+                $scope.Conductor = d.data[0];
+            }
+            
+        }, function(err) {           
+                toaster.pop('error','¡Error!',"Error al cargar conductor del servicio",0);           
+                console.log("Some Error Occured " + JSON.stringify(err));
+        }); 
+        
+    }
     
     $scope.GetServicios();
 }]);

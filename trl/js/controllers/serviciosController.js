@@ -406,7 +406,14 @@ app.controller('serviciosController',['$scope', 'zonaService', 'ngTableParams', 
     $scope.VerAsignarServicio = function (item){
         $scope.AsigServicio = item;
         $scope.AsigServicio.Conductor = {};
-        $('#mdAsignar').modal('show');   
+        $('#mdAsignar').modal({
+            backdrop: 'static',
+            keyboard: false,
+            show: true
+        });
+
+        //$('#mdAsignar').modal('show');   
+         
         getConductores(item.TipoVehiculoId);
     };
     
@@ -453,5 +460,4 @@ app.controller('serviciosController',['$scope', 'zonaService', 'ngTableParams', 
     };
                        
 }]);
-
 

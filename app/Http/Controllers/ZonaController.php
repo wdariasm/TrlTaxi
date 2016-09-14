@@ -13,12 +13,13 @@ class ZonaController extends Controller
 {
      public function index()
     {
-        return Zona::select('znCodigo', 'znNombre', 'znEstado')->where('znEstado', '<>','BORRADO')->get();          
+        return Zona::select('znCodigo', 'znNombre', 'znEstado')->where('znEstado', '<>','BORRADO')
+                ->orderBy('znCodigo', 'asc')->get();          
     }
 
     public function getPuntos($zona)
     {
-        return Puntos::where('ptZona',$zona)->get();
+        return Puntos::where('ptZona',$zona)->orderBy('ptCodigo', 'asc')->get();
     }
 
     public function getNumTaxi($zona)

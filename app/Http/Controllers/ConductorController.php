@@ -102,6 +102,12 @@ class ConductorController extends Controller
     {
         return Conductor::find($IdConductor);
     }
+    
+    public function getConVehiculo ($id){
+        return DB::select ("SELECT c.Nombre, c.TelefonoPpal, c.TelefonoTres, c.Email, v.Placa, v.Movil, v.Marca, c.RutaImg 
+                FROM conductor AS c INNER JOIN vehiculo  AS v ON c.VehiculoId =  v.IdVehiculo
+                WHERE c.IdConductor =$id LIMIT 1");
+    }
 
     /**
      * Update the specified resource in storage.

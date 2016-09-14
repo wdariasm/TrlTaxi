@@ -190,15 +190,14 @@ function($scope, usuarioService,toaster,ngTableParams , perfilService, personaSe
         $scope.title = "Editar Usuario";        
         $scope.Usuario = usuario;        
         $scope.PerfilSelect.IdRol = usuario.TipoAcceso;
-        if($scope.Usuario.PersonaId){
+        if($scope.Usuario.PersonaId){            
             getPersona($scope.Usuario.PersonaId, null);
-        }else if($scope.Usuario.ConductorId){
-            getConductor($scope.Usuario.continue, null);
-        }else if($scope.Usuario.ClienteId){
+        }else if($scope.Usuario.ConductorId){            
+            getConductor($scope.Usuario.ConductorId, null);
+        }else if($scope.Usuario.ClienteId){            
             getCliente($scope.Usuario.ClienteId, null);
         }
-                
-        
+                        
         permisosByUsuario(usuario.IdUsuario);
         $('#tabPanels a[href="#tabRegistro"]').tab('show');       
     };        

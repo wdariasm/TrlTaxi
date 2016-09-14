@@ -205,6 +205,14 @@ input{
     font-weight: 700;
 }
 
+.modal-footer{
+    padding: 7px;
+}
+
+.modal-body-fixed {
+    max-height: calc(100vh - 160px);
+    overflow-y: auto;
+}
 
 
 

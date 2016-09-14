@@ -13,5 +13,5 @@ Route::get('api/conductor/{IdConductor}/novedades','ConductorController@GetNoved
 
 Route::get('api/conductor/{IdConductor}/licencias','LicenciaConduccionController@GetLicencia'); 
 
-
-
+/*Ver conductor con vehiculo*/
+Route::get('api/conductor/{id}/vehiculo','ConductorController@getConVehiculo'); 

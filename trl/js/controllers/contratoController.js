@@ -180,10 +180,13 @@ app.controller("contratoController", ["$scope", 'tipoVehiculoService', "toaster"
     };
     
     
-    $scope.TipoPlantillaCheck = function(value,checked) {
-        console.log(checked);
+    $scope.TipoPlantillaCheck = function(value,checked) {        
         console.log($scope.Contrato.Plantillas);
-    };        
+    };       
+    
+    $scope.NuevoContrato = function (){
+        init();
+    };
     
     $scope.Guardar =  function (){           
         $scope.Contrato.ctTipoContrato = $scope.TipoContratoSelect.tpDescripcion;
@@ -193,7 +196,7 @@ app.controller("contratoController", ["$scope", 'tipoVehiculoService', "toaster"
         promise.then(function(d) {            
             toaster.pop('success','¡Información!', d.data.message);
             $scope.Contrato.Validar ="";
-            $scope.Boton.Guardar =true;
+           // $scope.Boton.Guardar =true;
             $scope.Boton.Imprimir = false;
               
         }, function(err) {           

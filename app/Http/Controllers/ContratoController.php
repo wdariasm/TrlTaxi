@@ -69,15 +69,17 @@ class ContratoController extends Controller
             $contrato->save();
             
             $numeroCto = $this->numeroContrato($contrato->IdContrato);
-            if($numeroCto !== "Correcto"){
+            if($numeroCto !== "Correcto"){                
                 return $numeroCto;
             }             
             $disponibilidad = $data["Disponibilidad"];            
             $plantillas = $data["Plantillas"];
-            $tipoServicio = $data["TipoServicio"];
-            
-            $this->llenarServicios($contrato->IdContrato, $tipoServicio, $disponibilidad, $plantillas);                        
-                                               
+            $tipoServicio = $data["TipoServicio"];            
+                        
+            $msj = $this->llenarServicios($contrato->IdContrato, $tipoServicio, $disponibilidad, $plantillas);
+            if($msj !=="Correcto"){
+                return $msj;
+            }            
             return JsonResponse::create(array('message' => "Contrato  guardado correctamente", "request" =>json_encode($contrato->IdContrato)), 200);
         } catch (\Exception $exc) {    
             return JsonResponse::create(array('message' => "No se pudo guardar", "request" =>json_encode($exc->getMessage())), 401);
@@ -88,14 +90,15 @@ class ContratoController extends Controller
     //FUNCIONES PRIVADAS //
     
     private function llenarServicios($idContrato, $tipoServicio, $disponibilidad, $plantillas){
-        try{            
+        try{                        
+            
             foreach ($tipoServicio as $ts) {
                 $insert = new ContratoTipoServicio();
                 $insert->csContratoId =$idContrato;
                 $insert->csTipoServicioId = $ts['svCodigo'];
                 $insert->csDescripcion = $ts['svDescripcion'];
                 $insert->csPlantilla = $ts['svPlantilla'];
-                $insert->csValor = $ts['csValor'];
+                $insert->csValor = $ts['svValorParada'];                
                 $insert->save();
             }
             
@@ -118,7 +121,9 @@ class ContratoController extends Controller
                     $insert->dcEstado = "ACTIVO";
                     $insert->save();
                 }
-            }                      
+            }                                  
+            
+            return "Correcto";
             
         }catch (\Exception $exc) {    
             return JsonResponse::create(array('message' => "No se pudo guardar", "request" =>json_encode($exc->getMessage())), 401);
