@@ -214,6 +214,10 @@ input{
     overflow-y: auto;
 }
 
+ .visible{
+     display: block !important;
+}
+
 
 
 

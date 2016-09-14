@@ -1,25 +1,36 @@
 <div ng-controller="servicioController" class="container-fluid">
     <div class="row">
-        <div class="col-md-12">            
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="input-group">
-                         <div class="input-group-addon"><i class="fa  fa-search text-primary"></i></div>
-                         <input  class="form-control" id="search" type="search" placeholder="Buscar Servicio" ng-model="TablaServicio.filter()['busqueda']">
-                    </div>
-                </div>
-                                                                       
-                <div class="col-md-2" style="margin-top: 5px;">
-                     <label class="text-center text-primary" style="font-size: 18px;">Total: {{Servicios.length}}</label>
-                 </div>
-
-                <div class="col-md-2 col-md-offset-1">
-                    <button type="button" class="btn btn-success btn-addon" ng-click="GetServiciosConductor()" ><i class="fa fa-refresh"></i> Actualizar</button>
-                </div>
+        <div class="col-md-12">  
+            
+            <div class="tabbable-line">
+                <ul class="nav nav-tabs nav-justified" id="tabPanels">                    
+                    <li class="active"><a href="#tabListado" data-toggle="tab">Listado de Servicios </a></li>
+                    <li ><a href="#tabRealizar" class="hidden" id="liServicio" data-toggle="tab">Realizar Servicio</a></li>
+                </ul>
             </div>
             
-            <div class="row">
-                <div class="col-md-12" style="margin-top: 10px;">
+            <div class="tab-content">
+                <div class="tab-pane active" id="tabListado">
+                    <br/>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="input-group">
+                                 <div class="input-group-addon"><i class="fa  fa-search text-primary"></i></div>
+                                 <input  class="form-control" id="search" type="search" placeholder="Buscar Servicio" ng-model="TablaServicio.filter()['busqueda']">
+                            </div>
+                        </div>
+
+                        <div class="col-md-2" style="margin-top: 5px;">
+                             <label class="text-center text-primary" style="font-size: 18px;">Total: {{Servicios.length}}</label>
+                         </div>
+
+                        <div class="col-md-2 col-md-offset-1">
+                            <button type="button" class="btn btn-success btn-addon" ng-click="GetServiciosConductor()" ><i class="fa fa-refresh"></i> Actualizar</button>
+                        </div>
+                    </div>
+                    
+                     <div class="row">
+                    <div class="col-md-12" style="margin-top: 10px;">
                     <table class="table table-striped table-condensed" ng-table="TablaServicio"  style="margin-top: 15px;">
                             <thead>
                                 <tr>
@@ -54,7 +65,7 @@
                                              
                                             <div ng-switch="item.Estado">
                                                 <a ng-switch-when="ASIGNADO" ng-click="CambiarEstado(item,'CONFIRMADO', 'SI')" style="float: left; margin-left: 3px;" href="javascript:;"  title="Confirmar"><i class="fa fa-check fa-1x text-success"></i></a>
-                                                <a ng-switch-when="CONFIRMADO"  style="float: left; margin-left: 3px;" href="javascript:;"  title="Realizar Servicio"><i class="fa fa-road fa-1x text-success"></i></a> 
+                                                <a ng-switch-when="CONFIRMADO" ng-click="RealizarServicio(item)" style="float: left; margin-left: 3px;" href="javascript:;"  title="Realizar Servicio"><i class="fa fa-road fa-1x text-success"></i></a> 
                                             </div>
                                              
                                                 
@@ -63,9 +74,137 @@
                                      </td>
                                  </tr>
                         </tbody>
-                     </table>                   
-                </div>                                        
-            </div>            
+                    </table>                   
+                    </div>                                        
+                    </div>                    
+                </div>
+                
+                <div class="tab-pane" id="tabRealizar">
+                    <br/>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">Datos del Servicio</h3>
+                            </div>
+
+                                <div class="panel-body" style="padding: 10px 0 7px 0">
+                            
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label  for="txtServiceId" >N° Servicio </label>                                                                                        
+                                    <input  type="text" class="form-control" required="" ng-model="ServicioDto.IdServicio" maxlength="11"  id="txtServiceId" placeholder="N° Servicio" disabled >                                            
+                                </div>
+                            </div>
+
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label  for="txtCto" >Contrato </label>                                                                                            
+                                    <input  type="text" class="form-control" required="" ng-model="ServicioDto.NumeroContrato" maxlength="11"  id="txtCto" placeholder="N° Contrato" readonly="" >
+
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label  for="txtCto" >Fecha Servicio </label>                                                                                            
+                                    <input  type="text" class="form-control" required="" ng-model="ServicioDto.FechaServicio" maxlength="11"  id="txtCto"  readonly="" >
+
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label  for="txtCto" >Hora Servicio </label>                                                                                            
+                                    <input  type="text" class="form-control" required="" ng-model="ServicioDto.Hora" maxlength="11"  id="txtCto"  readonly="" >
+
+                                </div>
+                            </div>
+
+                            <div class="col-md-8">
+                                <div class="form-group">
+                                    <label  for="txtRespon" >Responsable Servicio </label>                                                                                        
+                                    <input  type="text" class="form-control" required="" ng-model="ServicioDto.Responsable" maxlength="11"  id="txtRespon" placeholder="Responsable Servcio" disabled >                                          
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label  for="txttel" >Telefono </label>                                                                                        
+                                    <input  type="text" class="form-control" required="" ng-model="ServicioDto.Telefono" maxlength="11"  id="txttel"  disabled >                                          
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label  for="txttel" >Dirección Origen </label>                                                                                        
+                                    <input  type="text" class="form-control" required="" ng-model="ServicioDto.DireccionOrigen" maxlength="11"  id="txttel"  disabled >                                          
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label  for="txttel" >Dirección Destino </label>                                                                                        
+                                    <input  type="text" class="form-control" required="" ng-model="ServicioDto.DireccionDestino" maxlength="11"  id="txttel"  disabled >                                          
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label  for="txttel" >N° Pasajeros </label>                                                                                        
+                                    <input  type="text" class="form-control text-danger" required="" ng-model="ServicioDto.NumPasajeros" maxlength="11"  id="txttel"  disabled >                                          
+                                </div>
+                            </div>
+                            
+                             <div class="col-md-4">
+                                <div class="form-group">
+                                    <label  for="txttel" >Valor servicio </label>                                                                                        
+                                    <input  type="text" class="form-control text-danger" required="" ng-model="ServicioDto.ValorTotal" maxlength="11"  id="txttel"  disabled awnum="" num-sep="," num-int="14" num-fract="0" num-pos="true" num-thousand="true" >                                          
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label  for="txttel" >Forma Pago </label>                                                                                        
+                                    <input  type="text" class="form-control text-danger" required="" ng-model="ServicioDto.FormaPago" maxlength="11"  id="txttel"  disabled >                                          
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="text-center">
+                                        <label style="margin-top: 16%;" class="text-center">Estado actual -></label>
+                                    </div> 
+                                </div>
+                                <div class="col-md-8">
+                                    <h3 class="text-success">{{ServicioDto.Estado}}</h3>
+                                </div>
+                            </div>
+                            <hr>
+                            
+                            <div class="row" style="margin-top: -5px;">
+                                <div class="col-md-4 col-md-offset-4 text-center">
+                                    <div class="text-center">
+                                        <button class="btn btn-success">Iniciar Servicio</button>
+                                    </div>                                    
+                                </div>
+                            </div>
+                                
+                                
+                            </div> 
+                            </div>                            
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <div id="dvMapaServicio" class="hidden" style="width: 100%; height: 440px; margin-top: 10px;">
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                
+            </div>                                                          
         </div> 
     </div> 
     
@@ -93,5 +232,13 @@
        </div>            
     </div>        
 </div>
+
+<script type="text/javascript">
+    $('#tabPanels a').click(function (e) {
+        e.preventDefault();
+        $(this).tab('show');
+        
+    });
+</script>
 
 

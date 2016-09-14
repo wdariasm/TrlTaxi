@@ -17,9 +17,10 @@ app.controller('zonaController',['$scope', 'zonaService', 'ngTableParams', 'toas
     $scope.$parent.SetTitulo("GESTIÓN DE ZONAS");    
     crearFn();    
     loadZona();
-   
+    loadTodasZonas("");
     iniciarMapaZ();
     $scope.funcion.init();
+    //setTimeout(function (){DibujarZonas(0);},2000); 
     
     function Poligono() {
         this.coordenadas = null;
@@ -35,7 +36,7 @@ app.controller('zonaController',['$scope', 'zonaService', 'ngTableParams', 'toas
                     znNombre: "",                    
                     znEstado : "ACTIVO"            
                 };      
-                borrarPuntos();                 
+                borrarPuntos();                         
             }
         };
     }
@@ -146,10 +147,12 @@ app.controller('zonaController',['$scope', 'zonaService', 'ngTableParams', 'toas
         dibujarPoligono();
     };
        
-    $scope.nuevo = function() {
-        $scope.funcion.init();
+    $scope.nuevo = function() {        
         $scope.editMode = false;
         $scope.title = "NUEVA ZONA";
+        iniciarMapaZ();
+        $scope.funcion.init();
+        DibujarZonas(0);
     };
     
     $scope.get = function(item) {         
@@ -157,7 +160,10 @@ app.controller('zonaController',['$scope', 'zonaService', 'ngTableParams', 'toas
         $scope.editMode = true;
         $scope.title = "EDITAR ZONA";         
         $scope.Zona = item;        
-        getPuntos(item.znCodigo);        
+            iniciarMapaZ();
+        getPuntos(item.znCodigo);  
+        DibujarZonas(item.znCodigo);
+        
     };
     
     function getPuntos(codigo){        
@@ -274,7 +280,7 @@ app.controller('zonaController',['$scope', 'zonaService', 'ngTableParams', 'toas
         setTimeout(function (){
             iniciarMapaTodos();
         }, 200);        
-        loadTodasZonas();
+        loadTodasZonas("Todas");
     };
     
     var mapaTodos=null;
@@ -324,13 +330,45 @@ app.controller('zonaController',['$scope', 'zonaService', 'ngTableParams', 'toas
         mapaTodos.setZoom(13);
         
     };
+    
+     function DibujarZonas (opcion){     
+       
+        if(polyTodos !== null){
+            polyTodos.setMap(null);
+        }       
+        $.each(ZonasTodas, function(i, zn){
+            
+            if( parseInt(zn.Zona) != parseInt(opcion)){            
+                var puntos = [];       
+                $.each(zn.Puntos, function(i, item){                     
+                    var coordenadas = new google.maps.LatLng( item.latitud, item.longitud);                                    
+                    puntos.push(coordenadas);                                
+                }); 
+                var color = getRandomColor();
+                var polyTodos = new google.maps.Polygon({
+                    paths: puntos,     
+                    strokeColor: color,
+                    strokeOpacity: 0.8,
+                    strokeWeight: 3,
+                    fillColor: color,
+                    fillOpacity: 0.5
+                });                               
+                polyTodos.setMap($scope.mapZona);  
+            }
+                                                                  
+        });      
+        
+    };
 
 
-    function loadTodasZonas() {
+    function loadTodasZonas(opcion) {
         var promiseGet = zonaService.getPuntosAll(); //The Method Call from service
         promiseGet.then(function(pl) {
-            ZonasTodas = pl.data;  
-            procesarZonas();            
+            ZonasTodas = pl.data;
+            if(opcion ==="Todas"){
+                procesarZonas();
+            }
+            
         },
         function(errorPl) {
             toaster.pop("error","¡Error!", "Error al cargar zonas");
@@ -347,22 +385,7 @@ app.controller('zonaController',['$scope', 'zonaService', 'ngTableParams', 'toas
         return color;
     }
     
-    
-//    $scope.eliminar = function(idZona) {
-//          $('#mdConfirmacion').modal('hide'); 
-//        var r = confirm("¿Está seguro de Ejecutar Eliminar esta Zona");
-//        if (r == true) {            
-//            var promiseDel  = zonaService.delete(idZona);        
-//                promiseDel.then(function (d) {                
-//                toaster.pop('success', '¡Información', d.data.message);                
-//                loadZona();
-//            }, function (err) {                              
-//                toaster.pop('error', "¡Error!", err.data.request);  
-//                console.log("Some Error Occured "+ JSON.stringify(err));
-//            }); 
-//        } 
-//        
-//    };          
+ 
 }]);
 
 

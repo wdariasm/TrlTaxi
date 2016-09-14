@@ -2,7 +2,7 @@ var uri = "../public";
 var app;
 (function(){
     app = angular.module("trlConductor", ['ngRoute','ng-currency','ngTable','toaster', 'ngAnimate', 'checklist-model',
-    'fcsa-number']);
+    'dynamicNumber' ]);
     
     app.config(['$routeProvider', '$locationProvider', function AppConfig($routeProvider, $locationProvider){                        
 

@@ -154,12 +154,12 @@ class ServicioController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $svCodigo
+     * @param  int  $codigo
      * @return \Illuminate\Http\Response
      */
-    public function show($svCodigo)
+    public function show($codigo)
     {
-        //
+        return Servicio::find($codigo);
     }
     
     /**
