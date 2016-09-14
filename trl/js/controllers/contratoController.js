@@ -185,6 +185,8 @@ app.controller("contratoController", ["$scope", 'tipoVehiculoService', "toaster"
     };       
     
     $scope.NuevoContrato = function (){
+        $scope.title = "Nuevo Contrato";
+        $scope.editMode = false;
         init();
     };
     
@@ -196,14 +198,74 @@ app.controller("contratoController", ["$scope", 'tipoVehiculoService', "toaster"
         promise.then(function(d) {            
             toaster.pop('success','¡Información!', d.data.message);
             $scope.Contrato.Validar ="";
-           // $scope.Boton.Guardar =true;
+            $scope.Boton.Guardar =true;
             $scope.Boton.Imprimir = false;
+            init();
               
         }, function(err) {           
             toaster.pop('error', "¡Error!", err.data.request, 0);   
             console.log("Some Error Occured " + JSON.stringify(err));
         });                  
     };
+    
+    $scope.get =  function (item){
+        $scope.title = "Editando Contrato";
+        $scope.editMode = true;
+        init();        
+        $scope.Contrato =  item;        
+        $scope.Contrato.ctFechaInicio = moment($scope.Contrato.ctFechaInicio).format('L');         
+        $scope.Contrato.ctFechaFinal = moment($scope.Contrato.ctFechaFinal).format('L'); 
+        $scope.Contrato.Validar = "0";                        
+        $('#tabPanels a[href="#tabRegistroCto"]').tab('show');
+        var pos  =  funcionService.arrayObjectIndexOf($scope.TipoContrato, $scope.Contrato.ctTipoContrato, "tpDescripcion");
+        if(pos !== -1){
+            $scope.TipoContratoSelect = $scope.TipoContrato[pos];
+        }
+        getContrato($scope.Contrato.ctNumeroContrato);
+        $scope.Contrato.TipoServicio = [];
+        $scope.Contrato.Plantillas = [];
+        $scope.Contrato.Disponibilidad = [];
+    };
+    
+    $scope.Actualizar =  function (){
+         $scope.Contrato.ctTipoContrato = $scope.TipoContratoSelect.tpDescripcion;
+        if(!validar()) return;
+         var promise = contratoService.put($scope.Contrato.IdContrato, $scope.Contrato);                                                            
+        promise.then(function(d) {            
+            toaster.pop('success','¡Información!', d.data.message);
+            $scope.Contrato.Validar ="";
+            $scope.Boton.Guardar =true;
+            //$scope.Boton.Imprimir = false;
+            $scope.NuevoContrato();
+              
+        }, function(err) {           
+            toaster.pop('error', "¡Error!", err.data.request, 0);   
+            console.log("Some Error Occured " + JSON.stringify(err));
+        });   
+        
+    };
+    
+    function getContrato(numero){
+        var promise = contratoService.getPorNumeroCto(numero);
+        promise.then(function(d) {
+            if(d.data){                              
+                $scope.Contrato.ctFormaPago =  angular.copy(JSON.parse(d.data.ctFormaPago));
+//                $scope.Contrato.FechaFin = new Date(d.data.ctFechaFinal).toLocaleDateString('en-GB');
+//                $scope.Contrato.TipoServicio = d.data.TipoServicio;
+//                $scope.Contrato.Plantilla = d.data.Plantilla;
+//                if($scope.Contrato.TipoServicio === 0){
+//                    toaster.pop('error', 'No se encontraón servicios asociados a este contrato', 0);
+//                }      
+
+            }else{
+                toaster.pop('error', "Número de contrato no existe");
+            }
+
+        }, function(err) {
+                toaster.pop('error','¡Error!',err, 0);
+                console.log("Some Error Occured " + JSON.stringify(err));
+        });
+    }
         
         
     $scope.validarIdentificacion = function () {
@@ -225,6 +287,10 @@ app.controller("contratoController", ["$scope", 'tipoVehiculoService', "toaster"
            toaster.pop('error', "Error", "Error al validar Identificación"); 
             console.log("Some Error Occured " + JSON.stringify(err));
         });
+    };
+    
+    $scope.GetAllContratos = function (){
+        loadContratos();
     };
     
 }]);

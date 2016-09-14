@@ -129,6 +129,44 @@ class ContratoController extends Controller
             return JsonResponse::create(array('message' => "No se pudo guardar", "request" =>json_encode($exc->getMessage())), 401);
         }        
     }
+    
+    public function update(Request $request, $id)
+    {
+         try{
+            $data = $request->all();
+            $contrato = Contrato::find($id);
+            $contrato->ctClienteId = $data["ctClienteId"];
+            $contrato->ctNitCliente = $data["ctNitCliente"]; 
+            $contrato->ctContratante = $data["ctContratante"]; 
+            $contrato->ctTelefono = $data["ctTelefono"]; 
+            $date = new \DateTime(str_replace("/", "-", $data["ctFechaInicio"]));            
+            $contrato->ctFechaInicio = $date->format('Y-m-d H:i:s'); 
+            $date2 = new \DateTime(str_replace("/", "-", $data["ctFechaFinal"]));
+            $contrato->ctFechaFinal = $date2->format('Y-m-d H:i:s');                                                 
+            $contrato->ctDuracion = $data["ctDuracion"];             
+            $contrato->ctTipoContrato = $data["ctTipoContrato"];
+            $contrato->ctUsuarReg = $data["ctUsuarReg"];
+            $contrato->ctFormaPago = json_encode($data["ctFormaPago"]); 
+            $contrato->save();
+            
+            ContratoTipoServicio::where('csContratoId',$id)->delete();
+            ContratoDisponibilidad::where('dcContratoId',$id)->delete();            
+            ContratoPlantilla::where('pcContratoId',$id)->delete();
+                        
+            $disponibilidad = $data["Disponibilidad"];            
+            $plantillas = $data["Plantillas"];
+            $tipoServicio = $data["TipoServicio"];            
+                        
+            $msj = $this->llenarServicios($id, $tipoServicio, $disponibilidad, $plantillas);
+            if($msj !=="Correcto"){
+                return $msj;
+            }            
+            
+            return JsonResponse::create(array('message' => "Contrato Actualizado Correctamente", "request" =>json_encode($id)), 200);
+        }catch (\Exception $exc) {    
+            return JsonResponse::create(array('message' => "No se pudo guardar", "request" =>json_encode($exc->getMessage())), 401);
+        }  
+    }
 
 
     private function validarNumeroContrato ($numero){        
