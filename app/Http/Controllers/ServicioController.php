@@ -192,26 +192,29 @@ class ServicioController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $svCodigo
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($svCodigo)
+    public function destroy($id)
     {
-        //
+        try {            
+            $servicio = DB::update("UPDATE servicio SET Estado= 'CANCELADO' WHERE IdServicio=$id ");                        
+            return JsonResponse::create(array('message' => "Servicio cancelado correctamente", "request" =>json_encode($servicio)), 200);
+        } catch (\Exception $exc) {
+            return JsonResponse::create(array('message' => "No se pudo  actualizar servicio", "request" =>json_encode($exc->getMessage())), 401);
+        }
     }
     
     
     
-     //Actualiza el estado (Funcion eliminar)
-      public function updateEstado(Request $request, $svCodigo){
+    //Actualiza el estado del servicio por el conductor
+    public function updateServConductor(Request $request, $id){
         try {
             $data = $request->all();
-            $servicio = Servicio::find($svCodigo);
-            $servicio->svEstado = $data['svEstado'];
-            $servicio->save();
-            return JsonResponse::create(array('message' => "Datos Actualizados Correctamente", "request" =>json_encode($svCodigo)), 200);
-        } catch (Exception $ex) {
-            return JsonResponse::create(array('message' => "No se pudo modificar el Taxista", "exception"=>$ex->getMessage(), "request" =>json_encode($svCodigo)), 401);
+            $servicio = DB::update("UPDATE servicio SET Estado= '".$data['Estado']."' WHERE IdServicio=$id ");                        
+            return JsonResponse::create(array('message' => "Servicio actualizado correctamente", "request" =>json_encode($servicio)), 200);
+        } catch (\Exception $exc) {
+            return JsonResponse::create(array('message' => "No se pudo  actualizar servicio", "request" =>json_encode($exc->getMessage())), 401);
         }
     }
     

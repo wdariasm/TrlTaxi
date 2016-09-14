@@ -31,7 +31,7 @@
                     
                      <div class="row">
                     <div class="col-md-12" style="margin-top: 10px;">
-                    <table class="table table-striped table-condensed" ng-table="TablaServicio"  style="margin-top: 15px;">
+                    <table class="table  table-striped table-condensed table-responsive" ng-table="TablaServicio"  style="margin-top: 15px;">
                             <thead>
                                 <tr>
                                     <th>ID</th>
@@ -65,11 +65,11 @@
                                              
                                             <div ng-switch="item.Estado">
                                                 <a ng-switch-when="ASIGNADO" ng-click="CambiarEstado(item,'CONFIRMADO', 'SI')" style="float: left; margin-left: 3px;" href="javascript:;"  title="Confirmar"><i class="fa fa-check fa-1x text-success"></i></a>
-                                                <a ng-switch-when="CONFIRMADO" ng-click="RealizarServicio(item)" style="float: left; margin-left: 3px;" href="javascript:;"  title="Realizar Servicio"><i class="fa fa-road fa-1x text-success"></i></a> 
+                                                <a ng-switch-default ng-click="RealizarServicio(item)" style="float: left; margin-left: 3px;" href="javascript:;"  title="Realizar Servicio"><i class="fa fa-road fa-1x text-success"></i></a> 
                                             </div>
                                              
                                                 
-                                                <a ng-click=""  style="float: left; margin-left: 7px;" href="javascript:;"  title="Cancelar"><i class="fa fa-times fa-1x text-danger"></i></a>                                             
+                                                <a ng-click="CancelarServicio(item.IdServicio)"  style="float: left; margin-left: 7px;" href="javascript:;"  title="Cancelar"><i class="fa fa-times fa-1x text-danger"></i></a>                                             
                                          </center>
                                      </td>
                                  </tr>
@@ -171,23 +171,31 @@
                             </div>
                             
                             <div class="row">
-                                <div class="col-md-4">
+                                <div class="col-md-4 hidden-xs">
                                     <div class="text-center">
                                         <label style="margin-top: 16%;" class="text-center">Estado actual -></label>
                                     </div> 
                                 </div>
-                                <div class="col-md-8">
-                                    <h3 class="text-success">{{ServicioDto.Estado}}</h3>
+                                <div class="col-md-8 col-md-offset-0 col-xs-8 col-xs-offset-2">
+                                    <h3 class="text-success">{{ValBoton.EstAnterior}}</h3>
                                 </div>
                             </div>
                             <hr>
                             
                             <div class="row" style="margin-top: -5px;">
-                                <div class="col-md-4 col-md-offset-4 text-center">
+                                <div class="col-md-4 col-md-offset-2 col-xs-8 col-xs-offset-2 text-center">
                                     <div class="text-center">
-                                        <button class="btn btn-success">Iniciar Servicio</button>
+                                        <button type="button" class="btn  btn-addon btn-block  {{ValBoton.Color}}" ng-click="ActualizarServicio()"><i class="fa fa-check"></i> {{ValBoton.EstSiguiente}}</button>                                        
+                                    </div>  
+                                    <br>
+                                </div>
+                                
+                                <div class="col-md-4 col-md-offset-0 col-xs-8 col-xs-offset-2 text-center">
+                                    <div class="text-center">
+                                        <button class="btn btn-danger btn-addon btn-block" type="button" ng-click="CancelarServicio(ServicioDto.IdServicio)"><i class="fa fa-ban"></i>  Cancelar</button>
                                     </div>                                    
                                 </div>
+                                
                             </div>
                                 
                                 

@@ -1,6 +1,6 @@
 <?php
     Route::resource("api/servicio","ServicioController");
-    Route::put('api/servicio/updateEstado/{svCodigo}','ServicioController@updateEstado');
+    Route::put('api/servicio/conductor/{id}','ServicioController@updateServConductor');
 
      //Obtener servicios de un cliente //
     Route::get('api/cliente/{id}/servicios/{rol}/{usuario}','ServicioController@getServicioCliente');

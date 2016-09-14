@@ -50,7 +50,7 @@ app.controller("contratoController", ["$scope", 'tipoVehiculoService', "toaster"
     function initTabla() {
         $scope.TablaContrato = new ngTableParams({
             page: 1,
-            count: 20,
+            count: 15,
             sorting: undefined
         }, {
             filterDelay: 50,

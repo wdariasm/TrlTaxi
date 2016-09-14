@@ -15,8 +15,18 @@ app.service("servicioService",[ '$http', function ($http) {
         return req;                
     };
     
+    this.actualizar = function (id,objeto) {        
+        var req = $http.put(uri+'/api/servicio/conductor/' + id, objeto);
+        return req;                
+    };
+    
     this.get = function (id) {        
         var req = $http.get(uri+'/api/servicio/' + id);
+        return req;                
+    };
+    
+    this.delete = function (id) {        
+        var req = $http.delete(uri+'/api/servicio/' + id);
         return req;                
     };
     

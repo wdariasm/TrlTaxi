@@ -6,7 +6,11 @@ app.controller("servicioController", ["$scope",  "toaster",  "servicioService","
     $scope.TablaServicio = {};
     $scope.VerDetalle =false;
     $scope.ServicioDto = {};
-    $scope.ValServicio = {};
+    $scope.ValBoton = { 
+        EstAnterior : "",
+        EstSiguiente: "",
+        Color :""
+    };
     
     $scope.$parent.SetTitulo("MIS SERVICIOS");        
     initTabla();        
@@ -39,7 +43,7 @@ app.controller("servicioController", ["$scope",  "toaster",  "servicioService","
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(function(position) {
                 $scope.Posicion.Latitud =  position.coords.latitude;
-               $scope.Posicion.Longitud = position.coords.longitude;                      
+                $scope.Posicion.Longitud = position.coords.longitude;                      
             });   
             
             var coordenada = new google.maps.LatLng($scope.Posicion.Latitud, $scope.Posicion.Longitud);
@@ -49,8 +53,7 @@ app.controller("servicioController", ["$scope",  "toaster",  "servicioService","
             markerConductor = new google.maps.Marker({position: coordenada, map: mapa ,
                 animation: google.maps.Animation.DROP, title:"Mi posición",
                 icon:'images/posicion.png'
-            });
-            console.log(markerConductor);
+            });            
         }
     }
     
@@ -144,9 +147,7 @@ app.controller("servicioController", ["$scope",  "toaster",  "servicioService","
         var div2 = document.getElementById('dvMapaServicio');                
             div2.classList.remove('hidden');
             div2.classList.add('visible');                                  
-            setTimeout(function (){ iniciarMapaZ();
-                geolocate();
-            },200);                                 
+            setTimeout(function (){ iniciarMapaZ();  geolocate(); },200);
     };                        
    
     function getServicio (id){        
@@ -154,20 +155,93 @@ app.controller("servicioController", ["$scope",  "toaster",  "servicioService","
         promise.then(function(d) {  
             if (d.data){
                 $scope.ServicioDto = d.data;
-                
+                estadoServicio($scope.ServicioDto.Estado);
                 if( parseInt($scope.ServicioDto.TipoServicidoId) === 1){
                     var origen  = new google.maps.LatLng(parseFloat($scope.ServicioDto.LatOrigen), parseFloat($scope.ServicioDto.LngOrigen));
                     var destino = new google.maps.LatLng(parseFloat($scope.ServicioDto.LatDestino),parseFloat($scope.ServicioDto.LngDestino));
                     route(origen, destino,travelMode, directionsService, directionsDisplay);
-                } 
-                
+                }                                 
             }
             
         }, function(err) {           
                 toaster.pop('error','¡Error!',"Error al cargar servicio",0);           
                 console.log("Some Error Occured " + JSON.stringify(err));
         });         
-    }        
+    } 
+    
+    function estadoServicio (estado){
+        switch (estado) {
+            case "CONFIRMADO":
+                $scope.ValBoton.EstSiguiente = "EN SITIO";
+                $scope.ValBoton.EstAnterior ="CONFIRMADO";
+                $scope.ValBoton.Color = " btn-success";
+                break;
+            case "EN SITIO":
+                $scope.ValBoton.EstSiguiente = "EN RUTA";
+                $scope.ValBoton.EstAnterior ="EN SITIO";
+                $scope.ValBoton.Color = " btn-primary";
+                break;
+            case "EN RUTA":
+                $scope.ValBoton.EstSiguiente = "FINALIZADO";
+                $scope.ValBoton.EstAnterior ="EN RUTA";
+                $scope.ValBoton.Color = " btn-info";
+                break;            
+        }
+    }
+    
+    function cerrarServicio(){
+        $scope.ServicioDto = {};
+        $scope.ValBoton = {};                
+        var div1 = document.getElementById('liServicio');                
+                div1.classList.remove('visible');
+                div1.classList.add('hidden');                                                  
+        $('#tabPanels a[href="#tabListado"]').tab('show');
+    }
+    
+    $scope.ActualizarServicio=  function (){
+        if(!$scope.ServicioDto || !$scope.ServicioDto.IdServicio){
+            toaster.pop("error", "¡Error!", "Estimado Usuario(a), por favor seleccione un servicio valido.");
+            return;
+        }
+        
+        if($scope.ValBoton.EstSiguiente ===""){
+            toaster.pop("info", "¡Alerta!", "Estado del servicio no valido");
+            return;
+        }
+        var obj = {
+            Estado : $scope.ValBoton.EstSiguiente                       
+        };
+        
+        var promise = servicioService.actualizar($scope.ServicioDto.IdServicio, obj);
+        promise.then(function(d) {                        
+            toaster.pop('success','¡Información!', d.data.message);            
+            if($scope.ValBoton.EstSiguiente ==="FINALIZADO") {
+                cerrarServicio();
+            }
+            estadoServicio($scope.ValBoton.EstSiguiente);
+            $scope.GetServiciosConductor();
+        }, function(err) {           
+                toaster.pop('error','¡Error confirmar servicio!',err.data.request, 0);           
+                console.log("Some Error Occured " + JSON.stringify(err));
+        }); 
+        
+    };
+    
+    $scope.CancelarServicio=  function (id){
+        
+        var promise = servicioService.delete(id);
+        promise.then(function(d) {                        
+            toaster.pop('success','¡Información!', d.data.message);                    
+            if($scope.ServicioDto){
+                cerrarServicio();
+            }                            
+            $scope.GetServiciosConductor();
+        }, function(err) {           
+                toaster.pop('error','¡Error confirmar servicio!',err.data.request, 0);           
+                console.log("Some Error Occured " + JSON.stringify(err));
+        }); 
+        
+    };
     
 }]);
 

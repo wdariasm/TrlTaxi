@@ -58,8 +58,7 @@
                                 <td>
                                     <center>
                                         <a ng-click="get(item)" style="float: left; margin-left: 3px;" href="javascript:;"  title="Editar"><i class="fa fa-pencil fa-1x text-success"></i></a>
-                                        <a ng-click="VerDesactivar(item.IdVehiculo, 'INACTIVO')"  style="float: left; margin-left: 7px;" href="javascript:;"  title="Eliminar"><i class="fa fa-power-off fa-1x text-warning"></i></a>
-                                        <a  ng-click="VerNovedad(item)" style="float: left; margin-left: 7px;" href="javascript:;"  title="Novedades"><i class="fa fa-book text-danger fa-1x"></i></a>
+                                        <a ng-click="VerDesactivar(item.IdVehiculo, 'INACTIVO')"  style="float: left; margin-left: 7px;" href="javascript:;"  title="Cancelar Contrato"><i class="fa fa-power-off fa-1x text-warning"></i></a>
                                     </center>
                                 </td>
                             </tr>
@@ -156,7 +155,7 @@
                                     <div class="form-group">
                                         <label for="txtDuracion">Duración *</label>
                                         <div class="input-group">    
-                                            <div class="input-group-addon"><i class="fa fa-user text-success"></i></div>
+                                            <div class="input-group-addon"><i class="fa fa-dashboard text-success"></i></div>
                                             <input type="text"  class="form-control" required="" ng-model="Contrato.ctDuracion" maxlength="100" id="txtDuracion" placeholder="Duración contrato">
                                         </div>
                                     </div>
@@ -175,6 +174,8 @@
                                 </div>
                                 </div>
                                 
+                                <div class="row">
+                                <div class="col-md-9">
                                 <div class="panel panel-default">
                                     <div class="panel-heading">Servicios y Tarifas</div>
                                     <div class="panel-body">
@@ -202,22 +203,7 @@
                                                              <label for="pl{{item.plCodigo}}">{{$index + 1}}. &nbsp; {{item.plDescripcion}}</label> 
                                                         </div>
                                                     </div> 
-                                                </div>
-                                                
-                                               <!-- <table border="0" cellspacing="0" class="table table-striped" >                                                    
-                                                    <tbody>
-                                                        <tr ng-repeat="items in Plantillas">
-                                                            <td class="center">{{ items.plCodigo}}</td>
-                                                            <td>{{ items.plDescripcion }}</td>                                                            
-                                                            <td>
-                                                                <div class="checkbox checkbox-primary" style="margin-top: 0px; margin-bottom: 0px;">                                        
-                                                                    <input type="checkbox" id="pll{{items.plCodigo}}" checklist-model="Contrato.Plantillas"  ng-change="TipoPlantillaCheck(items)" checklist-value="items">
-                                                                    <label for=""></label> 
-                                                                </div>
-                                                            </td>                                                            
-                                                        </tr>
-                                                    </tbody>
-                                                </table>-->
+                                                </div>                                                                                             
                                             </div>
                                         </div>
                                         
@@ -235,14 +221,16 @@
                                         </div>    
                                     </div>
                                 </div>
+                                </div>    
                                 
+                                <div class="col-md-3">                                        
                                 <div class="panel panel-default">
                                     <div class="panel-heading">Forma de Pago</div>
                                     <div class="panel-body">
                                         <div class="row">                        
                                             <div class="col-md-12">
                                                 <div ng-repeat="fp in FormaPago">
-                                                    <div class="col-md-3">     
+                                                    <div class="col-md-6">     
                                                         <div class="checkbox checkbox-primary">                                        
                                                              <input type="checkbox" id="fp{{$index}}" checklist-model="Contrato.ctFormaPago"  checklist-value="fp">
                                                              <label for="fp{{$index}}">{{fp}}</label> 
@@ -252,7 +240,9 @@
                                             </div>
                                         </div>
                                     </div>
-                                </div>                                                                                                    
+                                </div>
+                                </div>    
+                                </div>    
                             </form>
                         </div>                            
                     </div>                    
@@ -269,7 +259,7 @@
         
     });
     
-    //$('#tabPanels a[href="#tabRegistroCto"]').tab('show');
+    $('#tabPanels a[href="#tabRegistroCto"]').tab('show');
     
      $(function() {
         $('input[name="txtFechaInicio"]').daterangepicker({
