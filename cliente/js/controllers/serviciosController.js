@@ -443,9 +443,14 @@ app.controller('serviciosController',['$scope', 'zonaService', 'ngTableParams', 
                 $scope.Contrato.FechaFin = new Date(d.data.ctFechaFinal).toLocaleDateString('en-GB');
                 $scope.Contrato.TipoServicio = d.data.TipoServicio;
                 $scope.Contrato.Plantilla = d.data.Plantilla;
+                $scope.Servicio.Responsable = $scope.Contrato.Nombre;
                 if($scope.Contrato.TipoServicio === 0){
                     toaster.pop('error', 'No se encontraón servicios asociados a este contrato', 0);
                 }      
+                
+                if( parseInt($scope.$parent.Login.TipoAcceso) === 5){
+                    $scope.Servicio.Responsable = $scope.$parent.Login.Nombre;
+                }
 
             }else{
                 toaster.pop('error', "Número de contrato no existe");

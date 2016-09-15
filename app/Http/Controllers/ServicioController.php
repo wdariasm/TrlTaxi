@@ -9,6 +9,7 @@ use App\Parada;
 use Illuminate\Http\JsonResponse;
 use DB;
 use App\Cliente;
+use App\Conductor;
 
 class ServicioController extends Controller
 {
@@ -134,7 +135,7 @@ class ServicioController extends Controller
             $insert->prLongitud = $p['prLongitud'];
             $insert->prValor = $p['prValor'];
             $insert->prFecha = $p['prFecha'];            
-            $insert->prEstado = 'ACTIVO';
+            $insert->prEstado = 'ACTIVA';
             $insert->save();
         }
     }
@@ -143,7 +144,8 @@ class ServicioController extends Controller
         try{  
             $data = $request->all();             
             $result = Servicio::where('IdServicio', $data["IdServicio"] )          
-                ->update(['ConductorId' => $data ['ConductorId'], 'Estado' => 'ASIGNADO' ]);                        
+                ->update(['ConductorId' => $data ['ConductorId'], 'Estado' => 'ASIGNADO' ]);             
+            $this->EnviarEmailAsignar($data["IdServicio"], $data["Responsable"], $data["Email"], $data["Nombre"]);
         
             return JsonResponse::create(array('message' => "Servicio asignado correctamente", "request" =>json_encode($result)), 200);
         } catch (\Exception $exc) {    
@@ -252,7 +254,7 @@ class ServicioController extends Controller
         mail($email, $título, $mensaje, $cabeceras);
     }
     
-    private function EnviarEmailAsignar($idServicio,  $responsable, $email){
+    private function EnviarEmailAsignar($idServicio,  $responsable, $email, $conductor){
         // título
         $título = 'Asignación de servicio [TRL]';
         // mensaje
@@ -266,7 +268,7 @@ class ServicioController extends Controller
          <img style='height:60px; width:200px;' src='http://".$_SERVER['HTTP_HOST']."/trl/images/logo.png' alt=''/>
           <h1> ¡Asignacón de servicio!</h1>
           
-          <p>Estimado conductor, se le  ha asignado un servicio, por favor confirma la aceptación del servicio.</p>
+          <p>Estimado $conductor se le  ha asignado un servicio, por favor confirmar la aceptación del servicio.</p>
 
           <p> Datos del servicio:</p>          
           <br/>    
@@ -281,8 +283,8 @@ class ServicioController extends Controller
        
         $cabeceras  = 'MIME-Version: 1.0' . "\r\n";
         $cabeceras .= 'Content-type: text/html; charset=UTF-8' . "\r\n";       
-        $cabeceras .= 'To: '.$responsable.' <'.$email.'>' . "\r\n";
-        $cabeceras .= 'From: Transporte Ruta Libre <info@trl.co>' . "\r\n";        
+        $cabeceras .= 'To: '.$conductor.' <'.$email.'>' . "\r\n";
+        $cabeceras .= 'From: Transporte Ruta Libre <info@trl.com.co>' . "\r\n";        
                
         mail($email, $título, $mensaje, $cabeceras);
     }
