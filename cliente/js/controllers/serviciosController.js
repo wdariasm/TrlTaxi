@@ -7,7 +7,9 @@ app.controller('serviciosController',['$scope', 'zonaService', 'ngTableParams', 
     $scope.Contratos = [];
     $scope.ContratoSelect = {};
     $scope.Boton = {"Cargando":true};
-    $scope.$parent.SetTitulo("SOLICITAR SERVICIOS");
+    $scope.$parent.SetTitulo("SOLICITAR SERVICIOS");    
+    
+    $scope.Asignacion = {  Manual : false,  Marcador : "Origen"    };
 
     $scope.Servicio  = {};
     $scope.TipoSelect = {}; // Select de tipo de Vehiculo;
@@ -16,7 +18,7 @@ app.controller('serviciosController',['$scope', 'zonaService', 'ngTableParams', 
     $scope.editMode = false;
 
     $scope.mapServicio;
-    $scope.markerOrigen = null;
+    var markerOrigen = null;
     var markerDestino = null;
     var infowindow = new google.maps.InfoWindow();
     var options = {  componentRestrictions: {country: 'co'} };
@@ -212,34 +214,46 @@ app.controller('serviciosController',['$scope', 'zonaService', 'ngTableParams', 
         mapa= new google.maps.Map(document.getElementById("dvMapaServicio"), mapOptions);
         directionsDisplay.setMap(mapa);
 
-//        google.maps.event.addListener($scope.mapServicio, "click", function(evento) {
-//            var latitud = evento.latLng.lat();
-//            var longitud = evento.latLng.lng();
-//            var coordenadas = new google.maps.LatLng(latitud, longitud);
-//            var marcador = new google.maps.Marker(
-//             {
-//                 position: coordenadas,
-//                map: $scope.mapServicio,
-//                 animation: google.maps.Animation.DROP,
-//                 title:"Marcador"
-//             }
-//            );
-//
-//            var po = new Poligono();
-//                po.coordenadas = coordenadas;
-//                po.marcador = marcador;
-//            $scope.vecPoligono.push(po);
-//            dibujarPoligono();
-//        });
-
-//        $scope.markerOrigen = new google.maps.Marker({
-//             map: $scope.mapServicio
-//        });
-//        markerDestino = new google.maps.Marker({
-//             map: mapa
-//        });    
-        
-                
+        google.maps.event.addListener(mapa, "click", function(evento) {
+            var latitud = evento.latLng.lat();
+            var longitud = evento.latLng.lng();                
+            if($scope.Asignacion.Manual){
+                var coordenadas = new google.maps.LatLng(latitud, longitud); 
+                switch ($scope.Asignacion.Marcador) {
+                    case "Origen":     
+                        if(markerOrigen !== null){
+                            markerOrigen.setMap(null);
+                        }
+                        markerOrigen = new google.maps.Marker({
+                            position: coordenadas, map: mapa ,
+                            animation: google.maps.Animation.DROP, title:"Posición de Origen",
+                            icon:'images/origen.png'
+                        });                        
+                        $scope.Servicio.LatOrigen = latitud;
+                        $scope.Servicio.LngOrigen = longitud;
+                        buscarZona($scope.Servicio.LatOrigen, $scope.Servicio.LngOrigen,"ZonaOrigen");
+                        break;                        
+                    case "Destino":     
+                        if(markerDestino !== null){
+                            markerDestino.setMap(null);
+                        }
+                        markerDestino = new google.maps.Marker({
+                            position: coordenadas, map: mapa ,
+                            animation: google.maps.Animation.DROP, title:"Posición de Destino",
+                            icon:'images/destino.png'
+                        });                        
+                        $scope.Servicio.LatDestino = latitud;
+                        $scope.Servicio.LngDestino = longitud;
+                        buscarZona($scope.Servicio.LatDestino, $scope.Servicio.LngDestino, 'ZonaDestino');
+                        break; 
+                    default:
+                        toaster.pop("info", "¡Información!","Por favor seleccione la posicion a establecer Origen o Destino.");
+                        break;
+                }
+                var geocoder = new google.maps.Geocoder();
+                geocoder.geocode({ 'latLng': coordenadas }, getGeocoder);     
+            }    
+        });                      
     };
 
     function route(origin_place_id, destination_place_id, travel_mode, directionsService, directionsDisplay) {
@@ -554,6 +568,37 @@ app.controller('serviciosController',['$scope', 'zonaService', 'ngTableParams', 
             toaster.pop('info', '¡Alerta!', "Estimado Usuario(a), por favor seleccione la forma de Pago");
             return;
         }
+        
+        var tipo=  parseInt($scope.Servicio.Tipo.csTipoServicioId);
+        switch (tipo) {
+            case 1:
+                if(!$scope.Servicio.LatDestino || $scope.Servicio.LngDestino ===""){
+                    toaster.pop('info', '¡Alerta!', "Estimado Usuario(a), por favor seleccione la posicion de Destino.");
+                    return;
+                }
+                
+                if(!$scope.Servicio.DireccionDestino || $scope.Servicio.DireccionDestino===""){
+                    toaster.pop('info', '¡Alerta!', "Estimado Usuario(a), por favor ingrese la dirección  de Destino.");
+                    return;
+                }
+                
+                if(!$scope.Servicio.LatOrigen || $scope.Servicio.LngOrigen ===""){
+                    toaster.pop('info', '¡Alerta!', "Estimado Usuario(a), por favor seleccione la posicion de Origen.");
+                    return;
+                }
+                
+                if(!$scope.Servicio.DireccionOrigen || $scope.Servicio.DireccionOrigen===""){
+                    toaster.pop('info', '¡Alerta!', "Estimado Usuario(a), por favor ingrese la dirección  de Origen.");
+                    return;
+                }
+
+                break;
+
+            default:
+
+                break;
+        }
+                
         $("#mdConfirmacion").modal('show');
     };
     
@@ -622,6 +667,91 @@ app.controller('serviciosController',['$scope', 'zonaService', 'ngTableParams', 
         $scope.Servicio.ValorTotal =  parseFloat($scope.Subtotal) + parseFloat($scope.Servicio.Valor);
         return total;
     };            
+    
+    $scope.UbicacionAutomatica= function (){
+        if(navigator.geolocation){
+            navigator.geolocation.getCurrentPosition(
+                function(posicion){
+                    $scope.Servicio.LatOrigen = posicion.coords.latitude;
+                    $scope.Servicio.LngOrigen = posicion.coords.longitude;
+                    posicionCliente();
+                },
+                function(PosicionError){                    
+                    switch (PosicionError.code)
+			{
+                            case PosicionError.PERMISSION_DENIED:
+                                toaster.pop("error", "¡Permiso denegado!", "Estimado Usuario(a) para el correcto funcionamiento de la aplicación, " +
+                                            " se requiere el permiso para acceder a su ubicación.",5000);
+                                break;
+                            case PosicionError.POSITION_UNAVAILABLE:
+                                toaster.pop("error","No se ha podido acceder a la información de su posición.");
+				break;
+                            case PosicionError.TIMEOUT:
+                                toaster.pop("error","El servicio ha tardado demasiado tiempo en responder.");
+				break;
+                            default:
+                                toaster.pop("error","Error desconocido.");
+                        }
+                },{
+			maximumAge: 75000,
+			timeout: 15000
+		}
+
+                );
+        } else {
+            toaster.pop("error","Su navegador no soporta la API de geolocalización.", 4000, 'rounded');
+        }
+        
+    };
+    
+    function posicionCliente(){
+        
+        $scope.Asignacion.Marcador="Origen";   
+        
+        if (!$scope.Servicio.LatOrigen  || !$scope.Servicio.LngOrigen){
+            return;
+        }
+        var limits = new google.maps.LatLngBounds();
+        var coordenada = new google.maps.LatLng($scope.Servicio.LatOrigen, $scope.Servicio.LngOrigen);
+        if(markerOrigen !== null){
+            markerOrigen.setMap(null);
+        }
+        markerOrigen = new google.maps.Marker({
+            position: coordenada, map: mapa ,
+            animation: google.maps.Animation.DROP, title:"Posición de Origen",
+            icon:'images/origen.png'
+        });
+        
+        limits.extend(coordenada);
+        mapa.fitBounds(limits);
+        mapa.setZoom(16);
+        
+        var geocoder = new google.maps.Geocoder();
+        geocoder.geocode({ 'latLng': coordenada }, getGeocoder);              
+
+    }
+    
+    function getGeocoder(results, status){       
+        var direccion ="";
+        if (status == google.maps.GeocoderStatus.OK) {
+            if (results[0]) {             
+                console.log(results);
+                 direccion = results[0].formatted_address.split(" a ",1); 
+                 console.log(direccion);
+            } else {
+                console.log('Google no retorno resultado alguno.');
+            }
+        } else {
+           console.log("Geocoding fallo debido a : " + status);
+        }
+                        
+        if($scope.Asignacion.Marcador == "Destino"){
+            $scope.Servicio.DireccionDestino = direccion[0];           
+        }else{
+            $scope.Servicio.DireccionOrigen = direccion[0];
+        }
+        $scope.$apply();
+    }
     
 
 }]);

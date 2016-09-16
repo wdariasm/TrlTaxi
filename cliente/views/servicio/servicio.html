@@ -34,6 +34,15 @@
                     <small class="texto">Consultar</small>
                 </div>
             </div>
+            
+            <div class="row" style="margin-bottom: 5px;" ng-show="Contrato.TipoServicio.length">
+                <div class="col-xs-12 text-center">
+                    <button type="button" ng-click="UbicacionAutomatica()" class="btn btn-floating btn-large cancelar" ng-disabled="!Asignacion.Manual" data-toggle="tooltip" data-placement="top" title="Establecer mi posición de origen"><i class="fa fa-map-marker"></i></button>
+                    <small class="texto">Mi posición</small>
+                </div>
+                
+            </div>
+            
 
             <div class="row" style="margin-bottom: 5px;">
                 <div class="col-xs-12 text-center">
@@ -160,7 +169,7 @@
                                             <label  for="cboNumPasajeros">N° Pasajeros *</label>     
                                             <div class="input-group">  
                                                  <div class="input-group-addon"><i class="fa fa-users"></i></div>                                
-                                                 <select  class="form-control" ng-model="Servicio.NumPasajeros" id="cboNumPasajeros" placeholder="Número de pasajeros">                                                     
+                                                 <select  class="form-control" ng-model="Servicio.NumPasajeros" id="cboNumPasajeros" placeholder="Número de pasajeros" required>                                                     
                                                      <option ng-repeat="n in [] | rango:50" value="{{n}}">{{n}}</option>
                                                  </select>
                                                <!-- <input class="form-control" ng-model="Servicio.NumPasajeros" solo-numeros id="txtNumPasajeros" type="text" required maxlength="3"  placeholder="N° Pasajeros">-->
@@ -212,8 +221,35 @@
                                 </div>
                                 
                                 <div class="col-md-7">
+                                    <!-- "-->
                                     <div ng-show="Servicio.Tipo.csTipoServicioId ==1">
-                                    <div class="row">                                    
+                                     
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="checkbox checkbox-primary">
+                                                <input type="checkbox" id="chkAsignacion" ng-model="Asignacion.Manual" ng-true-value="true" ng-false-value="false">
+                                                <label for="chkAsignacion">Asignación Manual</label> 
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="col-md-4" ng-show="Asignacion.Manual" data-toggle="tooltip" data-placement="top" title="Establecer mi posición de origen en el mapa.">
+                                            <div class="radio radio-success">
+                                                <input type="radio" id="rdAsignacion1" ng-model="Asignacion.Marcador" value="Origen" >
+                                                <label for="rdAsignacion1">Posición Origen</label> 
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="col-md-4" ng-show="Asignacion.Manual" data-toggle="tooltip" data-placement="top" title="Establecer mi posición de destino en el mapa.">
+                                            <div class="radio radio-danger">
+                                                <input type="radio" id="rdAsignacion2" ng-model="Asignacion.Marcador" value="Destino" >
+                                                <label for="rdAsignacion2">Posición Destino</label> 
+                                            </div>
+                                        </div>
+                                        
+                                    </div>
+                                         
+                                        
+                                    <div class="row" ng-show="!Asignacion.Manual">                                    
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label  for="txtOrigen">Dirección de origen *</label>     
@@ -234,6 +270,29 @@
                                             </div>                                
                                         </div>
                                     </div>
+                                    
+                                    <div class="row" ng-show="Asignacion.Manual">                                    
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label  for="txtOrigenManual">Dirección de origen *</label>     
+                                                <div class="input-group">  
+                                                     <div class="input-group-addon"><i class="fa fa-street-view"></i></div>                                
+                                                    <input class="form-control" ng-model="Servicio.DireccionOrigen"  id="txtOrigenManual" type="text"  maxlength="255"  placeholder="Ingresa tu Dirección de origen">                                              
+                                                </div>    
+                                            </div>                                
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label  for="txtDestinoManual">Dirección de destino *</label>     
+                                                <div class="input-group">  
+                                                     <div class="input-group-addon"><i class="fa fa-globe"></i></div>                                
+                                                    <input class="form-control" ng-model="Servicio.DireccionDestino"  id="txtDestinoManual" type="text"  maxlength="255"  placeholder="Ingresa tu Dirección de destino">
+                                                </div>    
+                                            </div>                                
+                                        </div>
+                                    </div>
+                                        
                                         
                                     <div class="row">
                                         <div class="col-md-12">

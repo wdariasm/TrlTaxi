@@ -31,11 +31,11 @@
         }
 
     .cancelar {
-        background-color: #FF5722;
+        background-color: #607d8b;
     }
 
         .cancelar:hover {
-            background-color: #FF7043;
+            background-color: #90a4ae;
         }
 
     .pdf {
