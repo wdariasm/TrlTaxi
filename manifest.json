@@ -1,0 +1,12 @@
+{  
+  "name": "Notificacioón TRL",  
+  "short_name": "TRL",  
+  "icons": [{  
+        "src": "images/destino.png",  
+        "sizes": "32x32",
+        "type": "image/png"
+      }],  
+  "start_url": "/index.html",  
+  "display": "standalone",  
+  "gcm_sender_id": "1008711149181"
+}

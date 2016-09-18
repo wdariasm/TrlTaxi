@@ -8,7 +8,7 @@ var gulp = require('gulp'),
 * Configuración de la tarea 'demo'
 */
 gulp.task('controllers', function () {
-    gulp.src(["trl/js/services/*.js", "trl/js/controllers/*.js",  "trl/js/session.js" , "trl/js/libs/funciones.js"])
+    gulp.src(["trl/js/session.js", "trl/js/services/*.js", "trl/js/controllers/*.js", "trl/js/libs/funciones.js"])
         .pipe(concat('vendors.js'))
         .pipe(uglify().on('error', gutil.log))
         .pipe(gulp.dest('trl/dist/'));        
