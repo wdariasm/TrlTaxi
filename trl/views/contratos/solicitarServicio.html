@@ -12,7 +12,7 @@
                     <li><a href="#tabRegistro" data-toggle="tab">Nuevo Servicio</a></li>                    
                 </ul>
             </div>
-            
+                        
             <div class="tab-content">
                 <div class="tab-pane" id="tabRegistro">
                     <br/>
@@ -193,13 +193,20 @@
                             </div>
 
                         </div>
-                                               
+                        
+                        <div class="col-md-2">                            
+                            <div class="input-group">
+                                <div class="input-group-addon"><i class="fa fa-calendar-check-o"></i></div>
+                                <input type="text" id="txtFechaMto" ng-model="FechaBusqueda" name="txtFechaMto" class="form-control" value="" ng-change="CambiarFormato()" title="Fecha de Servicio" readonly="" >                                                                                            
+                            </div>                                                        
+                        </div>
+                        
                         
                         <div class="col-md-2" style="margin-top: 5px;">
                              <label class="text-center text-primary" style="font-size: 18px;">Total: {{Servicios.length}}</label>
-                         </div>
+                        </div>
                         
-                        <div class="col-md-2 col-md-offset-1">
+                        <div class="col-md-2">
                             <button type="button" class="btn btn-success btn-addon" ng-click="GetServicios()" ><i class="fa fa-refresh"></i> Actualizar</button>
                         </div>
                         <br/>
@@ -242,6 +249,9 @@
                                          </center>
                                      </td>
                                  </tr>
+                                 <tr ng-hide="Servicios.length">
+                                     <td colspan="11" align="center"><h4 class="text-danger"> No se encontraron servicios solicitados para la fecha seleccionada.</h4></td>
+                                 </tr> 
                             </tbody>
                         </table>
                         </div>
@@ -373,5 +383,16 @@
     
     $(function () {
         $('[data-toggle="tooltip"]').tooltip();
+        
+        $('input[name="txtFechaMto"]').daterangepicker({
+            singleDatePicker: true,
+            showDropdowns: true           
+        }, 
+        function(start, end, label) {
+            $('#txtFechaMto').val(end.format('DD/MM/YYYY'));         
+        });
     });
+        
+        
+    
 </script>

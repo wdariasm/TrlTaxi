@@ -20,6 +20,11 @@ app.service("servicioService",[ '$http', function ($http) {
         return req;
     };
     
+    this.getPorFecha = function (fecha) {
+        var req = $http.post(uri+'/api/servicio/fecha', fecha);
+        return req;
+    };  
+    
 }]);
 
 

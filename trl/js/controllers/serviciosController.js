@@ -8,6 +8,8 @@ app.controller('serviciosController',['$scope', 'zonaService', 'ngTableParams', 
     $scope.AsigServicio =  {};
     $scope.Conductores = [];
     
+    $scope.FechaBusqueda =  moment().format('L');
+    
     $scope.Puntos = [];    
     $scope.editMode = false;
     $scope.Servicios = [];
@@ -391,7 +393,16 @@ app.controller('serviciosController',['$scope', 'zonaService', 'ngTableParams', 
     };
     
     $scope.GetServicios = function (){
-         var promise = servicioService.getAll();
+        if(!$scope.FechaBusqueda){
+            toaster.pop("info","¡Alerta!","Seleccione una fecha valida.");
+            return;
+        }        
+        var obj = {
+            fecha : $scope.FechaBusqueda
+        };
+        //var fecha = moment($scope.FechaBusqueda).format('YYYY MM DD');
+        
+        var promise = servicioService.getPorFecha(obj);
         promise.then(function(d) {                        
             $scope.Servicios = d.data;
             $scope.TablaServicio.reload();             
@@ -459,6 +470,10 @@ app.controller('serviciosController',['$scope', 'zonaService', 'ngTableParams', 
                 console.log("Some Error Occured " + JSON.stringify(err));
         }); 
         
+    };
+    
+     $scope.CambiarFormato=function (){
+        $scope.FechaBusqueda= moment($scope.FechaBusqueda).format('L');
     };
                        
 }]);

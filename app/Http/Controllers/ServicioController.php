@@ -12,12 +12,7 @@ use App\Cliente;
 use App\Conductor;
 
 class ServicioController extends Controller
-{
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+{  
     public function index()
     {
         $servicio = DB::select("SELECT s.IdServicio, s.ContratoId, s.ClienteId, s.NumeroContrato, s.Responsable,"
@@ -63,7 +58,21 @@ class ServicioController extends Controller
         return $result;
     }
     
+    public function getPorFecha(Request $request){
+        $date = new \DateTime(str_replace("/", "-", $request->get('fecha')." 00:00:00"));
+        $fecha = $date->format('Y-m-d');
+        $sql = "SELECT s.IdServicio, s.ContratoId, s.ClienteId, s.NumeroContrato, s.Responsable,"
+                . " s.Telefono, s.TipoServicidoId, ts.svDescripcion, s.FechaServicio, s.Hora, s.Valor, s.Estado, "
+                . " s.DescVehiculo, s.TipoVehiculoId, s.ValorTotal, s.ConductorId FROM servicio s INNER JOIN  tiposervicio "
+                . " ts ON s.TipoServicidoId=ts.svCodigo WHERE s.Estado <> 'FINALIZADO' AND s.Estado <> 'CANCELADO' "
+                . " and s.FechaServicio='$fecha' order by s.IdServicio desc";
+        
+        $servicio = DB::select($sql);
+        return $servicio;        
+    }
+
     
+
 
     /**
      * Store a newly created resource in storage.
@@ -325,5 +334,37 @@ class ServicioController extends Controller
         $cabeceras .= 'From: Transporte Ruta Libre <info@trl.co>' . "\r\n";        
                
         mail($email, $título, $mensaje, $cabeceras);
+    }
+    
+    public function probando($key, $mensaje, $url){
+        $this->notificacion(array($key), $mensaje, $url);
+    }
+    
+    private function notificacion($array, $message, $url){
+
+        $apiKey = 'AIzaSyAsI2XXAs9KXwBOWKD5epORXE4KHDXKBWA'; //Clave de la api
+            // Cabecera
+        $headers = array('Content-Type:application/json',
+                "Authorization:key=$apiKey");
+
+        $fields = array(
+            'registration_ids'  => $array,
+            'data'              => array( "message" => $message,
+                                           "url" => $url),
+        );
+						
+	$ch = curl_init();
+	curl_setopt($ch, CURLOPT_URL, "https://android.googleapis.com/gcm/send" );
+	curl_setopt($ch, CURLOPT_POST, true);
+	curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+	curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+	curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($fields));
+
+	$result = curl_exec($ch);
+	if ($result === FALSE) {
+		die('Problem occurred: ' . curl_error($ch));
+	}
+	curl_close($ch);
     }
 }

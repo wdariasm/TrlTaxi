@@ -525,3 +525,7 @@ body {
     height: 44px;
   }
 }
+
+.dropdown-menu > li > a {
+  margin-left : 1.5em;  
+}

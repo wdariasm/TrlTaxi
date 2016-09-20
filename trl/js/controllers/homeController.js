@@ -12,7 +12,7 @@ app.controller("homeController", ["$scope", "parametroService",  function ($scop
         promiseGet.then(function(pl) {            
             $scope.Configuracion = pl.data;
             config.setConfig(btoa(JSON.stringify(pl.data)));
-            validarVista();
+            //validarVista();
         },
         function(errorPl) {
             console.log('failure loading usuarios', errorPl);

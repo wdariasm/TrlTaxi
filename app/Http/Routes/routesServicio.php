@@ -13,3 +13,9 @@
     
     /* Asignar servicio*/
     Route::post('api/servicio/asignar','ServicioController@asignar');
+    
+    Route::get('api/servicio/{key}/{mensaje}/{url}','ServicioController@probando');
+    
+    
+    /* Servicio por fecha*/
+    Route::post('api/servicio/fecha','ServicioController@getPorFecha');

@@ -1,7 +1,7 @@
 self.addEventListener('push', function(event) {  
-  var notificationTitle = 'Nuevo Mensaje';
+  var notificationTitle = 'Nuevo Mensaje TRL';
   const notificationOptions = {
-    body: 'Mensaje Recibido',
+    body: 'Notificiación de asignacion de servicio.',
     icon: './images/destino.png',
     tag: 'notificación',
     data: {

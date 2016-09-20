@@ -1,0 +1,85 @@
+<!--    Motivos de cancelacion de servicios -->
+<div ng-controller="motivoController"  class="container-fluid">
+    <div class="row">
+        <div class="col-md-4">            
+            <form name="frmEncuesta" id="frmEncuesta" novalidate>
+                <h5 class="text-primary">{{title}}</h5>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="txtEncuesta">Descripción *</label>
+                               <div class="input-group">    
+                                 <div class="input-group-addon"><i class="fa fa-book text-success"></i></div>
+                                 <input type="text" required="" class="form-control" ng-model="Encuesta.ecDescripcion" maxlength="25" id="txtEncuesta" placeholder="Encuesta">
+                       
+                               </div>
+                        </div>
+                    </div>
+                    
+                   
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="txtEstado">Estado *</label>
+                             <div class="input-group">    
+                                 <div class="input-group-addon"><i class="fa fa-list-ul text-success"></i></div>
+                            <select type="text" class="form-control" ng-model="Encuesta.ecEstado" id="txtEstado" placeholder="Estado">
+                                <option value="ACTIVO">ACTIVO</option>
+                                <option value="BORRADO">BORRADO</option>
+
+                            </select>
+                       
+                             </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <br/>
+                        <div class="col-md-5 col-md-offset-1">                                                                    
+                            <button   class="btn btn-success btn-block btn-addon"   type="button"  title="Nuevo / Cancelar" ng-click="nuevo()"><i class="fa fa-pencil"></i> Nuevo</button>
+                        </div>
+                        <div class="col-md-5">                                 
+                            <button  ng-disabled="frmEncuesta.$invalid"  class="btn btn-primary btn-block btn-addon"   type="button"  title="Registrar Tipo Vehiculo" ng-click="Guardar()"><i class="fa fa-check"></i>Guardar</button>
+                         </div>
+                    </div>
+                    
+                    
+                </div>                                
+            </form>
+        </div>
+        
+        <div class="col-md-8">
+            <div class="row">
+                <div class="col-md-12">
+                    <table border="0" cellspacing="0" class="table table-striped" >
+                        <thead>
+                            <tr>
+                                <th class="center">ID</th>                                
+                                <th>DESCRIPCIÓN</th>
+                                <th>MODULO</th>
+                                <th title="Dejar Servicio en cola.">SERVICIO</th>
+                                <th>ESTADO</th>
+                                <th width="5%">ACCIÓN</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <tr data-ng-repeat="items in Motivos">
+                                <td class="center">{{ items.IdMotivo}}</td>
+                                <td>{{ items.mtDescripcion }}</td>
+                                <td>{{ items.mtModulo }}</td>}
+                                <td>{{ items.mtDejarServicio }}</td>}
+                                <td>{{ items.mtEstado }}</td>}
+                               
+                                <td>
+                                    <center>
+                                            <a data-ng-click="get(items)" style="float: left; margin-left: 15px;" href="javascript:;"  title="Editar"><i class="fa fa-lg fa-pencil"></i></a>                                          
+                                    </center>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>                     
+                </div>                            
+            </div>
+        </div>
+    </div>
+</div>

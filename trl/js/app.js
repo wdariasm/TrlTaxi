@@ -86,6 +86,11 @@ var app;
             .when("/0/encuesta",{
                 templateUrl: 'views/configuracion/encuesta.html'
             })
+            
+            .when("/0/cancelacion",{
+                templateUrl: 'views/configuracion/motivo.html'
+            })
+            
                        
             .when("/1/servicios",{
                 templateUrl: 'views/contratos/solicitarServicio.html'
