@@ -216,7 +216,32 @@ class ServicioController extends Controller
         }
     }
     
-    
+    public function cancelarServico(Request $request, $id){
+        try{
+            $data = $request->all();
+            $scConductorId = $data['Conductor'];
+            $estado = $data["estado"];
+            $motivo = $data ["motivo"];
+            $idCliente = $data ["Cliente"];
+            if($data['scConductorId'] === null || $data['scConductorId'] ===""){
+                $scConductorId = "NULL";
+            }
+            $update = DB::update("UPDATE servicio SET  Estado='$estado', ConductorId=NULL WHERE IdServicio= $id");                     
+            if ($update){                  
+                
+                DB::insert("INSERT INTO serviciocancelado (scCancelacionId, scServicioId, scConductorId, scClienteId) "
+                        . " VALUES ($motivo,$id,".$scConductorId.", ".$idCliente.") ");
+                
+                if ($scConductorId !== "NULL"){                   
+                    DB::update("UPDATE conductor SET Disposicion='LIBRE' WHERE IdConductor=".$scConductorId."");                            
+                }
+                               
+            }	                        	    
+            return JsonResponse::create(array('bandera' => "Correcto", 'message' => "Servicio cancelado correctamente",), 200);
+        } catch (\Exception $exc) {
+             return JsonResponse::create(array('bandera' => "Error", "request" =>json_encode($exc->getMessage())), 401);         
+        }
+    }        
     
     //Actualiza el estado del servicio por el conductor
     public function updateServConductor(Request $request, $id){

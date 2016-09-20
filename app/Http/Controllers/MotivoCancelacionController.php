@@ -12,6 +12,10 @@ class MotivoCancelacionController extends Controller
         return MotivoCancelacion::all();
     }
     
+    public function show ($modulo){
+        return MotivoCancelacion::where('mtModulo',$modulo)->where('mtEstado','ACTIVO')->get();
+    }
+    
     public function store(Request $request)
     {
          try{  
@@ -40,7 +44,7 @@ class MotivoCancelacionController extends Controller
     {
        try{
             $data = $request->all();
-            $motivo = Encuesta::find($id);
+            $motivo = MotivoCancelacion::find($id);
             $motivo->mtDescripcion = $data["mtDescripcion"];
             $motivo->mtModulo = $data["mtModulo"];
             $motivo->mtDejarServicio = $data["mtDejarServicio"];

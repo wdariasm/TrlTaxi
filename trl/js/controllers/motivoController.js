@@ -3,7 +3,7 @@ function ($scope, motivoService,toaster) {
     $scope.Motivo= {};
     $scope.Motivos = [];    
     $scope.editMode = false;
-    $scope.title = "Nueva Motivo"; 
+    $scope.title = "Nuevo Motivo"; 
    
     $scope.$parent.SetTitulo("MOTIVOS DE CANCELACION DE SERIVICIOS");
        
@@ -45,7 +45,7 @@ function ($scope, motivoService,toaster) {
             toaster.pop('success', "Control de Información", d.data.message); 
             initMotivo();
         }, function(err) {           
-                toaster.pop('error', "¡Error!", "Error al guardar encuesta");         
+                toaster.pop('error', "¡Error al guardar!",  err.request,0);         
                 console.log("Some Error Occured " + JSON.stringify(err));
         }); 
        
@@ -54,7 +54,7 @@ function ($scope, motivoService,toaster) {
    $scope.nuevo = function (){
        initMotivo();
        $scope.editMode =false;
-        $scope.title = "Nueva Motivo"; 
+        $scope.title = "Nuevo Motivo"; 
    };
    
     //edita Motivo
