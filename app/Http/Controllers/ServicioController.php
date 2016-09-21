@@ -208,9 +208,9 @@ class ServicioController extends Controller
      */
     public function destroy($id)
     {
-        try {            
-            $servicio = DB::update("UPDATE servicio SET Estado= 'CANCELADO' WHERE IdServicio=$id ");                        
-            return JsonResponse::create(array('message' => "Servicio cancelado correctamente", "request" =>json_encode($servicio)), 200);
+        try {
+            $servicio = DB::update("UPDATE servicio SET Estado= 'RECHAZADO', ConductorId=NULL WHERE IdServicio=$id ");
+            return JsonResponse::create(array('message' => "Servicio rechazado", "request" =>json_encode($servicio)), 200);
         } catch (\Exception $exc) {
             return JsonResponse::create(array('message' => "No se pudo  actualizar servicio", "request" =>json_encode($exc->getMessage())), 401);
         }
@@ -220,10 +220,10 @@ class ServicioController extends Controller
         try{
             $data = $request->all();
             $scConductorId = $data['Conductor'];
-            $estado = $data["estado"];
-            $motivo = $data ["motivo"];
+            $estado = $data["Estado"];
+            $motivo = $data ["Motivo"];
             $idCliente = $data ["Cliente"];
-            if($data['scConductorId'] === null || $data['scConductorId'] ===""){
+            if($scConductorId === null || $scConductorId ===""){
                 $scConductorId = "NULL";
             }
             $update = DB::update("UPDATE servicio SET  Estado='$estado', ConductorId=NULL WHERE IdServicio= $id");                     

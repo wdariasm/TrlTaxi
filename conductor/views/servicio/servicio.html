@@ -68,8 +68,10 @@
                                                 <a ng-switch-default ng-click="RealizarServicio(item)" style="float: left; margin-left: 3px;" href="javascript:;"  title="Realizar Servicio"><i class="fa fa-road fa-1x text-success"></i></a> 
                                             </div>
                                              
-                                                
-                                                <a ng-click="CancelarServicio(item.IdServicio)"  style="float: left; margin-left: 7px;" href="javascript:;"  title="Cancelar"><i class="fa fa-times fa-1x text-danger"></i></a>                                             
+                                            <div ng-switch="item.Estado">
+                                                <a  ng-switch-when="ASIGNADO" ng-click="RechazarServicio(item.IdServicio)"  style="float: left; margin-left: 7px;" href="javascript:;"  title="Cancelar"><i class="fa fa-times fa-1x text-danger"></i></a>
+                                                <a  ng-switch-default ng-click="VerCancelar(item)"  style="float: left; margin-left: 7px;" href="javascript:;"  title="Cancelar"><i class="fa fa-times fa-1x text-danger"></i></a>                                                
+                                            </div>                                                                                                                                                                                          
                                          </center>
                                      </td>
                                  </tr>
@@ -192,7 +194,7 @@
                                 
                                 <div class="col-md-4 col-md-offset-0 col-xs-8 col-xs-offset-2 text-center">
                                     <div class="text-center">
-                                        <button class="btn btn-danger btn-addon btn-block" type="button" ng-click="CancelarServicio(ServicioDto.IdServicio)"><i class="fa fa-ban"></i>  Cancelar</button>
+                                        <button class="btn btn-danger btn-addon btn-block" type="button" ng-click="VerCancelar(ServicioDto)"><i class="fa fa-ban"></i>  Cancelar</button>
                                     </div>                                    
                                 </div>
                                 
@@ -216,36 +218,42 @@
         </div> 
     </div> 
     
-    <div id="modalMotivo" class="modal modal-fixed-footer">            
+    <div id="modalMotivo" class="modal fade bs-example-modal" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" style="margin-top: 10%;">
+        <div class="modal-dialog modal-sm" style="width: 40%" >
         <div class="modal-content">
-            <h2>Seleccione Motivo de Cancelación</h2>
-            <div class="row">
-                <form name="frmCancelar" class="col s12" novalidate>                        
-                    <div class="row">                            
-                        <div class="col m9">
-                            <div class="row">
-                                <div data-ng-repeat="items in Motivos">                                    
-                                    <input name="rbMotivo"  type="radio"  id="rbMv{{items.idCancelar}}" value="{{items.idCancelar}}" ng-model="Servicio.motivo"/>
-                                    <label for="rbMv{{items.idCancelar}}" class="black-text" style="font-size: 16px;">{{items.motivo}} </label> <br/>
-                                </div>                               
+            <div class="modal-header">
+                <div class="modal-title">Seleccione Motivo de Cancelación</div>
+            </div>            
+            
+            <div class="modal-body">                                                       
+                <div class="row">                            
+                    <div class="col-md-9 col-md-offset-1">
+                        <div class="row">
+                            <div ng-repeat="mt in Motivos">
+                                <div class="col-md-12 radio radio-danger">
+                                    <input name="rbMotivos" type="radio" ng-model="MotivoSel" id="rMv{{mt.IdMotivo}}"  ng-change="Ver(mt.IdMotivo)" ng-value="mt" >
+                                    <label for="rMv{{mt.IdMotivo}}" style="font-size: 16px;">{{mt.mtDescripcion}} </label>
+                                </div>
                             </div>                               
-                        </div>
-                    </div>              
-                </form>
-            </div>
-        </div>            
-        <div class="modal-footer">                             
-            <button class="btn waves-effect waves-light green" type="button" ng-click="cancelar()" >Continuar</button>
-            <a href="javascript:;" class="modal-action modal-close waves-effect waves-light btn red" style="margin-right: 10px;">Salir</a> 
-       </div>            
+                        </div>                               
+                    </div>
+                </div>                                         
+            </div>    
+            
+            <div class="modal-footer">                             
+                <button type="button" class="btn btn-danger btn-addon" data-dismiss="modal"><i class="fa fa-ban"></i> Cerrar</button>
+                <button type="button" class="btn btn-primary btn-addon" ng-click="CancelarServicio()" ><i class="fa fa-check"></i> Aceptar</button>
+            </div> 
+            
+        </div>                    
+        </div>     
     </div>        
 </div>
 
 <script type="text/javascript">
     $('#tabPanels a').click(function (e) {
         e.preventDefault();
-        $(this).tab('show');
-        
+        $(this).tab('show');        
     });
 </script>
 

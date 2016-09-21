@@ -23,7 +23,12 @@ app.service("servicioService",[ '$http', function ($http) {
     this.getPorFecha = function (fecha) {
         var req = $http.post(uri+'/api/servicio/fecha', fecha);
         return req;
-    };  
+    };          
+    
+    this.cancelar = function (id,objeto) {        
+        var req = $http.put(uri+'/api/servicio/' + id + '/cancelar', objeto);
+        return req;                
+    };
     
 }]);
 

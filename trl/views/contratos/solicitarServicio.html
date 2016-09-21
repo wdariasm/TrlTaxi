@@ -243,10 +243,10 @@
                                     <td>{{ item.Hora}}</td>                                     
                                     <td>{{ item.Estado}}</td>
                                     <td>
-                                         <center>
-                                             <a ng-click="VerAsignarServicio(item)" style="float: left; margin-left: 3px;" href="javascript:;"  title="Asignar Servicio"><i class="fa fa-check fa-1x text-success"></i></a>
-                                             <a ng-click=""  style="float: left; margin-left: 7px;" href="javascript:;"  title="Cancelar"><i class="fa fa-power-off fa-1x text-warning"></i></a>                                            
-                                         </center>
+                                        <center>
+                                            <a ng-click="VerAsignarServicio(item)" style="float: left; margin-left: 3px;" href="javascript:;"  title="Asignar Servicio"><i class="fa fa-check fa-1x text-success"></i></a>
+                                            <a ng-click="CancelarServicio(item)"  style="float: left; margin-left: 7px;" href="javascript:;"  title="Cancelar"><i class="fa fa-power-off fa-1x text-warning"></i></a>                                            
+                                        </center>
                                      </td>
                                  </tr>
                                  <tr ng-hide="Servicios.length">

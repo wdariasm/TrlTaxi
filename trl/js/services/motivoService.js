@@ -1,6 +1,6 @@
 app.service("motivoService",[ '$http', function ($http) {
-    this.get = function (id) {
-        var req = $http.get(uri+'/api/motivo/' + id);
+    this.get = function (modulo) {
+        var req = $http.get(uri+'/api/motivo/' + modulo);
         return req;
     };
        

@@ -475,6 +475,24 @@ app.controller('serviciosController',['$scope', 'zonaService', 'ngTableParams', 
      $scope.CambiarFormato=function (){
         $scope.FechaBusqueda= moment($scope.FechaBusqueda).format('L');
     };
+    
+    $scope.CancelarServicio = function (item){
+        var obj = {
+            Conductor  : item.ConductorId,
+            Estado : "CANCELADO",
+            Motivo : 1,
+            Cliente : item.ClienteId
+        };
+        
+        var promise = servicioService.cancelar(item.IdServicio, obj);
+        promise.then(function(d) {         
+            toaster.pop('success', '¡Información', d.data.message);
+            $scope.GetServicios();              
+        }, function(err) {           
+                toaster.pop('error','¡Error!',err.data.request);           
+                console.log("Some Error Occured " + JSON.stringify(err));
+        }); 
+    };
                        
 }]);
 
