@@ -38,7 +38,7 @@
                             </thead>
 
                             <tbody>
-                                 <tr ng-repeat="item in $data" ng-class="{'info': item.Estado == 'ASIGNADO', 'warning':  item.Estado == 'SOLICITADO' , 'success':  item.Estado != 'SOLICITADO' || item.Estado != 'ASIGNADO'  }">
+                                 <tr ng-repeat="item in $data" ng-class="{'info': item.Estado == 'ASIGNADO', 'warning':  item.Estado == 'SOLICITADO' || item.Estado == 'CANCELADO' , 'success':  item.Estado != 'SOLICITADO' || item.Estado != 'ASIGNADO'  }">
                                      <td>{{ item.IdServicio}}</td>
                                      <td>{{ item.NumeroContrato }}</td>
                                      <td>{{ item.Responsable}}</td>
@@ -48,13 +48,15 @@
                                      <td >{{ item.ValorTotal | currency : "$" : 0}}</td>  
                                      <td>{{ item.FechaServicio}}</td>
                                     <td>{{ item.Hora}}</td>                                     
-                                    <td>{{ item.Estado}}</td>
+                                    <td>{{  (item.Estado == 'RECHAZADO' ? 'SOLICITADO' : item.Estado)  }}</td>
                                     <td>
                                          <center>                                                                                        
-                                            <div ng-if="item.Estado != 'ASIGNADO' && item.Estado !== 'SOLICITADO'">
+                                            <div ng-if="item.Estado != 'ASIGNADO' && item.Estado !== 'SOLICITADO' && item.Estado !== 'CANCELADO' && item.Estado !== 'FINALIZADO'" >
                                                 <a ng-click="VerConductor(item)" style="float: left; margin-left: 3px;" href="javascript:;"  title="Ver Conductor Asignado"><i class="fa fa-user fa-1x text-success"></i></a>
-                                            </div>                                                                                          
-                                            <a ng-click=""  style=" margin-left: 7px;" href="javascript:;"  title="Cancelar"><i class="fa fa-times fa-1x text-danger"></i></a>
+                                            </div> 
+                                            <div  ng-if="item.Estado != 'FINALIZADO' && item.Estado !== 'CANCELADO'">
+                                                <a  ng-click="VerCancelar(item)"  style="float: left; margin-left: 7px;" href="javascript:;"  title="Cancelar"><i class="fa fa-times fa-1x text-danger"></i></a>
+                                            </div>
                                          </center>
                                      </td>
                                  </tr>
@@ -64,32 +66,7 @@
             </div>            
         </div> 
     </div> 
-    
-    <div id="modalMotivo" class="modal modal-fixed-footer">            
-        <div class="modal-content">
-            <h2>Seleccione Motivo de Cancelación</h2>
-            <div class="row">
-                <form name="frmCancelar" class="col s12" novalidate>                        
-                    <div class="row">                            
-                        <div class="col m9">
-                            <div class="row">
-                                <div data-ng-repeat="items in Motivos">                                    
-                                    <input name="rbMotivo"  type="radio"  id="rbMv{{items.idCancelar}}" value="{{items.idCancelar}}" ng-model="Servicio.motivo"/>
-                                    <label for="rbMv{{items.idCancelar}}" class="black-text" style="font-size: 16px;">{{items.motivo}} </label> <br/>
-                                </div>                               
-                            </div>                               
-                        </div>
-                    </div>              
-                </form>
-            </div>
-        </div>            
-        <div class="modal-footer">                             
-            <button class="btn waves-effect waves-light green" type="button" ng-click="cancelar()" >Continuar</button>
-            <a href="javascript:;" class="modal-action modal-close waves-effect waves-light btn red" style="margin-right: 10px;">Salir</a> 
-       </div>            
-    </div>  
-    
-    
+           
     <div class="modal fade bs-example-modal-sm" id="mdConductor" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" style="margin-top: 1%;">
         <div class="modal-dialog modal-lg"  >                                   
             <div class="modal-content">
@@ -197,7 +174,38 @@
                 </div>
             </div>
         </div>
-    </div>    
+    </div> 
+    
+    <div id="modalMotivo" class="modal fade bs-example-modal" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" style="margin-top: 10%;">
+        <div class="modal-dialog modal-sm" style="width: 40%" >
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">Seleccione Motivo de Cancelación</div>
+            </div>            
+            
+            <div class="modal-body">                                                       
+                <div class="row">                            
+                    <div class="col-md-9 col-md-offset-1">
+                        <div class="row">
+                            <div ng-repeat="mt in Motivos">                                 
+                                <div class="col-md-12 radio radio-danger">
+                                    <input name="rbMotivos" type="radio" ng-model="MotivoSel" id="rMv{{mt.IdMotivo}}"  ng-change="Ver(mt.IdMotivo)" ng-value="{{mt.IdMotivo}}" >
+                                    <label for="rMv{{mt.IdMotivo}}" style="font-size: 16px;">{{mt.mtDescripcion}} </label>
+                                </div>
+                            </div>                               
+                        </div>                               
+                    </div>
+                </div>                                         
+            </div>    
+            
+            <div class="modal-footer">                             
+                <button type="button" class="btn btn-danger btn-addon" data-dismiss="modal"><i class="fa fa-ban"></i> Cerrar</button>
+                <button type="button" class="btn btn-primary btn-addon" ng-click="CancelarServicio()" ><i class="fa fa-check"></i> Aceptar</button>
+            </div> 
+            
+        </div>                    
+        </div>     
+    </div> 
         
     
 </div>

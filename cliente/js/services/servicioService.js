@@ -15,6 +15,16 @@ app.service("servicioService",[ '$http', function ($http) {
         return req;
     }; 
     
+    this.cancelar = function (id,objeto) {        
+        var req = $http.put(uri+'/api/servicio/' + id + '/cancelar', objeto);
+        return req;                
+    };
+    
+    this.getMotivos = function (modulo) {
+        var req = $http.get(uri+'/api/motivo/' + modulo);
+        return req;
+    };
+    
 }]);
 
 

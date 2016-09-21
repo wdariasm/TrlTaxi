@@ -7,6 +7,9 @@ app.controller("historialController", ["$scope",  "toaster",  "servicioService",
     $scope.VerDetalle =false;
     $scope.ServicioDto = {};
     $scope.Conductor = {};
+    $scope.MotivoSel=null; 
+    $scope.Motivos= [];
+    $scope.Valor = {};
     
     $scope.$parent.SetTitulo("HISTORIAL DE SERVICIOS");        
     initTabla();                           
@@ -101,6 +104,69 @@ app.controller("historialController", ["$scope",  "toaster",  "servicioService",
         }); 
         
     }
+    
+    function getMotivosC(){        
+        var promise = servicioService.getMotivos("CLIENTE");        
+        promise.then(function(d) {             
+            $scope.Motivos = d.data;            
+        }, function(err) {           
+                toaster.pop('error','¡Error!',"Error al cargar motivos de cancelación",0);           
+                console.log("Some Error Occured " + JSON.stringify(err));
+        });     
+    }     
+       
+    $scope.VerCancelar =  function (item){
+        $scope.MotivoSel=null;    
+        $scope.ServicioCancel = item;        
+        getMotivosC();        
+        $("#modalMotivo").modal("show");
+    };
+    
+    $scope.CancelarServicio =  function(){
+        if(!$scope.ServicioCancel || !$scope.ServicioCancel.IdServicio){
+            toaster.pop("error", "¡Error!", "Estimado Usuario(a), por favor seleccione un servicio valido.");
+            return;
+        }
+        
+        if(!$scope.MotivoSel){
+            toaster.pop("info", "¡Alerta!", "Estimado Usuario(a), por favor seleccione el motivo de cancelacion del servicio.");
+            return;
+        }
+        
+        var obj = {
+            Conductor  : $scope.ServicioCancel.ConductorId,
+            Estado : "CANCELADO",
+            Motivo : $scope.MotivoSel,
+            Cliente : $scope.ServicioCancel.ClienteId
+        };
+        
+        var promise = servicioService.cancelar($scope.ServicioCancel.IdServicio, obj);
+        promise.then(function(d) {         
+            toaster.pop('success', '¡Información', d.data.message);
+           
+            $scope.GetServicios();
+            $('#modalMotivo').modal('hide');   
+        }, function(err) {           
+                toaster.pop('error','¡Error!',err.data.request);           
+                console.log("Some Error Occured " + JSON.stringify(err));
+        }); 
+    };
+    
+    
+    function getMotivos(){        
+        var promise = servicioService.getMotivos("CONDUCTOR");        
+        promise.then(function(d) {             
+            $scope.Motivos = d.data;    
+            
+        }, function(err) {           
+                toaster.pop('error','¡Error!',"Error al cargar motivos de cancelación",0);           
+                console.log("Some Error Occured " + JSON.stringify(err));
+        });     
+    }     
+    
+    $scope.Ver = function (item){
+        $scope.MotivoSel = item;        
+    };
     
     $scope.GetServicios();
 }]);

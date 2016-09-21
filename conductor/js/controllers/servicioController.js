@@ -235,7 +235,7 @@ app.controller("servicioController", ["$scope",  "toaster",  "servicioService","
         promise.then(function(d) {                        
             toaster.pop('success','¡Información!', d.data.message);            
         }, function(err) {           
-            toaster.pop('error','¡Error confirmar servicio!',err.data.request, 0);           
+            toaster.pop('error','¡Error cancelar servicio!',err.data.request, 0);           
             console.log("Some Error Occured " + JSON.stringify(err));
         });         
     };
