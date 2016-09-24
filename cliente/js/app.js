@@ -2,10 +2,14 @@ var uri = "../public";
 var app;
 (function(){
     app = angular.module("trlCliente", ['ngRoute','ng-currency','ngTable','toaster', 'ngAnimate', 'checklist-model',
-    'fcsa-number']);
+    'fcsa-number', 'satellizer']);
     
-    app.config(['$routeProvider', '$locationProvider', function AppConfig($routeProvider, $locationProvider){                        
-
+    app.config(['$routeProvider', '$locationProvider', '$authProvider','$httpProvider', function AppConfig($routeProvider, $locationProvider, $authProvider, $httpProvider){                        
+            
+        $authProvider.tokenName = "token";
+        $authProvider.tokenPrefix = "trl";
+        $authProvider.storageType = 'sessionStorage';    
+            
         $routeProvider                                                
                                  
             .when("/1/servicio",{
@@ -43,11 +47,28 @@ var app;
             .otherwise({
                 redirectTo:"/iniciando"               
             });
+            
+            $httpProvider.interceptors.push('authInterceptor');
                           
     }]);
-
-    
-    //if (window.location.hash === '#_=_') window.location.hash = '!'; 
+        
+    app.factory('authInterceptor', function ($rootScope, $q, $window, $location) {
+        return {
+          request: function (config) {
+            config.headers = config.headers || {};
+            if ($window.sessionStorage.trl_token) {
+              config.headers.Authorization = 'Bearer ' + $window.sessionStorage.trl_token;
+            }
+            return config;
+          },
+          response: function (response) {
+            if (response.status === 401  || response.status === 403) {
+                $location.path('../inicio/index.html#/login');
+            }
+            return response || $q.when(response);
+          }
+        };
+    });        
     
     app.directive('ngEnter', function () {
         return function (scope, elements, attrs) {

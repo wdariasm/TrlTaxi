@@ -1,4 +1,4 @@
-app.controller("homeController", ["$scope", "parametroService",  function ($scope, parametroService) {
+app.controller("homeController", ["$scope", "parametroService", "usuarioService",  function ($scope, parametroService, usuarioService) {
         
     $scope.Titulo = "BIENVENIDO"; 
     $scope.Login = {};
@@ -9,13 +9,25 @@ app.controller("homeController", ["$scope", "parametroService",  function ($scop
      
     var click = 1;    
     
+    function getUser (){
+        var promiseGet = usuarioService.get($scope.Login.IdUsuario); 
+        promiseGet.then(function(pl) {            
+            $scope.Login = pl.data;    
+            sessionStorage.setItem("usuario","");
+            sessionStorage.setItem("usuario",btoa( JSON.stringify(pl.data)));             
+            $scope.getConfiguracion();
+        },
+        function(errorPl) {
+            console.log('error al cargar datos del usuario', errorPl);
+        });
+    }
     
     $scope.getConfiguracion= function (){
         var promiseGet = parametroService.getAll(); 
         promiseGet.then(function(pl) {            
             $scope.Configuracion = pl.data;
             config.setConfig(btoa(JSON.stringify(pl.data)));
-            //validarVista();
+            validarVista();
         },
         function(errorPl) {            
             $scope.Cargando = false;
@@ -25,9 +37,7 @@ app.controller("homeController", ["$scope", "parametroService",  function ($scop
         
     };
     
-    $scope.getConfiguracion();
-   
-        
+    
     $scope.mostrarOcultarMenu = function(){    
         if(click===1){               
 //            var div  =  document.getElementById("sidebar");
@@ -54,7 +64,8 @@ app.controller("homeController", ["$scope", "parametroService",  function ($scop
     };
     
     function validarUser (){                
-        $scope.Login =  session.getUser();        
+        $scope.Login =  session.getUser();   
+        getUser();
     }
     
     function validarVista(){

@@ -1,4 +1,4 @@
-app.controller("homeController", ["$scope", "parametroService", function ($scope,parametroService) {
+app.controller("homeController",  ["$scope", "parametroService", "usuarioService", function ($scope,parametroService,usuarioService ) {
         
     $scope.Titulo = "BIENVENIDOS"; 
     $scope.Login = {};
@@ -6,19 +6,31 @@ app.controller("homeController", ["$scope", "parametroService", function ($scope
         
     var click = 1;    
     
+    function getUser (){
+        var promiseGet = usuarioService.get($scope.Login.IdUsuario); 
+        promiseGet.then(function(pl) {            
+            $scope.Login = pl.data;    
+            sessionStorage.setItem("usuario","");
+            sessionStorage.setItem("usuario",btoa( JSON.stringify(pl.data)));             
+            $scope.getConfiguracion();
+        },
+        function(errorPl) {
+            console.log('error al cargar datos del usuario', errorPl);
+        });
+    }
+    
      $scope.getConfiguracion= function (){
         var promiseGet = parametroService.getAll(); 
         promiseGet.then(function(pl) {            
             $scope.Configuracion = pl.data;            
             config.setConfig(btoa(JSON.stringify(pl.data)));
-            //validarVista();
+            validarVista();
         },
         function(errorPl) {
             console.log('failure loading usuarios', errorPl);
         });
     };
-    
-    $scope.getConfiguracion();
+        
         
     $scope.mostrarOcultarMenu = function(){    
         if(click===1){               
@@ -43,7 +55,8 @@ app.controller("homeController", ["$scope", "parametroService", function ($scope
     };
     
     function validarUser (){        
-        $scope.Login = session.getUser();               
+        $scope.Login = session.getUser(); 
+        getUser();
     }
     
     function validarVista(){
@@ -68,6 +81,8 @@ app.controller('salirController',['$scope', 'usuarioService', 'toaster', functio
         promise.then(function(pl) {                       
             sessionStorage.setItem("usuario","");
             sessionStorage.removeItem("usuario"); 
+            sessionStorage.removeItem("trl_token"); 
+            sessionStorage.removeItem("trlconfig"); 
             $scope.mensaje = "Su sesión ha finalizado correctamente";
             toaster.pop('success','¡Información!',"Su sesión ha terminado.");
             setTimeout ('location.href = "../inicio/index.html#/login"', 3000);                       
