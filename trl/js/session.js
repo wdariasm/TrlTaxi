@@ -15,10 +15,9 @@ var session = {
     
     
     //Obtener Usuario
-    getUser:function(){
-        
+    getUser:function(){        
         var obj = sessionStorage.getItem("usuario");          
-        if (obj){            
+        if (obj){                       
             return JSON.parse(atob(obj));
         }else{            
             alert("Acceso Denegado, no tiene permisos para realizar esta operación");

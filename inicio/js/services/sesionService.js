@@ -1,7 +1,7 @@
-app.service("sesionService", ['$http', function ($http) {
+app.service("sesionService", ['$http', '$auth', function ($http, $auth) {
                         
     this.login = function (user) { 
-        var req = $http.post(uri+'/api/usuario/autenticar',user);         
+        var req = $auth.login(user);         
         return req; 
     };
     
@@ -13,11 +13,6 @@ app.service("sesionService", ['$http', function ($http) {
     this.confirmar = function(id, haskey){
         var req = $http.get(uri+'/api/usuario/' + id +'/'+haskey+'/confirmar');
         return req;	
-    }; 
-    
-    this.validarEmail = function (email) { 
-        var req = $http.get(uri+'/api/usuario/'+email+'/email');         
-        return req; 
     };                
     
     this.verificarKey = function(idCliente, id, haskey){

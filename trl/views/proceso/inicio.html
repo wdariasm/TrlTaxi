@@ -7,13 +7,21 @@
     </div>
     <div class="row">
         <div class="col-md-12">
-            <p class="text-center" style="font-size: 18px;">Espere por favor, cargando configuración ...<br/>                                      
+            <p class="text-center" style="font-size: 18px;">{{$parent.Mensajeh}}<br/>                                      
         </div>        
     </div>
-    <div class="row">
+    <div class="row" ng-show="$parent.Cargando">
         <div class="col-md-2 col-md-offset-5">
             <div class="text-center">
                 <li class="fa fa-spinner fa-fw fa-5x fa-pulse text-primary"></li>
+            </div>
+        </div>
+    </div>
+    
+     <div class="row" ng-hide="$parent.Cargando">
+        <div class="col-md-2 col-md-offset-5">
+            <div class="text-center">
+                <li class="fa fa-frown-o fa-fw fa-5x  text-warning"></li>
             </div>
         </div>
     </div>

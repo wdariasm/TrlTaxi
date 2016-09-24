@@ -68,7 +68,7 @@ app.controller("vehiculoController", ["$scope", "vehiculoService", "marcaService
             $scope.Vehiculos = d.data;
               $scope.TablaVehiculo.reload();
         }, function(err) {                        
-                toaster.pop('error', '¡Error!', 'Error al cargar Vehiculos');
+                toaster.pop('error', '¡Error load vehículos!', err.data.error);
                 console.log("Some Error Occured " + JSON.stringify(err));
         }); 
             
@@ -83,7 +83,7 @@ app.controller("vehiculoController", ["$scope", "vehiculoService", "marcaService
                 $scope.MarcaSelect = d.data[0];
             }           
         }, function(err) {           
-                toaster.pop('error', '¡Error!', 'Error al cargar Marcas');
+                toaster.pop('error', '¡Error!', err.data.error);
                 console.log("Some Error Occured " + JSON.stringify(err));
         }); 
     }
@@ -96,8 +96,7 @@ app.controller("vehiculoController", ["$scope", "vehiculoService", "marcaService
                 $scope.ClaseSelect = d.data[0];
             }
         }, function(err) {           
-                alert("ERROR AL PROCESAR SOLICITUD");           
-                console.log("Some Error Occured " + JSON.stringify(err));
+            toaster.pop('error', '¡Error load tipo vehículo !', err.data.error);                
         }); 
     }
     

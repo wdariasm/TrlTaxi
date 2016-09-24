@@ -7,7 +7,9 @@ use App\Usuario;
 use App\UsuarioPermiso;
 use Illuminate\Http\JsonResponse;
 use DB;
-use Crypt;
+use Tymon\JWTAuth\Exceptions\JWTException;
+use Tymon\JWTAuth\Exceptions\TokenInvalidException;
+use Tymon\JWTAuth\Facades\JWTAuth;
  
 class UsuarioController extends Controller
 {
@@ -57,7 +59,7 @@ class UsuarioController extends Controller
             
             $usuario= new Usuario();              
             $usuario->Login = $data["Login"];
-            $usuario->Clave =  Crypt::encrypt($clave);
+            $usuario->Clave = password_hash($clave, PASSWORD_DEFAULT) ;
             $usuario->Nombre = $data["Nombre"];
             $usuario->Estado = 'POR CONFIRMAR';
             $usuario->Modulo = $data["Modulo"];
@@ -199,50 +201,108 @@ class UsuarioController extends Controller
         }
     }
 
-    public function autenticar(Request $request){
+//    public function autenticar(Request $request){
+//        try {
+//            $data = $request->all();
+//            $dirIp= ip2long($request->ip());        
+//            
+//            if (!$dirIp){
+//                $dirIp = 0;
+//            }
+//
+//            $user = Usuario::select('Estado','Sesion', 'Clave', 'IdUsuario')->where("Login",$data['username'])->first();
+//            if (empty($user)){
+//                return JsonResponse::create(array('message' => "error", "request" =>'Usuario no existe en el Sistema'), 200);
+//            }
+//
+//            if($user['Estado'] != 'ACTIVO'){
+//                return JsonResponse::create(array('message' => "error", "request" =>'Usuario Bloqueado'), 200);
+//            }         
+//          
+//            $clave =Crypt::decrypt($user['Clave']);                                    
+//            if(strcmp($data['clave'], $clave) !== 0 ){                 
+//                return JsonResponse::create(array('message' => "error", "request" =>'Credenciales no validas'), 200);
+//            }            
+//            
+//           /* if($user['Sesion'] == 'INICIADA'){
+//                $result = DB::Select("SELECT DirIp, IF(DATE(FechaCnx) = CURRENT_DATE(), 'SI', 'NO') entrar"
+//                        . " FROM usuario WHERE IdUsuario= '".$user['IdUsuario']."'");                
+//                if ($result[0]->entrar == 'SI' && $dirIp!=$result[0]->DirIp ){
+//                    return JsonResponse::create(array('message' => "error", "request" =>'Usted Tiene una Sesion iniciada Ya'), 200);
+//                }
+//            }*/
+//            
+//            $usuario = DB::select("SELECT us.IdUsuario,  us.ConductorId, us.ClienteId, us.PersonaId, us.Nombre, us.Login, us.Estado, us.TipoAcceso, "
+//                    . " us.Modulo, GROUP_CONCAT(up.IdPermiso SEPARATOR ',') permisos, us.ValidarClave FROM usuario us INNER JOIN "
+//                    . " usuariopermiso up ON us.IdUsuario=up.IdUsuario WHERE us.IdUsuario='".$user['IdUsuario']."' GROUP BY us.IdUsuario ");
+//
+//            DB::update("UPDATE usuario SET FechaCnx = NOW(), DirIp=$dirIp, Sesion='INICIADA' WHERE IdUsuario = ".$user['IdUsuario']."");
+//
+//            return JsonResponse::create(array('message' =>"Correcto", "request" =>json_encode($usuario[0])), 200);
+//
+//        } catch (\DecryptException $e) {
+//            return JsonResponse::create(array('message' => "No se puedo autenticar el usuario", "request" =>json_encode($e->getMessage())), 401);
+//        } catch (\Exception $exc) {
+//            return JsonResponse::create(array('message' => "No se puedo autenticar el usuario", "request" =>json_encode($exc->getMessage())), 401);
+//        }
+//    }
+    
+     public function autenticar(Request $request){
         try {
-            $data = $request->all();
-            $dirIp= ip2long($request->ip());        
-            
+            $dirIp= ip2long($request->ip());                    
             if (!$dirIp){
                 $dirIp = 0;
             }
-
-            $user = Usuario::select('Estado','Sesion', 'Clave', 'IdUsuario')->where("Login",$data['username'])->first();                   
-            if (empty($user)){
-                return JsonResponse::create(array('message' => "error", "request" =>'Usuario no existe en el Sistema'), 200);
-            }
-
-            if($user['Estado'] != 'ACTIVO'){
-                return JsonResponse::create(array('message' => "error", "request" =>'Usuario Bloqueado'), 200);
-            }         
-          
-            $clave =Crypt::decrypt($user['Clave']);                                    
-            if(strcmp($data['clave'], $clave) !== 0 ){                 
-                return JsonResponse::create(array('message' => "error", "request" =>'Credenciales no validas'), 200);
-            }            
+                        
+            $usuario = $request->get('email');
+            $password = $request->get('password');
             
-           /* if($user['Sesion'] == 'INICIADA'){
+            $user = Usuario::select('Estado','Sesion','Clave', 'Nombre', 'IdUsuario', 'TipoAcceso', 'Modulo')->where("Login",$usuario)->first();
+            if (empty($user)){
+                return response()->json(['error' => 'Usuario no existe en el Sistema'], 401);
+            }
+            
+            if($user->Estado != 'ACTIVO'){
+                return response()->json(['error' => 'Usuario bloqueado.'], 401);            
+            }
+        
+            if (!password_verify($password, $user->Clave)) {
+                return response()->json(['error' => 'Credenciales no validas'], 401);
+            }             
+                               
+            
+            if($user->Sesion == 'INICIADA'){
                 $result = DB::Select("SELECT DirIp, IF(DATE(FechaCnx) = CURRENT_DATE(), 'SI', 'NO') entrar"
                         . " FROM usuario WHERE IdUsuario= '".$user['IdUsuario']."'");                
                 if ($result[0]->entrar == 'SI' && $dirIp!=$result[0]->DirIp ){
                     return JsonResponse::create(array('message' => "error", "request" =>'Usted Tiene una Sesion iniciada Ya'), 200);
                 }
-            }*/
+            }
             
-            $usuario = DB::select("SELECT us.IdUsuario,  us.ConductorId, us.ClienteId, us.PersonaId, us.Nombre, us.Login, us.Estado, us.TipoAcceso, "
-                    . " us.Modulo, GROUP_CONCAT(up.IdPermiso SEPARATOR ',') permisos, us.ValidarClave FROM usuario us INNER JOIN "
-                    . " usuariopermiso up ON us.IdUsuario=up.IdUsuario WHERE us.IdUsuario='".$user['IdUsuario']."' GROUP BY us.IdUsuario ");
+            $token = JWTAuth::fromUser($user, $this->getData($user));
+                       
 
             DB::update("UPDATE usuario SET FechaCnx = NOW(), DirIp=$dirIp, Sesion='INICIADA' WHERE IdUsuario = ".$user['IdUsuario']."");
 
-            return JsonResponse::create(array('message' =>"Correcto", "request" =>json_encode($usuario[0])), 200);
+            return response()->json(compact('token'));
 
-        } catch (\DecryptException $e) {
-            return JsonResponse::create(array('message' => "No se puedo autenticar el usuario", "request" =>json_encode($e->getMessage())), 401);
+        } catch (JWTException $e) {
+            return response()->json(['error' => 'No se pudo crear el token'.$e], 500);            
         } catch (\Exception $exc) {
-            return JsonResponse::create(array('message' => "No se puedo autenticar el usuario", "request" =>json_encode($exc->getMessage())), 401);
+            return JsonResponse::create(array('error' => "No se puedo autenticar el usuario", "request" =>json_encode($exc->getMessage())), 401);
         }
+    }
+    
+    private function getData($user)
+    {
+        $data = [
+            'user' => [
+                'IdUsuario' => $user->IdUsuario,
+                'Nombre' => $user->Nombre, 
+                'TipoAcceso' => $user->TipoAcceso, 
+                'Modulo'=> $user->Modulo
+            ]];
+        return $data;
     }
     
     public function ConfirmarCuenta($id, $key){
@@ -338,7 +398,7 @@ class UsuarioController extends Controller
             }                       
             $clave = $data["Clave"];
             $usuario = Usuario::find($id);
-            $usuario->Clave =  Crypt::encrypt($clave);            
+            $usuario->Clave = password_hash($clave, PASSWORD_DEFAULT);            
             $usuario->Sesion = 'CERRADA';
             $usuario->ValidarClave = 'NO';
             $usuario->save();
@@ -366,7 +426,7 @@ class UsuarioController extends Controller
             if(empty($usuario)){
                 return JsonResponse::create(array('message' => 'error', 'request' =>'Usuario no se encuentra registrado en el sistema.'));
             }
-            $usuario->Clave =  Crypt::encrypt($clave);            
+            $usuario->Clave = password_hash($clave, PASSWORD_DEFAULT);            
             $usuario->Sesion = 'CERRADA';
             $usuario->ValidarClave = 'NO'; 
             $usuario->save();            
@@ -425,5 +485,19 @@ class UsuarioController extends Controller
            return JsonResponse::create(array('message' => "No se pudo modificar el usuario", "exception"=>$ex->getMessage(), "request" =>json_encode($IdUsuario)), 401);
        }
    }
+   
+    public function refreshToken()
+    {
+        $token = JWTAuth::getToken();
+        if(!$token){
+            return response()->json(['Token not provided'], 401);
+        }
+        try{
+            $token = JWTAuth::refresh($token);
+        }catch(TokenInvalidException $e){
+            return response()->json(['error' => $e->getMessage()], 403);
+        }
+        return response()->json(['token'=>$token]);
+    }
 
 }

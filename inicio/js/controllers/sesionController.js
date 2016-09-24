@@ -1,4 +1,4 @@
-app.controller('sesionController', ['$scope' , 'sesionService', 'toaster', function ($scope, sesionService, toaster) {
+app.controller('sesionController', ['$scope' , 'sesionService', 'toaster','$auth', function ($scope, sesionService, toaster, $auth) {
     $scope.Usuario = {};
     $scope.msjError = "";
 
@@ -27,33 +27,27 @@ app.controller('sesionController', ['$scope' , 'sesionService', 'toaster', funct
         }        
         
         var object = {
-            username: $scope.Usuario.Login,
-            clave: $scope.Usuario.Clave
+            email: $scope.Usuario.Login,
+            password: $scope.Usuario.Clave
         };
        var promise = sesionService.login(object);
-        promise.then(function(d) {
-            if (d.data.message === "Correcto") {
-                sessionStorage.setItem("usuario","");
-                
-                sessionStorage.setItem("usuario",btoa(d.data.request));  
-                var sesion = JSON.parse(d.data.request);    
-                
-                if(sesion.TipoAcceso == "1" || sesion.TipoAcceso == "2"){
-                    location.href = "../trl/index.html";                        
-                }else if (sesion.TipoAcceso == "3"){
-                    location.href = "../conductor/index.html";                        
-                }else if (sesion.TipoAcceso == "4" || sesion.TipoAcceso == "5"){
-                    location.href = "../cliente/index.html";                                                                      
-                }else{
-                    toaster.pop('error', '¡Error!', "Tipo de acceso no permitido");                        
-                }               
-                
-            } else{
-                sessionStorage.clear();
-                toaster.pop('error', '¡Error!', d.data.request);
-            }
+        promise.then(function(d) {            
+            var user = $auth.getPayload().user;            
+            sessionStorage.setItem("usuario","");
+            sessionStorage.setItem("usuario",btoa( JSON.stringify(user)));  
+            
+            if(user.TipoAcceso == "1" || user.TipoAcceso == "2"){
+                location.href = "../trl/index.html";                        
+            }else if (user.TipoAcceso == "3"){
+                location.href = "../conductor/index.html";                        
+            }else if (user.TipoAcceso == "4" || user.TipoAcceso == "5"){
+                location.href = "../cliente/index.html";                                                                      
+            }else{
+                toaster.pop('error', '¡Error!', "Tipo de acceso no permitido");                        
+            }               
+                            
         }, function(err) {
-               toaster.pop('error', '¡Error!', err.data.request);
+               toaster.pop('error', '¡Error al autenticar!', err.data.error);
                 console.log("Some Error Occured " + JSON.stringify(err));
         });
     };

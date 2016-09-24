@@ -1,9 +1,15 @@
 var uri = "../public";
 var app;
 (function(){
-    app = angular.module("trlLogin", ['ngRoute','ng-currency', 'toaster']);    
+    app = angular.module("trlLogin", ['ngRoute','ng-currency', 'toaster', 'satellizer']);    
     
-    app.config(['$routeProvider', '$locationProvider', function AppConfig($routeProvider, $locationProvider){           
+    app.config(['$routeProvider', '$locationProvider', '$authProvider', function AppConfig($routeProvider, $locationProvider, $authProvider){           
+        
+        $authProvider.loginUrl =  '/TrlTaxi/public/api/usuario/autenticar';        
+        $authProvider.tokenName = "token";
+        $authProvider.tokenPrefix = "trl";
+        $authProvider.storageType = 'sessionStorage';   
+                        
         $routeProvider 
             .when("/login",{
                 templateUrl: 'views/inicio/login.html'
