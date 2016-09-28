@@ -22,6 +22,7 @@ Route::group(['middleware' => 'cors'], function () {
     Route::get('api/usuario/{id}/recuperar/{idKey}/{key}','UsuarioController@VefiricarKey');
     Route::post('api/usuario/recordar', 'UsuarioController@RecuperarClave');
     Route::put('api/usuario/actualizar/{idUsuario}','UsuarioController@updatePassword');
+    Route::get('api/usuario/token','UsuarioController@refreshToken');
     
     Route::group(['middleware' => 'jwt.auth'], function () {                 
         include 'Routes/routesMarca.php';

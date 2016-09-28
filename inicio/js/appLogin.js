@@ -5,6 +5,7 @@ var app;
     
     app.config(['$routeProvider', '$locationProvider', '$authProvider', function AppConfig($routeProvider, $locationProvider, $authProvider){           
         
+        //$authProvider.loginUrl =  '/public/api/usuario/autenticar';        
         $authProvider.loginUrl =  '/TrlTaxi/public/api/usuario/autenticar';        
         $authProvider.tokenName = "token";
         $authProvider.tokenPrefix = "trl";

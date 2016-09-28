@@ -144,7 +144,7 @@ var app;
             }
             return config;
           },
-          response: function (response) {
+          response: function (response) {              
             if (response.status === 401  || response.status === 403) {
                 $location.path('../inicio/index.html#/login');
             }

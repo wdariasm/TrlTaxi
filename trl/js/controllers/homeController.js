@@ -1,4 +1,5 @@
-app.controller("homeController", ["$scope", "parametroService", "usuarioService",  function ($scope, parametroService, usuarioService) {
+app.controller("homeController", ["$scope", "parametroService", "usuarioService", '$auth' , 
+     function ($scope, parametroService, usuarioService, $auth) {
         
     $scope.Titulo = "BIENVENIDO"; 
     $scope.Login = {};
@@ -78,7 +79,18 @@ app.controller("homeController", ["$scope", "parametroService", "usuarioService"
         }
     };
     
+    function refresToken(){
+        var promiseGet = usuarioService.refrescar(); 
+        promiseGet.then(function(pl) {              
+            $auth.setToken(pl.data.token);            
+        },
+        function(errorPl) {
+            console.log('Error al validar session', errorPl);
+        });
+    }
+    
     validarUser();        
+    setInterval(function(){refresToken();},1680000);
 }]);
 
 app.controller('salirController',['$scope', 'usuarioService', 'toaster', function ($scope, usuarioService, toaster) {

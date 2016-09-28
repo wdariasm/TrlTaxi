@@ -277,8 +277,7 @@ class UsuarioController extends Controller
             if (!password_verify($password, $user->Clave)) {
                 return response()->json(['error' => 'Credenciales no validas'], 401);
             }             
-                               
-            
+                                           
             if($user->Sesion == 'INICIADA'){
                 $result = DB::Select("SELECT DirIp, IF(DATE(FechaCnx) = CURRENT_DATE(), 'SI', 'NO') entrar"
                         . " FROM usuario WHERE IdUsuario= '".$user['IdUsuario']."'");                
@@ -287,11 +286,8 @@ class UsuarioController extends Controller
                 }
             }
             
-            $token = JWTAuth::fromUser($user, $this->getData($user));
-                       
-
+            $token = JWTAuth::fromUser($user, $this->getData($user));                       
             DB::update("UPDATE usuario SET FechaCnx = NOW(), DirIp=$dirIp, Sesion='INICIADA' WHERE IdUsuario = ".$user['IdUsuario']."");
-
             return response()->json(compact('token'));
 
         } catch (JWTException $e) {
@@ -496,16 +492,17 @@ class UsuarioController extends Controller
    
     public function refreshToken()
     {
-        $token = JWTAuth::getToken();
+        $token = JWTAuth::getToken();                        
         if(!$token){
             return response()->json(['Token not provided'], 401);
         }
         try{
-            $token = JWTAuth::refresh($token);
+            $newToken = JWTAuth::refresh($token);
         }catch(TokenInvalidException $e){
             return response()->json(['error' => $e->getMessage()], 403);
         }
-        return response()->json(['token'=>$token]);
+         //return $this->response->withArray(['token'=>$newToken]);
+        return response()->json(['token'=>$newToken]);
     }
 
 }

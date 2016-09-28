@@ -47,5 +47,10 @@ app.service("usuarioService", ['$http', function ($http) {
         return req;
     };
     
+    this.refrescar = function(){
+        var req = $http.get(uri+'/api/usuario/token');
+        return req;
+    };
+    
 }]);
 
