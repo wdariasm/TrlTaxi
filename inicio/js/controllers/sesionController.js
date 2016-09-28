@@ -31,7 +31,11 @@ app.controller('sesionController', ['$scope' , 'sesionService', 'toaster','$auth
             password: $scope.Usuario.Clave
         };
        var promise = sesionService.login(object);
-        promise.then(function(d) {            
+        promise.then(function(d) {
+            if(d.data.error){
+                toaster.pop('error','¡Error!', d.data.error);
+                return;
+            }
             var user = $auth.getPayload().user;            
             sessionStorage.setItem("usuario","");
             sessionStorage.setItem("usuario",btoa( JSON.stringify(user)));  

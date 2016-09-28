@@ -1,4 +1,4 @@
-app.controller("homeController", ["$scope", "parametroService", "usuarioService", '$auth' , 
+app.controller("homeController", ["$scope", "parametroService", "usuarioService", '$auth',
      function ($scope, parametroService, usuarioService, $auth) {
         
     $scope.Titulo = "BIENVENIDO"; 
@@ -74,7 +74,13 @@ app.controller("homeController", ["$scope", "parametroService", "usuarioService"
             if($scope.Login.ValidarClave ==="SI"){
                 location.href = "#/2/usuario/clave";                
             }else{
-                 location.href = "#/1/servicios";   
+                var ru = ruta.get();
+                if(ru === "/iniciando"){                   
+                    location.href = "#/1/servicios";                     
+                }else{
+                   location.href = "#"+ru;  
+                }
+                 
             }
         }
     };
@@ -90,7 +96,7 @@ app.controller("homeController", ["$scope", "parametroService", "usuarioService"
     }
     
     validarUser();        
-    setInterval(function(){refresToken();},1680000);
+    setInterval(function(){refresToken();},1080000);    
 }]);
 
 app.controller('salirController',['$scope', 'usuarioService', 'toaster', function ($scope, usuarioService, toaster) {
@@ -104,6 +110,7 @@ app.controller('salirController',['$scope', 'usuarioService', 'toaster', functio
             sessionStorage.removeItem("usuario"); 
             sessionStorage.removeItem("trl_token"); 
             sessionStorage.removeItem("trlconfig"); 
+            sessionStorage.removeItem("trlRuta");             
             $scope.mensaje = "Su sesión ha finalizado correctamente";
             toaster.pop('success','¡Información!',"Su sesión ha terminado.");
             setTimeout ('location.href = "../inicio/index.html#/login"', 2000);

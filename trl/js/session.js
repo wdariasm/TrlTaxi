@@ -76,4 +76,17 @@ var config = {
     }
 };
 
+var ruta = {
+    setConfig: function(config){      
+       sessionStorage.setItem("trlRuta", config);       
+    },
+    
+    get:function(){        
+        var cf = sessionStorage.getItem("trlRuta");        
+        if (cf){   
+            return atob(cf);           
+        }  
+    }
+};
+
 

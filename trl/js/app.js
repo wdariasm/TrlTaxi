@@ -152,6 +152,12 @@ var app;
           }
         };
     });
+    
+    app.run(['$rootScope','$location', '$routeParams', function($rootScope, $location, $routeParams) {
+        $rootScope.$on('$routeChangeSuccess', function(e, current, pre) {            
+            sessionStorage.setItem("trlRuta", btoa($location.path()));        
+        });
+    }]);
 
     
     

@@ -278,11 +278,11 @@ class UsuarioController extends Controller
                 return response()->json(['error' => 'Credenciales no validas'], 401);
             }             
                                            
-            if($user->Sesion == 'INICIADA'){
+            if($user->Sesion == 'INICIADA' && $user->TipoAcceso != 1){
                 $result = DB::Select("SELECT DirIp, IF(DATE(FechaCnx) = CURRENT_DATE(), 'SI', 'NO') entrar"
                         . " FROM usuario WHERE IdUsuario= '".$user['IdUsuario']."'");                
                 if ($result[0]->entrar == 'SI' && $dirIp!=$result[0]->DirIp ){
-                    return JsonResponse::create(array('message' => "error", "request" =>'Usted Tiene una Sesion iniciada Ya'), 200);
+                    return response()->json(['error' => 'Estimado Usuario(a), usted tiene una Sesion iniciada. '], 401);                    
                 }
             }
             
