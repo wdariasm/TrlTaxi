@@ -96,7 +96,7 @@ app.controller("homeController", ["$scope", "parametroService", "usuarioService"
     }
     
     validarUser();        
-    setInterval(function(){refresToken();},1080000);    
+    setInterval(function(){refresToken();},900000);             
 }]);
 
 app.controller('salirController',['$scope', 'usuarioService', 'toaster', function ($scope, usuarioService, toaster) {

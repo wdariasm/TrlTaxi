@@ -24,7 +24,16 @@ var session = {
             location.href = "../inicio/index.html#/login";
             return null;
         }   
-    }               
+    },               
+    
+    getNombre:function(){        
+        var obj = sessionStorage.getItem("usuario");          
+        if (obj){                       
+            var js = JSON.parse(atob(obj));
+            return js.Login + " - " + js.Nombre;
+        }
+        
+    }     
 };
 
 var config = {

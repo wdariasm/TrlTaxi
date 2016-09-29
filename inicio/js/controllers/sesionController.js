@@ -51,7 +51,7 @@ app.controller('sesionController', ['$scope' , 'sesionService', 'toaster','$auth
             }               
                             
         }, function(err) {
-               toaster.pop('error', '¡Error al autenticar!', err.data.error);
+               toaster.pop('error', '¡Error al autenticar!', err.data);
                 console.log("Some Error Occured " + JSON.stringify(err));
         });
     };

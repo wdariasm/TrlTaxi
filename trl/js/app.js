@@ -127,15 +127,15 @@ var app;
             
             .otherwise({
                 redirectTo:"/iniciando"               
-            });        
-            
+            });      
+                                       
             $httpProvider.interceptors.push('authInterceptor');
-                          
+            
     }]);
     
     
     //if (window.location.hash === '#_=_') window.location.hash = '!'; 
-    app.factory('authInterceptor', function ($rootScope, $q, $window, $location) {
+    app.factory('authInterceptor', function ($rootScope, $q, $window) {
         return {
           request: function (config) {
             config.headers = config.headers || {};
@@ -144,12 +144,21 @@ var app;
             }
             return config;
           },
-          response: function (response) {              
+          response: function (response) {                            
             if (response.status === 401  || response.status === 403) {
-                $location.path('../inicio/index.html#/login');
+                 location.href = "../inicio/index.html#/login";
             }
             return response || $q.when(response);
-          }
+          },
+          
+          responseError: function(rejection) {
+            console.log(rejection.data.error);
+            if(rejection.status == 401){
+               location.href = "../inicio/index.html#/login";
+            }
+            return $q.reject(rejection);
+        }
+          
         };
     });
     
