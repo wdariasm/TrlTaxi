@@ -33,7 +33,16 @@ var session = {
             return js.Login + " - " + js.Nombre;
         }
         
-    }     
+    }, 
+    
+    getError : function (){
+        var js="";
+        var obj = sessionStorage.getItem("trlError");          
+        if (obj){                       
+            js = atob(obj);            
+        }
+        return js;
+    }
 };
 
 var config = {

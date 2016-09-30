@@ -474,7 +474,7 @@ class UsuarioController extends Controller
             $cabeceras .= 'Content-type: text/html; charset=UTF-8' . "\r\n";
             $cabeceras .= 'To: '.$nombre.' <'.$para.'>' . "\r\n";
             $cabeceras .= 'From: Transporte Ruta Libre <info@trl.com.co>' . "\r\n";  
-           // mail($para, $título, $mensaje, $cabeceras);       
+            mail($para, $título, $mensaje, $cabeceras);       
     }
 
     public function updateEstado(Request $request, $IdUsuario){
@@ -500,8 +500,7 @@ class UsuarioController extends Controller
             $newToken = JWTAuth::refresh($token);
         }catch(TokenInvalidException $e){
             return response()->json(['error' => $e->getMessage()], 403);
-        }
-         //return $this->response->withArray(['token'=>$newToken]);
+        }         
         return response()->json(['token'=>$newToken]);
     }
 

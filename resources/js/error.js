@@ -24,24 +24,25 @@ function enviarImagen() {
         $("#infoSoporte").css("color", "black");
         var img = document.getElementById("imgCanvas");
         var e = {};
-        e.Url = location.href;
-        e.Asunto = $("#txtAsuntoSoporte").val();
-        e.Mensaje = $("#txtMensajeSoporte").val();
-        e.Imagen = img.src;
-        e.idRemitente = session.getNombre();
-        e.nomRemitente = "";       
-        
+        e.url = location.href;
+        e.asunto = $("#txtAsuntoSoporte").val();
+        e.mensaje = $("#txtMensajeSoporte").val();
+        e.imagen = img.src;        
+        e.nombre = session.getNombre();       
+        e.error = session.getError();
         $.ajax({
             type: "POST",
-            url: "",
-            data: "{'Reg':" + JSON.stringify(e) + "}",
+            url: uri + "/api/soporte/error"  + "?token=" + sessionStorage.getItem("trl_token"),
+            data:  JSON.stringify(e),
             async: true,
             contentType: "application/json; charset=utf-8",
             dataType: "json",
+          
             success: function (result) {
+                console.log(result);
                 $("#btnCapturar").prop("disabled", false);
-                if (result.d.Error == false) {
-                    $("#infoSoporte").html("Su mensaje ha sido enviado a soporte satisfactoriamente");
+                if (result.message === "Correcto") {
+                    $("#infoSoporte").html("Su mensaje ha sido enviado correctamente");
                     $("#infoSoporte").css("color", "green");
                     $("#txtAsuntoSoporte").val("");
                     $("#txtMensajeSoporte").val("");

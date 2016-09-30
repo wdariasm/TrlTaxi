@@ -151,8 +151,13 @@ var app;
             return response || $q.when(response);
           },
           
-          responseError: function(rejection) {
-            console.log(rejection.data.error);
+        responseError: function(rejection) {
+            var errorl = rejection.data.error;
+            if(!errorl){
+                errorl =rejection.data;
+            }
+            sessionStorage.setItem("trlError", btoa(errorl));
+              
             if(rejection.status == 401){
                location.href = "../inicio/index.html#/login";
             }
@@ -163,7 +168,7 @@ var app;
     });
     
     app.run(['$rootScope','$location', '$routeParams', function($rootScope, $location, $routeParams) {
-        $rootScope.$on('$routeChangeSuccess', function(e, current, pre) {            
+        $rootScope.$on('$routeChangeSuccess', function(e, current, pre) { 
             sessionStorage.setItem("trlRuta", btoa($location.path()));        
         });
     }]);
