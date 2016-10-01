@@ -21,10 +21,10 @@ class LicenciaConduccionController extends Controller
     }
 
     
-     public function GetLicencia(){
-        $result = DB::select("SELECT li.Numero, li.OTLicencia, li.FechaExpedicion, li.FechaVencimiento, li.Estado,"
+     public function GetLicencia($id){
+        $result = DB::select("SELECT li.IdLicencia, li.Numero, li.OTLicencia, li.FechaExpedicion, li.FechaVencimiento, li.Estado,"
                 . " li.Categoria, co.Cedula FROM licenciaconduccion li INNER JOIN conductor co ON li.lcConductor = co.IdConductor"
-                . " WHERE  li.Estado <> 'INACTIVA' ");
+                . " WHERE  li.lcConductor = $id ");
         
         return $result;  
         
@@ -34,12 +34,7 @@ class LicenciaConduccionController extends Controller
         return LicenciaConduccion::where("Numero",$Numero)->select("Numero")->first();
     }
     
- 
-    public function create()
-    {
-        //
-    }
-
+     
     /**
      * Store a newly created resource in storage.
      *
@@ -77,18 +72,7 @@ class LicenciaConduccionController extends Controller
     public function show($id)
     {
         //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
+    }   
 
     /**
      * Update the specified resource in storage.
@@ -123,15 +107,11 @@ class LicenciaConduccionController extends Controller
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
+     */    
     
     
      //Actualiza el estado (Funcion eliminar)
-      public function updateEstado(Request $request, $IdLicencia){
+    public function updateEstado(Request $request, $IdLicencia){
         try {
             $data = $request->all();
             $licencia =  LicenciaConduccion::find($IdLicencia);

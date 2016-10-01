@@ -71,7 +71,7 @@ class ParametroController extends Controller
             $Base64Img = base64_decode($Base64Img);
             file_put_contents('../img/error/'.$codigo, $Base64Img); 
                        
-            $título = utf8_encode("Error TRL]");
+            $título = utf8_encode("[Error TRL]");
             // mensaje
             $mensaje = "
             <html>
@@ -79,7 +79,7 @@ class ParametroController extends Controller
               <title>". utf8_encode("Error TRL") ."</title>
             </head>
             <body>          
-              <h1>Hola, $nombre </h1><br/>
+              <h2>Usuario, $nombre </h2><br/>
               <p>Hemos tenido el siguiente error: $asunto</p>                         
               <br/>    
               <h3>Datos del mensaje</h3>

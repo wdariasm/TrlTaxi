@@ -281,7 +281,7 @@
                                           <div class="row">
                                              <div class="col-xs-2 col-xs-offset-7">                                        
                                                  <br/>
-                                                     <button   class="btn btn-success btn-block btn-addon"   type="button"  title="Nuevo Conductor" ng-click="Nuevo()"><i class="fa fa-pencil"></i>Nuevo</button>
+                                                     <button   class="btn btn-success btn-block btn-addon"   type="button"  title="Nuevo / Cancelar" ng-click="Nuevo()"><i class="fa fa-pencil"></i>Nuevo</button>
                                              </div>
                                              <div class="col-xs-2">          
                                                  <br/>
@@ -353,7 +353,7 @@
                                         <th>DESCRIPCIÓN</th>  
                                         <th>FECHA DE REGISTRO</th>
                                         <th>ESTADO</th>
-                                        <th width="12%">ACCIÓN</th>
+                                        <th width="7%">ACCIÓN</th>
                                     </tr>
                                 </thead>
 
@@ -369,6 +369,9 @@
                                                 <!--<a ng-click="Cancelar(items.idCategoria,'INACTIVA')"  style="float: left; margin-left: 15px;" href="javascript:;"  title="Cancelar"><i class="fa fa-1x fa-ban text-warning"></i></a>-->
                                             </center>
                                          </td>
+                                     </tr>
+                                     <tr ng-hide="Novedades.length">
+                                         <td colspan="5"><h4 class="text-danger text-center">No se encontraron registros.</h4> </td>
                                      </tr>
                                 </tbody>
                               </table>
@@ -488,7 +491,7 @@
                                         <th>ESTADO</th>
                                         <th>CATEGORIA</th>
                                         <th>ID CONDUCTOR</th>
-                                        <th width="12%">ACCIÓN</th>
+                                        <th width="10%">ACCIÓN</th>
                                     </tr>
                                 </thead>
 
@@ -507,6 +510,9 @@
                                                 <a ng-click="Cancelar(items.idCategoria,'INACTIVA')"  style="float: left; margin-left: 15px;" href="javascript:;"  title="Cancelar"><i class="fa fa-1x fa-ban text-warning"></i></a>
                                             </center>
                                          </td>
+                                     </tr>
+                                     <tr ng-hide="Licencias.length">
+                                         <td colspan="8"><h4 class="text-danger text-center">No se encontraron registros.</h4> </td>
                                      </tr>
                                 </tbody>
                               </table>

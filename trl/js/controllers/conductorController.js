@@ -10,8 +10,9 @@ app.controller("conductorController", ["$scope", "conductorService", "tipoDocume
    $scope.Licencias=[];
    $scope.valCedula = false;
    $scope.valNumero=false;
+   $scope.editModeLic = false;
    
-   $scope.title="Registro Conductor";
+   $scope.title="Nuevo Conductor";
    $scope.IdConductorGlobal = "";
    $scope.IdLicenciaG="";
    $scope.TablaConductor = {};
@@ -145,13 +146,12 @@ app.controller("conductorController", ["$scope", "conductorService", "tipoDocume
         $scope.Conductor.Direccion = $scope.Conductor.Direccion.toUpperCase();
         $scope.Conductor.Observacion = $scope.Conductor.Observacion.toUpperCase();        
         $scope.Conductor.CdPlaca = $scope.Conductor.CdPlaca.toUpperCase();
-        $scope.Conductor.Escolaridad = $scope.SelEscolaridad.esCodigo;       
-           //$scope.Novedad.nvDescripcion=$scope.Novedad.nvDescripcion.toUpperCase();
+        $scope.Conductor.Escolaridad = $scope.SelEscolaridad.esCodigo;           
 		   
         if ($scope.valCedula){
             toaster.pop('error','¡Error!', 'N° de Cedula ya existe'); 
             return;
-         }
+        }
              
         if($scope.Conductor.VehiculoId === 0){
             toaster.pop('error','¡Error!', 'Placa no se encuentra registrada');
@@ -179,6 +179,9 @@ app.controller("conductorController", ["$scope", "conductorService", "tipoDocume
    
     //Editar Conductor
     $scope.get = function(item) {
+        initialize();
+        initNovedad();
+        initLicencia();
         getConductor(item.IdConductor);                
         $scope.editMode = true;
         $scope.title = "Editar Conductor";        
@@ -188,6 +191,8 @@ app.controller("conductorController", ["$scope", "conductorService", "tipoDocume
     $scope.Nuevo = function (){
         initialize();
         initNovedad();
+        initLicencia();
+        $scope.Novedades=[];
         $scope.editMode = false;
         $scope.title = "Nuevo Conductor";
     };
@@ -204,14 +209,14 @@ app.controller("conductorController", ["$scope", "conductorService", "tipoDocume
         
     }
    
-    function loadNovedad (id){
+    function loadNovedad (id){   
+        $scope.Novedades=[];
         var promise = conductorService.getNovedad(id);
         promise.then(function(d) {                        
-            $scope.Novedades = d.data;
-             // $scope.TablaNovedad.reload();
+            $scope.Novedades = d.data;             
         }, function(err) {           
-                toaster.pop('error','Error','No se pudo procesar la solicitud');
-                console.log("Some Error Occured " + JSON.stringify(err));
+            toaster.pop('error','Error en cargar novedad.',err.data.error);
+            console.log("Some Error Occured " + JSON.stringify(err));
         }); 
     }
    
@@ -354,11 +359,11 @@ app.controller("conductorController", ["$scope", "conductorService", "tipoDocume
     
      $scope.getLicencia = function(item) {
         $scope.LicenciaConduccion=item;
-        $scope.editMode = true;
-        $scope.active = "active";
+        $scope.editModeLic = true;        
     };
     
     function loadLicenciaConduccion (Id){
+        $scope.Licencias=[];
         var promise = conductorService.getLicencia(Id);
         promise.then(function(d) {                        
             $scope.Licencias = d.data;
@@ -402,7 +407,7 @@ app.controller("conductorController", ["$scope", "conductorService", "tipoDocume
         $scope.LicenciaConduccion.Categoria = $scope.LicenciaConduccion.Categoria.toUpperCase(); 
 
         var promise;
-        if($scope.editMode){            
+        if($scope.editModeLic){            
             promise = conductorService.putLicencia($scope.LicenciaConduccion.IdLicencia, $scope.LicenciaConduccion);
         }else {
             promise = conductorService.postLicencia($scope.LicenciaConduccion);            

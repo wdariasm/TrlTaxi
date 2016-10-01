@@ -399,18 +399,12 @@
                         </div>
 
                         <div class="tab-pane" id="tabNovedad">
-                            <form class="col-xs-10 col-xs-offset-1" name="frmNovedad" id="frmNovedad"  >
-                                
-                                <div class="row">
-                                    <div class="col-xs-6 text-right">
-                                        <h4>Gestión de Novedades </h4> 
+                            <form class="col-md-10 col-md-offset-1" name="frmNovedad" id="frmNovedad"  >
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">Gestión de Novedades
+                                        <h4 style="display: inline-block; float: right; margin-top: -2px;">{{Vehiculo.Placa}}</h4>
                                     </div>
-                                    <div class="col-md-3 text-left">
-                                        <h4 style="display: inline-block">{{Vehiculo.Placa}}</h4>
-                                    </div>
-                                </div>
-                                
-                                
+                                <div class="panel-body">
                                 <div class="row">
                                     <div class="col-md-4">
                                         <div class="form-group">
@@ -454,7 +448,7 @@
                                             <label  for="txtFechaExp">Fecha Expedicion</label>
                                             <div class="input-group">
                                                 <div class="input-group-addon"><i class="fa fa-calendar-check-o text-success"></i></div>
-                                                <input type="text" id="txtFechaExp" ng-model="Novedad.FechaExpedicion"  name="txtFechaExp" class="form-control dateNovedad" value=""  data-date-format="DD/MM/yyyy">                                                                                            
+                                                <input type="text" id="txtFechaExp" ng-model="Novedad.FechaExpedicion"  name="txtFechaExp" class="form-control dateNovedad" value="" ng-change="CambiarFormato2('FechaExpedicion')"  data-date-format="DD/MM/yyyy">                                                                                            
                                             </div>
                                         </div>
                                     </div>
@@ -464,7 +458,7 @@
                                             <label  for="txtFechaInicio">Fecha Inicio</label>
                                             <div class="input-group">
                                                 <div class="input-group-addon"><i class="fa fa-calendar-plus-o text-success"></i></div>
-                                                <input type="text" id="txtFechaInicio" ng-model="Novedad.FechaInicioVigencia" name="txtFechaInicio" class="form-control dateNovedad" value=""  data-date-format="DD/MM/yyyy">                                                                                            
+                                                <input type="text" id="txtFechaInicio" ng-model="Novedad.FechaInicioVigencia" name="txtFechaInicio" class="form-control dateNovedad" value=""  ng-change="CambiarFormato2('FechaInicioVigencia')" data-date-format="DD/MM/yyyy">                                                                                            
                                             </div>
                                         </div>
                                     </div>
@@ -474,7 +468,7 @@
                                             <label  for="txtFechaVen">Fecha Vencimiento</label>
                                             <div class="input-group">
                                                 <div class="input-group-addon"><i class="fa fa-calendar-times-o text-success"></i></div>
-                                                <input type="text" id="txtFechaVen" ng-model="Novedad.FechaVencimiento" name="txtFechaVen" class="form-control dateNovedad" value=""  data-date-format="DD/MM/yyyy">                                                                                            
+                                                <input type="text" id="txtFechaVen" ng-model="Novedad.FechaVencimiento" name="txtFechaVen" class="form-control dateNovedad" value="" ng-change="CambiarFormato2('FechaVencimiento')"  data-date-format="DD/MM/yyyy">                                                                                            
                                             </div>
                                         </div>
                                     </div>
@@ -528,10 +522,15 @@
                                         <button   class="btn btn-danger btn-block btn-addon"   type="button"  title="Registrar Vehiculo" ng-click="AgregarNovedad()"><i class="fa fa-check"></i>   Agregar</button>
                                     </div>
                                 </div>
-                                <br/><br/>
+                                <br/>
+                                    </div>
+                                </div>    
                             </form>
                             
-                            
+                            <div class="row">
+                                <div class="col-md-10 col-md-offset-1">
+                                <div class="panel panel-default">
+                                <div class="panel-heading">Listado de Novedades</div>
                              <table class="table table-striped table-condensed" ng-table="TablaNovedad">
                                 <thead>
                                     <tr>
@@ -550,8 +549,8 @@
                                         <td>{{ item.Codigo}}</td>
                                         <td>{{ item.Tipo }}</td>
                                         <td>{{ item.Entidad}}</td>
-                                        <td>{{ item.FechaInicioVigencia | date: "dd/MM/yyyy" }}</td>
-                                        <td>{{ item.FechaVencimiento | date: 'dd/MM/yyyy' }}</td>
+                                        <td>{{ ConvertirFecha(item.FechaInicioVigencia)  }}</td>
+                                        <td>{{ ConvertirFecha(item.FechaVencimiento) }}</td>
                                          <td>{{ item.Estado}}</td>
                                         <td>
                                             <center>
@@ -563,6 +562,10 @@
                                     </tr>
                                 </tbody>
                             </table>
+                            </div>
+                                
+                            </div>
+                        </div>
                         </div>
                     </div>
                 </div>

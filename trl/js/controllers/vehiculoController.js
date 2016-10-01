@@ -250,7 +250,15 @@ app.controller("vehiculoController", ["$scope", "vehiculoService", "marcaService
     $scope.CambiarFormato=function (variable){
         $scope.Vehiculo[variable] = moment($scope.Vehiculo[variable]).format('L');
     };
+        
+    $scope.CambiarFormato2=function (variable){
+        $scope.Novedad[variable] = moment($scope.Novedad[variable]).format('L');
+    };    
     
+    $scope.ConvertirFecha =  function (fecha){
+        var f = new Date(fecha);       
+        return f.toLocaleDateString('en-GB');
+    };
     
     $scope.ValidarPlaca = function () {
         $scope.valPlaca = false;

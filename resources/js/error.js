@@ -38,8 +38,7 @@ function enviarImagen() {
             contentType: "application/json; charset=utf-8",
             dataType: "json",
           
-            success: function (result) {
-                console.log(result);
+            success: function (result) {                
                 $("#btnCapturar").prop("disabled", false);
                 if (result.message === "Correcto") {
                     $("#infoSoporte").html("Su mensaje ha sido enviado correctamente");

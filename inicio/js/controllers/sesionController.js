@@ -31,7 +31,7 @@ app.controller('sesionController', ['$scope' , 'sesionService', 'toaster','$auth
             password: $scope.Usuario.Clave
         };
        var promise = sesionService.login(object);
-        promise.then(function(d) {
+        promise.then(function(d) {            
             if(d.data.error){
                 toaster.pop('error','¡Error!', d.data.error);
                 return;
@@ -51,7 +51,7 @@ app.controller('sesionController', ['$scope' , 'sesionService', 'toaster','$auth
             }               
                             
         }, function(err) {
-               toaster.pop('error', '¡Error al autenticar!', err.data);
+               toaster.pop('error', '¡Error al autenticar!', err.data.error);
                 console.log("Some Error Occured " + JSON.stringify(err));
         });
     };

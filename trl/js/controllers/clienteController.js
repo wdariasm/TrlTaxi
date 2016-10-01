@@ -45,8 +45,8 @@ function ($scope, clienteService, tipoDocumentoService,toaster,ngTableParams, fu
             $scope.Clientes = d.data;
             $scope.TablaCliente.reload();             
         }, function(err) {           
-                toaster.pop('error','¡Error!',"Error al cargar Clientes");           
-                console.log("Some Error Occured " + JSON.stringify(err));
+            toaster.pop('error','¡Error al cargar clientes!', err.data.error,0);           
+            console.log("Some Error Occured " + JSON.stringify(err));
         }); 
     }
    
@@ -58,7 +58,7 @@ function ($scope, clienteService, tipoDocumentoService,toaster,ngTableParams, fu
                $scope.TipoSelect = d.data[0];
             }
         }, function(err) {           
-                toaster.pop('error','¡Error!',"ERROR AL PROCESAR SOLICITUD");            
+                toaster.pop('error','¡Error tipo de documentos!',err.data.error,5000);            
                 console.log("Some Error Occured " + JSON.stringify(err));
         }); 
     }
@@ -215,7 +215,11 @@ function ($scope, clienteService, tipoDocumentoService,toaster,ngTableParams, fu
         });
     };
     
-   
+    $scope.GetAllClientes= function (){        
+        loadCliente();
+        loadTipoDocumentos();
+    };
+    
     loadCliente();
 }]);
 

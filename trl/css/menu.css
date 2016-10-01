@@ -36,8 +36,7 @@ body {
 }
 
 #contenido{    
-    padding: 10px 0px 5px 0px;    
-    border-left: 1px solid #ccc;
+    padding: 10px 0px 5px 0px;        
     min-height: 580px;
     height: auto;        
 }
@@ -121,7 +120,7 @@ body {
   -webkit-transition: all 0.5s cubic-bezier(0.55, 0, 0.1, 1);
   -o-transition: all 0.5s cubic-bezier(0.55, 0, 0.1, 1);
   transition: all 0.5s cubic-bezier(0.55, 0, 0.1, 1);
-  min-height: 580px;
+  min-height: 580px;  
 }
 .sidebar:before,
 .sidebar:after {
@@ -477,6 +476,7 @@ body {
   transform: translate3d(-240px, 0, 0);
 }
 .sidebar.open {
+  border-right: 1px solid #ccc;
   min-width: 240px;
   width: 240px;
   -webkit-transform: translate3d(0, 0, 0);
