@@ -1,5 +1,5 @@
-app.controller("homeController", ["$scope", "parametroService", "usuarioService", '$auth',
-    function ($scope,parametroService, usuarioService, $auth) {
+app.controller("homeController", ["$scope", "parametroService", "usuarioService", '$auth','$rootScope',
+    function ($scope,parametroService, usuarioService, $auth, $rootScope) {
         
     $scope.Titulo = "BIENVENIDOS"; 
     $scope.Login = {};
@@ -69,8 +69,8 @@ app.controller("homeController", ["$scope", "parametroService", "usuarioService"
             }
         }
     };
-    
-    function refresToken(){
+            
+    $rootScope.refresToken = function (opcion){
         var promiseGet = usuarioService.refrescar(); 
         promiseGet.then(function(pl) {              
             $auth.setToken(pl.data.token);            
@@ -78,10 +78,10 @@ app.controller("homeController", ["$scope", "parametroService", "usuarioService"
         function(errorPl) {
             console.log('Error al validar session', errorPl);
         });
-    }
+    };
     
     validarUser();        
-    setInterval(function(){refresToken();},1080000);
+    setInterval(function(){ $rootScope.refresToken();},900000);
 }]);
 
 app.controller('salirController',['$scope', 'usuarioService', 'toaster', function ($scope, usuarioService, toaster) {
@@ -109,3 +109,11 @@ app.controller('salirController',['$scope', 'usuarioService', 'toaster', functio
    
 }]);
 
+function refrescar(){
+    var elem = angular.element(document.querySelector('[ng-app]'));
+    var injector = elem.injector();
+    var rootScope = injector.get('$rootScope');          
+    rootScope.$apply(function(){        
+        setTimeout(function () { rootScope.refresToken("true");}, 7000);            
+    });
+}
