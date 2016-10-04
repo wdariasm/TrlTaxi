@@ -70,6 +70,12 @@ var app;
         };
     });        
     
+    app.run(['$rootScope','$location', '$routeParams', function($rootScope, $location, $routeParams) {
+        $rootScope.$on('$routeChangeSuccess', function(e, current, pre) { 
+            sessionStorage.setItem("trlRuta", btoa($location.path()));        
+        });
+    }]);
+    
     app.directive('ngEnter', function () {
         return function (scope, elements, attrs) {
             elements.bind('keydown keypress', function (event) {

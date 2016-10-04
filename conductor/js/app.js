@@ -20,6 +20,9 @@ var app;
                 templateUrl: 'views/servicio/historial.html'
             })
             
+            .when("/1/cartera",{
+                templateUrl: 'views/servicio/cartera.html'
+            })                        
             
             .when("/2/usuario/clave",{
                 templateUrl: 'views/conductor/cambiarClave.html'
@@ -58,6 +61,12 @@ var app;
           }
         };
     });
+    
+    app.run(['$rootScope','$location', '$routeParams', function($rootScope, $location, $routeParams) {
+        $rootScope.$on('$routeChangeSuccess', function(e, current, pre) { 
+            sessionStorage.setItem("trlRuta", btoa($location.path()));        
+        });
+    }]);
         
     app.directive('ngEnter', function () {
         return function (scope, elements, attrs) {

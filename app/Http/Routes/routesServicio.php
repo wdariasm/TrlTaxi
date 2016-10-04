@@ -22,3 +22,11 @@
     
     /* Cancelar Servicio */
     Route::put('api/servicio/{id}/cancelar','ServicioController@cancelarServico');
+    
+    /* Servicio por conductor y rango de fecha*/
+    Route::post('api/servicio/conductor','ServicioController@getServicioConductorFecha');
+    
+    /* Servicio cartera  por conductor y rango de fecha*/
+    Route::post('api/servicio/cartera','ServicioController@getCarteraConductorFecha');
+    
+    

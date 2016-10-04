@@ -1,0 +1,119 @@
+<div ng-controller="carteraController" class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">            
+            <div class="row">                                
+                <div class="col-md-12" style="margin-top: 10px;">
+                    <div class="panel panel-default ">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Seleccionar rango de fechas </h3>
+                        </div>
+                        
+                        <div class="panel-body">
+                            <div class="col-md-2">     
+                                <label>Fecha de Inicio *</label>
+                                <div class="input-group">
+                                    <div class="input-group-addon"><i class="fa fa-calendar-minus-o"></i></div>
+                                    <input type="text" id="txtFechaInicio" ng-model="Busqueda.FechaInicio" name="txtFechaInicio" class="form-control" value="" ng-change="CambiarFormato('FechaInicio')" title="Fecha Inicio" readonly="" >
+                                </div>                                                        
+                            </div>
+
+                            <div class="col-md-2">    
+                                <label>Fecha Fin *</label>
+                                <div class="input-group">
+                                    <div class="input-group-addon"><i class="fa fa-calendar-plus-o"></i></div>
+                                    <input type="text" id="txtFechaFin" ng-model="Busqueda.FechaFin" name="txtFechaFin" class="form-control" value="" ng-change="CambiarFormato('FechaFin')" title="Fecha Final" readonly="" >
+                                </div>                                                        
+                            </div>
+
+                            <div class="col-md-2 " >
+                                <button type="button" style="margin-top: 22px;" class="btn btn-primary btn-addon" ng-click="GetServicios()" ><i class="fa fa-refresh"></i> Consultar</button>
+                            </div>
+                        </div>
+                    </div> 
+                </div> 
+                
+            </div>
+            
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="panel panel-default panel-success">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Cartera </h3>
+                        </div>
+                        <div class="panel-body">
+                            <table class="table table-striped table-condensed"  style="margin-top: 15px;">
+                            <tbody>
+                                <tr>
+                                    <td>N° Servicios</td>
+                                     <td>{{ Cartera[0].Cantidad}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Efectivo</td>
+                                    <td >{{ Cartera[0].Efectivo | currency : "$" : 0}}</td> 
+                                </tr>                                
+                                <tr>
+                                    <td>Debito</td>
+                                    <td >{{ Cartera[0].Debito | currency : "$" : 0}}</td> 
+                                </tr>
+                                <tr>
+                                    <td>Credito</td>
+                                    <td >{{ Cartera[0].Credito | currency : "$" : 0}}</td> 
+                                </tr>
+                                <tr>
+                                    <td>Total</td>
+                                    <td >{{ Cartera[0].Total | currency : "$" : 0}}</td> 
+                                </tr>
+                                <tr ng-hide="Cartera.length">                                    
+                                    <td colspan="2" class="text-center text-danger">No se encontraron resultados</td>
+                                </tr>
+                            </tbody>
+                            </table>  
+                        </div>                                         
+                </div>                                        
+            </div>
+               
+            <div class="col-md-6" >
+               <div class="panel panel-default ">
+                   <div class="panel-heading">
+                       <h3 class="panel-title">Grafica </h3>
+                   </div>
+                   <div class="panel-body">
+
+                   </div>
+               </div>
+            </div>
+                
+                
+                
+        </div> 
+    </div>
+</div>
+
+<script type="text/javascript">
+    
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip();
+        
+        $('input[name="txtFechaInicio"]').daterangepicker({
+            singleDatePicker: true,
+            showDropdowns: true           
+        }, 
+        function(start, end, label) {
+            $('#txtFechaInicio').val(end.format('DD/MM/YYYY'));         
+        });
+        
+        $('input[name="txtFechaFin"]').daterangepicker({
+            singleDatePicker: true,
+            showDropdowns: true           
+        }, 
+        function(start, end, label) {
+            $('#txtFechaFin').val(end.format('DD/MM/YYYY'));         
+        });
+    });
+        
+        
+    
+</script>
+
+
+

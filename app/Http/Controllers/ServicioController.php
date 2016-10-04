@@ -70,9 +70,48 @@ class ServicioController extends Controller
         $servicio = DB::select($sql);
         return $servicio;        
     }
-
     
-
+    /*
+     * OBTENER SERVICIOS DEL CONDUCTOR POR RANGO DE FECHAS
+     */    
+    public function getServicioConductorFecha(Request $request){
+        $id = $request->get('id');
+        
+        $date = new \DateTime(str_replace("/", "-", $request->get('fecha')." 00:00:00"));
+        $fecha = $date->format('Y-m-d');
+        
+        $date2 = new \DateTime(str_replace("/", "-", $request->get('fechafin')." 00:00:00"));
+        $fechaFin = $date2->format('Y-m-d');
+        
+        $sql = "SELECT s.IdServicio, s.ContratoId, s.ClienteId, s.NumeroContrato, s.Responsable,"
+                . " s.Telefono, s.TipoServicidoId, ts.svDescripcion, s.FechaServicio, s.Hora, s.Valor, s.Estado, "
+                . " s.DescVehiculo, s.TipoVehiculoId, s.ValorTotal, s.ConductorId FROM servicio s INNER JOIN  tiposervicio "
+                . " ts ON s.TipoServicidoId=ts.svCodigo WHERE s.Estado = 'FINALIZADO'  "
+                . " and s.ConductorId = $id and s.FechaServicio BETWEEN '$fecha' AND '$fechaFin' order by s.IdServicio desc";
+       
+        $servicio = DB::select($sql);
+        return $servicio;        
+    }
+    
+    public function getCarteraConductorFecha(Request $request){
+        $id = $request->get('id');
+        
+        $date = new \DateTime(str_replace("/", "-", $request->get('fecha')." 00:00:00"));
+        $fecha = $date->format('Y-m-d');
+        
+        $date2 = new \DateTime(str_replace("/", "-", $request->get('fechafin')." 00:00:00"));
+        $fechaFin = $date2->format('Y-m-d');
+        
+        $sql = "SELECT COUNT(s.IdServicio) 'Cantidad', SUM(IF(s.FormaPago = 'EFECTIVO', s.ValorTotal, 0)) 'Efectivo',"
+                . " SUM(IF(s.FormaPago = 'CREDITO', s.ValorTotal, 0)) 'Credito', SUM(IF(s.FormaPago = 'DEBITO',"
+                . " s.ValorTotal, 0)) 'Debito', SUM(IF(s.FormaPago = 'CHEQUE', s.ValorTotal, 0)) 'Cheque', "
+                . " SUM(s.ValorTotal) 'Total' FROM servicio s  WHERE s.Estado = 'FINALIZADO' AND s.ConductorId = $id"
+                . " AND  DATE(s.FechaServicio) BETWEEN '$fecha' AND '$fechaFin' GROUP BY s.ConductorId ";
+       
+        $servicio = DB::select($sql);       
+        return $servicio;        
+    }
+    
 
     /**
      * Store a newly created resource in storage.

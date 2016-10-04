@@ -30,7 +30,7 @@ gulp.task('watch1', function () {
 });
 
 gulp.task('ctrlConductor', function () {
-    gulp.src(["trl/js/libs/funciones.js", "conductor/js/services/*.js", "conductor/js/controllers/*.js", "trl/js/session.js"])
+    gulp.src(["conductor/js/services/*.js", "conductor/js/controllers/*.js", "trl/js/session.js", "trl/js/libs/funciones.js"])
     .pipe(concat('vendors.js'))
     .pipe(uglify().on('error', gutil.log))
     .pipe(gulp.dest('conductor/dist/'));

@@ -40,6 +40,16 @@ app.service("servicioService",[ '$http', function ($http) {
         return req;                
     };
     
+    this.getServicios = function (servicio) {
+        var req = $http.post(uri+'/api/servicio/conductor',servicio); 
+        return req; 
+    };
+    
+    this.getCartera = function (servicio) {
+        var req = $http.post(uri+'/api/servicio/cartera',servicio); 
+        return req; 
+    };
+    
 }]);
 
 
