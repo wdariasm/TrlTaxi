@@ -1,6 +1,7 @@
 app.controller('usuarioController', ['$scope', 'usuarioService', 'toaster', "ngTableParams", "perfilService", 
-    "personaService", "funcionService", "clienteService", "conductorService", 
-function($scope, usuarioService,toaster,ngTableParams , perfilService, personaService, funcionService, clienteService, conductorService) {
+    "personaService", "funcionService", "clienteService", "conductorService", "contratoService",
+function($scope, usuarioService,toaster,ngTableParams , perfilService, personaService, funcionService, 
+clienteService, conductorService , contratoService) {
     $scope.Usuario = {};  
     $scope.Usuarios = [];
     $scope.Perfiles = [];
@@ -43,7 +44,8 @@ function($scope, usuarioService,toaster,ngTableParams , perfilService, personaSe
             Email : "",
             Contrato : "",
             Permisos : [],
-            Identificacion :""
+            Identificacion :"",
+            ContratoId : null
         };  
     }
          
@@ -235,10 +237,15 @@ function($scope, usuarioService,toaster,ngTableParams , perfilService, personaSe
             toaster.pop('info', '¡Alerta!', 'Seleccione al menos un permiso');
             return;
         }
-        
+                        
         $scope.Usuario.Modulo = funcionService.GetModuloUser($scope.Usuario.Permisos);
         $scope.Usuario.Nombre = $scope.Usuario.Nombre.toUpperCase();
         $scope.Usuario.TipoAcceso = $scope.PerfilSelect.IdRol;
+        
+        if($scope.PerfilSelect.IdRol === 5 && !$scope.Usuario.ContratoId){
+            toaster.pop('info', '¡Alerta!', 'El N° de contrato NO existe');
+            return;
+        }
                               
         var promise;
         if($scope.editMode){            
@@ -268,7 +275,7 @@ function($scope, usuarioService,toaster,ngTableParams , perfilService, personaSe
             getConductor(null, $scope.Usuario.Identificacion);
         }else if($scope.PerfilSelect.IdRol === 1 || $scope.PerfilSelect.IdRol === 2){
             getPersona(null, $scope.Usuario.Identificacion);
-        }else if($scope.PerfilSelect.IdRol === 4 || $scope.PerfilSelect.IdRol === 4){
+        }else if($scope.PerfilSelect.IdRol === 4 || $scope.PerfilSelect.IdRol === 5){
             getCliente(null, $scope.Usuario.Identificacion);
         }
     };
@@ -291,7 +298,29 @@ function($scope, usuarioService,toaster,ngTableParams , perfilService, personaSe
             console.log("Some Error Occured " + JSON.stringify(err));
         });
     };
-        
+    
+    $scope.BuscarContrato =  function (){
+        $scope.Usuario.ContratoId = null;
+        if (!$scope.Usuario.Contrato || $scope.Usuario.Contrato  ==="" ){
+            toaster.pop('info', "Estimado usuario(a), por favor ingrese el número de contrato");
+            return;
+        }       
+        toaster.pop('wait','Consultando informacioón....',"", 0);        
+        var promise = contratoService.getPorNumeroCto($scope.Usuario.Contrato);
+        promise.then(function(d) {                
+            if(d.data){
+                toaster.clear();
+                $scope.Usuario.ContratoId = d.data.IdContrato;
+                
+            }else{
+                toaster.pop('error', "Número de contrato no existe");
+            }
+            
+        }, function(err) {           
+                toaster.pop('error','¡Error!',err.data, 0);
+                console.log("Some Error Occured " + JSON.stringify(err));
+        });                
+    };           
     
      $scope.CambiarPass = function(id, nombre, login) {         
         $scope.User = {

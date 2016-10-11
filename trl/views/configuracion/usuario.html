@@ -131,7 +131,7 @@
                             <label for="txtContrato">N° Contraro*</label>
                              <div class="input-group">    
                                 <div class="input-group-addon"><i class="fa fa-navicon"></i></div>
-                                <input  type="text" ng-disabled="PerfilSelect.IdRol != '5'" class="form-control" ng-model="Usuario.Contrato" maxlength="11" id="txtContrato" placeholder="N° Contrato ">
+                                <input  type="text" ng-disabled="PerfilSelect.IdRol != '5'" class="form-control" ng-model="Usuario.Contrato" maxlength="11" id="txtContrato" placeholder="N° Contrato " ng-blur="BuscarContrato()">
                             </div>
                         </div>
                     </div>  

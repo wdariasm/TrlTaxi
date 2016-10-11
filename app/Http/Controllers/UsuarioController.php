@@ -85,7 +85,7 @@ class UsuarioController extends Controller
 
             return JsonResponse::create(array('message' => "Usuario guardado correctamente", "request" =>json_encode($usuario->IdUsuario)), 200);
         } catch (\Exception $exc) {
-            return JsonResponse::create(array('message' => "No se pudo guardar", "request" =>json_encode($exc->getMessage())), 401);
+            return JsonResponse::create(array('message' => "No se pudo guardar", "request" =>json_encode($exc->getMessage())), $exc->getCode());
         }
     }
     
