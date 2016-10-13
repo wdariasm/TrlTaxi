@@ -170,7 +170,7 @@ class ServicioController extends Controller
                                     
             return JsonResponse::create(array('message' => "Servicio guardado correctamente", "request" =>json_encode($servicio->IdServicio)), 200);
         } catch (\Exception $exc) {    
-            return JsonResponse::create(array('message' => "No se pudo guardar", "request" =>json_encode($exc->getMessage())), 401);
+            return JsonResponse::create(array('message' => "No se pudo guardar", "request" =>json_encode($exc->getMessage())), 500);
         }
     }
     
@@ -235,7 +235,7 @@ class ServicioController extends Controller
                                               
             return JsonResponse::create(array('message' => "Servicio actualizado correctamente", "request" =>json_encode($result)), 200);
         } catch (\Exception $exc) {
-            return JsonResponse::create(array('message' => "No se pudo guardar", "request" =>json_encode($exc->getMessage())), 401);
+            return JsonResponse::create(array('message' => "No se pudo guardar", "request" =>json_encode($exc->getMessage())), 500);
         }
     }
 
@@ -251,7 +251,7 @@ class ServicioController extends Controller
             $servicio = DB::update("UPDATE servicio SET Estado= 'RECHAZADO', ConductorId=NULL WHERE IdServicio=$id ");
             return JsonResponse::create(array('message' => "Servicio rechazado", "request" =>json_encode($servicio)), 200);
         } catch (\Exception $exc) {
-            return JsonResponse::create(array('message' => "No se pudo  actualizar servicio", "request" =>json_encode($exc->getMessage())), 401);
+            return JsonResponse::create(array('message' => "No se pudo  actualizar servicio", "request" =>json_encode($exc->getMessage())), 500);
         }
     }
     
@@ -278,7 +278,7 @@ class ServicioController extends Controller
             }	                        	    
             return JsonResponse::create(array('bandera' => "Correcto", 'message' => "Servicio cancelado correctamente",), 200);
         } catch (\Exception $exc) {
-             return JsonResponse::create(array('bandera' => "Error", "request" =>json_encode($exc->getMessage())), 401);         
+             return JsonResponse::create(array('bandera' => "Error", "request" =>json_encode($exc->getMessage())), 500);         
         }
     }        
     
@@ -289,7 +289,7 @@ class ServicioController extends Controller
             $servicio = DB::update("UPDATE servicio SET Estado= '".$data['Estado']."' WHERE IdServicio=$id ");                        
             return JsonResponse::create(array('message' => "Servicio actualizado correctamente", "request" =>json_encode($servicio)), 200);
         } catch (\Exception $exc) {
-            return JsonResponse::create(array('message' => "No se pudo  actualizar servicio", "request" =>json_encode($exc->getMessage())), 401);
+            return JsonResponse::create(array('message' => "No se pudo  actualizar servicio", "request" =>json_encode($exc->getMessage())), 500);
         }
     }
     
