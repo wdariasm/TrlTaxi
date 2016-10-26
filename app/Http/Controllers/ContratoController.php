@@ -17,23 +17,37 @@ class ContratoController extends Controller
 {
     
     public function index(){
-        return Contrato::take(20)->get();
+        try{
+            return Contrato::take(20)->get();      
+        }catch (\Exception $exc) {
+            return JsonResponse::create(array('file' => $exc->getFile(), "line"=> $exc->getLine(),  "message" =>json_encode($exc->getMessage())), 500);
+        } catch (Exception $ex) {
+            return JsonResponse::create(array('file' => $ex->getFile(), "line"=> $ex->getLine(),  "message" =>json_encode($ex)), 500);
+        }
     }
     
     public function tipoContrato (){
-        return DB::select("select * from tipocontrato");
+        try{
+            return DB::select("select * from tipocontrato");        
+        }catch (\Exception $exc) {
+            return JsonResponse::create(array('file' => $exc->getFile(), "line"=> $exc->getLine(),  "message" =>json_encode($exc->getMessage())), 500);
+        }
     }
     
     public function  getPorNumeroContrato($contrato){
-        $result =  Contrato::where('ctNumeroContrato', $contrato)->first();
-        if(!empty($result)){
-            $result->TipoServicio = ContratoTipoServicio::where('csContratoId', $result->IdContrato)->get();
-            $result->Plantilla = ContratoPlantilla::join("plantilla", 'contratoplantilla.pcPlantillaId', '=', 'plantilla.plCodigo')
-                    ->select("contratoplantilla.pcCodigo","contratoplantilla.pcTipoServicio","plantilla.plCodigo", "plantilla.plDescripcion")
-                    ->where('pcContratoId', $result->IdContrato)->get();
-            
+        try {
+            $result =  Contrato::where('ctNumeroContrato', $contrato)->first();
+            if(!empty($result)){
+                $result->TipoServicio = ContratoTipoServicio::where('csContratoId', $result->IdContrato)->get();
+                $result->Plantilla = ContratoPlantilla::join("plantilla", 'contratoplantilla.pcPlantillaId', '=', 'plantilla.plCodigo')
+                        ->select("contratoplantilla.pcCodigo","contratoplantilla.pcTipoServicio","plantilla.plCodigo", "plantilla.plDescripcion")
+                        ->where('pcContratoId', $result->IdContrato)->get();
+
+            }
+            return $result;
+        }catch (\Exception $exc) {
+            return JsonResponse::create(array('file' => $exc->getFile(), "line"=> $exc->getLine(),  "message" =>json_encode($exc->getMessage())), 500);
         }
-        return $result;
     }
     
     function getContratoByCliente($id, $estado) {

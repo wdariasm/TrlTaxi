@@ -44,7 +44,7 @@
                                     <th>FECHA</th>
                                     <th>HORA</th>
                                     <th>ESTADO</th>
-                                    <th width="6%">ACCION</th>
+                                    <th width="9%">ACCION</th>
                                 </tr>
                             </thead>
 
@@ -64,7 +64,8 @@
                                          <center>
                                              
                                             <div ng-switch="item.Estado">
-                                                <a ng-switch-when="ASIGNADO" ng-click="CambiarEstado(item,'CONFIRMADO', 'SI')" style="float: left; margin-left: 3px;" href="javascript:;"  title="Confirmar"><i class="fa fa-check fa-1x text-success"></i></a>
+                                                <a ng-switch-when="ASIGNADO" ng-click="RealizarServicio(item)" style="float: left; margin-left: 3px;" href="javascript:;"  title="Detalle del Servicio"><i class="fa fa-search fa-1x text-info"></i></a>
+                                                <a ng-switch-when="ASIGNADO" ng-click="CambiarEstado(item,'CONFIRMADO', 'SI')" style="float: left; margin-left: 3px;" href="javascript:;"  title="Confirmar"><i class="fa fa-check fa-1x text-success"></i></a>                                                
                                                 <a ng-switch-default ng-click="RealizarServicio(item)" style="float: left; margin-left: 3px;" href="javascript:;"  title="Realizar Servicio"><i class="fa fa-road fa-1x text-success"></i></a> 
                                             </div>
                                              
@@ -184,10 +185,10 @@
                             </div>
                             <hr>
                             
-                            <div class="row" style="margin-top: -5px;">
+                            <div class="row" style="margin-top: -5px;" ng-show="ServicioDto.Estado != 'ASIGNADO'">
                                 <div class="col-md-4 col-md-offset-2 col-xs-8 col-xs-offset-2 text-center">
                                     <div class="text-center">
-                                        <button type="button" class="btn  btn-addon btn-block  {{ValBoton.Color}}" ng-click="ActualizarServicio()"><i class="fa fa-check"></i> {{ValBoton.EstSiguiente}}</button>                                        
+                                        <button type="button" class="btn  btn-addon btn-block  {{ValBoton.Color}}" ng-click="ActualizarServicio()" title="{{ValBoton.EstSiguiente}}"><i class="fa fa-check"></i> {{ValBoton.EstSiguiente}}</button>                                        
                                     </div>  
                                     <br>
                                 </div>
@@ -198,6 +199,14 @@
                                     </div>                                    
                                 </div>
                                 
+                            </div>
+                            
+                            <div class="row" ng-show="ServicioDto.Estado == 'ASIGNADO'">
+                                <div class="col-md-4 col-md-offset-3 col-xs-8 col-xs-offset-2 text-center">
+                                    <div class="text-center">
+                                        <button class="btn btn-success btn-addon btn-block" type="button" ng-click="CambiarEstado(ServicioDto, 'CONFIRMADO', 'SI')"><i class="fa fa-ban"></i> Confirmar</button>
+                                    </div>                                    
+                                </div>
                             </div>
                                 
                                 

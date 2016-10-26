@@ -45,28 +45,41 @@ class ZonaController extends Controller
         return $result;
     }
     
-    public function getPuntosAll() {        
-       //$result= DB::select("SELECT znCodigo,znNombre FROM zona WHERE st_contains(znArea, POINT($latitud, $longitud)) LIMIT 1");               
+    public function getPuntosAll() {               
+        try{
+            $lstZona =  array();        
+            $result = DB::select("SELECT z.znCodigo, z.znNombre,  GROUP_CONCAT(p.ptLatitud ,',', p.ptLongitud ORDER BY p.ptCodigo ASC SEPARATOR ';')"
+                    . " AS ptArea FROM zona z INNER JOIN puntos p ON z.znCodigo = p.ptZona  WHERE z.znEstado='ACTIVO'  GROUP BY z.znCodigo");
+            for ($index = 0; $index < count($result); $index++) {
+                $puntos = array();
+                $cantidad =  strlen($result[$index]->ptArea);
+                if($cantidad < 1000){                                        
+                    $ptZona = explode(";", $result[$index]->ptArea);                                              
+                    for ($j = 0; $j < count($ptZona); $j++) {
+                        $p = explode("," ,$ptZona[$j]);                
+                        $pos = ["latitud" => $p[0], "longitud"=> $p[1]];
+                        array_push($puntos, $pos);
+                    }                 
+                }else{                    
+                    $consulta = DB::select("SELECT ptLatitud, ptLongitud FROM puntos WHERE ptZona= ".$result[$index]->znCodigo);                    
+                    foreach ($consulta as $pt) {                        
+                        $pos = ["latitud" => $pt->ptLatitud, "longitud"=> $pt->ptLongitud];
+                        array_push($puntos, $pos);
+                    }
+                            
+                }                                         
+                $zona = array(
+                    "Zona" => $result[$index]->znCodigo,
+                    "Nombre" => $result[$index]->znNombre,
+                    "Puntos" => $puntos
+                );                    
+                array_push($lstZona,$zona);            
+            }         
+            return $lstZona;
+        }catch (\Exception $exc) {
+            return JsonResponse::create(array('file' => $exc->getFile(), "line"=> $exc->getLine(),  "message" =>json_encode($exc->getMessage())), 500);
+        }
         
-        $lstZona =  array();        
-        $result = DB::select("SELECT z.znCodigo, z.znNombre,  GROUP_CONCAT(p.ptLatitud ,',', p.ptLongitud ORDER BY p.ptCodigo ASC SEPARATOR ';')"
-                . " AS ptArea FROM zona z INNER JOIN puntos p ON z.znCodigo = p.ptZona  WHERE z.znEstado='ACTIVO'  GROUP BY z.znCodigo");
-        for ($index = 0; $index < count($result); $index++) {
-            $ptZona = explode(";", $result[$index]->ptArea);            
-            $puntos = array();
-            for ($j = 0; $j < count($ptZona); $j++) {
-                $p = explode("," ,$ptZona[$j]);                
-                $pos = ["latitud" => $p[0], "longitud"=> $p[1]];
-                array_push($puntos, $pos);
-            }                                              
-            $zona = array(
-                "Zona" => $result[$index]->znCodigo,
-                "Nombre" => $result[$index]->znNombre,
-                "Puntos" => $puntos
-            );                    
-            array_push($lstZona,$zona);            
-        }         
-        return $lstZona;
     }
 
 

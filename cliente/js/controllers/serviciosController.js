@@ -50,7 +50,7 @@ app.controller('serviciosController',['$scope', 'zonaService', 'ngTableParams', 
     iniciarMapaZ();     
     initAutocomplete();
     initAutocompleteDestino();
-    initAutocompleteParada();
+   // initAutocompleteParada();
     init();
     
     $scope.AceptarCondicion = false;
@@ -83,7 +83,7 @@ app.controller('serviciosController',['$scope', 'zonaService', 'ngTableParams', 
             Tipo : {},
             Responsable : "",
             FechaServicio: moment().format('L'),
-            Hora:"",
+            Hora: moment().format("hh:mm a"),
             Valor : 0,
             NumHoras : "0",
             NumPasajeros : "0",
@@ -626,9 +626,9 @@ app.controller('serviciosController',['$scope', 'zonaService', 'ngTableParams', 
             $scope.ContratoSelect = {};
             $scope.Nuevo();
             
-        }, function(err) {
-                toaster.pop('error','¡Error!',err.data.request, 0);
-                console.log("Some Error Occured " + JSON.stringify(err));
+        }, function(err) {            
+            toaster.pop('error','¡Error!',err.data, 0);
+            console.log("Some Error Occured " + JSON.stringify(err));
         });
         
     };
@@ -646,8 +646,9 @@ app.controller('serviciosController',['$scope', 'zonaService', 'ngTableParams', 
         if(!$scope.Servicio.Tipo.csValor){
             toaster.pop("info","¡Alerta!", "Seleccione el tipo de servicio.");
             return;
-        }
-        
+        }        
+        $scope.Parada.prLatiud = 0;
+        $scope.Parada.prLongitud  = 0;                  
         $scope.Parada.prValor = $scope.Servicio.Tipo.csValor;
         $scope.Parada.prFecha = $scope.Servicio.FechaServicio;
         $scope.Servicio.Paradas.push($scope.Parada);

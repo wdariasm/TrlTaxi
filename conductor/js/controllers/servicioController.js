@@ -112,7 +112,7 @@ app.controller("servicioController", ["$scope",  "toaster",  "servicioService","
             $scope.Servicios = d.data;
             $scope.TablaServicio.reload();             
         }, function(err) {           
-                toaster.pop('error','¡Error!',"Error al cargar servicios");           
+                toaster.pop('error','¡Error al cargar servicios!',err.data);           
                 console.log("Some Error Occured " + JSON.stringify(err));
         }); 
     };
@@ -130,6 +130,9 @@ app.controller("servicioController", ["$scope",  "toaster",  "servicioService","
         promise.then(function(d) {                        
             toaster.pop('success','¡Información!', d.data.message);
             $scope.GetServiciosConductor();
+             if($scope.ServicioDto){
+                cerrarServicio();
+            }  
         }, function(err) {           
                 toaster.pop('error','¡Error confirmar servicio!',err.data.request, 0);           
                 console.log("Some Error Occured " + JSON.stringify(err));
@@ -174,11 +177,17 @@ app.controller("servicioController", ["$scope",  "toaster",  "servicioService","
     
     function estadoServicio (estado){
         switch (estado) {
+                        
             case "CONFIRMADO":
-                $scope.ValBoton.EstSiguiente = "EN SITIO";
+                $scope.ValBoton.EstSiguiente = "DESPLAZAMIENTO A SITIO";
                 $scope.ValBoton.EstAnterior ="CONFIRMADO";
                 $scope.ValBoton.Color = " btn-success";
                 break;
+            case "DESPLAZAMIENTO A SITIO":
+                $scope.ValBoton.EstSiguiente = "EN SITIO";
+                $scope.ValBoton.EstAnterior ="DESPLAZAMIENTO A SITIO";
+                $scope.ValBoton.Color = " btn-success";
+            break;
             case "EN SITIO":
                 $scope.ValBoton.EstSiguiente = "EN RUTA";
                 $scope.ValBoton.EstAnterior ="EN SITIO";
@@ -233,7 +242,8 @@ app.controller("servicioController", ["$scope",  "toaster",  "servicioService","
     $scope.RechazarServicio=  function (id){        
         var promise = servicioService.delete(id);
         promise.then(function(d) {                        
-            toaster.pop('success','¡Información!', d.data.message);            
+            toaster.pop('success','¡Información!', d.data.message);  
+            $scope.GetServiciosConductor();
         }, function(err) {           
             toaster.pop('error','¡Error cancelar servicio!',err.data.request, 0);           
             console.log("Some Error Occured " + JSON.stringify(err));

@@ -134,9 +134,9 @@
                                 <div class="col-xs-3">
                                     <div class="form-group">
                                         <label  for="txtFechaInicio">Fecha Inicio *</label>
-                                        <div class="input-group">
-                                            <div class="input-group-addon"><i class="fa fa-calendar-times-o text-success"></i></div>
-                                            <input type="text" id="txtFechaInicio" name="txtFechaInicio" ng-model="Contrato.ctFechaInicio" class="form-control" value=""  ng-change="CambiarFormato('ctFechaInicio')">                                                                                            
+                                        <div class="input-group" >
+                                            <div class="input-group-addon"><i class="fa fa-calendar-times-o text-success"></i></div>                                            
+                                            <input type="text" id="txtFechaInicio" name="txtFechaInicio" ng-model="Contrato.ctFechaInicio" class="form-control" value=""  ng-change="CambiarFormato('ctFechaInicio')">
                                         </div>
                                     </div>
                                 </div>
@@ -262,13 +262,13 @@
   //  $('#tabPanels a[href="#tabRegistroCto"]').tab('show');
     
      $(function() {
-        $('input[name="txtFechaInicio"]').daterangepicker({
+         $('input[name="txtFechaInicio"]').daterangepicker({
             singleDatePicker: true,
             showDropdowns: true           
         }, 
         function(start, end, label) {
             $('#txtFechaInicio').val(end.format('DD/MM/YYYY'));         
-        });
+        }); 
         
         $('input[name="txtFechaFin"]').daterangepicker({
             singleDatePicker: true,

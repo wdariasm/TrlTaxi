@@ -31,7 +31,7 @@ app.controller("contratoController", ["$scope", 'tipoVehiculoService', "toaster"
         promise.then(function(d) {                        
             $scope.TipoServicio = d.data;
         }, function(err) {           
-                toaster.pop('error','¡Error!',"Error al cargar tipos de servicio");
+                toaster.pop('error','¡Error al cargar tipos de servicio!', err.data, 0);
                 console.log("Some Error Occured " + JSON.stringify(err));
         });
     }
@@ -41,9 +41,9 @@ app.controller("contratoController", ["$scope", 'tipoVehiculoService', "toaster"
         promise.then(function(d) {                        
             $scope.Contatos = d.data;
             $scope.TablaContrato.reload();
-        }, function(err) {           
-                toaster.pop('error','¡Error!',"Error al cargar contratos");
-                console.log("Some Error Occured " + JSON.stringify(err));
+        }, function(err) {             
+            toaster.pop('error','¡ Error al cargar contratos!', err.data , 0);
+            console.log("Some Error Occured " + JSON.stringify(err));
         });
     }
     
@@ -77,7 +77,7 @@ app.controller("contratoController", ["$scope", 'tipoVehiculoService', "toaster"
                 $scope.TipoContratoSelect = d.data[0];
             }
         }, function(err) {           
-            toaster.pop('error','¡Error!',"Error al cargar tipos de contrato");
+            toaster.pop('error','¡ Error al cargar tipos de contrato!', JSON.stringify(err.data), 0);
             console.log("Some Error Occured " + JSON.stringify(err));
         });
     }
@@ -173,12 +173,22 @@ app.controller("contratoController", ["$scope", 'tipoVehiculoService', "toaster"
         return f.toLocaleDateString('en-GB');
     };
     
-    $scope.CambiarFormato=function (variable){
-        $scope.Contrato[variable] = moment($scope.Contrato[variable]).format('L');                
-        var diferencia = moment.preciseDiff($scope.Contrato.ctFechaInicio, $scope.Contrato.ctFechaFinal );
-        $scope.Contrato.ctDuracion = diferencia;        
+    $scope.CambiarFormato=function (variable){       
+        $scope.Contrato[variable] = moment($scope.Contrato[variable]).format("L"); 
+        calcularDias();                      
     };
     
+    
+    function calcularDias (){
+               console.log("enter");
+        var diferencia = funcionService.diferenciaDias($scope.Contrato.ctFechaInicio, $scope.Contrato.ctFechaFinal);
+        if (diferencia < 0) {            
+            toaster.pop("error","¡Validación!","Estimado Usuario(a), la fecha de finalización del contrato debe ser posterior" +
+                " a la fecha de inicia.");           
+        }
+         $scope.Contrato.ctDuracion = diferencia + " DÍAS";
+    }
+        
     
     $scope.TipoPlantillaCheck = function(value,checked) {        
         console.log($scope.Contrato.Plantillas);

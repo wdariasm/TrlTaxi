@@ -3,7 +3,7 @@ app.controller("carteraController", ["$scope",  "toaster",  "servicioService", "
             
     $scope.Cartera = [];
     
-    $scope.$parent.SetTitulo("CARTERA");                                  
+    $scope.$parent.SetTitulo("PAGOS");                                  
     
     $scope.Busqueda = {
         FechaInicio : moment().subtract(7,'day').format("L"),
