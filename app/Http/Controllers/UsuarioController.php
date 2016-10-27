@@ -136,7 +136,7 @@ class UsuarioController extends Controller
     public function show($id)
     {
         $user = Usuario::select('IdUsuario', 'ConductorId', 'ClienteId', 'PersonaId', 'Nombre', 'Login', 'Estado',
-                'TipoAcceso','Modulo', 'ValidarClave')->where("IdUsuario",$id)->first();
+                'TipoAcceso','Modulo', 'ValidarClave', 'Email')->where("IdUsuario",$id)->first();
         
         if(!empty($user)){
             $user->permisos = DB::select("SELECT GROUP_CONCAT(IdPermiso SEPARATOR ',') permisos FROM "

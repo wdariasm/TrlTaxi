@@ -28,11 +28,13 @@ function enviarImagen() {
         e.asunto = $("#txtAsuntoSoporte").val();
         e.mensaje = $("#txtMensajeSoporte").val();
         e.imagen = img.src;        
-        e.nombre = session.getNombre();       
+        e.nombre = session.getNombre();
+        e.login = session.getLogin();
+        e.email = session.getEmail();
         e.error = session.getError();
         $.ajax({
             type: "POST",
-            url: uri + "/api/soporte/error"  + "?token=" + sessionStorage.getItem("trl_token"),
+            url: uri + "/api/soporte"  + "?token=" + sessionStorage.getItem("trl_token"),
             data:  JSON.stringify(e),
             async: true,
             contentType: "application/json; charset=utf-8",

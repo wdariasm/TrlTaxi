@@ -46,8 +46,8 @@
                                      <td>{{ item.svDescripcion}}</td>
                                      <td>{{ item.DescVehiculo}}</td>                                     
                                      <td >{{ item.ValorTotal | currency : "$" : 0}}</td>  
-                                     <td>{{ item.FechaServicio}}</td>
-                                    <td>{{ item.Hora}}</td>                                     
+                                     <td>{{ item.FechaServicio | date}}</td>
+                                    <td>{{ item.Hora }}</td>                                     
                                     <td>{{  (item.Estado == 'RECHAZADO' ? 'SOLICITADO' : item.Estado)  }}</td>
                                     <td>
                                          <center>                                                                                        

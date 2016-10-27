@@ -30,10 +30,30 @@ var session = {
         var obj = sessionStorage.getItem("usuario");          
         if (obj){                       
             var js = JSON.parse(atob(obj));
-            return js.Login + " - " + js.Nombre;
+            return js.Nombre;
         }
         
     }, 
+    
+    getLogin:function(){        
+        var obj = sessionStorage.getItem("usuario");          
+        if (obj){                       
+            var js = JSON.parse(atob(obj));
+            return js.Login;
+        }
+        
+    }, 
+    
+    getEmail:function(){        
+        var obj = sessionStorage.getItem("usuario");          
+        if (obj){                       
+            var js = JSON.parse(atob(obj));
+            return js.Email;
+        }
+        
+    }, 
+    
+    
     
     getError : function (){
         var js="";
