@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use Illuminate\Http\JsonResponse;
 use App\Soporte;
+use DB;
 
 class SoporteController extends Controller
 {
@@ -14,6 +15,20 @@ class SoporteController extends Controller
     {
         return Soporte::all();
     }     
+    
+    public function show($user){
+        try
+        { 
+            $condicion = "";
+            if($user !=="ADMIN"){
+                $condicion = " WHERE spUsuario = $user";
+            }
+            $result = DB::select("select *  from soporte $condicion order by IdSoporte desc");
+            return $result;
+        }catch (\Exception $exc) {
+            return JsonResponse::create(array('file' => $exc->getFile(), "line"=> $exc->getLine(),  "message" =>json_encode($exc->getMessage())), 500);
+        }
+    }
     
     public function store(Request $request)
     {

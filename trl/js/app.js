@@ -117,6 +117,10 @@ var app;
                 templateUrl: 'views/proceso/salir.html'
             })
             
+            .when("/2/soporte",{
+                templateUrl: 'views/proceso/soporte.html'
+            })
+                        
             .when("/iniciando",{
                 templateUrl: 'views/proceso/inicio.html'                        
             })
@@ -273,6 +277,13 @@ var app;
             }
 
             return sum;
+        };
+    });
+    
+    
+    app.filter('dateConvert', function() {
+        return function(dateString) {
+            return Date.parse(dateString);
         };
     });
     

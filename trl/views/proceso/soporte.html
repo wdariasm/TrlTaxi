@@ -1,0 +1,60 @@
+<div  ng-controller="soporteController" class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="row">
+                <div class="col-md-6">                            
+                     <div class="input-group">
+                         <div class="input-group-addon"><i class="fa  fa-search text-primary"></i></div>
+                         <input  class="form-control" id="search" type="search" placeholder="Buscar " ng-model="TbSoporte.filter()['busqueda']">
+                     </div>
+
+                </div>
+
+                <div class="col-md-2" style="margin-top: 5px;">
+                    <label class=" text-primary" style="font-size: 18px;">Total: {{Soportes.length}}</label>
+                </div>
+
+                <div class="col-md-2 col-md-offset-1">
+                    <button type="button" class="btn btn-success btn-addon" ng-click="GetSoporte()" ><i class="fa fa-refresh"></i> Actualizar</button>
+                </div>
+
+
+            </div>
+            
+            <div class="row">
+                <div class="col-md-12">                                               
+                    <table class="table table-striped table-condensed" ng-table="TbSoporte">
+                        <thead>
+                            <tr>
+                                <th>N°</th>                                
+                                <th>NOMBRE</th>
+                                <th>EMAIL</th>
+                                <th>ASUNTO</th>
+                                <th>FECHA</th>
+                                <th>ESTADO</th>
+                                <th width="4%">ACCION</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <tr ng-repeat="item in $data">
+                                <td>{{ item.IdSoporte}}</td>
+                                <td>{{ item.spNombre }}</td>
+                                <td>{{ item.spEmail}}</td>
+                                <td >{{ item.spAsunto }}</td>                                
+                                <td title="Fecha Registro">{{ item.spFechaReg  | dateConvert |  date : "dd/MM/yyyy h:mm a"  }}</td>                                
+                                <td>{{ item.spEstado}}</td>
+                                <td>
+                                    <center>
+                                        <a ng-click="get(item)" style="float: left; margin-left: 3px;" href="javascript:;"  title="Detalle"><i class="fa fa-pencil fa-1x text-success"></i></a>
+                                    </center>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>            
+        </div>
+    </div>
+    
+</div>
