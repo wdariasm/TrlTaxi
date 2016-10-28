@@ -155,18 +155,21 @@ var app;
             return response || $q.when(response);
           },
           
-        responseError: function(rejection) {
-            var errorl = rejection.data.error;
-            if(!errorl){
-                errorl =rejection.data;
+            responseError: function(rejection) {
+                var errorl = rejection.data.error;
+                if(!errorl){
+                    errorl =rejection.data;
+                }
+                sessionStorage.setItem("trlError", btoa(errorl));
+
+                if(rejection.status == 401){               
+                    setTimeout( function () {$rootScope.globalMsj("error", "Error de Sesión", "Su sesión ha caducado por inactividad " +
+                        " Por seguridad debe iniciar nuevamente sesión.", 0);},10);            
+                    setTimeout(function (){ location.href = "../inicio/index.html#/login"; }, 8000);
+
+                }
+                return $q.reject(rejection);
             }
-            sessionStorage.setItem("trlError", btoa(errorl));
-              
-            if(rejection.status == 401){
-               location.href = "../inicio/index.html#/login";
-            }
-            return $q.reject(rejection);
-        }
           
         };
     });

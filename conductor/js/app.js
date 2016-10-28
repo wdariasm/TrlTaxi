@@ -53,12 +53,28 @@ var app;
             }
             return config;
           },
-          response: function (response) {
-            if (response.status === 401  || response.status === 403) {
-                $location.path('../inicio/index.html#/login');
+            response: function (response) {
+              if (response.status === 401  || response.status === 403) {
+                  $location.path('../inicio/index.html#/login');
+              }
+              return response || $q.when(response);
+            },
+            
+            responseError: function(rejection) {
+                var errorl = rejection.data.error;
+                if(!errorl){
+                    errorl =rejection.data;
+                }
+                sessionStorage.setItem("trlError", btoa(errorl));
+
+                if(rejection.status == 401){               
+                    setTimeout( function () {$rootScope.globalMsj("error", "Error de Sesión", "Su sesión ha caducado por inactividad " +
+                        " Por seguridad debe iniciar nuevamente sesión.", 0);},10);            
+                    setTimeout(function (){ location.href = "../inicio/index.html#/login"; }, 8000);
+
+                }
+                return $q.reject(rejection);
             }
-            return response || $q.when(response);
-          }
         };
     });
     

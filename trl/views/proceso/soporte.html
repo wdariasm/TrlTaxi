@@ -1,6 +1,9 @@
 <div  ng-controller="soporteController" class="container-fluid">
     <div class="row">
         <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-heading"><h3 class="panel-title">Listado de Soporte</h3></div>
+                <div class="panel-body">
             <div class="row">
                 <div class="col-md-6">                            
                      <div class="input-group">
@@ -17,7 +20,6 @@
                 <div class="col-md-2 col-md-offset-1">
                     <button type="button" class="btn btn-success btn-addon" ng-click="GetSoporte()" ><i class="fa fa-refresh"></i> Actualizar</button>
                 </div>
-
 
             </div>
             
@@ -46,15 +48,92 @@
                                 <td>{{ item.spEstado}}</td>
                                 <td>
                                     <center>
-                                        <a ng-click="get(item)" style="float: left; margin-left: 3px;" href="javascript:;"  title="Detalle"><i class="fa fa-pencil fa-1x text-success"></i></a>
+                                        <a ng-click="get(item)" style="margin-left: 3px;" href="javascript:;"  title="Detalle"><i class="fa fa-search fa-1x text-success"></i></a>
                                     </center>
                                 </td>
+                            </tr>
+                            <tr ng-show="EstadoConsulta">
+                                <td colspan="7" class="text-center">
+                                    <i class="fa fa-pulse fa-spinner fa-fw fa-5x text-info"></i>
+                                </td>
+                            </tr>
+                            <tr ng-hide="Soportes.length">
+                                <td colspan="7" align="center"><h4 class="text-danger" ng-hide="EstadoConsulta"> No se encontraron solicitudes de soporte por este usuario.</h4></td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
-            </div>            
+            </div>  
+                </div>
+            </div>
+            
+            <div class="row" ng-show="VerDetalle">
+                <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <button type="button" class="close"  ng-click="VerDetalle=false"><span aria-hidden="true">&times;</span></button>
+                      <h3 class="panel-title">Detalle de soporte N° {{Soporte.IdSoporte}}</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <table class="table table-bordered">
+                                    <tr>
+                                        <td>N° Soporte </td>
+                                        <td>{{Soporte.IdSoporte}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Usuario </td>
+                                        <td>{{Soporte.spUsuario}}</td>
+                                    </tr>
+                                    
+                                    <tr>
+                                        <td>Nombre </td>
+                                        <td>{{Soporte.spNombre}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Email </td>
+                                        <td>{{Soporte.spEmail}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Asunto </td>
+                                        <td>{{Soporte.spAsunto}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Mensaje </td>
+                                        <td>{{Soporte.spMensaje}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Usuario </td>
+                                        <td>{{Soporte.spUrl}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Url </td>
+                                        <td>{{Soporte.spUrl}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Estado </td>
+                                        <td>{{Soporte.spEstado}}</td>
+                                    </tr>
+                                    
+                                </table>
+                                
+                            </div>
+                            <div class="col-md-6">
+                                <div class="thumbnail">
+                                    <img src="{{Soporte.spImagen}}" alt="Error">
+                                    <div class="caption">
+                                        <h3>Captura del Error</h3>                                                                      
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+                </div>
+            </div>
+            
         </div>
-    </div>
-    
+    </div>    
 </div>

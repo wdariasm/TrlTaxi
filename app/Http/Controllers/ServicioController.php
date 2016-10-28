@@ -9,7 +9,7 @@ use App\Parada;
 use Illuminate\Http\JsonResponse;
 use DB;
 use App\Cliente;
-use App\Conductor;
+
 
 class ServicioController extends Controller
 {  
@@ -59,16 +59,21 @@ class ServicioController extends Controller
     }
     
     public function getPorFecha(Request $request){
-        $date = new \DateTime(str_replace("/", "-", $request->get('fecha')." 00:00:00"));
-        $fecha = $date->format('Y-m-d');
-        $sql = "SELECT s.IdServicio, s.ContratoId, s.ClienteId, s.NumeroContrato, s.Responsable,"
-                . " s.Telefono, s.TipoServicidoId, ts.svDescripcion, s.FechaServicio, s.Hora, s.Valor, s.Estado, "
-                . " s.DescVehiculo, s.TipoVehiculoId, s.ValorTotal, s.ConductorId FROM servicio s INNER JOIN  tiposervicio "
-                . " ts ON s.TipoServicidoId=ts.svCodigo WHERE s.Estado = 'SOLICITADO' OR s.Estado = 'RECHAZADO' "
-                . "  order by s.IdServicio desc";
+        try{
+            $date = new \DateTime(str_replace("/", "-", $request->get('fecha')." 00:00:00"));
+            $fecha = $date->format('Y-m-d');
+            $sql = "SELECT s.IdServicio, s.ContratoId, s.ClienteId, s.NumeroContrato, s.Responsable,"
+                    . " s.Telefono, s.TipoServicidoId, ts.svDescripcion, s.FechaServicio, s.Hora, s.Valor, s.Estado, "
+                    . " s.DescVehiculo, s.TipoVehiculoId, s.ValorTotal, s.ConductorId FROM servicio s INNER JOIN  tiposervicio "
+                    . " ts ON s.TipoServicidoId=ts.svCodigo WHERE s.Estado = 'SOLICITADO' OR s.Estado = 'RECHAZADO' "
+                    . "  order by s.IdServicio desc";
+
+            $servicio = DB::select($sql);
+            return $servicio;     
         
-        $servicio = DB::select($sql);
-        return $servicio;        
+        }catch (\Exception $exc) {
+            return JsonResponse::create(array('file' => $exc->getFile(), "line"=> $exc->getLine(),  "message" =>json_encode($exc->getMessage())), 401);
+        }   
     }
     
     /*
@@ -196,8 +201,8 @@ class ServicioController extends Controller
             $this->EnviarEmailAsignar($data["IdServicio"], $data["Responsable"], $data["Email"], $data["Nombre"]);
         
             return JsonResponse::create(array('message' => "Servicio asignado correctamente", "request" =>json_encode($result)), 200);
-        } catch (\Exception $exc) {    
-            return JsonResponse::create(array('message' => "No se pudo guardar", "request" =>json_encode($exc->getMessage())), 401);
+        }catch (\Exception $exc) {
+            return JsonResponse::create(array('file' => $exc->getFile(), "line"=> $exc->getLine(),  "message" =>json_encode($exc->getMessage())), 500);
         }
     }
 
@@ -235,13 +240,13 @@ class ServicioController extends Controller
                                               
             return JsonResponse::create(array('message' => "Servicio actualizado correctamente", "request" =>json_encode($result)), 200);
         } catch (\Exception $exc) {
-            return JsonResponse::create(array('message' => "No se pudo guardar", "request" =>json_encode($exc->getMessage())), 500);
+            return JsonResponse::create(array('file' => $exc->getFile(), "line"=> $exc->getLine(),  "message" =>json_encode($exc->getMessage())), 500);
         }
     }
 
     /**
-     * Remove the specified resource from storage.
-     *
+     * 
+     *RECHAZAR SERVICIO POR PARTE DEL CONDUCTOR
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
@@ -251,7 +256,7 @@ class ServicioController extends Controller
             $servicio = DB::update("UPDATE servicio SET Estado= 'RECHAZADO', ConductorId=NULL WHERE IdServicio=$id ");
             return JsonResponse::create(array('message' => "Servicio rechazado", "request" =>json_encode($servicio)), 200);
         } catch (\Exception $exc) {
-            return JsonResponse::create(array('message' => "No se pudo  actualizar servicio", "request" =>json_encode($exc->getMessage())), 500);
+            return JsonResponse::create(array('file' => $exc->getFile(), "line"=> $exc->getLine(),  "message" =>json_encode($exc->getMessage())), 500);
         }
     }
     
@@ -278,7 +283,7 @@ class ServicioController extends Controller
             }	                        	    
             return JsonResponse::create(array('bandera' => "Correcto", 'message' => "Servicio cancelado correctamente",), 200);
         } catch (\Exception $exc) {
-             return JsonResponse::create(array('bandera' => "Error", "request" =>json_encode($exc->getMessage())), 500);         
+            return JsonResponse::create(array('bandera' => "Error", 'file' => $exc->getFile(), "line"=> $exc->getLine(),  "message" =>json_encode($exc->getMessage())), 500);
         }
     }        
     
@@ -289,7 +294,7 @@ class ServicioController extends Controller
             $servicio = DB::update("UPDATE servicio SET Estado= '".$data['Estado']."' WHERE IdServicio=$id ");                        
             return JsonResponse::create(array('message' => "Servicio actualizado correctamente", "request" =>json_encode($servicio)), 200);
         } catch (\Exception $exc) {
-            return JsonResponse::create(array('message' => "No se pudo  actualizar servicio", "request" =>json_encode($exc->getMessage())), 500);
+            return JsonResponse::create(array('file' => $exc->getFile(), "line"=> $exc->getLine(),  "message" =>json_encode($exc->getMessage())), 500);
         }
     }
     

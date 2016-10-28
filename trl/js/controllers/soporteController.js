@@ -2,13 +2,16 @@ app.controller('soporteController',['$scope', 'soporteService', 'ngTableParams',
     $scope.Soportes = [];
     $scope.$parent.SetTitulo("LISTADO DE SOPORTE"); 
     $scope.TbSoporte = {};
+    $scope.EstadoConsulta =false;
+    $scope.VerDetalle = false;
+    $scope.Soporte = {};
    
     initTabla();
     
     function initTabla() {
         $scope.TbSoporte = new ngTableParams({
             page: 1,
-            count: 5,
+            count: 10,
             sorting: undefined
         }, {
             filterDelay: 50,
@@ -28,9 +31,11 @@ app.controller('soporteController',['$scope', 'soporteService', 'ngTableParams',
     };
     
     $scope.GetSoporte = function (){
+        $scope.EstadoConsulta =true;
         var promiseGet = soporteService.getAll($scope.$parent.Login.Login);
         promiseGet.then(function(pl) {
             $scope.Soportes = pl.data;
+            $scope.EstadoConsulta =false;
             $scope.TbSoporte.reload();
         },
         function(errorPl) {
@@ -40,5 +45,10 @@ app.controller('soporteController',['$scope', 'soporteService', 'ngTableParams',
     };
     
     $scope.GetSoporte();
+    
+    $scope.get= function (item){
+        $scope.VerDetalle = true;
+        $scope.Soporte = item;
+    };
    
 }]);

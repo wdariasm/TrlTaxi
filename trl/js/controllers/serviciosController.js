@@ -407,7 +407,7 @@ app.controller('serviciosController',['$scope', 'zonaService', 'ngTableParams', 
             $scope.Servicios = d.data;
             $scope.TablaServicio.reload();             
         }, function(err) {           
-                toaster.pop('error','¡Error!',"Error al cargar servicios");           
+                toaster.pop('error','¡Error al cargar servicios!',err.data);           
                 console.log("Some Error Occured " + JSON.stringify(err));
         }); 
     };
@@ -466,7 +466,7 @@ app.controller('serviciosController',['$scope', 'zonaService', 'ngTableParams', 
             $scope.GetServicios();
             $('#mdAsignar').modal('hide');   
         }, function(err) {           
-                toaster.pop('error','¡Error!',err.data.request);           
+                toaster.pop('error','¡Error!',err.data, 0);           
                 console.log("Some Error Occured " + JSON.stringify(err));
         }); 
         

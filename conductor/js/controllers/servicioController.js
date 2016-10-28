@@ -134,7 +134,7 @@ app.controller("servicioController", ["$scope",  "toaster",  "servicioService","
                 cerrarServicio();
             }  
         }, function(err) {           
-                toaster.pop('error','¡Error confirmar servicio!',err.data.request, 0);           
+                toaster.pop('error','¡Error confirmar servicio!',err.data, 0);           
                 console.log("Some Error Occured " + JSON.stringify(err));
         }); 
     };
@@ -170,7 +170,7 @@ app.controller("servicioController", ["$scope",  "toaster",  "servicioService","
             }
             
         }, function(err) {           
-                toaster.pop('error','¡Error!',"Error al cargar servicio",0);           
+                toaster.pop('error','¡Error al cargar servicio!',err.data,0);           
                 console.log("Some Error Occured " + JSON.stringify(err));
         });         
     } 
@@ -233,7 +233,7 @@ app.controller("servicioController", ["$scope",  "toaster",  "servicioService","
             estadoServicio($scope.ValBoton.EstSiguiente);
             $scope.GetServiciosConductor();
         }, function(err) {           
-                toaster.pop('error','¡Error confirmar servicio!',err.data.request, 0);           
+                toaster.pop('error','¡Error confirmar servicio!',err.data, 0);           
                 console.log("Some Error Occured " + JSON.stringify(err));
         }); 
         
@@ -245,7 +245,7 @@ app.controller("servicioController", ["$scope",  "toaster",  "servicioService","
             toaster.pop('success','¡Información!', d.data.message);  
             $scope.GetServiciosConductor();
         }, function(err) {           
-            toaster.pop('error','¡Error cancelar servicio!',err.data.request, 0);           
+            toaster.pop('error','¡Error cancelar servicio!',err.data, 0);           
             console.log("Some Error Occured " + JSON.stringify(err));
         });         
     };
@@ -284,7 +284,7 @@ app.controller("servicioController", ["$scope",  "toaster",  "servicioService","
             $scope.GetServiciosConductor();
             $('#modalMotivo').modal('hide');   
         }, function(err) {           
-                toaster.pop('error','¡Error!',err.data.request);           
+                toaster.pop('error','¡Error cancelar servicio.!',err.data, 0);           
                 console.log("Some Error Occured " + JSON.stringify(err));
         }); 
     };
@@ -296,7 +296,7 @@ app.controller("servicioController", ["$scope",  "toaster",  "servicioService","
             $scope.Motivos = d.data;    
             
         }, function(err) {           
-                toaster.pop('error','¡Error!',"Error al cargar motivos de cancelación",0);           
+                toaster.pop('error','¡Error cargar motivos de cancelación!',err.data,0);           
                 console.log("Some Error Occured " + JSON.stringify(err));
         });     
     }     

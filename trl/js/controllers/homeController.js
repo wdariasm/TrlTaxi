@@ -1,5 +1,5 @@
-app.controller("homeController", ["$scope", "parametroService", "usuarioService", '$auth', '$rootScope',
-     function ($scope, parametroService, usuarioService, $auth, $rootScope) {
+app.controller("homeController", ["$scope", "parametroService", "usuarioService", '$auth', '$rootScope', "toaster",
+     function ($scope, parametroService, usuarioService, $auth, $rootScope, toaster) {
         
     $scope.Titulo = "BIENVENIDO"; 
     $scope.Login = {};
@@ -95,13 +95,19 @@ app.controller("homeController", ["$scope", "parametroService", "usuarioService"
         promiseGet.then(function(pl) {              
             $auth.setToken(pl.data.token);            
         },
-        function(errorPl) {
-            console.log('Error al validar session', errorPl);
+        function(err) {
+            toaster.pop("error", "Error de seguridad.", err.data);
+            console.log('Error al validar session', err);
         });
     };
     
     validarUser();        
-    setInterval(function(){ $rootScope.refresToken("false");},900000);                
+    setInterval(function(){ $rootScope.refresToken("false");},1200000);       
+    
+    $rootScope.globalMsj = function (tipo, titulo, mensaje){        
+        toaster.pop(tipo, titulo, mensaje, 0);
+    };
+    
 }]);
 
 app.controller('salirController',['$scope', 'usuarioService', 'toaster', function ($scope, usuarioService, toaster) {

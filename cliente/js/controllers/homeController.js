@@ -1,5 +1,5 @@
-app.controller("homeController",  ["$scope", "parametroService", "usuarioService", '$auth', '$rootScope',
-    function ($scope,parametroService,usuarioService, $auth , $rootScope) {
+app.controller("homeController",  ["$scope", "parametroService", "usuarioService", '$auth', '$rootScope', "toaster",
+    function ($scope,parametroService,usuarioService, $auth , $rootScope, toaster) {
         
     $scope.Titulo = "BIENVENIDOS"; 
     $scope.Login = {};
@@ -82,7 +82,12 @@ app.controller("homeController",  ["$scope", "parametroService", "usuarioService
     };
     
     validarUser();        
-    setInterval(function(){ $rootScope.refresToken();},900000);
+    setInterval(function(){ $rootScope.refresToken();},1200000);
+    
+    $rootScope.globalMsj = function (tipo, titulo, mensaje){        
+        toaster.pop(tipo, titulo, mensaje, 0);
+    };
+    
 }]);
 
 app.controller('salirController',['$scope', 'usuarioService', 'toaster', function ($scope, usuarioService, toaster) {

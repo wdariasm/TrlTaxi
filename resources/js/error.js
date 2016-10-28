@@ -43,7 +43,7 @@ function enviarImagen() {
             success: function (result) {                
                 $("#btnCapturar").prop("disabled", false);
                 if (result.message === "Correcto") {
-                    $("#infoSoporte").html("Su mensaje ha sido enviado correctamente");
+                    $("#infoSoporte").html("Su mensaje ha sido enviado correctamente. N° Soporte " + result.request);
                     $("#infoSoporte").css("color", "green");
                     $("#txtAsuntoSoporte").val("");
                     $("#txtMensajeSoporte").val("");

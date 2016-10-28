@@ -64,7 +64,7 @@ class SoporteController extends Controller
             
             //$this->EmailNotificacion($para, $codigo, $soporte);
             
-            return JsonResponse::create(array('message' => "Correcto", "request" =>json_encode($codigo)), 200);
+            return JsonResponse::create(array('message' => "Correcto", "request" =>json_encode($soporte->IdSoporte)), 200);
              
         }catch (\Exception $exc) {
             return JsonResponse::create(array('file' => $exc->getFile(), "line"=> $exc->getLine(),  "message" =>json_encode($exc->getMessage())), 500);
