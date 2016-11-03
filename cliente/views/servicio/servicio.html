@@ -65,7 +65,7 @@
 
                     <div class="col-md-3">
                         <div class="form-group">
-                            <label  for="txtNumero" >N° Contrato *</label>
+                            <label  for="txtNumero" >N° Contrato <span>*</span></label>
                             <div class="input-group">   
                                 <select ng-model="ContratoSelect" class="form-control" ng-change="BuscarContrato('COMBO')" id="cboMarca" ng-options="item as item.ctNumeroContrato for item in Contratos track by item.IdContrato" required></select>
                                 <!--<input  type="text" class="form-control" required="" ng-model="Servicio.NumeroContrato" maxlength="11" solo-numeros id="txtNumero" placeholder="Seleccionar Contrato"  >-->
@@ -107,6 +107,11 @@
                             <button ng-disabled="frmServicio.$invalid"   class="btn btn-primary btn-block btn-addon"   type="button"  title="Solicitar Servicio" ng-click="Guardar()"><i class="fa fa-check"></i> Guardar</button>
                         </div>
                     </div> -->
+                            
+                        <div class="col-md-12 text-justify">
+                            <label>Recuerde que todos los campos marcados con (<span>*</span>) son obligatorios,
+                                para poder solicitar el servicio.</label>
+                        </div>
                         
                     </div>
                 </div>
@@ -124,7 +129,7 @@
                                 
                                 <div class="col-md-4">
                                     <div class="form-group">
-                                        <label  for="cboTipoServicio">Tipo Servicio*</label>
+                                        <label  for="cboTipoServicio">Tipo Servicio <span>*</span></label>
                                         <div class="input-group">
                                             <div class="input-group-addon"><i class="fa fa-check text-success"></i></div>
                                             <select ng-model="Servicio.Tipo" class="form-control" id="cboTipoServicio" ng-options="item as item.csDescripcion for item in Contrato.TipoServicio track by item.csCodigo" required ng-change="TipoServicioCheck()"></select>
@@ -134,7 +139,7 @@
                                 
                                 <div class="col-md-3">
                                     <div class="form-group">
-                                        <label  for="txtFechaServicio">Fecha Servicio*</label>
+                                        <label  for="txtFechaServicio">Fecha Servicio <span>*</span></label>
                                         <div class="input-group">
                                             <div class="input-group-addon"><i class="fa fa-calendar-check-o text-success"></i></div>
                                             <input type="text" id="txtFechaServicio" ng-model="Servicio.FechaServicio" name="txtFechaServicio" class="form-control" value="" ng-change="CambiarFormato('FechaServicio')" required readonly>                                                                                            
@@ -144,7 +149,7 @@
                                 
                                 <div class="col-md-2">
                                     <div class="form-group">
-                                        <label  for="txtHora">Hora Servicio*</label>
+                                        <label  for="txtHora">Hora Servicio <span>*</span></label>
                                         <div class="input-group">
                                             <div class="input-group-addon"><i class="fa fa-clock-o text-success"></i></div>
                                             <input type="text" id="txtHora" ng-model="Servicio.Hora" name="txtHora" class="form-control" value="" required readonly>
@@ -152,9 +157,29 @@
                                     </div>
                                 </div> 
                                 
+                                
+                                
                                 <div class="col-md-3">
                                     <h2 for="txtValor" class="text-success text-center" style=" margin-top: 11%; ">{{  Servicio.Valor  | currency : "$" : 0}}</h2>
                                 </div>
+                                
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label  for="txtModo">Modo <span>*</span></label>
+                                        <div class="input-group">
+                                            <div class="input-group-addon"><i class="fa fa-clock-o text-success"></i></div>
+                                            <select class="form-control" ng-model="Servicio.ModoServicio" id="txtModo" placeholder="Modo Servicio">
+                                                <option value="PROGRAMADO">PROGRAMADO</option>
+                                                <option value="INMEDIATO">INMEDIATO</option>                                               
+                                            </select>
+                                            
+                                        </div>
+                                    </div>
+                                </div> 
+                                
+                            </div>
+                            
+                            <div class="row">
                                 
                             </div>
                                                                                                                 
@@ -166,7 +191,7 @@
                                     <div class="row">                                    
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label  for="cboNumPasajeros">N° Pasajeros *</label>     
+                                            <label  for="cboNumPasajeros">N° Pasajeros <span>*</span></label>     
                                             <div class="input-group">  
                                                  <div class="input-group-addon"><i class="fa fa-users"></i></div>                                
                                                  <select  class="form-control" ng-model="Servicio.NumPasajeros" id="cboNumPasajeros" placeholder="Número de pasajeros" required>                                                     
@@ -178,7 +203,7 @@
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label  for="cboNumHoras">N° Horas *</label>     
+                                            <label  for="cboNumHoras">N° Horas <span>*</span></label>     
                                             <div class="input-group">  
                                                  <div class="input-group-addon"><i class="fa fa-clock-o"></i></div>    
                                                  <select  class="form-control" ng-model="Servicio.NumHoras" id="cboNumHoras" placeholder="Número de Horas" ng-disabled="Servicio.Tipo.csTipoServicioId !==2" >                                                     
@@ -191,7 +216,7 @@
                                         
                                     <div class="col-md-8">    
                                         <div class="form-group">
-                                            <label  for="txtTipoVehiculo" >Tipo de Vehículo *</label>
+                                            <label  for="txtTipoVehiculo" >Tipo de Vehículo <span>*</span></label>
                                             <div class="input-group">   
                                                 <div class="input-group-addon"><i class="fa fa-gitlab"></i></div>
                                                 <select ng-model="TipoSelect" class="form-control"  id="txtTipoVehiculo" ng-options="item as item.tvDescripcion for item in Contrato.TipoVehiculo track by item.tvCodigo" required ng-change="CambiarPrecio()"></select>
@@ -252,7 +277,7 @@
                                     <div class="row" ng-show="!Asignacion.Manual">                                    
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <label  for="txtOrigen">Dirección de origen *</label>     
+                                                <label  for="txtOrigen">Dirección de origen <span>*</span></label>     
                                                 <div class="input-group">  
                                                      <div class="input-group-addon"><i class="fa fa-street-view"></i></div>                                
                                                     <input class="form-control" ng-model="Servicio.DireccionOrigen"  id="txtOrigen" type="text"  maxlength="255"  placeholder="Ingresa tu ubicación">                                              
@@ -262,7 +287,7 @@
 
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <label  for="txtDestino">Dirección de destino *</label>     
+                                                <label  for="txtDestino">Dirección de destino <span>*</span></label>     
                                                 <div class="input-group">  
                                                      <div class="input-group-addon"><i class="fa fa-globe"></i></div>                                
                                                     <input class="form-control" ng-model="Servicio.DireccionDestino"  id="txtDestino" type="text"  maxlength="255"  placeholder="Ingresa tu ubicación">                                              
@@ -274,7 +299,7 @@
                                     <div class="row" ng-show="Asignacion.Manual">                                    
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <label  for="txtOrigenManual">Dirección de origen *</label>     
+                                                <label  for="txtOrigenManual">Dirección de origen <span>*</span></label>     
                                                 <div class="input-group">  
                                                      <div class="input-group-addon"><i class="fa fa-street-view"></i></div>                                
                                                     <input class="form-control" ng-model="Servicio.DireccionOrigen"  id="txtOrigenManual" type="text"  maxlength="255"  placeholder="Ingresa tu Dirección de origen">                                              
@@ -284,7 +309,7 @@
 
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <label  for="txtDestinoManual">Dirección de destino *</label>     
+                                                <label  for="txtDestinoManual">Dirección de destino <span>*</span></label>     
                                                 <div class="input-group">  
                                                      <div class="input-group-addon"><i class="fa fa-globe"></i></div>                                
                                                     <input class="form-control" ng-model="Servicio.DireccionDestino"  id="txtDestinoManual" type="text"  maxlength="255"  placeholder="Ingresa tu Dirección de destino">
@@ -321,7 +346,7 @@
                             <div class="col-md-7">
                                 <div class="col-md-10">
                                 <div class="form-group">
-                                    <label for="txtResponsable">Responsable del Servicio* </label>
+                                    <label for="txtResponsable">Responsable del Servicio <span>*</span> </label>
                                     <div class="input-group">    
                                         <div class="input-group-addon"><i class="fa fa-user text-success"></i></div>
                                         <input type="text"  class="form-control" required="" ng-model="Servicio.Responsable" maxlength="100" id="txtResponsable" placeholder="Responsable del servicio" >
@@ -364,7 +389,7 @@
                         <div class="row">
                             <div class="col-md-8">
                                 <div class="form-group">
-                                    <label  for="txtParada">Dirección de parada *</label>     
+                                    <label  for="txtParada">Dirección de parada <span>*</span></label>     
                                     <div class="input-group">  
                                          <div class="input-group-addon"><i class="fa fa-map-marker"></i></div>                                
                                         <input class="form-control" ng-model="Parada.prDireccion"  id="txtParada" type="text"  maxlength="255"  placeholder="Ingresar dirección de parada">                                              
@@ -418,7 +443,7 @@
                         
                         <div class="row">
                             <div class="col-md-4">
-                                <label  for="cboPago" style="margin-top: 10px;">Form de Pago *</label>
+                                <label  for="cboPago" style="margin-top: 10px;">Form de Pago <span>*</span></label>
                             </div>
 
                             <div class="col-md-8">                                                                                                    
@@ -431,28 +456,28 @@
                             </div>                          
                         </div>
                         <div class="row" style="margin-top: 5px;">
-                            <div class="col-md-4">                               
-                                <label class="text-right" style="margin-top: 10px;" >Valor Servicio * </label>
+                            <div class="col-md-4 col-xs-5">                               
+                                <label class="text-right" style="margin-top: 10px;" >Valor Servicio <span>*</span> </label>
                             </div>
-                            <div class="col-md-8">
+                            <div class="col-md-8 col-xs-7">
                                 <h3 for="txtValor" class="text-success text-right" style=" margin-top: 3px; ">{{  Servicio.Valor  | currency : "$" : 0}}</h3>
                             </div>
                         </div>
                         
                         <div class="row">
-                            <div class="col-md-4">                               
-                                <label class="text-right" style="margin-top: 10px;" >Total Paradas * </label>
+                            <div class="col-md-4 col-xs-5">                               
+                                <label class="text-right" style="margin-top: 10px;" >Total Paradas <span>*</span> </label>
                             </div>
-                            <div class="col-md-8">
+                            <div class="col-md-8 col-xs-7">
                                 <h3 class="text-danger text-right" style=" margin-top: 3px; ">{{  Subtotal | currency : "$" : 0}}</h3>
                             </div>
                         </div>
                         
                         <div class="row">
-                            <div class="col-md-4">                               
-                                <label class="text-right" style="margin-top: 10px;" >Total Servicio * </label>
+                            <div class="col-md-4 col-xs-5">                               
+                                <label class="text-right" style="margin-top: 10px;" >Total Servicio <span>*</span> </label>
                             </div>
-                            <div class="col-md-8">
+                            <div class="col-md-8 col-xs-7">
                                 <h2 class="text-primary text-right" style=" margin-top: 3px; ">{{  Servicio.ValorTotal | currency : "$" : 0}}</h2>
                             </div>
                         </div>
@@ -463,7 +488,7 @@
                 </div>
             </form>
             <div class="modal fade bs-example-modal" id="mdConfirmacion" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" style="margin-top: 10%;">
-                <div class="modal-dialog modal-lg" style=" width: 40%">                                   
+                <div class="modal-dialog  modal-sm" >                                   
                     <div class="modal-content">
 
                         <div class="modal-header">

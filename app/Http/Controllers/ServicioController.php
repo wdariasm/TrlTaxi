@@ -156,6 +156,7 @@ class ServicioController extends Controller
             $servicio->PlantillaId= $data["PlantillaId"];
             $servicio->TipoVehiculoId= $data["TipoVehiculoId"];
             $servicio->DescVehiculo= $data["DescVehiculo"];
+            $servicio->ModoServicio= $data["ModoServicio"];
             $servicio->Parada= $data["Parada"];
             $servicio->ValorTotal= $data["ValorTotal"];
             $servicio->Nota= $data["Nota"];            

@@ -101,7 +101,8 @@ app.controller('serviciosController',['$scope', 'zonaService', 'ngTableParams', 
             Paradas : [],
             Parada : "NO",
             ValorTotal :0,
-            Nota :""
+            Nota :"",
+            ModoServicio :"PROGRAMADO"
         };
         
         $scope.Parada = {
@@ -340,6 +341,7 @@ app.controller('serviciosController',['$scope', 'zonaService', 'ngTableParams', 
                 $scope.Servicio.Valor = d.data.tfValor;
                 $scope.Servicio.ValorTotal = parseInt(d.data.tfValor);
                 $scope.Servicio.Codigo = d.data.tfCodigo;
+                toaster.pop("info", "Valor del Servicio.", "$ "+ $scope.Servicio.Valor);
             }else{
                toaster.pop('info','¡Alerta!',"Estimado Usuario(a), no se encontró el precio con estos " +
                             "parametros de ubicación y tipo de vehículo", 0);

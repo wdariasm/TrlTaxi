@@ -106,6 +106,9 @@ app.controller('salirController',['$scope', 'usuarioService', 'toaster', functio
             setTimeout ('location.href = "../inicio/index.html#/login"', 3000);                       
         },
         function(errorPl) {
+            if(errorPl.status == 401){
+                 setTimeout ('location.href = "../inicio/index.html#/login"', 3000);
+            }
             toaster.pop('error','¡Error!',errorPl.data.request);
             console.log('failure loading usuarios', errorPl);
         });        
