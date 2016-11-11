@@ -10,6 +10,11 @@ app.service("servicioService",[ '$http', function ($http) {
         return req;
     };   
     
+    this.getSolicitados = function () {
+        var req = $http.get(uri+'/api/servicio/solicitados');
+        return req;
+    };   
+    
     this.getDisponible = function (tipo){
         var req = $http.get(uri+'/api/servicio/tipo/'+tipo+'/conductores');
         return req;
@@ -23,7 +28,7 @@ app.service("servicioService",[ '$http', function ($http) {
     this.getPorFecha = function (fecha) {
         var req = $http.post(uri+'/api/servicio/fecha', fecha);
         return req;
-    };          
+    };                  
     
     this.cancelar = function (id,objeto) {        
         var req = $http.put(uri+'/api/servicio/' + id + '/cancelar', objeto);

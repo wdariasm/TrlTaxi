@@ -76,6 +76,23 @@ class ServicioController extends Controller
         }   
     }
     
+    public function getSolicitados(){
+        try{   
+           
+            $sql = "SELECT s.IdServicio, s.ContratoId, s.ClienteId, s.NumeroContrato, s.Responsable,"
+                    . " s.Telefono, s.TipoServicidoId, ts.svDescripcion, s.FechaServicio, s.Hora, s.Valor, s.Estado, "
+                    . " s.DescVehiculo, s.TipoVehiculoId, s.ValorTotal, s.ConductorId FROM servicio s INNER JOIN  tiposervicio "
+                    . " ts ON s.TipoServicidoId=ts.svCodigo WHERE s.Estado = 'SOLICITADO' OR s.Estado = 'RECHAZADO' "
+                    . "  order by s.IdServicio desc";
+            
+            $servicio = DB::select($sql);
+            return $servicio;   
+        
+        }catch (\Exception $exc) {
+            return JsonResponse::create(array('file' => $exc->getFile(), "line"=> $exc->getLine(),  "message" =>json_encode($exc->getMessage())), 401);
+        }   
+    }
+    
     /*
      * OBTENER SERVICIOS DEL CONDUCTOR POR RANGO DE FECHAS
      */    

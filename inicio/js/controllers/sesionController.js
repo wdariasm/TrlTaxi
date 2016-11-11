@@ -50,9 +50,9 @@ app.controller('sesionController', ['$scope' , 'sesionService', 'toaster','$auth
                 toaster.pop('error', '¡Error!', "Tipo de acceso no permitido");                        
             }               
                             
-        }, function(err) {
-               toaster.pop('error', '¡Error al autenticar!', err.data.error);
-                console.log("Some Error Occured " + JSON.stringify(err));
+        }, function(err) {            
+            toaster.pop('error', '¡Error al autenticar!', err.data.error);
+            console.log("Some Error Occured " + JSON.stringify(err));
         });
     };
 

@@ -1,4 +1,8 @@
 <?php
+
+    /* Servicios solicitados */
+    Route::get('api/servicio/solicitados','ServicioController@getSolicitados');
+    
     Route::resource("api/servicio","ServicioController");
     Route::put('api/servicio/conductor/{id}','ServicioController@updateServConductor');
 
@@ -10,7 +14,7 @@
     
     //Conductores libres para asignar servcio//
     Route::get('api/servicio/tipo/{id}/conductores','ServicioController@getConductores');
-    
+            
     /* Asignar servicio*/
     Route::post('api/servicio/asignar','ServicioController@asignar');
     
@@ -28,5 +32,6 @@
     
     /* Servicio cartera  por conductor y rango de fecha*/
     Route::post('api/servicio/cartera','ServicioController@getCarteraConductorFecha');
+    
     
     

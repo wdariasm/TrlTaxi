@@ -267,22 +267,22 @@ class UsuarioController extends Controller
             
             $user = Usuario::select('Estado','Sesion','Clave', 'Nombre', 'IdUsuario', 'TipoAcceso', 'Modulo')->where("Login",$usuario)->first();
             if (empty($user)){
-                return response()->json(['error' => 'Usuario no existe en el Sistema'], 401);
+                return JsonResponse::create(array('error' => "Usuario no existe en el Sistema"), 500);                
             }
             
             if($user->Estado != 'ACTIVO'){
-                return response()->json(['error' => 'Usuario bloqueado.'], 401);            
+                return JsonResponse::create(array('error' => "Usuario bloqueado"), 500);                
             }
         
             if (!password_verify($password, $user->Clave)) {
-                return response()->json(['error' => 'Credenciales no validas'], 401);
+                return JsonResponse::create(array('error' => "Credenciales no validas"), 500);                
             }             
                                            
             if($user->Sesion == 'INICIADA' && $user->TipoAcceso != 1){
                 $result = DB::Select("SELECT DirIp, IF(DATE(FechaCnx) = CURRENT_DATE(), 'SI', 'NO') entrar"
                         . " FROM usuario WHERE IdUsuario= '".$user['IdUsuario']."'");                
                 if ($result[0]->entrar == 'SI' && $dirIp!=$result[0]->DirIp ){
-                    return response()->json(['error' => 'Estimado Usuario(a), usted tiene una Sesion iniciada. '], 401);                    
+                    //return response()->json(['error' => 'Estimado Usuario(a), usted tiene una Sesion iniciada. '], 401);                    
                 }
             }
             
@@ -293,7 +293,7 @@ class UsuarioController extends Controller
         } catch (JWTException $e) {
             return response()->json(['error' => 'No se pudo crear el token'.$e], 500);            
         } catch (\Exception $exc) {
-            return JsonResponse::create(array('error' => "No se puedo autenticar el usuario", "request" =>json_encode($exc->getMessage())), 401);
+            return JsonResponse::create(array('error' => "No se puedo autenticar el usuario", "request" =>json_encode($exc->getMessage())), 500);
         }
     }
     

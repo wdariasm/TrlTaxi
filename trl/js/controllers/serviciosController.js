@@ -13,7 +13,9 @@ app.controller('serviciosController',['$scope', 'zonaService', 'ngTableParams', 
     $scope.Puntos = [];    
     $scope.editMode = false;
     $scope.Servicios = [];
+    $scope.ServicioTodos = [];
     $scope.TablaServicio ={};
+    $scope.TablaTodos ={};
     
     $scope.mapServicio;      
     $scope.markerOrigen = null;    
@@ -53,6 +55,7 @@ app.controller('serviciosController',['$scope', 'zonaService', 'ngTableParams', 
     initTablaZona();
     init();
     initTabla();
+    initTablaTodos();
     
     function Poligono() {
         this.coordenadas = null;
@@ -328,6 +331,28 @@ app.controller('serviciosController',['$scope', 'zonaService', 'ngTableParams', 
             }
         });
     };
+    
+     function initTablaTodos() {
+        $scope.TablaTodos = new ngTableParams({
+            page: 1,
+            count: 10,
+            sorting: undefined
+        }, {
+            filterDelay: 50,
+            total: 1000,
+            counts : [],
+            getData: function (a, b) {
+                var c = b.filter().filtro;
+                f = [];
+                c ? (c = c.toLowerCase(), f = $scope.ServicioTodos.filter(function (a) {
+                    return a.Responsable.toLowerCase().indexOf(c) > -1 ||
+                           a.NumeroContrato.indexOf(c) > -1 ||
+                           a.svDescripcion.toLowerCase().indexOf(c) > -1 ||
+                           a.Estado.toLowerCase().indexOf(c) > -1                                                       
+                })) : f = $scope.ServicioTodos, f = b.sorting() ? f : f, b.total(f.length), a.resolve(f.slice((b.page() - 1) * b.count(), b.page() * b.count()))
+            }
+        });
+    };
        
     $scope.nuevo = function() {       
         $scope.editMode = false;
@@ -393,19 +418,11 @@ app.controller('serviciosController',['$scope', 'zonaService', 'ngTableParams', 
     };
     
     $scope.GetServicios = function (){
-        if(!$scope.FechaBusqueda){
-            toaster.pop("info","¡Alerta!","Seleccione una fecha valida.");
-            return;
-        }        
-        var obj = {
-            fecha : $scope.FechaBusqueda
-        };
-        //var fecha = moment($scope.FechaBusqueda).format('YYYY MM DD');
-        
-        var promise = servicioService.getPorFecha(obj);
+              
+        var promise = servicioService.getSolicitados();
         promise.then(function(d) {                        
             $scope.Servicios = d.data;
-            $scope.TablaServicio.reload();             
+            $scope.TablaServicio.reload();              
         }, function(err) {           
                 toaster.pop('error','¡Error al cargar servicios!',err.data);           
                 console.log("Some Error Occured " + JSON.stringify(err));

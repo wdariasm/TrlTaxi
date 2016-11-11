@@ -7,7 +7,7 @@ app.controller('serviciosController',['$scope', 'zonaService', 'ngTableParams', 
     $scope.Contratos = [];
     $scope.ContratoSelect = {};
     $scope.Boton = {"Cargando":true};
-    $scope.$parent.SetTitulo("SOLICITAR SERVICIOS");    
+    $scope.$parent.SetTitulo("SOLICITAR SERVICIO");    
     
     $scope.Asignacion = {  Manual : false,  Marcador : "Origen"    };
 
@@ -40,9 +40,7 @@ app.controller('serviciosController',['$scope', 'zonaService', 'ngTableParams', 
         Latitud : config.getLatitud(),
         Longitud : config.getLongitud()
     };
-
-    $scope.$parent.SetTitulo("GESTIÓN DE SERVICIOS");    
-
+    
     //    
     $scope.AutocompleteOrigen=null;
     $scope.AutocompleteDestino =null;    

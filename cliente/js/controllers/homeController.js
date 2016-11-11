@@ -88,6 +88,14 @@ app.controller("homeController",  ["$scope", "parametroService", "usuarioService
         toaster.pop(tipo, titulo, mensaje, 0);
     };
     
+    function setVentana(){
+        var mediaquery = window.matchMedia("(max-width: 600px)");
+        if (mediaquery.matches) {
+            $scope.mostrarOcultarMenu();
+        }
+    }
+        setVentana();
+    
 }]);
 
 app.controller('salirController',['$scope', 'usuarioService', 'toaster', function ($scope, usuarioService, toaster) {
