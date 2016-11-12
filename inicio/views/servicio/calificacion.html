@@ -1,0 +1,85 @@
+<style>
+    body{
+        background-color: #edf1f2
+    }
+                         
+    @media (max-width:480px){
+        .pageicon {                    
+            font-size: 45px;
+            margin-top: 2px;                    
+            width: 70px;                
+        }
+        .espacio{
+            margin-top: 5px;
+        }
+
+        .titulo{                           
+            text-align: center;
+            height: 50px;
+            font-size: 24px;
+            font-weight: 700;
+            margin-top: 10px;
+            color: #000000;
+        }
+        .titulo img{
+             display: none;
+        }
+        
+        h2{
+            font-size: 18px;
+        }
+    }
+</style>
+
+<div ng-controller="calificacionController as cl" class="container-fluid">               
+    <div  class="row">
+        <div  class="header"> 
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-3 col-xs-3">
+                        <div class="titulo">                            
+                            <img src="../trl/images/logo.png" class="animated slideInLeft"  alt="logo"/> 
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>  
+        
+        <div class="row" >              
+            <div  class=" col-md-10 col-xs-12 pages">                                   
+                <div class="col-md-4 col-md-offset-5 col-xs-10 col-xs-offset-1">                         
+                    <div class="well page animated slideInDown" >               
+
+                            <h2 class="text-primary  text-center "><strong>Calificación de Servicio</strong></h2><br/>                         
+                            
+                        <div class="row" >          
+                            <div class="col-md-12 col-xs-12">
+                                <form name="frmCalificacion" novalidate="">
+                                    <div class="form-group">
+                                        <label>N° Servicio: </label> <label> <strong> {{cl.Servicio.IdServicio}}</strong></label>                                             
+                                    </div>
+                                    <div class="form-group">
+                                        <button ng-disabled="frmCalificacion.$invalid"   class="btn btn-primary btn-block btn-addon"   type="button"  title="Registrar Cliente" ng-click="Recuperar()"> <i class="fa fa-send"></i>Enviar Correo</button>
+                                    </div>
+
+                                </form>
+                                <div class="text-center" ng-show="Cargando"><i class="fa fa-spinner fa-pulse fa-fw fa-3x text-primary"></i></div>
+                                <div class="text-center" <h5>{{msjError}}</h5></div>
+                               <br/>  
+                            </div>                            
+
+                            <a href="#/login" class="btn" title="Inicio" style="float: right" ><i class="fa fa-home fa-3x"></i></a>
+                        </div>                                                        
+                    </div>                                                            
+                </div> 
+                
+                 
+                
+            </div>   <!-- div pages-->              
+        </div>  <!-- div row-->      
+        
+        <div class="row">
+           
+        </div>
+    </div>                                    
+</div>

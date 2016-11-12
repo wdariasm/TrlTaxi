@@ -235,6 +235,13 @@ class ServicioController extends Controller
         return Servicio::find($codigo);
     }
     
+    public function getCalificacion($codigo)
+    {
+        return Servicio::join('conductor', 'servicio.ConductorId', '=', 'conductor.IdConductor')
+                ->select("servicio.IdServicio", "servicio.NumeroContrato", "servicio.Calificacion", "conductor.Nombre")
+                ->where("IdServicio", "=", $codigo)->first();
+    }
+    
     /**
      * Update the specified resource in storage.
      *

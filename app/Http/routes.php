@@ -23,6 +23,8 @@ Route::group(['middleware' => 'cors'], function () {
     Route::post('api/usuario/recordar', 'UsuarioController@RecuperarClave');
     Route::put('api/usuario/actualizar/{idUsuario}','UsuarioController@updatePassword');
     Route::get('api/usuario/token','UsuarioController@refreshToken');
+    Route::get('api/servicio/{id}/calificacion','ServicioController@getCalificacion');
+    
     
     Route::group(['middleware' => 'jwt.auth'], function () {                 
         include 'Routes/routesMarca.php';

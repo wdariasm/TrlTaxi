@@ -24,6 +24,10 @@ var app;
                 templateUrl: 'views/inicio/confirmar.html'                
             }) 
             
+            .when("/calificacion/:idServicio",{
+                templateUrl: 'views/servicio/calificacion.html'
+            })
+            
             .when('/cambiarClave/:id/:idUser/:haskey', {
                 templateUrl: 'views/inicio/cambiarClave.html'                
             }) 

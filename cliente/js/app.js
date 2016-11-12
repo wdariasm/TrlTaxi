@@ -39,6 +39,7 @@ var app;
             .when("/2/salir",{
                 templateUrl: 'views/cliente/salir.html'
             })
+                        
             
             .when("/iniciando",{
                 templateUrl: 'views/cliente/inicio.html'                        
