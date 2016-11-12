@@ -22,6 +22,17 @@ class ServicioController extends Controller
         return $servicio;            
     }
     
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $codigo
+     * @return \Illuminate\Http\Response
+     */
+    public function show($codigo)
+    {
+        return Servicio::find($codigo);
+    }
+        
     public function getServicioCliente($id, $rol, $usuario)
     {
         $condicion = " WHERE  s.ClienteId = ".$id;
@@ -61,11 +72,17 @@ class ServicioController extends Controller
     public function getPorFecha(Request $request){
         try{
             $date = new \DateTime(str_replace("/", "-", $request->get('fecha')." 00:00:00"));
+            $estado = $request->get('estado');
+            $condicion = "";
             $fecha = $date->format('Y-m-d');
+            
+            if($estado !=="TODOS"){
+                $condicion =  " AND Estado = '". $estado ."'";
+            }
             $sql = "SELECT s.IdServicio, s.ContratoId, s.ClienteId, s.NumeroContrato, s.Responsable,"
                     . " s.Telefono, s.TipoServicidoId, ts.svDescripcion, s.FechaServicio, s.Hora, s.Valor, s.Estado, "
                     . " s.DescVehiculo, s.TipoVehiculoId, s.ValorTotal, s.ConductorId FROM servicio s INNER JOIN  tiposervicio "
-                    . " ts ON s.TipoServicidoId=ts.svCodigo WHERE s.Estado = 'SOLICITADO' OR s.Estado = 'RECHAZADO' "
+                    . " ts ON s.TipoServicidoId=ts.svCodigo WHERE FechaServicio = '$fecha' " . $condicion
                     . "  order by s.IdServicio desc";
 
             $servicio = DB::select($sql);
@@ -92,6 +109,15 @@ class ServicioController extends Controller
             return JsonResponse::create(array('file' => $exc->getFile(), "line"=> $exc->getLine(),  "message" =>json_encode($exc->getMessage())), 401);
         }   
     }
+    
+    public function getCalificacion($codigo)
+    {
+        return Servicio::join('conductor', 'servicio.ConductorId', '=', 'conductor.IdConductor')
+                ->select("servicio.IdServicio", "servicio.NumeroContrato", "servicio.Calificacion", "servicio.Responsable",
+                        "conductor.Nombre", "servicio.ValorTotal", "servicio.Estado", "servicio.UserReg")
+                ->where("IdServicio", "=", $codigo)->first();
+    }
+    
     
     /*
      * OBTENER SERVICIOS DEL CONDUCTOR POR RANGO DE FECHAS
@@ -222,25 +248,7 @@ class ServicioController extends Controller
         }catch (\Exception $exc) {
             return JsonResponse::create(array('file' => $exc->getFile(), "line"=> $exc->getLine(),  "message" =>json_encode($exc->getMessage())), 500);
         }
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $codigo
-     * @return \Illuminate\Http\Response
-     */
-    public function show($codigo)
-    {
-        return Servicio::find($codigo);
-    }
-    
-    public function getCalificacion($codigo)
-    {
-        return Servicio::join('conductor', 'servicio.ConductorId', '=', 'conductor.IdConductor')
-                ->select("servicio.IdServicio", "servicio.NumeroContrato", "servicio.Calificacion", "conductor.Nombre")
-                ->where("IdServicio", "=", $codigo)->first();
-    }
+    }        
     
     /**
      * Update the specified resource in storage.
@@ -264,6 +272,35 @@ class ServicioController extends Controller
             }
                                               
             return JsonResponse::create(array('message' => "Servicio actualizado correctamente", "request" =>json_encode($result)), 200);
+        } catch (\Exception $exc) {
+            return JsonResponse::create(array('file' => $exc->getFile(), "line"=> $exc->getLine(),  "message" =>json_encode($exc->getMessage())), 500);
+        }
+    }
+    
+    //Actualiza el estado del servicio por el conductor
+    public function updateServConductor(Request $request, $id){
+        try {            
+            $data = $request->all();
+            $estado = $data['Estado'];
+            $servicio = DB::update("UPDATE servicio SET Estado= '".$estado."' WHERE IdServicio=$id ");    
+            if($estado === "FINALIZADO"){
+                $this->EmailCalificacion($id);
+            }
+            return JsonResponse::create(array('message' => "Servicio actualizado correctamente", "request" =>json_encode($servicio)), 200);
+        } catch (\Exception $exc) {
+            return JsonResponse::create(array('file' => $exc->getFile(), "line"=> $exc->getLine(),  "message" =>json_encode($exc->getMessage())), 500);
+        }
+    }
+    
+    /* CALIFICAR SERVCIO POR EL CLIENTE */
+    public function calificar(Request $request, $id)
+    {
+       try{
+            $data = $request->all();            
+            $result = Servicio::where('IdServicio', $id )          
+                ->update(['Calificacion' => $data['Calificacion'] ]); 
+                                                                     
+            return JsonResponse::create(array('message' => "Servicio calificado correctamente", "request" =>json_encode($result)), 200);
         } catch (\Exception $exc) {
             return JsonResponse::create(array('file' => $exc->getFile(), "line"=> $exc->getLine(),  "message" =>json_encode($exc->getMessage())), 500);
         }
@@ -311,17 +348,7 @@ class ServicioController extends Controller
             return JsonResponse::create(array('bandera' => "Error", 'file' => $exc->getFile(), "line"=> $exc->getLine(),  "message" =>json_encode($exc->getMessage())), 500);
         }
     }        
-    
-    //Actualiza el estado del servicio por el conductor
-    public function updateServConductor(Request $request, $id){
-        try {
-            $data = $request->all();
-            $servicio = DB::update("UPDATE servicio SET Estado= '".$data['Estado']."' WHERE IdServicio=$id ");                        
-            return JsonResponse::create(array('message' => "Servicio actualizado correctamente", "request" =>json_encode($servicio)), 200);
-        } catch (\Exception $exc) {
-            return JsonResponse::create(array('file' => $exc->getFile(), "line"=> $exc->getLine(),  "message" =>json_encode($exc->getMessage())), 500);
-        }
-    }
+       
     
     private function EnviarEmail($idServicio, $contrato,  $responsable, $email){
         // título
@@ -427,6 +454,50 @@ class ServicioController extends Controller
         $cabeceras .= 'To: '.$responsable.' <'.$email.'>' . "\r\n";
         $cabeceras .= 'From: Transporte Ruta Libre <info@trl.co>' . "\r\n";        
                
+        mail($email, $título, $mensaje, $cabeceras);
+    }
+    
+    private function EmailCalificacion($idServicio){
+        // título
+        $título = utf8_encode('Calificación de servicio [TRL]');
+        // mensaje
+        $servicio  =  $this->getCalificacion($idServicio);
+        $user = \App\Usuario::select("Email", "IdUsuario")->where("Login", "=", $servicio->UserReg)->first();
+        $email = $user->Email;
+        $mensaje = "
+        <html>
+        <head>
+          <title>".utf8_encode('Calificación de servicio') ."</title>
+        </head>
+        <body>
+         <img style='height:60px; width:200px;' src='http://".$_SERVER['HTTP_HOST']."/trl/images/logo.png' alt=''/>
+          <h1> ¡".utf8_encode('Calificación de servicio') ."!</h1>
+              
+            <h1>Hola, ". $servicio->Responsable ."</h1><br/>
+            <p>Su  servicio ha finalizado correctamente, por favor le invitamos a calificar el servicio prestado
+                por parte de nuestra empresa.</p>
+            <p> Si ha tenido alguna inconformidad por favor comuníquese con nosotros.</p>            
+            <br/>
+          
+            <p> Datos del servicio:</p>          
+            <br/>    
+            <p>N° Servicio: $idServicio</p>
+            <p>N° Contrato : $servicio->NumeroContrato</p>
+            <p>Valor Servicio : $servicio->ValorTotal</p>
+            <p>Responsable : $servicio->Responsable</p><br/>              
+            <p>Conductor : $servicio->Nombre</p>
+           <br/>
+           <p><a href='http://".$_SERVER['HTTP_HOST']."/inicio/index.html#/calificacion/$idServicio' target='_blank'>Click Aqui, para calificar el servicio</a></p>
+            <br/>
+          <p>Atentamente</p>
+          <p>Tu equipo de Transporte Ruta Libre</p>
+        </body>
+        </html> ";
+       
+        $cabeceras  = 'MIME-Version: 1.0' . "\r\n";
+        $cabeceras .= 'Content-type: text/html; charset=UTF-8' . "\r\n";       
+        $cabeceras .= 'To: '.$servicio->Responsable.' <'.$email.'>' . "\r\n";
+        $cabeceras .= 'From: Transporte Ruta Libre <info@trl.co>' . "\r\n";                
         mail($email, $título, $mensaje, $cabeceras);
     }
     

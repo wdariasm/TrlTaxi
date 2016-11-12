@@ -365,12 +365,51 @@
                 
                 <div class="tab-pane" id="tabTodos">
                     <div class="row">
+                        <br/>
+                        <div class="col-md-4">
+
+                            <div class="input-group">
+                                 <div class="input-group-addon"><i class="fa  fa-search text-primary"></i></div>
+                                 <input  class="form-control" id="search" type="search" placeholder="Buscar Servicio" ng-model="TablaTodos.filter()['buscadaAvanzada']">
+                            </div>
+
+                        </div>
+                        
+                        <div class="col-md-3">
+                            <div class="input-group">                            
+                                <select ng-model="Filtro.Estado" class="form-control" id="cboEstado"  ng-required="true">
+                                    <option value="TODOS" >TODOS</option>
+                                    <option value="SOLICITADO">SOLICITADO</option>                                    
+                                    <option value="ASIGNADO" >ASIGNADO</option>                                    
+                                    <option value="CANCELADO">CANCELADO</option>
+                                    <option value="CONFIRMADO" >CONFIRMADO</option>                                    
+                                    <option value="DESPLAZAMIENTO A SITIO" >DESPLAZAMIENTO A SITIO</option>
+                                    <option value="EN SITIO">EN SITIO</option>
+                                    <option value="EN RUTA" >EN RUTA</option>                                    
+                                    <option value="FINALIZADO">FINALIZADO</option>
+                                    <option value="RECHAZADO" >RECHAZADO</option>
+                                    
+                                </select>
+                            </div>   
+                        </div>
+                        
                         <div class="col-md-2">                            
                             <div class="input-group">
                                 <div class="input-group-addon"><i class="fa fa-calendar-check-o"></i></div>
                                 <input type="text" id="txtFechaMto" ng-model="FechaBusqueda" name="txtFechaMto" class="form-control" value="" ng-change="CambiarFormato()" title="Fecha de Servicio" readonly="" >                                                                                            
                             </div>                                                        
                         </div>
+                                                                        
+                        
+                        <div class="col-md-1" style="margin-top: 5px;">
+                             <label class="text-center text-primary" style="font-size: 18px;">Total: {{ServicioTodos.length}}</label>
+                        </div>
+                        
+                                                                                                
+                        <div class="col-md-2">
+                            <button type="button" class="btn btn-success btn-addon" ng-click="GetServiciosTodos()" ><i class="fa fa-refresh"></i> Actualizar</button>
+                        </div>
+                        
                     </div>
                     <div class="row">
                         <div class="col-md-12">
@@ -390,9 +429,9 @@
                                         <th width="6%">ACCION</th>
                                     </tr>
                                 </thead>
-
+                                <!-- ng-class="{'info': item.Estado == 'ASIGNADO' || item.Estado =='CONFIRMADO', 'warning':  item.Estado == 'SOLICITADO' , 'danger':  item.Estado == 'FINALIZADO' || item.Estado = 'CANCELADO'  }"-->
                                 <tbody>
-                                    <tr ng-repeat="item in $data" class="success"  ng-class="{'info': item.Estado == 'ASIGNADO' || item.Estado =='CONFIRMADO', 'warning':  item.Estado == 'SOLICITADO' , 'danger':  item.Estado == 'FINALIZADO' || item.Estado = 'CANCELADO'  }">
+                                    <tr ng-repeat="item in $data" >
                                          <td>{{ item.IdServicio}}</td>
                                          <td>{{ item.NumeroContrato }}</td>
                                          <td>{{ item.Responsable}}</td>
@@ -404,9 +443,8 @@
                                         <td>{{ item.Hora}}</td>                                     
                                         <td>{{ item.Estado}}</td>
                                         <td>
-                                            <center>
-                                                <a ng-click="VerAsignarServicio(item)" style="float: left; margin-left: 3px;" href="javascript:;"  title="Asignar Servicio"><i class="fa fa-check fa-1x text-success"></i></a>
-                                                <a ng-click="CancelarServicio(item)"  style="float: left; margin-left: 7px;" href="javascript:;"  title="Cancelar"><i class="fa fa-power-off fa-1x text-warning"></i></a>                                            
+                                            <center>                                                
+                                                <!--<a ng-click="CancelarServicio(item)"  style="float: left; margin-left: 7px;" href="javascript:;"  title="Cancelar"><i class="fa fa-power-off fa-1x text-warning"></i></a> -->
                                             </center>
                                          </td>
                                      </tr>

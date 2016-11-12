@@ -7,6 +7,7 @@ app.controller('serviciosController',['$scope', 'zonaService', 'ngTableParams', 
     $scope.Servicio  = {};
     $scope.AsigServicio =  {};
     $scope.Conductores = [];
+    $scope.Filtro = { Estado : "TODOS"};
     
     $scope.FechaBusqueda =  moment().format('L');
     
@@ -320,7 +321,7 @@ app.controller('serviciosController',['$scope', 'zonaService', 'ngTableParams', 
             total: 1000,
             counts : [],
             getData: function (a, b) {
-                var c = b.filter().filtro;
+                var c = b.filter().busqueda;
                 f = [];
                 c ? (c = c.toLowerCase(), f = $scope.Servicios.filter(function (a) {
                     return a.Responsable.toLowerCase().indexOf(c) > -1 ||
@@ -342,7 +343,7 @@ app.controller('serviciosController',['$scope', 'zonaService', 'ngTableParams', 
             total: 1000,
             counts : [],
             getData: function (a, b) {
-                var c = b.filter().filtro;
+                var c = b.filter().buscadaAvanzada;
                 f = [];
                 c ? (c = c.toLowerCase(), f = $scope.ServicioTodos.filter(function (a) {
                     return a.Responsable.toLowerCase().indexOf(c) > -1 ||
@@ -510,6 +511,27 @@ app.controller('serviciosController',['$scope', 'zonaService', 'ngTableParams', 
                 console.log("Some Error Occured " + JSON.stringify(err));
         }); 
     };
+    
+    $scope.GetServiciosTodos = function (){
+        if(!$scope.FechaBusqueda){
+            toaster.pop("info","¡Alerta!","Seleccione una fecha valida.");
+            return;
+        }        
+        var obj = {
+            fecha : $scope.FechaBusqueda,
+            estado : $scope.Filtro.Estado
+        };                
+        var promise = servicioService.getPorFecha(obj);
+        promise.then(function(d) {                        
+            $scope.ServicioTodos = d.data;
+            $scope.TablaTodos.reload();              
+        }, function(err) {           
+                toaster.pop('error','¡Error al cargar servicios!',err.data);           
+                console.log("Some Error Occured " + JSON.stringify(err));
+        }); 
+    };
+    
+    $scope.GetServiciosTodos();
                        
 }]);
 

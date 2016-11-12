@@ -55,11 +55,42 @@
                         <div class="row" >          
                             <div class="col-md-12 col-xs-12">
                                 <form name="frmCalificacion" novalidate="">
+                                    
+                                    <table class="table table-condensed table-bordered table-responsive table-striped">
+                                        <tr>
+                                            <td>N° Servicio</td>
+                                            <td><strong> {{cl.Servicio.IdServicio}}</strong></td>
+                                        </tr>
+                                       
+                                        
+                                        <tr>
+                                            <td>N° Contrato</td>
+                                            <td><strong> {{cl.Servicio.NumeroContrato}}</strong></td>
+                                        </tr>
+                                        
+                                        <tr>
+                                            <td>Valor Servicio</td>
+                                            <td><strong> {{cl.Servicio.ValorTotal | currency : "$" : 0}}</strong></td>
+                                        </tr>
+                                        
+                                        <tr>
+                                            <td>Conductor</td>
+                                            <td><strong> {{cl.Servicio.Nombre}}</strong></td>
+                                        </tr>
+                                        
+                                        <tr>
+                                            <td colspan="2">Calificación</td>                                                                                        
+                                        </tr>
+                                        <tr>
+                                            
+                                            <td colspan="2"><input ng-model="cl.Servicio.Calificacion" id="txtCalificacion" name="txtCalificacion" type="number" class="rating" min=1 max=5 step=1 data-size="sm" ></td>
+                                            
+                                        </tr>
+                                    </table>
+                                    
+                                    
                                     <div class="form-group">
-                                        <label>N° Servicio: </label> <label> <strong> {{cl.Servicio.IdServicio}}</strong></label>                                             
-                                    </div>
-                                    <div class="form-group">
-                                        <button ng-disabled="frmCalificacion.$invalid"   class="btn btn-primary btn-block btn-addon"   type="button"  title="Registrar Cliente" ng-click="Recuperar()"> <i class="fa fa-send"></i>Enviar Correo</button>
+                                        <button ng-disabled="frmCalificacion.$invalid"   class="btn btn-primary btn-block btn-addon"   type="button"  title="Registrar Cliente" ng-click="cl.Calificar()"> <i class="fa fa-send"></i>Enviar Calificación</button>
                                     </div>
 
                                 </form>
@@ -83,3 +114,40 @@
         </div>
     </div>                                    
 </div>
+
+<script>
+    // initialize with defaults
+    $("#txtCalificacion").rating({
+        starCaptionClasses: function(val) {
+            if (val == 0) {
+               return 'label label-default';
+            }
+            else if (val < 3) {
+                return 'label label-danger';
+            } 
+            else {
+                return 'label label-success';
+            }
+        },
+        defaultCaption: '{rating} Estrellas',
+        starCaptions: {
+            0.5: 'Media Estrella',
+            1: 'Una Estrella',
+            1.5: 'Una Estrella y Media',
+            2: 'Dos Estrellas',
+            2.5: 'Dos Estrellas y Media',
+            3: 'Tres Estrellas',
+            3.5: 'Tres Estrellas y Media',
+            4: 'Cuatro Estrellas',
+            4.5: 'Cuatro Estrellas y Media',
+            5: 'Cinco Estrellas'
+        },
+        clearButtonTitle: 'Limpiar',
+        clearCaption: 'Sin Calificar', 
+        containerClass : "krajee-fa"
+    });
+
+    
+</script>
+    
+
