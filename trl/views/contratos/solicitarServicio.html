@@ -186,72 +186,79 @@
                 <div class="tab-pane active" id="tabListado">
                     <br/>
                     <div class="row">
-                        <div class="col-md-6">
-
-                            <div class="input-group">
-                                 <div class="input-group-addon"><i class="fa  fa-search text-primary"></i></div>
-                                 <input  class="form-control" id="search" type="search" placeholder="Buscar Servicio" ng-model="TablaServicio.filter()['busqueda']">
-                            </div>
-
-                        </div>
-                                                                        
-                        
-                        <div class="col-md-2" style="margin-top: 5px;">
-                             <label class="text-center text-primary" style="font-size: 18px;">Total: {{Servicios.length}}</label>
-                        </div>
-                        
-                        <div class="col-md-2">
-                            <button type="button" class="btn btn-success btn-addon" ng-click="GetServicios()" ><i class="fa fa-refresh"></i> Actualizar</button>
-                        </div>
-                        <br/>
-                        
-                        
                         <div class="col-md-12">
-                        <table class="table table-striped table-condensed" ng-table="TablaServicio"  style="margin-top: 15px;">
-                            <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>CONTRATO</th>
-                                    <th>RESPONSABLE</th>
-                                    <th>TELEFONO</th>                                            
-                                    <th>T.SERVICIO</th>
-                                    <th>T.VEHICULO</th>
-                                    <th>$ PRECIO</th>
-                                    <th>FECHA</th>
-                                    <th>HORA</th>
-                                    <th>ESTADO</th>
-                                    <th width="6%">ACCION</th>
-                                </tr>
-                            </thead>
+                        <div class="panel panel-default">
+                            <div class="panel-heading">Servicios pendientes de asignar</div>
+                            <div class="panel-body">
+                                 <div class="row">
+                                <div class="col-md-6">
+                                    <div class="input-group">
+                                         <div class="input-group-addon"><i class="fa  fa-search text-primary"></i></div>
+                                         <input  class="form-control" id="search" type="search" placeholder="Buscar Servicio" ng-model="TablaServicio.filter()['busqueda']">
+                                    </div>
 
-                            <tbody>
-                                 <tr ng-repeat="item in $data"  ng-class="{'info': item.Estado == 'ASIGNADO', 'warning':  item.Estado == 'SOLICITADO' , 'success':  item.Estado != 'SOLICITADO' || item.Estado != 'ASIGNADO'  }">
-                                     <td>{{ item.IdServicio}}</td>
-                                     <td>{{ item.NumeroContrato }}</td>
-                                     <td>{{ item.Responsable}}</td>
-                                     <td >{{ item.Telefono }}</td>
-                                     <td>{{ item.svDescripcion}}</td>
-                                     <td>{{ item.DescVehiculo}}</td>                                     
-                                     <td >{{ item.ValorTotal | currency : "$" : 0}}</td>  
-                                     <td>{{ item.FechaServicio}}</td>
-                                    <td>{{ item.Hora}}</td>                                     
-                                    <td>{{ item.Estado}}</td>
-                                    <td>
-                                        <center>
-                                            <a ng-click="VerAsignarServicio(item)" style="float: left; margin-left: 3px;" href="javascript:;"  title="Asignar Servicio"><i class="fa fa-check fa-1x text-success"></i></a>
-                                            <a ng-click="CancelarServicio(item)"  style="float: left; margin-left: 7px;" href="javascript:;"  title="Cancelar"><i class="fa fa-power-off fa-1x text-warning"></i></a>                                            
-                                        </center>
-                                     </td>
-                                 </tr>
-                                 <tr ng-hide="Servicios.length">
-                                     <td colspan="11" align="center"><h4 class="text-danger"> No se encontraron servicios solicitados.</h4></td>
-                                 </tr> 
-                            </tbody>
-                        </table>
+                                </div>
+
+
+                                <div class="col-md-2" style="margin-top: 5px;">
+                                     <label class="text-center text-primary" style="font-size: 18px;">Total: {{Servicios.length}}</label>
+                                </div>
+
+                                <div class="col-md-2">
+                                    <button type="button" class="btn btn-success btn-addon" ng-click="GetServicios()" ><i class="fa fa-refresh"></i> Actualizar</button>
+                                </div>
+                                <br/>
+                                 </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                    <table class="table table-striped table-condensed" ng-table="TablaServicio"  style="margin-top: 15px;">
+                                        <thead>
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>CONTRATO</th>
+                                                <th>RESPONSABLE</th>
+                                                <th>TELEFONO</th>                                            
+                                                <th>T.SERVICIO</th>
+                                                <th>T.VEHICULO</th>
+                                                <th>$ PRECIO</th>
+                                                <th>FECHA</th>
+                                                <th>HORA</th>
+                                                <th>ESTADO</th>
+                                                <th width="6%">ACCION</th>
+                                            </tr>
+                                        </thead>
+
+                                        <tbody>
+                                             <tr ng-repeat="item in $data"  ng-class="{'info': item.Estado == 'ASIGNADO', 'warning':  item.Estado == 'SOLICITADO' , 'success':  item.Estado != 'SOLICITADO' || item.Estado != 'ASIGNADO'  }">
+                                                 <td>{{ item.IdServicio}}</td>
+                                                 <td>{{ item.NumeroContrato }}</td>
+                                                 <td>{{ item.Responsable}}</td>
+                                                 <td >{{ item.Telefono }}</td>
+                                                 <td>{{ item.svDescripcion}}</td>
+                                                 <td>{{ item.DescVehiculo}}</td>                                     
+                                                 <td >{{ item.ValorTotal | currency : "$" : 0}}</td>  
+                                                 <td>{{ item.FechaServicio}}</td>
+                                                <td>{{ item.Hora}}</td>                                     
+                                                <td>{{ item.Estado}}</td>
+                                                <td>
+                                                    <center>
+                                                        <a ng-click="VerAsignarServicio(item)" style="float: left; margin-left: 3px;" href="javascript:;"  title="Asignar Servicio"><i class="fa fa-check fa-1x text-success"></i></a>
+                                                        <a ng-click="CancelarServicio(item)"  style="float: left; margin-left: 7px;" href="javascript:;"  title="Cancelar"><i class="fa fa-power-off fa-1x text-warning"></i></a>                                            
+                                                    </center>
+                                                 </td>
+                                             </tr>
+                                             <tr ng-hide="Servicios.length">
+                                                 <td colspan="11" align="center"><h4 class="text-danger"> No se encontraron servicios solicitados.</h4></td>
+                                             </tr> 
+                                        </tbody>
+                                    </table>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        
+                        </div>
                     </div>
-                    
+                                                                                                                                                          
                     <div class="modal fade bs-example-modal-sm" id="mdAsignar" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" style="margin-top: 1%;">
                     <div class="modal-dialog modal-lg"  >                                   
                         <div class="modal-content">
@@ -364,121 +371,196 @@
                 </div>
                 
                 <div class="tab-pane" id="tabTodos">
-                    <div class="row">
-                        <br/>
-                        <div class="col-md-4">
-
-                            <div class="input-group">
-                                 <div class="input-group-addon"><i class="fa  fa-search text-primary"></i></div>
-                                 <input  class="form-control" id="search" type="search" placeholder="Buscar Servicio" ng-model="TablaTodos.filter()['buscadaAvanzada']">
-                            </div>
-
-                        </div>
-                        
-                        <div class="col-md-3">
-                            <div class="input-group">                            
-                                <select ng-model="Filtro.Estado" class="form-control" id="cboEstado"  ng-required="true">
-                                    <option value="TODOS" >TODOS</option>
-                                    <option value="SOLICITADO">SOLICITADO</option>                                    
-                                    <option value="ASIGNADO" >ASIGNADO</option>                                    
-                                    <option value="CANCELADO">CANCELADO</option>
-                                    <option value="CONFIRMADO" >CONFIRMADO</option>                                    
-                                    <option value="DESPLAZAMIENTO A SITIO" >DESPLAZAMIENTO A SITIO</option>
-                                    <option value="EN SITIO">EN SITIO</option>
-                                    <option value="EN RUTA" >EN RUTA</option>                                    
-                                    <option value="FINALIZADO">FINALIZADO</option>
-                                    <option value="RECHAZADO" >RECHAZADO</option>
-                                    
-                                </select>
-                            </div>   
-                        </div>
-                        
-                        <div class="col-md-2">                            
-                            <div class="input-group">
-                                <div class="input-group-addon"><i class="fa fa-calendar-check-o"></i></div>
-                                <input type="text" id="txtFechaMto" ng-model="FechaBusqueda" name="txtFechaMto" class="form-control" value="" ng-change="CambiarFormato()" title="Fecha de Servicio" readonly="" >                                                                                            
-                            </div>                                                        
-                        </div>
-                                                                        
-                        
-                        <div class="col-md-1" style="margin-top: 5px;">
-                             <label class="text-center text-primary" style="font-size: 18px;">Total: {{ServicioTodos.length}}</label>
-                        </div>
-                        
-                                                                                                
-                        <div class="col-md-2">
-                            <button type="button" class="btn btn-success btn-addon" ng-click="GetServiciosTodos()" ><i class="fa fa-refresh"></i> Actualizar</button>
-                        </div>
-                        
-                    </div>
+                    <div ng-controller="consultaServiciosController as cs">
                     <div class="row">
                         <div class="col-md-12">
-                            <table class="table table-striped table-condensed" ng-table="TablaTodos"  style="margin-top: 15px;">
-                                <thead>
-                                    <tr>
-                                        <th>ID</th>
-                                        <th>CONTRATO</th>
-                                        <th>RESPONSABLE</th>
-                                        <th>TELEFONO</th>                                            
-                                        <th>T.SERVICIO</th>
-                                        <th>T.VEHICULO</th>
-                                        <th>$ PRECIO</th>
-                                        <th>FECHA</th>
-                                        <th>HORA</th>
-                                        <th>ESTADO</th>
-                                        <th width="6%">ACCION</th>
-                                    </tr>
-                                </thead>
-                                <!-- ng-class="{'info': item.Estado == 'ASIGNADO' || item.Estado =='CONFIRMADO', 'warning':  item.Estado == 'SOLICITADO' , 'danger':  item.Estado == 'FINALIZADO' || item.Estado = 'CANCELADO'  }"-->
-                                <tbody>
-                                    <tr ng-repeat="item in $data" >
-                                         <td>{{ item.IdServicio}}</td>
-                                         <td>{{ item.NumeroContrato }}</td>
-                                         <td>{{ item.Responsable}}</td>
-                                         <td >{{ item.Telefono }}</td>
-                                         <td>{{ item.svDescripcion}}</td>
-                                         <td>{{ item.DescVehiculo}}</td>                                     
-                                         <td >{{ item.ValorTotal | currency : "$" : 0}}</td>  
-                                         <td>{{ item.FechaServicio}}</td>
-                                        <td>{{ item.Hora}}</td>                                     
-                                        <td>{{ item.Estado}}</td>
-                                        <td>
-                                            <center>                                                
-                                                <!--<a ng-click="CancelarServicio(item)"  style="float: left; margin-left: 7px;" href="javascript:;"  title="Cancelar"><i class="fa fa-power-off fa-1x text-warning"></i></a> -->
-                                            </center>
-                                         </td>
-                                     </tr>
-                                     <tr ng-hide="ServicioTodos.length">
-                                         <td colspan="11" align="center"><h4 class="text-danger"> No se encontraron servicios solicitados para la fecha seleccionada.</h4></td>
-                                     </tr> 
-                                </tbody>
-                            </table>
+                        <div class="panel panel-default" style="margin-top: 10px;">
+                            <div class="panel-heading">Filtros</div>
+                            <div class="panel-body">
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                    <label class="control-label">Por Estado</label>                                       
+                                    <div class="input-group">                            
+                                        <select ng-model="cs.Filtro.Estado" class="form-control" id="cboEstado"  ng-required="true">
+                                            <option value="TODOS" >TODOS</option>
+                                            <option value="SOLICITADO">SOLICITADO</option>                                    
+                                            <option value="ASIGNADO" >ASIGNADO</option>                                    
+                                            <option value="CANCELADO">CANCELADO</option>
+                                            <option value="CONFIRMADO" >CONFIRMADO</option>                                    
+                                            <option value="DESPLAZAMIENTO A SITIO" >DESPLAZAMIENTO A SITIO</option>
+                                            <option value="EN SITIO">EN SITIO</option>
+                                            <option value="EN RUTA" >EN RUTA</option>                                    
+                                            <option value="FINALIZADO">FINALIZADO</option>
+                                            <option value="RECHAZADO" >RECHAZADO</option>
+
+                                        </select>
+                                    </div>   
+                                    </div>
+                                </div>                                
+                                
+                                <input type="hidden" id="txtFechaI" ng-model="cs.Filtro.FechaInicial" >
+                                <input type="hidden" id="txtFechaF" ng-model="cs.Filtro.FechaFin">
+                                
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <div class="checkbox checkbox-primary" style="margin-top: 0; margin-bottom: 3px;">                                        
+                                                <input type="checkbox" id="chkFecha"  ng-model="cs.Filtro.FechaChk" ng-true-value="true" ng-false-value="false" >                                         
+                                                <label for="chkFecha" ><strong>Rango de fechas</strong></label>
+                                        </div> 
+                                        
+                                        <div class="input-group">                                                                          
+                                            <div id="reportrange" ng-disabled="cs.Filtro.FechaChk" class="pull-right" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; height: 34px;">
+                                                <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
+                                                <span></span> <b class="caret"></b>
+                                            </div>  
+                                        </div>
+                                    </div>
+                                </div>   
+                                
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <label  for="cboTipoServicio">Tipo Servicio</label>
+                                        <div class="input-group">
+                                            <select ng-model="cs.TipoSelect" class="form-control" id="cboTipoServicio" ng-options="item as item.svDescripcion for item in cs.TipoServicio track by item.svCodigo" ></select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <label></label>
+                                        <div class="input-group">      
+                                            <button type="button" class="btn btn-success btn-addon" ng-click="cs.GetServiciosTodos()" ><i class="fa fa-refresh"></i> Consultar</button>
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="panel panel-default">
+                            <div class="panel-heading">Datos</div>
+                            <div class="panel-body">
+                                <div class="col-md-6">
+
+                                    <div class="input-group">
+                                         <div class="input-group-addon"><i class="fa  fa-search text-primary"></i></div>
+                                         <input  class="form-control" id="txtsearch" type="text" placeholder="Buscar por N Servcio, Contrato, Nombre, Responsable, Estado" ng-model="cs.TablaTodos.filter()['buscadaAvanzada']">
+                                    </div>                                                                        
+
+                                </div>
+                                <div class="col-md-3" style="margin-top: 5px;">
+                                         <label class="text-center text-primary" style="font-size: 18px;">Total Registros: {{cs.ServicioTodos.length}}</label>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <table class="table table-striped table-condensed" ng-table="cs.TablaTodos"  style="margin-top: 15px;">
+                                            <thead>
+                                                <tr>
+                                                    <th>ID</th>
+                                                    <th>CONTRATO</th>
+                                                    <th>RESPONSABLE</th>
+                                                    <th>TELEFONO</th>                                            
+                                                    <th>T.SERVICIO</th>
+                                                    <th>T.VEHICULO</th>
+                                                    <th>$ VALOR</th>
+                                                    <th>FECHA</th>
+                                                    <th>HORA</th>
+                                                    <th>ESTADO</th>
+                                                    <th width="6%">ACCION</th>
+                                                </tr>
+                                            </thead>                                            
+                                            <tbody>
+                                                <tr ng-repeat="item in $data" ng-class="{'info': item.Estado == 'ASIGNADO' || item.Estado =='CONFIRMADO', 'warning':  item.Estado == 'SOLICITADO', 'success' : item.Estado == 'FINALIZADO', 'danger': item.Estado == 'CANCELADO' } " >
+                                                     <td>{{ item.IdServicio}}</td>
+                                                     <td>{{ item.NumeroContrato }}</td>
+                                                     <td>{{ item.Responsable}}</td>
+                                                     <td >{{ item.Telefono }}</td>
+                                                     <td>{{ item.svDescripcion}}</td>
+                                                     <td>{{ item.DescVehiculo}}</td>                                     
+                                                     <td >{{ item.ValorTotal | currency : "$" : 0}}</td>  
+                                                     <td>{{ item.FechaServicio}}</td>
+                                                    <td>{{ item.Hora}}</td>                                     
+                                                    <td>{{ item.Estado}}</td>
+                                                    <td>
+                                                        <center>                                                
+                                                            <!--<a ng-click="CancelarServicio(item)"  style="float: left; margin-left: 7px;" href="javascript:;"  title="Cancelar"><i class="fa fa-power-off fa-1x text-warning"></i></a> -->
+                                                        </center>
+                                                     </td>
+                                                 </tr>
+                                                 <tr ng-hide="cs.ServicioTodos.length">
+                                                     <td colspan="11" align="center"><h4 class="text-danger"> No se encontraron servicios con los criterios de busqueda seleccionados.</h4></td>
+                                                 </tr> 
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>                                                                       
                         </div>
                     </div>
-                </div>
-                                                
-                
+                    </div>
+                </div>                                                                
             </div>            
         </div>        
     </div>                    
 </div>
 
 <script type="text/javascript">
+    $('#tabPanels a[href="#tabTodos"]').tab('show');
+    
      $('#tabPanels a').click(function (e) {
         e.preventDefault();
         $(this).tab('show');
     });
     
     $(function () {
-        $('[data-toggle="tooltip"]').tooltip();
+        $('[data-toggle="tooltip"]').tooltip();                       
         
-        $('input[name="txtFechaMto"]').daterangepicker({
-            singleDatePicker: true,
-            showDropdowns: true           
-        }, 
-        function(start, end, label) {
-            $('#txtFechaMto').val(end.format('DD/MM/YYYY'));         
-        });
+        var cb = function(start, end) {                    
+            $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+            $('#txtFechaI').val(start.format('YYYY-MM-DD'));
+            $('#txtFechaF').val(end.format('YYYY-MM-DD'));                        
+        };
+                
+                
+        var optionSet1 = {
+            startDate: moment().subtract(29, 'days'),
+            endDate: moment(),
+            minDate: '01/01/2010',
+            maxDate: '12/31/2030',                    
+            showDropdowns: true,
+            showWeekNumbers: true,
+            timePicker: false,                    
+            ranges: {
+               'Hoy': [moment(), moment()],
+               'Ayer': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+               'Ultimos 7 dias': [moment().subtract(6, 'days'), moment()],
+               'Ultimos 30 dias': [moment().subtract(29, 'days'), moment()],
+               'Este Mes': [moment().startOf('month'), moment().endOf('month')],
+               'Ultimo Mes': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+            },
+            opens: 'right',
+            buttonClasses: ['btn btn-default'],
+            applyClass: 'btn-sm btn-primary',
+            cancelClass: 'btn-sm btn-warning',
+            format: 'MM/DD/YYYY',
+            separator: ' to ',
+            locale: {
+                applyLabel: 'Aplicar',
+                cancelLabel: 'Limpiar',
+                fromLabel: 'Desde',
+                toLabel: 'Hasta',
+                customRangeLabel: 'Rango',
+                daysOfWeek: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi','Sa'],
+                monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+                firstDay: 1
+            }
+          };
+
+        $('#reportrange span').html(moment().format('MMMM D, YYYY') + ' - ' + moment().format('MMMM D, YYYY'));
+        $('#reportrange').daterangepicker(optionSet1,cb);                
+        
     });
         
         

@@ -71,25 +71,38 @@ class ServicioController extends Controller
     
     public function getPorFecha(Request $request){
         try{
-            $date = new \DateTime(str_replace("/", "-", $request->get('fecha')." 00:00:00"));
-            $estado = $request->get('estado');
             $condicion = "";
-            $fecha = $date->format('Y-m-d');
+            $condFecha = "";
+            $condTipo = "";
+            $estado = $request->get('Estado');
+            $buscarPorFecha = $request->get('FechaChk');
+            $fechaInicial = $request->get('FechaInicial');
+            $fechaFinal = $request->get('FechaFin');
+            $TipoServicio = $request->get('TipoServicio');
             
             if($estado !=="TODOS"){
                 $condicion =  " AND Estado = '". $estado ."'";
             }
+            
+            if($buscarPorFecha){
+                $condFecha = " AND FechaServicio BETWEEN '$fechaInicial' AND '$fechaFinal'";
+            }
+            
+            if($TipoServicio != "0"){
+                $condTipo = " AND TipoServicidoId = ".$TipoServicio;
+            }
+            
             $sql = "SELECT s.IdServicio, s.ContratoId, s.ClienteId, s.NumeroContrato, s.Responsable,"
                     . " s.Telefono, s.TipoServicidoId, ts.svDescripcion, s.FechaServicio, s.Hora, s.Valor, s.Estado, "
                     . " s.DescVehiculo, s.TipoVehiculoId, s.ValorTotal, s.ConductorId FROM servicio s INNER JOIN  tiposervicio "
-                    . " ts ON s.TipoServicidoId=ts.svCodigo WHERE FechaServicio = '$fecha' " . $condicion
+                    . " ts ON s.TipoServicidoId=ts.svCodigo WHERE ContratoId > 0  " . $condicion . $condFecha . $condTipo
                     . "  order by s.IdServicio desc";
 
-            $servicio = DB::select($sql);
+            $servicio = DB::select($sql);            
             return $servicio;     
         
         }catch (\Exception $exc) {
-            return JsonResponse::create(array('file' => $exc->getFile(), "line"=> $exc->getLine(),  "message" =>json_encode($exc->getMessage())), 401);
+            return JsonResponse::create(array('file' => $exc->getFile(), "line"=> $exc->getLine(),  "message" =>json_encode($exc->getMessage())), 500);
         }   
     }
     

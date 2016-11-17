@@ -7,7 +7,7 @@ app.controller('serviciosController',['$scope', 'zonaService', 'ngTableParams', 
     $scope.Servicio  = {};
     $scope.AsigServicio =  {};
     $scope.Conductores = [];
-    $scope.Filtro = { Estado : "TODOS"};
+    
     
     $scope.FechaBusqueda =  moment().format('L');
     
@@ -16,8 +16,7 @@ app.controller('serviciosController',['$scope', 'zonaService', 'ngTableParams', 
     $scope.Servicios = [];
     $scope.ServicioTodos = [];
     $scope.TablaServicio ={};
-    $scope.TablaTodos ={};
-    
+        
     $scope.mapServicio;      
     $scope.markerOrigen = null;    
     var markerDestino = null;    
@@ -55,8 +54,7 @@ app.controller('serviciosController',['$scope', 'zonaService', 'ngTableParams', 
     initAutocompleteDestino();
     initTablaZona();
     init();
-    initTabla();
-    initTablaTodos();
+    initTabla();    
     
     function Poligono() {
         this.coordenadas = null;
@@ -331,29 +329,7 @@ app.controller('serviciosController',['$scope', 'zonaService', 'ngTableParams', 
                 })) : f = $scope.Servicios, f = b.sorting() ? f : f, b.total(f.length), a.resolve(f.slice((b.page() - 1) * b.count(), b.page() * b.count()))
             }
         });
-    };
-    
-     function initTablaTodos() {
-        $scope.TablaTodos = new ngTableParams({
-            page: 1,
-            count: 10,
-            sorting: undefined
-        }, {
-            filterDelay: 50,
-            total: 1000,
-            counts : [],
-            getData: function (a, b) {
-                var c = b.filter().buscadaAvanzada;
-                f = [];
-                c ? (c = c.toLowerCase(), f = $scope.ServicioTodos.filter(function (a) {
-                    return a.Responsable.toLowerCase().indexOf(c) > -1 ||
-                           a.NumeroContrato.indexOf(c) > -1 ||
-                           a.svDescripcion.toLowerCase().indexOf(c) > -1 ||
-                           a.Estado.toLowerCase().indexOf(c) > -1                                                       
-                })) : f = $scope.ServicioTodos, f = b.sorting() ? f : f, b.total(f.length), a.resolve(f.slice((b.page() - 1) * b.count(), b.page() * b.count()))
-            }
-        });
-    };
+    };         
        
     $scope.nuevo = function() {       
         $scope.editMode = false;
@@ -510,28 +486,7 @@ app.controller('serviciosController',['$scope', 'zonaService', 'ngTableParams', 
                 toaster.pop('error','¡Error!',err.data.request);           
                 console.log("Some Error Occured " + JSON.stringify(err));
         }); 
-    };
-    
-    $scope.GetServiciosTodos = function (){
-        if(!$scope.FechaBusqueda){
-            toaster.pop("info","¡Alerta!","Seleccione una fecha valida.");
-            return;
-        }        
-        var obj = {
-            fecha : $scope.FechaBusqueda,
-            estado : $scope.Filtro.Estado
-        };                
-        var promise = servicioService.getPorFecha(obj);
-        promise.then(function(d) {                        
-            $scope.ServicioTodos = d.data;
-            $scope.TablaTodos.reload();              
-        }, function(err) {           
-                toaster.pop('error','¡Error al cargar servicios!',err.data);           
-                console.log("Some Error Occured " + JSON.stringify(err));
-        }); 
-    };
-    
-    $scope.GetServiciosTodos();
+    };        
                        
 }]);
 
