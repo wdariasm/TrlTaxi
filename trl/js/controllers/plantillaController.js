@@ -1,5 +1,5 @@
-app.controller('plantillaController',['$scope',  'ngTableParams', 'toaster',"plantillaService", "$routeParams",
-    function ($scope, ngTableParams, toaster, plantillaService, $routeParams) {
+app.controller('plantillaController',['$scope',  'ngTableParams', 'toaster',"plantillaService", "$routeParams", "serverData",
+    function ($scope, ngTableParams, toaster, plantillaService, $routeParams, serverData) {
     
     var opcion =["1","3","4"];
     
@@ -9,8 +9,9 @@ app.controller('plantillaController',['$scope',  'ngTableParams', 'toaster',"pla
     $scope.editMode = false;                    
     $scope.title = "Nueva Plantilla"; 
     $scope.tbPlantilla = {};
-    
+    $scope.PlantillaGlobal =  {};
     $scope.TipoId = $routeParams.tipo;   
+    $scope.Mensaje = {};
     
     if(opcion.indexOf($scope.TipoId) === -1){
         toaster.pop("error","¡Error!", "Ruta no valida");
@@ -101,14 +102,69 @@ app.controller('plantillaController',['$scope',  'ngTableParams', 'toaster',"pla
             loadPlantilla();
               
         }, function(err) {           
-            toaster.pop('error', "¡Error!", err.data.request);   
+            toaster.pop('error', "¡Error!", err.data);   
             console.log("Some Error Occured " + JSON.stringify(err));
         });  
     };
     
-    $scope.VerServicios= function(id) {                
-        $('#mdServicios').modal('show');         
-    };             
+  
+    $scope.VerDesactivarPlantilla = function (item){
+        $scope.PlantillaGlobal = item;
+        $scope.Mensaje.Boton = false;
+        $('#mdConfirmacionPlantilla').modal('show'); 
+    };
+    
+    $scope.EliminarDatos = function (){
+        if(!$scope.PlantillaGlobal.plCodigo){
+            $scope.Mensaje.Texto =  "ID de plantilla no valido";
+            return;
+        }
+        var objeto = {
+            PlantillaId : $scope.PlantillaGlobal.plCodigo,
+            Usuario : $scope.$parent.Login.Login,
+            Tipo : $scope.TipoId, 
+            Descripcion : $scope.PlantillaGlobal.plDescripcion
+        };
+        
+        $scope.Mensaje.Texto = "Espere por favor. Este proceso puede tardar algunos minutos.";
+        $scope.Mensaje.Boton = true;
+        $scope.Mensaje.Cargando = true;
+        
+        var promise = plantillaService.delete(objeto);            
+        
+        promise.then(function(d) {            
+            toaster.pop('success','¡Información!', d.data.message);
+            $('#mdConfirmacionPlantilla').modal('hide');
+            loadPlantilla();
+              
+        }, function(err) {           
+            toaster.pop('error', "¡Error!", err.data);   
+            console.log("Some Error Occured " + JSON.stringify(err));
+        });  
+        
+    };
+    
+    $scope.AgregarDatos = function (item){
+        serverData.data = angular.copy(item);
+                
+        var div1 = document.getElementById('liVistaDatos');                
+                div1.classList.remove('hidden');
+                div1.classList.add('visible');                                                  
+        $('#tabPanels a[href="#tabRegistro"]').tab('show');                
+        
+        switch ($scope.TipoId){
+            case "1":                
+                $scope.$emit("cargueTransfert", "iniciando cargue");
+                break;
+            case "3":
+                $scope.$emit("cargueRuta", "iniciando cargue");
+                break;
+            case "4":
+                $scope.$emit("cargueTraslado", "iniciando cargue");
+                break;
+        }
+                
+    };
 }]);
 
 

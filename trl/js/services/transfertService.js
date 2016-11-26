@@ -4,8 +4,8 @@ app.service("transfertService", ['$http', function ($http) {
         return req;
     };            
        
-    this.getAll = function () {
-        var req = $http.get(uri+'/api/transfert');
+    this.getAll = function (idPlantilla) {
+        var req = $http.get(uri+'/api/plantilla/' + idPlantilla + '/transfert');
         return req;
     };                
         

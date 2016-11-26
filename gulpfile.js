@@ -10,7 +10,7 @@ var gulp = require('gulp'),
 gulp.task('controllers', function () {
     gulp.src(["trl/js/session.js", "trl/js/services/*.js", "trl/js/controllers/*.js", "trl/js/libs/funciones.js"])
         .pipe(concat('vendors.js'))
-        .pipe(uglify().on('error', gutil.log))
+       // .pipe(uglify().on('error', gutil.log))
         .pipe(gulp.dest('trl/dist/'));        
 });
 

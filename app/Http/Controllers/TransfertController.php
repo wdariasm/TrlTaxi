@@ -12,9 +12,14 @@ class TransfertController extends Controller
     
     public function index()
     {                
+        return null;
+    }
+    
+    public function getByPlanitlla($idPlantilla){
         return DB::select("SELECT t.*, cv.tvDescripcion, z.znNombre, zd.znNombre AS destino FROM transfert AS t "
                 . " INNER JOIN clasevehiculo AS cv ON t.tfTipoVehiculo = cv.tvCodigo INNER JOIN zona z ON t.tfOrigen = "
-                . " z.znCodigo INNER JOIN zona zd ON t.tfDestino = zd.znCodigo WHERE t.tfEstado <> 'BORRADO'");
+                . " z.znCodigo INNER JOIN zona zd ON t.tfDestino = zd.znCodigo WHERE"
+                . " tfPlantilla = $idPlantilla AND t.tfEstado <> 'BORRADO'");
     }
     
     public function  GetTarifasActivas(){
@@ -58,9 +63,9 @@ class TransfertController extends Controller
             $transfert->save();
             
             return JsonResponse::create(array('message' => "Vehiculo guardado correctamente", "request" =>json_encode($transfert->tfCodigo)), 200);
-        } catch (\Exception $exc) {    
-            return JsonResponse::create(array('message' => "No se pudo guardar", "request" =>json_encode($exc->getMessage())), 401);
-        }
+        } catch (\Exception $exc) {
+            return JsonResponse::create(array('file' => $exc->getFile(), "line"=> $exc->getLine(),  "message" =>json_encode($exc->getMessage())), 500);
+        }  
     }
     
     public function update(Request $request, $id)
@@ -80,9 +85,9 @@ class TransfertController extends Controller
             $transfert->save();
             
             return JsonResponse::create(array('message' => "Vehiculo guardado correctamente", "request" =>json_encode($transfert->tfCodigo)), 200);
-        } catch (\Exception $exc) {    
-            return JsonResponse::create(array('message' => "No se pudo guardar", "request" =>json_encode($exc->getMessage())), 401);
-        }
+        }catch (\Exception $exc) {
+            return JsonResponse::create(array('file' => $exc->getFile(), "line"=> $exc->getLine(),  "message" =>json_encode($exc->getMessage())), 500);
+        }  
     }
     
     public function UpdateEstado(Request $request, $id){
@@ -92,8 +97,8 @@ class TransfertController extends Controller
             $taxi->tfEstado = $data['estado'];
             $taxi->save();
             return JsonResponse::create(array('message' => "Datos actualizados correctamente", "request" =>json_encode($id)), 200);
-        } catch (Exception $ex) {
-            return JsonResponse::create(array('message' => "No se pudo modificar el Vehiculo", "request" =>json_encode($ex->getMessage())), 401);
-        }
+        }catch (\Exception $exc) {
+            return JsonResponse::create(array('file' => $exc->getFile(), "line"=> $exc->getLine(),  "message" =>json_encode($exc->getMessage())), 500);
+        }  
     }
 }

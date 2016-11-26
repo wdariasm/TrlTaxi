@@ -75,3 +75,9 @@
     };
     
 });
+
+app.service("serverData", function () {
+    return {
+        data: {}
+    };
+});

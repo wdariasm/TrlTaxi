@@ -4,6 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Plantilla;
+use App\HistorialPlantilla;
+use App\Ruta;
+use App\Traslado;
+use App\Transfert;
 use Illuminate\Http\JsonResponse;
 use DB;
 
@@ -36,9 +40,9 @@ class PlantillaController extends Controller
             $plantilla->save();           
             return JsonResponse::create(array('message' => "Plantilla guardada correctamente", "request" =>json_encode($plantilla->plCodigo)), 200);
             
-        } catch (\Exception $exc) {    
-            return JsonResponse::create(array('message' => "No se pudo guardar", "request" =>json_encode($exc->getMessage())), 401);
-        }
+        }catch (\Exception $exc) {
+            return JsonResponse::create(array('file' => $exc->getFile(), "line"=> $exc->getLine(),  "message" =>json_encode($exc->getMessage())), 500);
+        }  
     }
     
     
@@ -94,9 +98,9 @@ class PlantillaController extends Controller
             $plantilla->save();           
             return JsonResponse::create(array('message' => "Datos actualizados correctamente", "request" =>json_encode($plantilla->plCodigo)), 200);
             
-        } catch (\Exception $exc) {    
-            return JsonResponse::create(array('message' => "No se pudo guardar", "request" =>json_encode($exc->getMessage())), 401);
-        }
+        }catch (\Exception $exc) {
+            return JsonResponse::create(array('file' => $exc->getFile(), "line"=> $exc->getLine(),  "message" =>json_encode($exc->getMessage())), 500);
+        }  
     }
 
     /**
@@ -113,8 +117,50 @@ class PlantillaController extends Controller
             $plantilla->save();           
             return JsonResponse::create(array('message' => "Plantilla inactivada correctamente", "request" =>json_encode($plantilla->plCodigo)), 200);
             
-        } catch (\Exception $exc) {    
-            return JsonResponse::create(array('message' => "No se pudo guardar", "request" =>json_encode($exc->getMessage())), 401);
-        }
+        }catch (\Exception $exc) {
+            return JsonResponse::create(array('file' => $exc->getFile(), "line"=> $exc->getLine(),  "message" =>json_encode($exc->getMessage())), 500);
+        }  
+    }
+    
+    public function borrarDatos(Request $request)
+    {
+        try{  
+            $data = $request->all(); 
+            $idPlantilla =  $data["PlantillaId"];
+            $usuario = $data["Usuario"];
+            $tipo = $data["Tipo"];
+            $datos = null;
+            $descripcion = "";
+            switch ($tipo) {
+                case "1":                    
+                    $descripcion  ="TRANSFER";
+                    $datos = Transfert::where("tfPlantilla", $idPlantilla)->get();
+                    $filas = Transfert::where('tfPlantilla', $idPlantilla)->delete();
+                    break;                
+                case "3":
+                    $descripcion  ="RUTA";
+                    $datos = Ruta::where("rtPlantilla", $idPlantilla)->get();
+                    $filas = Ruta::where('rtPlantilla', $idPlantilla)->delete();
+                    break;
+                
+                case "4":
+                    $descripcion  ="TRASLADO";
+                    $datos = Traslado::where("tlPlantilla", $idPlantilla)->get();
+                    $filas = Traslado::where('tlPlantilla', $idPlantilla)->delete();
+                    break;                
+            }
+                                    
+            $historial = new HistorialPlantilla();                        
+            $historial->htDescripcion = "ELINACIÓN MASIVA DE DATOS PLANTILLA ".$descripcion;
+            $historial->htUsuario = $usuario;
+            $historial->htDatos = $datos;
+            $historial->htPlantillaId = $idPlantilla;
+            $historial->htNombrePl = $data["Descripcion"];
+            $historial->save();           
+            return JsonResponse::create(array('message' => "Datos borrados correctamente", "request" =>json_encode($filas)), 200);
+            
+        }catch (\Exception $exc) {
+            return JsonResponse::create(array('file' => $exc->getFile(), "line"=> $exc->getLine(),  "message" =>json_encode($exc->getMessage())), 500);
+        }  
     }
 }

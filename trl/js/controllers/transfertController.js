@@ -1,5 +1,6 @@
-app.controller('transfertController',['$scope', 'zonaService', 'ngTableParams', 'toaster',"transfertService", "tipoVehiculoService","plantillaService",
-    function ($scope,  zonaService, ngTableParams, toaster, transfertService, tipoVehiculoService, plantillaService) {
+function  transfertController($scope, zonaService, ngTableParams, toaster, transfertService, tipoVehiculoService, 
+        plantillaService,  $rootScope, serverData, funcionService) {
+            
     $scope.Zonas = [];           
     $scope.Transferts = [];
     $scope.Transfert = {};
@@ -15,14 +16,25 @@ app.controller('transfertController',['$scope', 'zonaService', 'ngTableParams', 
     $scope.ZonaDestino = {};
     $scope.ClaseSelect = {};
     $scope.PlantillaSelect = {};
+    $scope.Mensaje = {};
             
     $scope.$parent.SetTitulo("GESTIÓN DE TARIFAS TRANSFERT");          
     loadZona();        
     getClaseVehiculo();
-    loadTransfert();
+    
     loadPlantillas();
     init();            
     initTabla();   
+    
+    $rootScope.$on("cargueTransfert", function (event, data) {        
+        loadTransfert(serverData.data.plCodigo);
+        
+        var pos = funcionService.arrayObjectIndexOf($scope.Plantillas,serverData.data.plCodigo , "plCodigo");
+        if(pos != "-1"){
+            $scope.PlantillaSelect =  $scope.Plantillas[pos];
+        }
+        
+    });
       
     function loadZona() {
         var promiseGet = zonaService.getAll(); //The Method Call from service
@@ -34,7 +46,7 @@ app.controller('transfertController',['$scope', 'zonaService', 'ngTableParams', 
             }
         },
         function(errorPl) {
-            toaster.pop("error","¡Error!", "Eror al cargar zonas");
+            toaster.pop("error","¡Error!", "Error al cargar zonas");
             console.log('failure loading Zona', errorPl);
         });
     }
@@ -48,13 +60,11 @@ app.controller('transfertController',['$scope', 'zonaService', 'ngTableParams', 
             }
         },
         function(errorPl) {
-            toaster.pop("error","¡Error!", "Eror al cargar plantillas de transfert");
+            toaster.pop("error","¡Error!", "Error al cargar plantillas de transfert");
             console.log('failure loading Zona', errorPl);
         });
     }
-    
-    
-    
+           
     function getClaseVehiculo (){
         var promise = tipoVehiculoService.getAll();
         promise.then(function(d) {                        
@@ -63,19 +73,22 @@ app.controller('transfertController',['$scope', 'zonaService', 'ngTableParams', 
                 $scope.ClaseSelect = d.data[0];
             }
         }, function(err) {           
-            toaster.pop("error","¡Error!", "Eror al cargar tipos de vehículo");         
+            toaster.pop("error","¡Error!", "Error al cargar tipos de vehículo");         
             console.log("Some Error Occured " + JSON.stringify(err));
         }); 
     }
     
-    function loadTransfert() {
-        var promiseGet = transfertService.getAll(); //The Method Call from service
+    function loadTransfert(idPlantilla) {
+        $scope.Mensaje.Cargando = true;
+        var promiseGet = transfertService.getAll(idPlantilla); //The Method Call from service
         promiseGet.then(function(pl) {
+            $scope.Mensaje.Cargando = false;
             $scope.Transferts = pl.data;       
             $scope.tbTransfert.reload();
         },
         function(errorPl) {
-            toaster.pop("error","¡Error!", "Eror al cargar tarifas");
+            $scope.Mensaje.Cargando = false;
+            toaster.pop("error","¡Error!", "Error al cargar tarifas");
             console.log('failure loading Zona', errorPl);
         });
     }
@@ -139,12 +152,7 @@ app.controller('transfertController',['$scope', 'zonaService', 'ngTableParams', 
         if(!$scope.ZonaDestino){
             toaster.pop('info','¡Alerta!', 'Seleccione la zona  destino');
             return;
-        }
-        
-        if ($scope.ZonaOrigen.znCodigo === $scope.ZonaDestino.znCodigo){
-            toaster.pop('info','¡Alerta!', 'Zona destino debe ser diferente a zona origen');
-            return;
-        }
+        }               
         
         if(!$scope.ClaseSelect){
             toaster.pop('info','¡Alerta!', 'Seleccione el tipo de vehículo');
@@ -169,10 +177,10 @@ app.controller('transfertController',['$scope', 'zonaService', 'ngTableParams', 
         promise.then(function(d) {            
             toaster.pop('success','¡Información!', d.data.message);
             $scope.Nuevo();
-            loadTransfert();
+            loadTransfert(serverData.data.plCodigo);
               
         }, function(err) {           
-            toaster.pop('error', "¡Error!", err.data.request);   
+            toaster.pop('error', "¡Error!", err.data);   
             console.log("Some Error Occured " + JSON.stringify(err));
         });  
     };
@@ -196,6 +204,9 @@ app.controller('transfertController',['$scope', 'zonaService', 'ngTableParams', 
                     console.log("Some Error Occured "+ JSON.stringify(err));
             });
     };            
-}]);
+};
 
+transfertController.$inject = ['$scope', 'zonaService', 'ngTableParams', 'toaster',"transfertService", 
+        "tipoVehiculoService","plantillaService", "$rootScope","serverData", "funcionService"];
 
+app.controller('transfertController', transfertController);

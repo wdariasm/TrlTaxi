@@ -1,0 +1,122 @@
+<div class="container-fluid"  ng-controller="plantillaController" >
+    <div class="row">                       
+        <div class="col-md-4">            
+            <br/>
+            <form name="frmPlatilla" id="frmPlatilla" novalidate>                               
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="form-group">
+                            <label for="txtDescripcion">Descripción *</label>
+                               <div class="input-group">    
+                                 <div class="input-group-addon"><i class="fa fa-automobile text-success"></i></div>
+                                 <input type="text" required="" class="form-control" ng-model="Plantilla.plDescripcion" maxlength="100" id="txtDescripcion" placeholder="Descripción">
+
+                               </div>
+                        </div>
+                    </div>
+
+
+                    <div class="col-xs-12">
+                        <div class="form-group">
+                            <label for="txtEstado">Estado *</label>
+                             <div class="input-group">    
+                                 <div class="input-group-addon"><i class="fa fa-list-ul text-success"></i></div>
+                            <select type="text" class="form-control" ng-model="Plantilla.plEstado" id="txtEstado" placeholder="Estado">
+                                <option value="ACTIVO">ACTIVO</option>
+                                <option value="INACTIVO">INACTIVO</option>                                               
+                            </select>
+
+                             </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <br/>
+                        <div class="col-xs-5 col-xs-offset-1">                                                                    
+                            <button   class="btn btn-success btn-block btn-addon"   type="button"  title="Nuevo / Cancelar" ng-click="nuevo()"><i class="fa fa-pencil"></i> Nuevo</button>
+                        </div>
+                        <div class="col-xs-5">                                 
+                            <button  ng-disabled="frmPlatilla.$invalid"  class="btn btn-primary btn-block btn-addon"   type="button"  title="Registrar Tipo Vehiculo" ng-click="Guardar()"><i class="fa fa-check"></i>Guardar</button>
+                        </div>
+                    </div>
+
+
+                </div>                                
+            </form>
+        </div>
+
+        <div class="col-md-8">
+            <br/>
+            <div class="row">
+                <div class="col-xs-12">
+                    <table border="0" cellspacing="0" class="table table-striped" >
+                        <thead>
+                            <tr>
+                                <th class="center">CODIGO</th>                                
+                                <th>DESCRIPCIÓN</th>
+                                <th>TIPO</th>
+                                <th>ESTADO</th>
+                                <th width="16%">ACCIÓN</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <tr data-ng-repeat="items in Plantillas">
+                                <td class="center">{{ items.plCodigo}}</td>
+                                <td>{{ items.plDescripcion }}</td>
+                                <td>{{ items.svDescripcion }}</td>
+                                <td>{{ items.plEstado}}</td>
+                                <td>
+                                    <center>                                        
+                                        <a data-ng-click="Get(items)" style="float: left; margin-left: 15px;" href="javascript:;"  title="Editar"><i class="fa fa-lg fa-pencil"></i></a>
+                                        <a data-ng-click="AgregarDatos(items)" style="float: left; margin-left: 15px;" href="javascript:;"  title="Agregar Datos"><i class="fa fa-lg fa-search-plus text-success"></i></a>
+                                        <a ng-click="VerDesactivarPlantilla(items)"  style="float: left; margin-left: 15px;" href="javascript:;"  title="Eliminar datos plantilla"><i class="fa fa-lg fa-trash text-danger"></i></a>
+                                    </center>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>                                     
+                </div>                            
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade bs-example-modal-sm" id="mdConfirmacionPlantilla" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" style="margin-top: 10%;">
+        <div class="modal-dialog modal-sm" style="width: 30%" >                                   
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <div class="modal-title"> Borrar Datos Plantilla</div>
+                </div>
+
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <label class="text-danger" style="display: initial">Estimado usuario(a), tenga en cuenta que este proceso eliminará definitivamente todas las tarifas 
+                                configurados para esta plantilla: </label> <label style="display: inline-block"><strong>{{PlantillaGlobal.plDescripcion}}</strong></label>
+                                    
+                        </div>
+
+                        <div class="col-xs-12">
+                            <label>¿Está seguro de ejecutar esta acción?  </label>
+                        </div>
+
+                        <div class="col-xs-12 text-center">
+                            <label>{{Mensaje.Texto}}</label>
+                        </div>
+
+                        <div class="col-xs-12 text-center" ng-show="Mensaje.Cargando">
+                            <i class="fa fa-spinner fa-fw fa-pulse fa-3x text-info"></i>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" ng-disabled="Mensaje.Boton" ng-click="EliminarDatos()">Aceptar</button>
+                </div>  
+            </div>
+        </div>
+    </div>
+</div>
