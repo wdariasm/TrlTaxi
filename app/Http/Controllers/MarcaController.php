@@ -38,9 +38,9 @@ class MarcaController extends Controller
             $marca->save();
             
             return JsonResponse::create(array('message' => "Marca guardada correctamente", "request" =>json_encode($marca->maCodigo)), 200);
-        } catch (Exception $exc) {    
-            return JsonResponse::create(array('message' => "No se pudo guardar", "request" =>json_encode($exc->getMessage())), 401);
-        }
+        }catch (\Exception $exc) {
+            return JsonResponse::create(array('file' => $exc->getFile(), "line"=> $exc->getLine(),  "message" =>json_encode($exc->getMessage())), 500);
+        } 
     }
 
     /**
@@ -72,21 +72,10 @@ class MarcaController extends Controller
             $marca->save();
 
             return JsonResponse::create(array('message' => "Datos Actualizados correctamente", "request" =>json_encode($marca->maCodigo)), 200);
-        } catch (Exception $exc) {
-            return JsonResponse::create(array('message' => "No se pudo guardar", "request" =>json_encode($request)), 401);
-        }
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $maCodigo
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($maCodigo)
-    {
-        //
-    }
+        }catch (\Exception $exc) {
+            return JsonResponse::create(array('file' => $exc->getFile(), "line"=> $exc->getLine(),  "message" =>json_encode($exc->getMessage())), 500);
+        } 
+    }  
     
     
     //Actualiza el estado (Funcion eliminar)
@@ -97,8 +86,8 @@ class MarcaController extends Controller
             $marca->maEstado = $data['maEstado'];
             $marca->save();
             return JsonResponse::create(array('message' => "Datos Actualizados Correctamente", "request" =>json_encode($maCodigo)), 200);
-        } catch (Exception $ex) {
-            return JsonResponse::create(array('message' => "No se pudo modificar el Taxista", "exception"=>$ex->getMessage(), "request" =>json_encode($maCodigo)), 401);
-        }
+        }catch (\Exception $exc) {
+            return JsonResponse::create(array('file' => $exc->getFile(), "line"=> $exc->getLine(),  "message" =>json_encode($exc->getMessage())), 500);
+        } 
     }
 }

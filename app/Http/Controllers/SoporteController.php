@@ -62,7 +62,7 @@ class SoporteController extends Controller
             $Base64Img = base64_decode($Base64Img);
             file_put_contents('../img/error/'.$codigo, $Base64Img); 
             
-            //$this->EmailNotificacion($para, $codigo, $soporte);
+            $this->EmailNotificacion($para, $codigo, $soporte);
             
             return JsonResponse::create(array('message' => "Correcto", "request" =>json_encode($soporte->IdSoporte)), 200);
              

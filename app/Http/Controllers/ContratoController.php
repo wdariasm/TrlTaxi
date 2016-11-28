@@ -95,9 +95,9 @@ class ContratoController extends Controller
                 return $msj;
             }            
             return JsonResponse::create(array('message' => "Contrato  guardado correctamente", "request" =>json_encode($contrato->IdContrato)), 200);
-        } catch (\Exception $exc) {    
-            return JsonResponse::create(array('message' => "No se pudo guardar", "request" =>json_encode($exc->getMessage())), 401);
-        }
+        }catch (\Exception $exc) {
+            return JsonResponse::create(array('file' => $exc->getFile(), "line"=> $exc->getLine(),  "message" =>json_encode($exc->getMessage())), 500);
+        } 
     }
     
     
@@ -139,8 +139,8 @@ class ContratoController extends Controller
             
             return "Correcto";
             
-        }catch (\Exception $exc) {    
-            return JsonResponse::create(array('message' => "No se pudo guardar", "request" =>json_encode($exc->getMessage())), 401);
+        }catch (\Exception $exc) {
+            return JsonResponse::create(array('file' => $exc->getFile(), "line"=> $exc->getLine(),  "message" =>json_encode($exc->getMessage())), 500);
         }        
     }
     
@@ -177,8 +177,8 @@ class ContratoController extends Controller
             }            
             
             return JsonResponse::create(array('message' => "Contrato Actualizado Correctamente", "request" =>json_encode($id)), 200);
-        }catch (\Exception $exc) {    
-            return JsonResponse::create(array('message' => "No se pudo guardar", "request" =>json_encode($exc->getMessage())), 401);
+        }catch (\Exception $exc) {
+            return JsonResponse::create(array('file' => $exc->getFile(), "line"=> $exc->getLine(),  "message" =>json_encode($exc->getMessage())), 500);
         }  
     }
 

@@ -49,21 +49,11 @@ class TipoServicioController extends Controller
             }      
             
             return JsonResponse::create(array('message' => "TipoServicio guardado correctamente", "request" =>json_encode($servicio->svCodigo)), 200);
-        } catch (Exception $exc) {    
-            return JsonResponse::create(array('message' => "No se pudo guardar", "request" =>json_encode($exc->getMessage())), 401);
-        }
+        }catch (\Exception $exc) {
+            return JsonResponse::create(array('file' => $exc->getFile(), "line"=> $exc->getLine(),  "message" =>json_encode($exc->getMessage())), 500);
+        } 
     }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $svCodigo
-     * @return \Illuminate\Http\Response
-     */
-    public function show($svCodigo)
-    {
-        //
-    }
+   
     
     /**
      * Update the specified resource in storage.
@@ -93,9 +83,9 @@ class TipoServicioController extends Controller
             }                        
             
             return JsonResponse::create(array('message' => "Datos Actualizados correctamente", "request" =>json_encode($servicio->svCodigo)), 200);
-        } catch (\Exception $exc) {
-            return JsonResponse::create(array('message' => "No se pudo guardar", "request" =>json_encode($exc->getMessage())), 401);
-        }
+        }catch (\Exception $exc) {
+            return JsonResponse::create(array('file' => $exc->getFile(), "line"=> $exc->getLine(),  "message" =>json_encode($exc->getMessage())), 500);
+        } 
     }
 
     /**
@@ -112,15 +102,15 @@ class TipoServicioController extends Controller
     
     
      //Actualiza el estado (Funcion eliminar)
-      public function updateEstado(Request $request, $svCodigo){
+    public function updateEstado(Request $request, $svCodigo){
         try {
             $data = $request->all();
             $servicio = TipoServicio::find($svCodigo);
             $servicio->svEstado = $data['svEstado'];
             $servicio->save();
             return JsonResponse::create(array('message' => "Datos Actualizados Correctamente", "request" =>json_encode($svCodigo)), 200);
-        } catch (Exception $ex) {
-            return JsonResponse::create(array('message' => "No se pudo modificar el Taxista", "exception"=>$ex->getMessage(), "request" =>json_encode($svCodigo)), 401);
-        }
+        }catch (\Exception $exc) {
+            return JsonResponse::create(array('file' => $exc->getFile(), "line"=> $exc->getLine(),  "message" =>json_encode($exc->getMessage())), 500);
+        } 
     }
 }

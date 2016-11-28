@@ -51,9 +51,9 @@ class PersonaController extends Controller
             
             
             return JsonResponse::create(array('message' => "Guardado correctamente", "request" =>json_encode($persona->IdPersona)), 200);
-        } catch (\Exception $exc) {    
-            return JsonResponse::create(array('message' => "No se pudo guardar", "request" =>json_encode($exc->getMessage())), 401);
-        }
+        }catch (\Exception $exc) {
+            return JsonResponse::create(array('file' => $exc->getFile(), "line"=> $exc->getLine(),  "message" =>json_encode($exc->getMessage())), 500);
+        } 
     }
 
     /**
@@ -92,9 +92,9 @@ class PersonaController extends Controller
             $persona->save();
                        
             return JsonResponse::create(array('message' => "Datos Actualizados correctamente", "request" =>json_encode($persona->id)), 200);
-        } catch (Exception $exc) {            
-            return JsonResponse::create(array('message' => "No se pudo guardar", "request" =>json_encode($data)), 401);
-        }
+        }catch (\Exception $exc) {
+            return JsonResponse::create(array('file' => $exc->getFile(), "line"=> $exc->getLine(),  "message" =>json_encode($exc->getMessage())), 500);
+        } 
     }
 
     /**

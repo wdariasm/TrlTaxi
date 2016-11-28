@@ -35,9 +35,9 @@ class BancoController extends Controller
             $banco->save();
             
             return JsonResponse::create(array('message' => "banco guardada correctamente", "request" =>json_encode($banco->bcCodigo)), 200);
-        } catch (Exception $exc) {    
-            return JsonResponse::create(array('message' => "No se pudo guardar", "request" =>json_encode($exc->getMessage())), 401);
-        }
+        }catch (\Exception $exc) {
+            return JsonResponse::create(array('file' => $exc->getFile(), "line"=> $exc->getLine(),  "message" =>json_encode($exc->getMessage())), 500);
+        } 
     }
     
 
@@ -58,9 +58,9 @@ class BancoController extends Controller
             $banco->save();
             
             return JsonResponse::create(array('message' => "Banco Actualizado Correctamente", "request" =>json_encode($banco->bcCodigo)), 200);
-        } catch (Exception $exc) {
-            return JsonResponse::create(array('message' => "No se pudo guardar", "request" =>json_encode($exc->message)), 401);
-        }
+        }catch (\Exception $exc) {
+            return JsonResponse::create(array('file' => $exc->getFile(), "line"=> $exc->getLine(),  "message" =>json_encode($exc->getMessage())), 500);
+        } 
     }
 
     /**

@@ -23,16 +23,7 @@ class TipoDocumentoController extends Controller
         //return TipoDocumento::select("tdCodigo", "tdDescripcion")->get();
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
+    
     /**
      * Store a newly created resource in storage.
      *
@@ -50,32 +41,12 @@ class TipoDocumentoController extends Controller
             $tipoDocumento->save();
             
             return JsonResponse::create(array('message' => "Tipo de Documento guardado correctamente", "request" =>json_encode($tipoDocumento->tdCodigo)), 200);
-        } catch (Exception $exc) {    
-            return JsonResponse::create(array('message' => "No se pudo guardar", "request" =>json_encode($exc->getMessage())), 401);
-        }
+        }catch (\Exception $exc) {
+            return JsonResponse::create(array('file' => $exc->getFile(), "line"=> $exc->getLine(),  "message" =>json_encode($exc->getMessage())), 500);
+        } 
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
+    
 
     /**
      * Update the specified resource in storage.
@@ -94,9 +65,9 @@ class TipoDocumentoController extends Controller
             $tipoDocumento->save();
 
             return JsonResponse::create(array('message' => "Datos Actualizados correctamente", "request" =>json_encode($tipoDocumento->tdCodigo)), 200);
-        } catch (Exception $exc) {
-            return JsonResponse::create(array('message' => "No se pudo guardar", "request" =>json_encode($request)), 401);
-        }
+        }catch (\Exception $exc) {
+            return JsonResponse::create(array('file' => $exc->getFile(), "line"=> $exc->getLine(),  "message" =>json_encode($exc->getMessage())), 500);
+        } 
     }
 
     /**
@@ -120,8 +91,8 @@ class TipoDocumentoController extends Controller
             $tipoDocumento->tdEstado = $data['tdEstado'];
             $tipoDocumento->save();
             return JsonResponse::create(array('message' => "Datos Actualizados Correctamente", "request" =>json_encode($tdCodigo)), 200);
-        } catch (Exception $ex) {
-            return JsonResponse::create(array('message' => "No se pudo modificar el Taxista", "exception"=>$ex->getMessage(), "request" =>json_encode($tdCodigo)), 401);
-        }
+        }catch (\Exception $exc) {
+            return JsonResponse::create(array('file' => $exc->getFile(), "line"=> $exc->getLine(),  "message" =>json_encode($exc->getMessage())), 500);
+        } 
     }
 }

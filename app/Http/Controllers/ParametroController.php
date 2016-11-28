@@ -47,27 +47,9 @@ class ParametroController extends Controller
             
             $param->save();                      
             return JsonResponse::create(array('message' => "Datos Guardados correctamente", "request" =>json_encode($param->id)), 200);
-        } catch (Exception $exc) {            
-            return JsonResponse::create(array('message' => "No se pudo guardar", "request" =>json_encode($exc)), 401);
-        }
+        }catch (\Exception $exc) {
+            return JsonResponse::create(array('file' => $exc->getFile(), "line"=> $exc->getLine(),  "message" =>json_encode($exc->getMessage())), 500);
+        } 
     }
-    
-    public function error(Request $request)
-    {
-        try{
-            
-           
-            
-            
           
-                       
-            
-           
-        }catch (\Exception $exc) {            
-            return JsonResponse::create(array('message' =>'Error', "Error" =>json_encode($exc->getMessage())), 401);
-        }
-        
-    }
-
-   
 }

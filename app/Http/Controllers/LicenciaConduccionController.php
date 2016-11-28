@@ -58,9 +58,9 @@ class LicenciaConduccionController extends Controller
             $licencia->save();
             
             return JsonResponse::create(array('message' => "licencia guardada correctamente", "request" =>json_encode($licencia->IdLicencia)), 200);
-        } catch (Exception $exc) {    
-            return JsonResponse::create(array('message' => "No se pudo guardar", "request" =>json_encode($exc->getMessage())), 401);
-        }
+        }catch (\Exception $exc) {
+            return JsonResponse::create(array('file' => $exc->getFile(), "line"=> $exc->getLine(),  "message" =>json_encode($exc->getMessage())), 500);
+        } 
     }
 
     /**
@@ -97,9 +97,9 @@ class LicenciaConduccionController extends Controller
             $licencia->save();
             
             return JsonResponse::create(array('message' => "Licencia Actualizado Correctamente", "request" =>json_encode($licencia->IdLicencia)), 200);
-        } catch (Exception $exc) {
-            return JsonResponse::create(array('message' => "No se pudo guardar", "request" =>json_encode($exc->message)), 401);
-        }
+        }catch (\Exception $exc) {
+            return JsonResponse::create(array('file' => $exc->getFile(), "line"=> $exc->getLine(),  "message" =>json_encode($exc->getMessage())), 500);
+        } 
     }
 
     /**
@@ -118,9 +118,9 @@ class LicenciaConduccionController extends Controller
             $licencia->Estado = $data['Estado'];
             $licencia->save();
             return JsonResponse::create(array('message' => "Datos Actualizados Correctamente", "request" =>json_encode($IdLicencia)), 200);
-        } catch (Exception $ex) {
-            return JsonResponse::create(array('message' => "No se pudo modificar el Taxista", "exception"=>$ex->getMessage(), "request" =>json_encode($IdLicencia)), 401);
-        }
+        }catch (\Exception $exc) {
+            return JsonResponse::create(array('file' => $exc->getFile(), "line"=> $exc->getLine(),  "message" =>json_encode($exc->getMessage())), 500);
+        } 
     }
     
     public function calcularFechaVencimiento(Request $request, $IdLicencia){
@@ -136,9 +136,8 @@ class LicenciaConduccionController extends Controller
             
             return JsonResponse::create(array('message' => "Datos Actualizados Correctamente", "request" =>json_encode($IdLicencia)), 200);
   
-        } catch (Exception $ex) {
-            return JsonResponse::create(array('message' => "No se pudo modificar el estado", "exception"=>$ex->getMessage(), "request" =>json_encode($IdLicencia)), 401);
-
-        }
+        }catch (\Exception $exc) {
+            return JsonResponse::create(array('file' => $exc->getFile(), "line"=> $exc->getLine(),  "message" =>json_encode($exc->getMessage())), 500);
+        } 
     }
 }

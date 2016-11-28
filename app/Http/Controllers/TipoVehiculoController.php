@@ -39,9 +39,9 @@ class TipoVehiculoController extends Controller
             $tipoVehiculo->save();
             
             return JsonResponse::create(array('message' => "Tipo de vehiculo  guardado correctamente", "request" =>json_encode($tipoVehiculo->tvCodigo)), 200);
-        } catch (Exception $exc) {    
-            return JsonResponse::create(array('message' => "No se pudo guardar", "request" =>json_encode($exc->getMessage())), 401);
-        }
+        }catch (\Exception $exc) {
+            return JsonResponse::create(array('file' => $exc->getFile(), "line"=> $exc->getLine(),  "message" =>json_encode($exc->getMessage())), 500);
+        } 
     }
 
     /**
@@ -74,9 +74,9 @@ class TipoVehiculoController extends Controller
             $tipoVehiculo->save();
 
             return JsonResponse::create(array('message' => "Datos Actualizados correctamente", "request" =>json_encode($tipoVehiculo->tvCodigo)), 200);
-        } catch (\Exception $exc) {
-            return JsonResponse::create(array('message' => "No se pudo guardar", "request" =>json_encode($exc->getMessage())), 401);
-        }
+        }catch (\Exception $exc) {
+            return JsonResponse::create(array('file' => $exc->getFile(), "line"=> $exc->getLine(),  "message" =>json_encode($exc->getMessage())), 500);
+        } 
     }
 
     /**
@@ -100,8 +100,8 @@ class TipoVehiculoController extends Controller
             $marca->tvEstado = $data['tvEstado'];
             $marca->save();
             return JsonResponse::create(array('message' => "Datos Actualizados Correctamente", "request" =>json_encode($tvCodigo)), 200);
-        } catch (Exception $ex) {
-            return JsonResponse::create(array('message' => "No se pudo modificar el Taxista", "exception"=>$ex->getMessage(), "request" =>json_encode($tvCodigo)), 401);
-        }
+        }catch (\Exception $exc) {
+            return JsonResponse::create(array('file' => $exc->getFile(), "line"=> $exc->getLine(),  "message" =>json_encode($exc->getMessage())), 500);
+        } 
     }
 }

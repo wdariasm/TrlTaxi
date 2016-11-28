@@ -57,9 +57,9 @@ class MantenimientoController extends Controller
             }
             
             return JsonResponse::create(array('message' => "Mantenimiento guardado correctamente", "request" =>json_encode($mantenimiento->IdMantenimiento)), 200);
-        } catch (Exception $exc) {    
-            return JsonResponse::create(array('message' => "No se pudo guardar", "request" =>json_encode($exc->getMessage())), 401);
-        }
+        }catch (\Exception $exc) {
+            return JsonResponse::create(array('file' => $exc->getFile(), "line"=> $exc->getLine(),  "message" =>json_encode($exc->getMessage())), 500);
+        } 
     }
 
     /**
@@ -73,17 +73,7 @@ class MantenimientoController extends Controller
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
+   
     /**
      * Update the specified resource in storage.
      *
@@ -106,9 +96,9 @@ class MantenimientoController extends Controller
             $mantenimiento->save();
 
             return JsonResponse::create(array('message' => "Datos actualizados correctamente", "request" =>json_encode($mantenimiento->IdMantenimiento)), 200);
-        } catch (Exception $exc) {
-            return JsonResponse::create(array('message' => "No se pudo actualizar correctamentes", "request" =>json_encode($exc->getMessage())), 401);
-        }
+        }catch (\Exception $exc) {
+            return JsonResponse::create(array('file' => $exc->getFile(), "line"=> $exc->getLine(),  "message" =>json_encode($exc->getMessage())), 500);
+        } 
     }
     
     public function updateDetalle(Request $request, $detCodigo){
@@ -120,8 +110,8 @@ class MantenimientoController extends Controller
             $insert->save();                       
             
             return JsonResponse::create(array('message' => " Detalle Actualizado Correctamente", "request" =>json_encode($insert->detCodigo)), 200);
-        } catch (\Exception $exc) {
-            return JsonResponse::create(array('message' => "No se pudo guardar", "request" =>json_encode($exc->getMessage())), 401);
+        }catch (\Exception $exc) {
+            return JsonResponse::create(array('file' => $exc->getFile(), "line"=> $exc->getLine(),  "message" =>json_encode($exc->getMessage())), 500);
         } 
     }
 
@@ -137,9 +127,9 @@ class MantenimientoController extends Controller
 
                 $insert->save();
             return JsonResponse::create(array('message' => "Detalle  guardado correctamente", "request" =>json_encode($insert->detCodigo)), 200);
-        } catch (\Exception $exc) {    
-            return JsonResponse::create(array('message' => "No se pudo guardar", "request" =>json_encode($exc->getMessage())), 401);
-        }
+        }catch (\Exception $exc) {
+            return JsonResponse::create(array('file' => $exc->getFile(), "line"=> $exc->getLine(),  "message" =>json_encode($exc->getMessage())), 500);
+        } 
     }
     /**
      * Remove the specified resource from storage.

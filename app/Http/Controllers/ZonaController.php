@@ -111,9 +111,9 @@ class ZonaController extends Controller
                 }
             }        
             return JsonResponse::create(array('message' => "Guardado correctamente", "request" =>json_encode($id[0]->znCodigo)), 200);
-        } catch (\Exception $exc) {
-            return JsonResponse::create(array('message' => "No se pudo guardar",  "request" =>json_encode($exc->getMessage())), 401);
-        }
+        }catch (\Exception $exc) {
+            return JsonResponse::create(array('file' => $exc->getFile(), "line"=> $exc->getLine(),  "message" =>json_encode($exc->getMessage())), 500);
+        } 
 
     }
 
@@ -159,9 +159,9 @@ class ZonaController extends Controller
                 }
             }        
             return JsonResponse::create(array('message' => "Datos Actualizados correctamente", "request" =>json_encode($id)), 200);
-        } catch (\Exception $exc) {
-            return JsonResponse::create(array('message' => "No se pudo guardar",  "request" =>json_encode($exc->getMessage())), 401);
-        }
+        }catch (\Exception $exc) {
+            return JsonResponse::create(array('file' => $exc->getFile(), "line"=> $exc->getLine(),  "message" =>json_encode($exc->getMessage())), 500);
+        } 
     }
 
     /**
@@ -176,9 +176,8 @@ class ZonaController extends Controller
             DB::update("update zona set znEstado = 'BORRADO'  WHERE znCodigo = $id");
              return JsonResponse::create(array('message' => 'Zona Eliminada Correctamente'), 200);
         }catch (\Exception $exc) {
-            return JsonResponse::create(array('message' => "No se pudo Eliminar", 'request'=>$exc), 401);
-        }
-        
+            return JsonResponse::create(array('file' => $exc->getFile(), "line"=> $exc->getLine(),  "message" =>json_encode($exc->getMessage())), 500);
+        }         
     }
         
 }

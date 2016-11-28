@@ -28,9 +28,9 @@ class MotivoCancelacionController extends Controller
             $motivo->save();
             
             return JsonResponse::create(array('message' => "Datos guardados correctamente", "request" =>json_encode($motivo->IdMotivo)), 200);
-        } catch (\Exception $exc) {    
-            return JsonResponse::create(array('message' => "No se pudo guardar", "request" =>json_encode($exc->getMessage())), 401);
-        }
+        }catch (\Exception $exc) {
+            return JsonResponse::create(array('file' => $exc->getFile(), "line"=> $exc->getLine(),  "message" =>json_encode($exc->getMessage())), 500);
+        } 
     }    
     
     /**
@@ -52,8 +52,8 @@ class MotivoCancelacionController extends Controller
             $motivo->save();
 
             return JsonResponse::create(array('message' => "Datos Actualizados correctamente", "request" =>json_encode($motivo->ecCodigo)), 200);
-        } catch (\Exception $exc) {
-            return JsonResponse::create(array('message' => "No se pudo guardar", "request" =>json_encode($exc->getMessage())), 401);
-        }
+        }catch (\Exception $exc) {
+            return JsonResponse::create(array('file' => $exc->getFile(), "line"=> $exc->getLine(),  "message" =>json_encode($exc->getMessage())), 500);
+        } 
     }      
 }

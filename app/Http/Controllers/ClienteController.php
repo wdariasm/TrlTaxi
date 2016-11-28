@@ -21,20 +21,10 @@ class ClienteController extends Controller
     
         
     }
-
     
-     public function validarIdentificacion($Cedula){
+    public function validarIdentificacion($Cedula){
         return Cliente::where("Identificacion",$Cedula)->select("Identificacion", 'Nombres', 'IdCliente', 'Correo', 'MovilPpal')->first();
-    }
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
+    }  
 
     /**
      * Store a newly created resource in storage.
@@ -62,9 +52,9 @@ class ClienteController extends Controller
             $cliente->save();
             
           return JsonResponse::create(array('message' => "Cliente  guardado correctamente", "request" =>json_encode($cliente->IdCliente)), 200);
-        } catch (Exception $exc) {    
-            return JsonResponse::create(array('message' => "No se pudo guardar", "request" =>json_encode($exc->getMessage())), 401);
-        }
+        }catch (\Exception $exc) {
+            return JsonResponse::create(array('file' => $exc->getFile(), "line"=> $exc->getLine(),  "message" =>json_encode($exc->getMessage())), 500);
+        } 
     }
 
     /**
@@ -78,17 +68,7 @@ class ClienteController extends Controller
         return Cliente::find($id);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
+   
     /**
      * Update the specified resource in storage.
      *
@@ -113,9 +93,9 @@ class ClienteController extends Controller
             $cliente->TipoPersona = $data["TipoPersona"]; 
             $cliente->save();
             return JsonResponse::create(array('message' => "Cliente Actualizado Correctamente", "request" =>json_encode($cliente->IdCliente)), 200);
-        } catch (Exception $exc) {
-            return JsonResponse::create(array('message' => "No se pudo guardar", "request" =>json_encode($exc->message)), 401);
-        }
+        }catch (\Exception $exc) {
+            return JsonResponse::create(array('file' => $exc->getFile(), "line"=> $exc->getLine(),  "message" =>json_encode($exc->getMessage())), 500);
+        } 
     }
 
        //Actualiza el estado (Funcion eliminar)
@@ -126,9 +106,9 @@ class ClienteController extends Controller
             $cliente->Estado = $data['Estado'];
             $cliente->save();
             return JsonResponse::create(array('message' => "Datos Actualizados Correctamente", "request" =>json_encode($IdCliente)), 200);
-        } catch (Exception $ex) {
-            return JsonResponse::create(array('message' => "No se pudo modificar el Cliente", "exception"=>$ex->getMessage(), "request" =>json_encode($IdCliente)), 401);
-        }
+        }catch (\Exception $exc) {
+            return JsonResponse::create(array('file' => $exc->getFile(), "line"=> $exc->getLine(),  "message" =>json_encode($exc->getMessage())), 500);
+        } 
     }
     
     

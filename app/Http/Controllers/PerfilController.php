@@ -62,9 +62,9 @@ class PerfilController extends Controller
             
             return JsonResponse::create(array('message' => "Perfil Guardado Correctamente", "request" =>json_encode($perfil->id)), 200);
             
-        } catch (Exception $exc) {
-            return JsonResponse::create(array('message' => "No se pudo guardar el Perfil", "exception"=>$exc->getMessage(), "request" =>json_encode($data)), 401);
-        }
+        }catch (\Exception $exc) {
+            return JsonResponse::create(array('file' => $exc->getFile(), "line"=> $exc->getLine(),  "message" =>json_encode($exc->getMessage())), 500);
+        } 
     }
 
 
@@ -94,9 +94,9 @@ class PerfilController extends Controller
             
             return JsonResponse::create(array('message' => "Perfil Modificado Correctamente", "request" =>json_encode($id)), 200);
             
-        } catch (\Exception $exc) {
-            return JsonResponse::create(array('message' => "No se pudo Modificar el Perfil",  "request" =>json_encode($exc->getMessage())), 401);
-        }
+        }catch (\Exception $exc) {
+            return JsonResponse::create(array('file' => $exc->getFile(), "line"=> $exc->getLine(),  "message" =>json_encode($exc->getMessage())), 500);
+        } 
     }
 
     /**
@@ -112,8 +112,8 @@ class PerfilController extends Controller
             $perfil->save();
             PerfilPermiso::where('IdRol',$id)->delete();
             return JsonResponse::create(array('message' => "Perfil inactivado Correctamente", "request" =>json_encode($id)), 200);
-        } catch (\Exception $ex) {
-            return JsonResponse::create(array('message' => "No se pudo inactivar",  "request" =>json_encode($ex->getMessage())), 401);
-        }
+       }catch (\Exception $exc) {
+            return JsonResponse::create(array('file' => $exc->getFile(), "line"=> $exc->getLine(),  "message" =>json_encode($exc->getMessage())), 500);
+        } 
     }
 }

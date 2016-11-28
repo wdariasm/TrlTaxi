@@ -63,7 +63,7 @@ class TransfertController extends Controller
             $transfert->save();
             
             return JsonResponse::create(array('message' => "Vehiculo guardado correctamente", "request" =>json_encode($transfert->tfCodigo)), 200);
-        } catch (\Exception $exc) {
+        }catch (\Exception $exc) {
             return JsonResponse::create(array('file' => $exc->getFile(), "line"=> $exc->getLine(),  "message" =>json_encode($exc->getMessage())), 500);
         }  
     }
@@ -87,7 +87,7 @@ class TransfertController extends Controller
             return JsonResponse::create(array('message' => "Vehiculo guardado correctamente", "request" =>json_encode($transfert->tfCodigo)), 200);
         }catch (\Exception $exc) {
             return JsonResponse::create(array('file' => $exc->getFile(), "line"=> $exc->getLine(),  "message" =>json_encode($exc->getMessage())), 500);
-        }  
+        }   
     }
     
     public function UpdateEstado(Request $request, $id){
