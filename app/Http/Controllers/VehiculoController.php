@@ -37,7 +37,7 @@ class VehiculoController extends Controller
        try{  
             $data = $request->all(); 
             $vehiculo= new Vehiculo();                        
-            $vehiculo->IdVehiculo = $data["IdVehiculo"];
+            
             $vehiculo->Placa = $data["Placa"]; 
             $vehiculo->Marca = $data["Marca"]; 
             $vehiculo->Modelo = $data["Modelo"]; 
@@ -83,7 +83,38 @@ class VehiculoController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        try{  
+            $data = $request->all(); 
+            $vehiculo= Vehiculo::find($id);
+            $vehiculo->Placa = $data["Placa"]; 
+            $vehiculo->Marca = $data["Marca"]; 
+            $vehiculo->Modelo = $data["Modelo"]; 
+            $vehiculo->Color = $data["Color"]; 
+            $vehiculo->Cilindraje = $data["Cilindraje"]; 
+            $vehiculo->Movil = $data["Movil"]; 
+            $vehiculo->Estado = $data["Estado"]; 
+            $vehiculo->Tipo = $data["Tipo"]; 
+            
+            $f1 = $data["FechaArriendo"];
+            if($f1 !== "Invalid date" && $f1!==""){                            
+               $date = new \DateTime(str_replace("/", "-", $f1));            
+               $vehiculo->FechaArriendo = $date->format('Y-m-d H:i:s');            
+            }
+                                    
+            $vehiculo->ClaseVehiculo = $data["ClaseVehiculo"]; 
+            $vehiculo->Runt = $data["Runt"]; 
+                           
+            $f2 = $data["FProxMantenimiento"];
+            if($f2 !== "Invalid date" && $f1!==""){                                           
+               $date2 = new \DateTime(str_replace("/", "-",$f2));              
+               $vehiculo->FProxMantenimiento = $date2->format('Y-m-d H:i:s');              
+            }
+            
+            $vehiculo->save();            
+            return JsonResponse::create(array('message' => "Datos actualizados correctamente", "request" =>json_encode($vehiculo->IdVehiculo)), 200);
+        }catch (\Exception $exc) {
+            return JsonResponse::create(array('file' => $exc->getFile(), "line"=> $exc->getLine(),  "message" =>json_encode($exc->getMessage())), 500);
+        } 
     }
     
     public function UpdateEstado(Request $request, $id){

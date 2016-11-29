@@ -49,4 +49,34 @@ class GpsController extends Controller
             return JsonResponse::create(array('file' => $exc->getFile(), "line"=> $exc->getLine(),  "message" =>json_encode($exc->getMessage())), 500);
         } 
     }
+    
+    /*actualizar key de notificacion*/
+    public function update(Request $request, $imei)
+    {
+       try{            
+            $key = $request->get("gpKey");           
+            $gps = Gps::find($imei);
+            $gps->gpKey = $key;
+            $gps->save();
+            return JsonResponse::create(array('message' => "Correcto", "request" =>"Imei Actualizado Correctamente"), 200);
+        }catch (\Exception $exc) {
+            return JsonResponse::create(array('file' => $exc->getFile(), "line"=> $exc->getLine(),  "message" =>json_encode($exc->getMessage())), 500);
+        }             
+    }
+    
+    /* actualizar posicion */
+    public function setPosicion(Request $request, $imei)
+    {
+        try{
+                       
+            $latitud = $request->get("gpLatitud");
+            $longitud = $request->get("gpLongitud");
+                                                
+            DB::update("UPDATE gps SET gpLongitud = '".$longitud."' , gpLatitud = '".$latitud."'  WHERE gpImei = $imei ");    
+            
+            return JsonResponse::create(array('message' => "Correcto", "request" =>"Posicion actualizada correctamente"), 200);
+        }catch (\Exception $exc) {
+            return JsonResponse::create(array('file' => $exc->getFile(), "line"=> $exc->getLine(),  "message" =>json_encode($exc->getMessage())), 500);
+        }   
+    }
 }

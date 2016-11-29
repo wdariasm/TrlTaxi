@@ -24,7 +24,8 @@ Route::group(['middleware' => 'cors'], function () {
     Route::put('api/usuario/actualizar/{idUsuario}','UsuarioController@updatePassword');
     Route::get('api/usuario/token','UsuarioController@refreshToken');
     Route::get('api/servicio/{id}/calificacion','ServicioController@getCalificacion');
-    Route::put('api/servicio/calificar/{id}','ServicioController@calificar');
+    Route::put('api/servicio/calificar/{id}','ServicioController@calificar');    
+    Route::put('api/gps/posicion/{imei}','GpsController@setPosicion');    
     
     Route::group(['middleware' => 'jwt.auth'], function () {                 
         include 'Routes/routesMarca.php';

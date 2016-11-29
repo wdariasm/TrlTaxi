@@ -62,7 +62,7 @@ app.controller("vehiculoController", ["$scope", "vehiculoService", "marcaService
         $scope.editMode=false;
     }
    
-    function loadVehiculo (){
+    $scope.LoadVehiculo = function (){
         var promise = vehiculoService.getAll();
         promise.then(function(d) {                        
             $scope.Vehiculos = d.data;
@@ -70,10 +70,9 @@ app.controller("vehiculoController", ["$scope", "vehiculoService", "marcaService
         }, function(err) {                        
                 toaster.pop('error', '¡Error load vehículos!', err.data.error);
                 console.log("Some Error Occured " + JSON.stringify(err));
-        }); 
-            
-    }
-      loadVehiculo();
+        });             
+    };
+    $scope.LoadVehiculo();
     
     function loadMarcas (){
         var promise = marcaService.getAll();
@@ -133,16 +132,17 @@ app.controller("vehiculoController", ["$scope", "vehiculoService", "marcaService
         $scope.Vehiculo.FProxMantenimiento = moment($scope.Vehiculo.FProxMantenimiento).format("L");
         $scope.editMode = true;
         $scope.Titulo = "Editando ";
-        var pos = funcionService.arrayObjectIndexOf($scope.ClaseVehiculo,$scope.Vehiculo.ClaseVehiculo, 'tvCodigo');            
+        var pos = funcionService.arrayObjectIndexOf($scope.ClaseVehiculo, parseInt($scope.Vehiculo.ClaseVehiculo), 'tvCodigo');            
             $scope.ClaseSelect =$scope.ClaseVehiculo[pos];
             
-        var pos1 = funcionService.arrayObjectIndexOf($scope.Marcas,$scope.Vehiculo.Marca, 'maCodigo');            
-            $scope.MarcaSelect =$scope.Marcas[pos1];
+        var pos1 = funcionService.arrayObjectIndexOf($scope.Marcas, parseInt($scope.Vehiculo.Marca), 'maCodigo');            
+            $scope.MarcaSelect =$scope.Marcas[pos1];            
         $('#tabPanels a[href="#tabRegistro"]').tab('show');
     };
     
     $scope.Nuevo = function (){
         init();
+        $('#txtPlaca').focus();
         $scope.editMode = false;
         $scope.Titulo = "Nuevo ";
     };
@@ -163,9 +163,8 @@ app.controller("vehiculoController", ["$scope", "vehiculoService", "marcaService
             toaster.pop('error','¡Error!', 'Placa ya se encuentra registrada.');
             return;
         }
-        
-        console.log($scope.Vehiculo);
-              
+                
+        toaster.pop("wait", "Espere..", "Guardando información");      
         var promise;
         if($scope.editMode){            
             promise = vehiculoService.put($scope.Vehiculo.IdVehiculo, $scope.Vehiculo);
@@ -173,12 +172,17 @@ app.controller("vehiculoController", ["$scope", "vehiculoService", "marcaService
             promise = vehiculoService.post($scope.Vehiculo);            
         }
         
-        promise.then(function(d) {                        
-            loadVehiculo();
-            toaster.pop('success', "Control de Información", d.data.message);            
+        promise.then(function(d) {     
+            toaster.clear();
+            $scope.LoadVehiculo();
+            toaster.pop('success', "Control de Información", d.data.message);     
+            $scope.Nuevo();
+            if($scope.editMode){
+                $('#tabPanels a[href="#tabListado"]').tab('show');
+            }
              
         }, function(err) {          
-            toaster.pop('error', "¡Error!", err.data.request);                
+            toaster.pop('error', "¡Error!",  err.data, 0);                
             console.log("Some Error Occured " + JSON.stringify(err));
         });       
    };
@@ -290,7 +294,7 @@ app.controller("vehiculoController", ["$scope", "vehiculoService", "marcaService
             var promisePut  = vehiculoService.updateEstado($scope.IdVehiculoGlobal, objetc);
                 promisePut.then(function (d) {
                     toaster.pop('success', "Control de Información", d.data.message);                 
-                    loadVehiculo();
+                    $scope.LoadVehiculo();
             }, function (err) {
                     toaster.pop('error', "¡Error!", err.data.request); 
                     console.log("Some Error Occured "+ JSON.stringify(err));
