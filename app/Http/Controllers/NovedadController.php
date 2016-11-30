@@ -9,13 +9,7 @@ use Illuminate\Http\JsonResponse;
 class NovedadController extends Controller
 {
     
-    public function index()
-    {
-        
-    }
-
-   
-
+    
     /**
      * Store a newly created resource in storage.
      *
@@ -30,7 +24,7 @@ class NovedadController extends Controller
             $novedad->Vehiculo = $data["Vehiculo"];
             $novedad->Codigo = $data["Codigo"]; 
             $date1 = new \DateTime( str_replace("/", "-",  $data["FechaExpedicion"]));
-            $novedad->FechaExpedicion =  $date1->format('Y-m-d H:i:s');        
+            $novedad->FechaExpedicion =  $date1->format('Y-m-d');        
             $novedad->Entidad = $data["Entidad"]; 
             $novedad->Entidad = $data["Entidad"]; 
             $novedad->ModServicio = $data["ModServicio"]; 
@@ -38,9 +32,9 @@ class NovedadController extends Controller
             $novedad->Estado = $data["Estado"]; 
             $novedad->Tipo = $data["Tipo"]; 
             $date = new \DateTime(str_replace("/", "-",  $data["FechaInicioVigencia"]));
-            $novedad->FechaInicioVigencia = $date->format('Y-m-d H:i:s');            
+            $novedad->FechaInicioVigencia = $date->format('Y-m-d');            
             $date2 = new \DateTime(str_replace("/", "-",$data["FechaVencimiento"]));            
-            $novedad->FechaVencimiento = $date2->format('Y-m-d H:i:s');
+            $novedad->FechaVencimiento = $date2->format('Y-m-d');
 
             $novedad->save();
             
@@ -78,17 +72,17 @@ class NovedadController extends Controller
             $data = $request->all();
             $novedad = NovedadVehiculo::find($id);            
             $novedad->Codigo = $data["Codigo"]; 
-            $date1 = new \DateTime($data["FechaExpedicion"]);
-            $novedad->FechaExpedicion =  $date1->format('Y-m-d H:i:s');                    
+            $date1 = new \DateTime(str_replace("/", "-",$data["FechaExpedicion"]));
+            $novedad->FechaExpedicion =  $date1->format('Y-m-d');                    
             $novedad->Entidad = $data["Entidad"]; 
             $novedad->ModServicio = $data["ModServicio"]; 
             $novedad->RadioAccion = $data["RadioAccion"]; 
             $novedad->Estado = $data["Estado"]; 
             $novedad->Tipo = $data["Tipo"]; 
-            $date = new \DateTime($data["FechaInicioVigencia"]);
-            $novedad->FechaInicioVigencia = $date->format('Y-m-d H:i:s');            
-            $date2 = new \DateTime($data["FechaVencimiento"]);            
-            $novedad->FechaVencimiento = $date2->format('Y-m-d H:i:s');
+            $date = new \DateTime(str_replace("/", "-", $data["FechaInicioVigencia"]));
+            $novedad->FechaInicioVigencia = $date->format('Y-m-d');            
+            $date2 = new \DateTime(str_replace("/", "-", $data["FechaVencimiento"]));            
+            $novedad->FechaVencimiento = $date2->format('Y-m-d');
             $novedad->save();
 
             return JsonResponse::create(array('message' => "Datos actualizados correctamente", "request" =>json_encode($novedad->IdNovedad)), 200);

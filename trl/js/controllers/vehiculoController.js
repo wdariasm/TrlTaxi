@@ -4,6 +4,7 @@ app.controller("vehiculoController", ["$scope", "vehiculoService", "marcaService
    $scope.Vehiculos = [];
    $scope.Marcas = [];
    $scope.editMode = false;
+   $scope.editNovedad = false;
    $scope.valPlaca = false;
    $scope.ClaseVehiculo = [];
    $scope.TablaVehiculo = {};
@@ -45,7 +46,7 @@ app.controller("vehiculoController", ["$scope", "vehiculoService", "marcaService
         };        
     } 
     
-    function initNovedad  (){
+    $scope.InitNovedad = function  (){
         $scope.Novedad = {
             IdNovedad : 0,
             Codigo : "",
@@ -59,8 +60,8 @@ app.controller("vehiculoController", ["$scope", "vehiculoService", "marcaService
             Vehiculo : "",
             Tipo :"SOAT"
         };        
-        $scope.editMode=false;
-    }
+        $scope.editNovedad=false;
+    };
    
     $scope.LoadVehiculo = function (){
         var promise = vehiculoService.getAll();
@@ -127,6 +128,7 @@ app.controller("vehiculoController", ["$scope", "vehiculoService", "marcaService
     initTabla();
     
     $scope.get = function(item){
+        loadNovedad(item.IdVehiculo);
         $scope.Vehiculo = item;
         $scope.Vehiculo.FechaArriendo = moment($scope.Vehiculo.FechaArriendo).format("L");
         $scope.Vehiculo.FProxMantenimiento = moment($scope.Vehiculo.FProxMantenimiento).format("L");
@@ -145,15 +147,7 @@ app.controller("vehiculoController", ["$scope", "vehiculoService", "marcaService
         $('#txtPlaca').focus();
         $scope.editMode = false;
         $scope.Titulo = "Nuevo ";
-    };
-    
-    $scope.VerNovedad = function (item){
-        $scope.Vehiculo = item;
-            loadNovedad(item.IdVehiculo);
-        initNovedad();
-        $('#tabPanels a[href="#tabNovedad"]').tab('show');
-    };
-        
+    };       
    
     $scope.Guardar = function (){                                        
         $scope.Vehiculo.Marca = $scope.MarcaSelect.maCodigo;
@@ -189,8 +183,33 @@ app.controller("vehiculoController", ["$scope", "vehiculoService", "marcaService
  
     init();
     
+    // FUNCIONES CARGUE DE IMAGENES 
+    
+    $scope.VerModalImagenes = function (){
+        $("#mdImagenes").modal("show");
+    };
+    
     
     // FUNCIONES PARA  NOVEDADES 
+    
+    $scope.VerModalNovedad = function (){        
+        $("#mdNovedades").modal("show");
+        $scope.TituloNov = "Agregar Novedad ";
+        $scope.InitNovedad();        
+    };
+    
+    $scope.GetNovedad = function (item){
+        $scope.Novedad = angular.copy(item);                
+        $scope.TituloNov = "Editando Novedad "; 
+        $scope.Novedad.FechaInicioVigencia =  $scope.ConvertirFecha(item.FechaInicioVigencia);
+        $scope.Novedad.FechaExpedicion = $scope.ConvertirFecha(item.FechaExpedicion);        
+        $scope.Novedad.FechaVencimiento = $scope.ConvertirFecha(item.FechaVencimiento);        
+        $scope.editNovedad = true;
+        $("#mdNovedades").modal("show");
+    };
+        
+    
+    
     function loadNovedad (id){
         var promise = vehiculoService.getNovedad(id);
         promise.then(function(d) {                        
@@ -207,20 +226,6 @@ app.controller("vehiculoController", ["$scope", "vehiculoService", "marcaService
             page: 1,
             count: 10,
             sorting: undefined
-        }, {
-            filterDelay: 50,
-            total: 1000,
-            counts : [],
-            getData: function (a, b) {
-                var c = b.filter().busqueda;
-                f = [];
-                c ? (c = c.toLowerCase(), f = $scope.Taxis.filter(function (a) {
-                    return a.Codigo.toLowerCase().indexOf(c) > -1 ||
-                           a.Estado.toLowerCase().indexOf(c) > -1 ||
-                           a.Tipo.toLowerCase().indexOf(c) > -1 ||
-                           a.FechaVencimiento.indexOf(c) > -1                                                       
-                })) : f = $scope.Novedades, f = b.sorting() ? f : f, b.total(f.length), a.resolve(f.slice((b.page() - 1) * b.count(), b.page() * b.count()))
-            }
         });
     };
     
@@ -235,7 +240,7 @@ app.controller("vehiculoController", ["$scope", "vehiculoService", "marcaService
         $scope.Novedad.Entidad =$scope.Novedad.Entidad.toUpperCase();
         $scope.Novedad.Vehiculo =$scope.Vehiculo.IdVehiculo;
         var promise;
-        if($scope.editMode){            
+        if($scope.editNovedad){            
             promise = novedadService.put($scope.Novedad.IdNovedad, $scope.Novedad);
         }else {
             promise = novedadService.post($scope.Novedad);            
@@ -243,10 +248,13 @@ app.controller("vehiculoController", ["$scope", "vehiculoService", "marcaService
         
         promise.then(function(d) {                        
             loadNovedad($scope.Vehiculo.IdVehiculo);
-            toaster.pop('success', "Control de Información", d.data.message);            
-            initNovedad();
+            toaster.pop('success', "Control de Información", d.data.message);   
+            if($scope.editNovedad){
+                $("#mdNovedades").modal("hide");
+            }
+            $scope.InitNovedad();
         }, function(err) {          
-            toaster.pop('error', "Error", "Error al procesar solicitud");                
+            toaster.pop('error', "Error", err.data,0);                
             console.log("Some Error Occured " + JSON.stringify(err));
         });                          
     };

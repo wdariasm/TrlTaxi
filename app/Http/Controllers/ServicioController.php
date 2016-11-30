@@ -54,8 +54,10 @@ class ServicioController extends Controller
         }        
         $servicio = DB::select("SELECT s.IdServicio, s.ContratoId, s.ClienteId, s.NumeroContrato, s.Responsable,"
                 . " s.Telefono, s.TipoServicidoId, ts.svDescripcion, s.FechaServicio, s.Hora, s.Valor, s.Estado, "
-                . " s.DescVehiculo, s.ValorTotal, s.ConductorId FROM servicio s INNER JOIN  tiposervicio ts ON "
-                . "  s.TipoServicidoId=ts.svCodigo WHERE  s.ConductorId = $id ".$condicion . " order by s.IdServicio desc");
+                . " s.DescVehiculo, s.ValorTotal, s.ConductorId, s.NumPasajeros, s.FormaPago, s.DireccionOrigen, "
+                . " s.DireccionDestino, s.LatOrigen, s.LngOrigen, s.LatDestino, s.LngDestino "
+                . " FROM servicio s INNER JOIN  tiposervicio ts ON s.TipoServicidoId=ts.svCodigo "
+                . " WHERE  s.ConductorId = $id ".$condicion . " order by s.IdServicio desc");
         return $servicio;     
     }    
     
