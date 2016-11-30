@@ -1,5 +1,7 @@
-app.controller("vehiculoController", ["$scope", "vehiculoService", "marcaService", "tipoVehiculoService","ngTableParams", "toaster", "novedadService","funcionService",
-    function ($scope, vehiculoService, marcaService, tipoVehiculoService, ngTableParams, toaster, novedadService, funcionService) {
+app.controller("vehiculoController", ["$scope", "vehiculoService", "marcaService", "tipoVehiculoService",
+    "ngTableParams", "toaster", "novedadService","funcionService", "serverData",
+    function ($scope, vehiculoService, marcaService, tipoVehiculoService, ngTableParams, toaster, 
+    novedadService, funcionService, serverData) {
    $scope.Vehiculo = {};
    $scope.Vehiculos = [];
    $scope.Marcas = [];
@@ -186,7 +188,9 @@ app.controller("vehiculoController", ["$scope", "vehiculoService", "marcaService
     // FUNCIONES CARGUE DE IMAGENES 
     
     $scope.VerModalImagenes = function (){
-        $("#mdImagenes").modal("show");
+        $("#mdImagenes").modal("show");        
+        serverData.data = $scope.Vehiculo;   
+        $scope.$emit("ImagenVehiculo", "Cargue de documento Vehículo: ");             
     };
     
     

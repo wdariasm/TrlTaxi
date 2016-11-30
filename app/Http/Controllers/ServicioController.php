@@ -258,7 +258,7 @@ class ServicioController extends Controller
             $result = Servicio::where('IdServicio', $data["IdServicio"] )          
                 ->update(['ConductorId' => $data ['ConductorId'], 'Estado' => 'ASIGNADO' ]);             
             $this->EnviarEmailAsignar($data["IdServicio"], $data["Responsable"], $data["Email"], $data["Nombre"]);
-        
+            $this->NotificacionConductor($data ['ConductorId'], $data["IdServicio"] );
             return JsonResponse::create(array('message' => "Servicio asignado correctamente", "request" =>json_encode($result)), 200);
         }catch (\Exception $exc) {
             return JsonResponse::create(array('file' => $exc->getFile(), "line"=> $exc->getLine(),  "message" =>json_encode($exc->getMessage())), 500);
@@ -546,5 +546,52 @@ class ServicioController extends Controller
 		die('Problem occurred: ' . curl_error($ch));
 	}
 	curl_close($ch);
+    }
+    
+    public function NotificacionConductor ($idConductor, $idServicio){
+        $payload = array(
+            'title'         => "TRL (Asignación de Servicio)",
+            'msg'           => "Estimado usuario se le  ha asignado un servicio, por favor confirmar la aceptación del servicio N° ".$idServicio,
+            'std'           => 1,
+        );
+                                        
+        $idPushvec = array();
+        $idPushvec[0] = $key = $this->obtenerRegid($idConductor);
+        $this->enviarNotificacion($idPushvec,$payload);    
+    }
+    
+    private  function obtenerRegid($idConductor){
+        try {
+            $regid = DB::select("SELECT sm.gpKey FROM (conductor c INNER JOIN vehiculo v ON c.VehiculoId = v.IdVehiculo) INNER JOIN "
+                . "gps sm ON v.IdVehiculo = sm.gpVehiculoId WHERE sm.gpEstado='ACTIVO' AND  c.IdConductor=$idConductor LIMIT 1");
+            if(!empty($regid)){
+                return $regid[0]->regid;
+            }
+            return null;
+        }  catch (Exception $e) {
+            return JsonResponse::create(array('message' => "ErrorKey", "request" =>$e->getMessage()), 401);
+        }
+    }  
+
+    private function enviarNotificacion($array,$payload) {
+        $apiKey = 'AAAAi3Qf2F8:APA91bG7JP2FtXjzsSTNTqJlYVrSeLRKLL0QxjZ-VnpJWlWiUEjvc5jw241Y0SJI-DrHCJeTgFyPnFhCAXOMC0dZdE71EnnA6H_5HPEQjuVBJBJDirxUhLdzdmG7fd39wZXutJTTeBTSs85nB9WE3bSWHmjyR8WLcw';
+        $headers = array('Content-Type:application/json',"Authorization:key=$apiKey");
+
+        $data = array(
+            'data' => $payload,
+            'registration_ids' => $array
+        );
+
+        $ch = curl_init();
+        curl_setopt ($ch, CURLOPT_ENCODING, 'gzip');
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($ch, CURLOPT_URL, "https://fcm.googleapis.com/fcm/send");
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+        $res = curl_exec($ch);
+        curl_close($ch);
+        return $res;
     }
 }

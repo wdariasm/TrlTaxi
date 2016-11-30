@@ -1,5 +1,4 @@
-<div ng-controller="vehiculoController">
-    
+<div ng-controller="vehiculoController">    
     <div  class="container-fluid">        
         <div class="row">
             <div class="col-xs-12">
@@ -14,73 +13,73 @@
                         <div class="tab-pane active" id="tabListado">
                             <div class="row">
                                 <div class="col-xs-6">
-                                    
+
                                     <div class="input-group">
-                                         <div class="input-group-addon"><i class="fa  fa-search text-primary"></i></div>
-                                         <input  class="form-control" id="search" type="search" placeholder="Buscar por placa, movil, tipo, estado" ng-model="TablaVehiculo.filter()['busqueda']">
+                                        <div class="input-group-addon"><i class="fa  fa-search text-primary"></i></div>
+                                        <input  class="form-control" id="search" type="search" placeholder="Buscar por placa, movil, tipo, estado" ng-model="TablaVehiculo.filter()['busqueda']">
                                     </div>
 
                                 </div>
-                                
+
                                 <div class="col-xs-3" style="margin-top: 5px;">
-                                     <label class=" text-primary" style="font-size: 18px;">Total: {{Vehiculos.length}}</label>
+                                    <label class=" text-primary" style="font-size: 18px;">Total: {{Vehiculos.length}}</label>
                                 </div>                                
-                                
+
                                 <div class="col-xs-2">
                                     <button type="button" class="btn btn-success btn-addon" ng-click="LoadVehiculo()" ><i class="fa fa-refresh"></i> Actualizar</button>
                                 </div>
-                                
+
                                 <br/>
                             </div>
-                            
+
                             <div class="row">
                                 <div class="col-md-12">
-                            
-                            <table class="table table-striped table-condensed" ng-table="TablaVehiculo">
-                                <thead>
-                                    <tr>
-                                        <th>PLACA</th>
-                                        <th>MOVIL</th>
-                                        <th>CLASE</th>
-                                        <th>TIPO</th>                                            
-                                        <th>RUNT</th>
-                                        <th>PROPIEDAD</th>
-                                        <th>T.CONTRATO</th>
-                                        <th>ESTADO</th>
-                                        <th width="8%">ACCION</th>
-                                    </tr>
-                                </thead>
 
-                               <tbody>
-                                    <tr ng-repeat="item in $data">
-                                        <td>{{ item.Placa}}</td>
-                                        <td>{{ item.Movil }}</td>
-                                        <td>{{ item.tvDescripcion}}</td>
-                                        <td >{{ item.Tipo }}</td>                                                                                
-                                        <td>{{ item.Runt}}</td>
-                                        <td>{{ item.Propiedad}}</td>
-                                        <td>{{ item.TipoContrato}}</td>
-                                        <td>{{ item.Estado}}</td>
-                                        <td>
-                                            <center>
-                                                <a ng-click="get(item)" style="float: left; margin-left: 3px;" href="javascript:;"  title="Editar"><i class="fa fa-pencil fa-1x text-success"></i></a>
-                                                <a  ng-click="VerNovedad(item)" style="float: left; margin-left: 8px;" href="javascript:;"  title="Asignar IMEI"><i class="fa fa-mobile text-danger fa-1x"></i></a>
-                                                <a ng-click="VerDesactivar(item.IdVehiculo, 'INACTIVO')"  style="float: left; margin-left: 8px;" href="javascript:;"  title="Eliminar"><i class="fa fa-power-off fa-1x text-warning"></i></a>                                               
-                                            </center>
+                                    <table class="table table-striped table-condensed" ng-table="TablaVehiculo">
+                                        <thead>
+                                            <tr>
+                                                <th>PLACA</th>
+                                                <th>MOVIL</th>
+                                                <th>CLASE</th>
+                                                <th>TIPO</th>                                            
+                                                <th>RUNT</th>
+                                                <th>PROPIEDAD</th>
+                                                <th>T.CONTRATO</th>
+                                                <th>ESTADO</th>
+                                                <th width="8%">ACCION</th>
+                                            </tr>
+                                        </thead>
+
+                                        <tbody>
+                                            <tr ng-repeat="item in $data">
+                                                <td>{{ item.Placa}}</td>
+                                                <td>{{ item.Movil}}</td>
+                                                <td>{{ item.tvDescripcion}}</td>
+                                                <td >{{ item.Tipo}}</td>                                                                                
+                                                <td>{{ item.Runt}}</td>
+                                                <td>{{ item.Propiedad}}</td>
+                                                <td>{{ item.TipoContrato}}</td>
+                                                <td>{{ item.Estado}}</td>
+                                                <td>
+                                        <center>
+                                            <a ng-click="get(item)" style="float: left; margin-left: 3px;" href="javascript:;"  title="Editar"><i class="fa fa-pencil fa-1x text-success"></i></a>
+                                            <a  ng-click="VerNovedad(item)" style="float: left; margin-left: 8px;" href="javascript:;"  title="Asignar IMEI"><i class="fa fa-mobile text-danger fa-1x"></i></a>
+                                            <a ng-click="VerDesactivar(item.IdVehiculo, 'INACTIVO')"  style="float: left; margin-left: 8px;" href="javascript:;"  title="Eliminar"><i class="fa fa-power-off fa-1x text-warning"></i></a>                                               
+                                        </center>
                                         </td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                                        </tr>
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
                             <div class="modal fade bs-example-modal-sm" id="mdConfirmacion" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" style="margin-top: 10%;">
                                 <div class="modal-dialog modal-sm" style="width: 30%" >                                   
                                     <div class="modal-content">
-                                       
+
                                         <div class="modal-header">
                                             <div class="modal-title">Activar / Inactivar Vehículo</div>
                                         </div>
-                                        
+
                                         <div class="modal-body">
                                             <div class="row">
                                                 <div class="col-xs-12">
@@ -88,365 +87,358 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        
+
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
                                             <button type="button" class="btn btn-primary" ng-click="Desactivar()">Aceptar</button>
                                         </div>  
-                                        
+
                                     </div>
-                                                                     
+
                                 </div>
                             </div>
-                            
+
                         </div>
 
                         <div class="tab-pane" id="tabRegistro">
                             <div id="paneldebotones" class="row text-right paneldebotones " style="position: absolute; margin-top: 30px; right: 12px; z-index: 100">
                                 <div class="col-xs-12" style="padding-top: 6px;">
-                                    
+
                                     <div class="row" style="margin-bottom: 8px;" ng-hide="editMode">
                                         <div class="col-xs-12 text-center">
                                             <button type="button" class="btn btn-floating  btn-large pdf" ng-disabled="Boton.Imprimir" ng-click="Nuevo()" title="Nuevo"><i class="fa fa-pencil"></i></button>
                                             <small class="texto">Nuevo</small>
                                         </div>
                                     </div>
-                                                                        
+
                                     <div class="row" style="margin-bottom: 8px;" ng-show="editMode">
                                         <div class="col-xs-12 text-center">
                                             <button type="button" class="btn btn-floating  btn-large editar"  ng-click="Nuevo()"><i class="fa fa-trash"></i></button>
                                             <small class="texto">Cancelar</small>
                                         </div>
                                     </div>
-                                    
+
                                     <div class="row" style="margin-bottom: 5px;">
                                         <div class="col-xs-12 text-center">
                                             <button type="button" class="btn btn-floating  btn-large borrador" ng-disabled="frmVehiculo.$invalid"  ng-click="Guardar();" title="Guardar"><i class="fa fa-file-text-o"></i></button>
                                             <small class="texto">Guardar</small>
                                         </div>
                                     </div>
-                                    
+
                                     <div class="row" style="margin-bottom:8px; " ng-show="editMode">
                                         <div class="col-xs-12 text-center">
                                             <button type="button" class="btn btn-floating  btn-large pdf"  ng-click="VerModalNovedad()" title="Soat y otros"><i class="fa fa-book"></i></button>
                                             <small class="texto">Novedades</small>
                                         </div>
                                     </div>
-                                     
+
                                     <div class="row" style="margin-bottom:8px; " ng-show="editMode">
                                         <div class="col-xs-12 text-center">
                                             <button type="button" class="btn btn-floating  btn-large cancelar"  ng-click="VerModalImagenes()" title="Adjuntar Imagen"><i class="fa fa-picture-o"></i></button>
                                             <small class="texto">Galería</small>
                                         </div>
                                     </div>
-                    
+
                                 </div>
                             </div>
-                            
-                            <form class="col-md-11" name="frmVehiculo" id="frmVehiculo"  >
-                                                                  
+
+                            <form class="col-md-11" name="frmVehiculo" id="frmVehiculo">
                                 <div class="panel panel-default">
                                     <div class="panel-heading">
                                         <h3 class="panel-title">Datos Básicos</h3>
                                     </div>
-                                    
+
                                     <div class="panel-body">
-                                                                                                                       
-                                    <div class="row">
-                                    
-                                    <div class="col-md-3">
-                                        <div class="form-group">
-                                            <label  for="txtPlaca">Placa *</label>
-                                            <div class="input-group">
-                                                <div class="input-group-addon"><i class="fa fa-automobile text-success"></i></div>
-                                                <input class="form-control" ng-model="Vehiculo.Placa"  letras-numeros id="txtPlaca" name="txtPlaca" type="text"  required  ng-blur="ValidarPlaca()" maxlength="6"  autofocus="">
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label  for="txtPlaca">Placa *</label>
+                                                    <div class="input-group">
+                                                        <div class="input-group-addon"><i class="fa fa-automobile text-success"></i></div>
+                                                        <input class="form-control" ng-model="Vehiculo.Placa"  letras-numeros id="txtPlaca" name="txtPlaca" type="text"  required  ng-blur="ValidarPlaca()" maxlength="6"  autofocus="">
+                                                    </div>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="col-md-3">
-                                        <div class="form-group">
-                                            <label  for="txtMovil">Movil *</label>
-                                            <div class="input-group">
-                                                <div class="input-group-addon"><i class="fa fa-sort-numeric-asc text-success"></i></div>
-                                                <input class="form-control" ng-model="Vehiculo.Movil"  solo-numeros id="txtMovil" name="txtMovil" type="text"  required  maxlength="4"  >
-                                            </div>
-                                        </div>
-                                    </div>
 
-                                    <div class="col-md-3">
-                                        <div class="form-group">
-                                            <label  for="cboMarca">Marca *</label>
-                                            <div class="input-group">
-                                                <div class="input-group-addon"><i class="fa fa-gitlab text-success"></i></div>                                                
-                                                <select ng-model="MarcaSelect" class="form-control" id="cboMarca" ng-options="item as item.maDescripcion for item in Marcas track by item.maCodigo" required></select>
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label  for="txtMovil">Movil *</label>
+                                                    <div class="input-group">
+                                                        <div class="input-group-addon"><i class="fa fa-sort-numeric-asc text-success"></i></div>
+                                                        <input class="form-control" ng-model="Vehiculo.Movil"  solo-numeros id="txtMovil" name="txtMovil" type="text"  required  maxlength="4"  >
+                                                    </div>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </div>                                                                       
 
-                                    <div class="col-md-3">
-                                        <div class="form-group">
-                                            <label  for="txtModelo">Modelo *</label>
-                                            <div class="input-group">
-                                                <div class="input-group-addon"><i class="fa fa-sort-numeric-desc text-success"></i></div>
-                                                <input class="form-control" ng-model="Vehiculo.Modelo"  solo-numeros id="txtModelo" name="txtModelo" type="text"  required  maxlength="4"   >
-                                            </div>
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="col-md-3">
-                                        <div class="form-group">
-                                            <label  for="cboClase">Clase Vehiculo *</label>
-                                            <div class="input-group">
-                                                <div class="input-group-addon"><i class="fa fa-gitlab text-success"></i></div>
-                                                <select ng-model="ClaseSelect" class="form-control" id="cboClase" ng-options="item as item.tvDescripcion for item in ClaseVehiculo track by item.tvCodigo" required></select>
-                                            </div>
-                                        </div>
-                                    </div>
-                                        
-                                    <div class="col-md-3">
-                                        <div class="form-group">
-                                            <label  for="txtTipo">Tipo *</label>
-                                            <div class="input-group">
-                                                <div class="input-group-addon"><i class="fa fa-certificate text-success"></i></div>                                                
-                                                <select  class="form-control" ng-model="Vehiculo.Tipo" id="txtTipo"  required>
-                                                    <option value="CERRADA">CERRADA</option>
-                                                    <option value="DOBLE CABINA">DOBLE CABINA</option>
-                                                    <option value="STATION WAGON">STATION WAGON</option>
-                                                    <option value="VAN">VAN</option>
-                                                    <option value="WAGON">WAGON</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-                                  
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label  for="cboMarca">Marca *</label>
+                                                    <div class="input-group">
+                                                        <div class="input-group-addon"><i class="fa fa-gitlab text-success"></i></div>                                                
+                                                        <select ng-model="MarcaSelect" class="form-control" id="cboMarca" ng-options="item as item.maDescripcion for item in Marcas track by item.maCodigo" required></select>
+                                                    </div>
+                                                </div>
+                                            </div>                                                                       
 
-                                    <div class="col-md-3">
-                                        <div class="form-group">
-                                            <label  for="txtColor">Color *</label>
-                                            <div class="input-group">
-                                                <div class="input-group-addon"><i class="fa fa-paint-brush text-success"></i></div>
-                                                <input class="form-control" ng-model="Vehiculo.Color"   id="txtColor" name="txtColor" type="text"  required  maxlength="20" >
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label  for="txtModelo">Modelo *</label>
+                                                    <div class="input-group">
+                                                        <div class="input-group-addon"><i class="fa fa-sort-numeric-desc text-success"></i></div>
+                                                        <input class="form-control" ng-model="Vehiculo.Modelo"  solo-numeros id="txtModelo" name="txtModelo" type="text"  required  maxlength="4"   >
+                                                    </div>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </div>
 
-                                    <div class="col-md-3">
-                                        <div class="form-group">
-                                            <label  for="txtCilindraje">Cilindraje *</label>
-                                            <div class="input-group">
-                                                <div class="input-group-addon"><i class="fa fa-tachometer text-success"></i></div>
-                                                <input class="form-control" ng-model="Vehiculo.Cilindraje" solo-numeros id="txtCilindraje" name="txtCilindraje" type="text"  required   maxlength="10" >
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label  for="cboClase">Clase Vehiculo *</label>
+                                                    <div class="input-group">
+                                                        <div class="input-group-addon"><i class="fa fa-gitlab text-success"></i></div>
+                                                        <select ng-model="ClaseSelect" class="form-control" id="cboClase" ng-options="item as item.tvDescripcion for item in ClaseVehiculo track by item.tvCodigo" required></select>
+                                                    </div>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </div>                                                                      
 
-                                    <div class="col-md-3">
-                                        <div class="form-group">
-                                            <label  for="txtRunt">Runt *</label>
-                                            <div class="input-group">
-                                                <div class="input-group-addon"><i class="fa fa-certificate text-success"></i></div>                                                
-                                                <select  class="form-control" ng-model="Vehiculo.Runt" id="txtRunt" placeholder="Estado" required>
-                                                    <option value="ACTIVO">ACTIVO</option>
-                                                    <option value="INACTIVO">INACTIVO</option>
-                                                </select>
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label  for="txtTipo">Tipo *</label>
+                                                    <div class="input-group">
+                                                        <div class="input-group-addon"><i class="fa fa-certificate text-success"></i></div>                                                
+                                                        <select  class="form-control" ng-model="Vehiculo.Tipo" id="txtTipo"  required>
+                                                            <option value="CERRADA">CERRADA</option>
+                                                            <option value="DOBLE CABINA">DOBLE CABINA</option>
+                                                            <option value="STATION WAGON">STATION WAGON</option>
+                                                            <option value="VAN">VAN</option>
+                                                            <option value="WAGON">WAGON</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </div>
-                                  
-                                    
-                                    <div class="col-md-3">
-                                        <div class="form-group">
-                                            <label  for="txtFechaArriendo">Fecha Arriendo *</label>
-                                            <div class="input-group">
-                                                <div class="input-group-addon"><i class="fa fa-calendar-times-o text-success"></i></div>
-                                                <input type="text" id="txtFechaArriendo" name="txtFechaArriendo" ng-model="Vehiculo.FechaArriendo" class="form-control" value="" ng-disabled="Vehiculo.Propiedad !='ARRENDADO'" ng-change="CambiarFormato('FechaArriendo')">                                                                                            
-                                            </div>
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="col-md-3">
-                                        <div class="form-group">
-                                            <label  for="txtFechaMto">Fecha Prox Mantenimiento</label>
-                                            <div class="input-group">
-                                                <div class="input-group-addon"><i class="fa fa-calendar-check-o text-success"></i></div>
-                                                <input type="text" id="txtFechaMto" ng-model="Vehiculo.FProxMantenimiento" name="txtFechaMto" class="form-control" value="" ng-change="CambiarFormato('FProxMantenimiento')" >                                                                                            
-                                            </div>
-                                        </div>
-                                    </div>
-                                    
-                                    
 
-                                    <div class="col-md-3">
-                                        <div class="form-group">
-                                            <label for="txtEstado">Estado *</label>
-                                             <div class="input-group">
-                                                <div class="input-group-addon"><i class="fa fa-list text-success"></i></div>
-                                                <select  class="form-control" ng-model="Vehiculo.Estado" id="txtEstado" placeholder="Estado">
-                                                    <option value="ACTIVO">ACTIVO</option>
-                                                    <option value="INACTIVO">INACTIVO</option>
-                                                </select>
 
-                                             </div>
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label  for="txtColor">Color *</label>
+                                                    <div class="input-group">
+                                                        <div class="input-group-addon"><i class="fa fa-paint-brush text-success"></i></div>
+                                                        <input class="form-control" ng-model="Vehiculo.Color"   id="txtColor" name="txtColor" type="text"  required  maxlength="20" >
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label  for="txtCilindraje">Cilindraje *</label>
+                                                    <div class="input-group">
+                                                        <div class="input-group-addon"><i class="fa fa-tachometer text-success"></i></div>
+                                                        <input class="form-control" ng-model="Vehiculo.Cilindraje" solo-numeros id="txtCilindraje" name="txtCilindraje" type="text"  required   maxlength="10" >
+                                                    </div>
+                                                </div>
+                                            </div>                                                                      
+
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label  for="txtRunt">Runt *</label>
+                                                    <div class="input-group">
+                                                        <div class="input-group-addon"><i class="fa fa-certificate text-success"></i></div>                                                
+                                                        <select  class="form-control" ng-model="Vehiculo.Runt" id="txtRunt" placeholder="Estado" required>
+                                                            <option value="ACTIVO">ACTIVO</option>
+                                                            <option value="INACTIVO">INACTIVO</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label  for="txtFechaArriendo">Fecha Arriendo *</label>
+                                                    <div class="input-group">
+                                                        <div class="input-group-addon"><i class="fa fa-calendar-times-o text-success"></i></div>
+                                                        <input type="text" id="txtFechaArriendo" name="txtFechaArriendo" ng-model="Vehiculo.FechaArriendo" class="form-control" value="" ng-disabled="Vehiculo.Propiedad != 'ARRENDADO'" ng-change="CambiarFormato('FechaArriendo')">                                                                                            
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label  for="txtFechaMto">Fecha Prox Mantenimiento</label>
+                                                    <div class="input-group">
+                                                        <div class="input-group-addon"><i class="fa fa-calendar-check-o text-success"></i></div>
+                                                        <input type="text" id="txtFechaMto" ng-model="Vehiculo.FProxMantenimiento" name="txtFechaMto" class="form-control" value="" ng-change="CambiarFormato('FProxMantenimiento')" >                                                                                            
+                                                    </div>
+                                                </div>
+                                            </div>
+
+
+
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label for="txtEstado">Estado *</label>
+                                                    <div class="input-group">
+                                                        <div class="input-group-addon"><i class="fa fa-list text-success"></i></div>
+                                                        <select  class="form-control" ng-model="Vehiculo.Estado" id="txtEstado" placeholder="Estado">
+                                                            <option value="ACTIVO">ACTIVO</option>
+                                                            <option value="INACTIVO">INACTIVO</option>
+                                                        </select>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+
                                         </div>
-                                    </div>
-                                                                    
-                                </div>
                                     </div>
                                 </div>                                                                                                                                 
-                                                               
-                                   
+
                                 <div class="panel panel-default">
                                     <div class="panel-heading">
                                         <h3 class="panel-title">Otros Datos</h3>
                                     </div>
                                     <div class="panel-body">
-                                        
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <label  for="txtNumMotor">Número Motor *</label>
-                                            <div class="input-group">
-                                                <div class="input-group-addon"><i class="fa fa-automobile text-success"></i></div>
-                                                <input class="form-control" ng-model="Vehiculo.NumMotor"  letras-numeros id="txtNumMotor"  type="text"  required    maxlength="25" >
-                                            </div>
-                                        </div>
-                                    </div>
-                                        
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <label  for="txtNumSerie">Número Serie *</label>
-                                            <div class="input-group">
-                                                <div class="input-group-addon"><i class="fa fa-automobile text-success"></i></div>
-                                                <input class="form-control" ng-model="Vehiculo.NumSerie"  letras-numeros id="txtNumSerie"  type="text"     maxlength="30" >
-                                            </div>
-                                        </div>
-                                    </div>
-                                        
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <label  for="txtNumVin">Número Vin *</label>
-                                            <div class="input-group">
-                                                <div class="input-group-addon"><i class="fa fa-automobile text-success"></i></div>
-                                                <input class="form-control" ng-model="Vehiculo.NumVin"  letras-numeros id="txtNumVin"  type="text"  required    maxlength="30" >
-                                            </div>
-                                        </div>
-                                    </div>
-                                        
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label  for="txtLinea">Línea *</label>
-                                            <div class="input-group">
-                                                <div class="input-group-addon"><i class="fa fa-automobile text-success"></i></div>
-                                                <input class="form-control" ng-model="Vehiculo.Linea"  letras-numeros id="txtLinea"  type="text"     maxlength="40" >
-                                            </div>
-                                        </div>
-                                    </div>
-                                        
-                                    <div class="col-md-3">
-                                        <div class="form-group">
-                                            <label for="txtTipoContrato">Tipo Contratación *</label>
-                                             <div class="input-group">
-                                                <div class="input-group-addon"><i class="fa fa-list text-success"></i></div>
-                                                <select  class="form-control" ng-model="Vehiculo.TipoContrato" id="txtTipoContrato" placeholder="Estado">
-                                                    <option value="POR RUTAS">POR RUTAS</option>
-                                                    <option value="ARRENDADO">ARRENDADO</option>
-                                                </select>
 
-                                             </div>
-                                        </div>
-                                    </div>
-                                        
-                                    <div class="col-md-3">
-                                        <div class="form-group">
-                                            <label for="cboPropiedad">Propiedad *</label>
-                                            <div class="input-group">
-                                                <div class="input-group-addon"><i class="fa fa-list-ul text-success"></i></div>
-                                                <select  class="form-control" ng-model="Vehiculo.Propiedad" id="cboPropiedad" placeholder="" required>
-                                                   <option value="AFILIADO">AFILIADO</option>
-                                                   <option value="ARRENDADO">ARRENDADO</option>
-                                                   <option value="PROPIO">PROPIO</option>
-                                                   <option value="SOCIO">SOCIO</option>
-                                                   <option value="SUMINISTRADO">SUMINISTRADO</option>                                                   
-                                               </select>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label  for="txtNumMotor">Número Motor *</label>
+                                                <div class="input-group">
+                                                    <div class="input-group-addon"><i class="fa fa-automobile text-success"></i></div>
+                                                    <input class="form-control" ng-model="Vehiculo.NumMotor"  letras-numeros id="txtNumMotor"  type="text"  required    maxlength="25" >
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                        
-                                    <div class="col-xs-6">
-                                        <div class="form-group">
-                                            <label  for="txtEmpresa">Empresa Afiliación *</label>
-                                            <div class="input-group">
-                                                <div class="input-group-addon"><i class="fa fa-automobile text-success"></i></div>
-                                                <input class="form-control" ng-model="Vehiculo.Empresa"  letras-numeros id="txtEmpresa"  type="text"  required   maxlength="35" >
+
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label  for="txtNumSerie">Número Serie *</label>
+                                                <div class="input-group">
+                                                    <div class="input-group-addon"><i class="fa fa-automobile text-success"></i></div>
+                                                    <input class="form-control" ng-model="Vehiculo.NumSerie"  letras-numeros id="txtNumSerie"  type="text"     maxlength="30" >
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                        
-                                        
+
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label  for="txtNumVin">Número Vin *</label>
+                                                <div class="input-group">
+                                                    <div class="input-group-addon"><i class="fa fa-automobile text-success"></i></div>
+                                                    <input class="form-control" ng-model="Vehiculo.NumVin"  letras-numeros id="txtNumVin"  type="text"  required    maxlength="30" >
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label  for="txtLinea">Línea *</label>
+                                                <div class="input-group">
+                                                    <div class="input-group-addon"><i class="fa fa-automobile text-success"></i></div>
+                                                    <input class="form-control" ng-model="Vehiculo.Linea"  letras-numeros id="txtLinea"  type="text"     maxlength="40" >
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label for="txtTipoContrato">Tipo Contratación *</label>
+                                                <div class="input-group">
+                                                    <div class="input-group-addon"><i class="fa fa-list text-success"></i></div>
+                                                    <select  class="form-control" ng-model="Vehiculo.TipoContrato" id="txtTipoContrato" placeholder="Estado">
+                                                        <option value="POR RUTAS">POR RUTAS</option>
+                                                        <option value="ARRENDADO">ARRENDADO</option>
+                                                    </select>
+
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label for="cboPropiedad">Propiedad *</label>
+                                                <div class="input-group">
+                                                    <div class="input-group-addon"><i class="fa fa-list-ul text-success"></i></div>
+                                                    <select  class="form-control" ng-model="Vehiculo.Propiedad" id="cboPropiedad" placeholder="" required>
+                                                        <option value="AFILIADO">AFILIADO</option>
+                                                        <option value="ARRENDADO">ARRENDADO</option>
+                                                        <option value="PROPIO">PROPIO</option>
+                                                        <option value="SOCIO">SOCIO</option>
+                                                        <option value="SUMINISTRADO">SUMINISTRADO</option>                                                   
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-xs-6">
+                                            <div class="form-group">
+                                                <label  for="txtEmpresa">Empresa Afiliación *</label>
+                                                <div class="input-group">
+                                                    <div class="input-group-addon"><i class="fa fa-automobile text-success"></i></div>
+                                                    <input class="form-control" ng-model="Vehiculo.Empresa"  letras-numeros id="txtEmpresa"  type="text"  required   maxlength="35" >
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                                
+
                                 <div class="row" ng-show="editMode">
-                                <div class="col-md-12">
-                                <div class="panel panel-default">
-                                    <div class="panel-heading"><h3 class="panel-title">Listado de Novedades</h3></div>
-                                        <table class="table table-striped table-condensed table-hover" >
-                                           <thead>
-                                               <tr>
-                                                   <th>CODIGO</th>
-                                                   <th>TIPO</th>
-                                                   <th>ENTIDAD</th>
-                                                   <th>FEC.VIGENCIA</th>
-                                                   <th>FEC.VENCIMIENTO</th>
-                                                   <th>ESTADO</th>                                        
-                                                   <th>ACCION</th>
-                                               </tr>
-                                           </thead>
+                                    <div class="col-md-12">
+                                        <div class="panel panel-default">
+                                            <div class="panel-heading"><h3 class="panel-title">Listado de Novedades</h3></div>
+                                            <table class="table table-striped table-condensed table-hover" >
+                                                <thead>
+                                                    <tr>
+                                                        <th>CODIGO</th>
+                                                        <th>TIPO</th>
+                                                        <th>ENTIDAD</th>
+                                                        <th>FEC.VIGENCIA</th>
+                                                        <th>FEC.VENCIMIENTO</th>
+                                                        <th>ESTADO</th>                                        
+                                                        <th>ACCION</th>
+                                                    </tr>
+                                                </thead>
 
-                                            <tbody>
-                                                 <tr ng-repeat="item in Novedades">
-                                                     <td>{{ item.Codigo}}</td>
-                                                     <td>{{ item.Tipo }}</td>
-                                                     <td>{{ item.Entidad}}</td>
-                                                     <td>{{ ConvertirFecha(item.FechaInicioVigencia)  }}</td>
-                                                     <td>{{ ConvertirFecha(item.FechaVencimiento) }}</td>
-                                                      <td>{{ item.Estado}}</td>
-                                                     <td>
-                                                         <center>
-                                                            <a ng-click="GetNovedad(item)" href="javascript:;"  title="Ver / Editar"><i class="fa fa-pencil fa-1x text-success"></i></a>
-                                                         </center>
-                                                     </td>
-                                                 </tr>
-                                             </tbody>
-                                        </table>
-                                    </div>                                
+                                                <tbody>
+                                                    <tr ng-repeat="item in Novedades">
+                                                        <td>{{ item.Codigo}}</td>
+                                                        <td>{{ item.Tipo}}</td>
+                                                        <td>{{ item.Entidad}}</td>
+                                                        <td>{{ ConvertirFecha(item.FechaInicioVigencia)}}</td>
+                                                        <td>{{ ConvertirFecha(item.FechaVencimiento)}}</td>
+                                                        <td>{{ item.Estado}}</td>
+                                                        <td>
+                                                <center>
+                                                    <a ng-click="GetNovedad(item)" href="javascript:;"  title="Ver / Editar"><i class="fa fa-pencil fa-1x text-success"></i></a>
+                                                </center>
+                                                </td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>                                
+                                    </div>
                                 </div>
-                            </div>
-                                
-                                   
+
+
                                 <div class="panel panel-default" ng-show="editMode">
                                     <div class="panel-heading">
                                         <h3 class="panel-title">Galería de Imagenes</h3>
                                     </div>
                                     <div class="panel-body">
-                                        
+
                                     </div>
                                 </div>
-
-
                             </form>
                         </div>
 
                         <div class="tab-pane" id="tabNovedad">
-                            
-                            
-                            
+                            <div class="">
+                                
+                            </div>
+
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        
+
         <div class="modal fade bs-example-modal-lg" id="mdNovedades" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" style="margin-top: 5%;">
             <div class="modal-dialog modal-lg" >                                   
                 <div class="modal-content">
@@ -463,18 +455,18 @@
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <label for="txtTipoN">Tipo *</label>
-                                             <div class="input-group">
-                                                 <div class="input-group-addon"><i class="fa fa-list text-success"></i></div>
-                                            <select type="text" class="form-control" ng-model="Novedad.Tipo" id="txtTipoN" placeholder="Tipo Novedad">
-                                                <option value="SOAT">SOAT</option>
-                                                <option value="TARJETA DE OPERACION">TARJETA DE OPERACION</option>
-                                                <option value="TECNO MECANICA">TECNO MECANICA</option>
-                                            </select>
+                                            <div class="input-group">
+                                                <div class="input-group-addon"><i class="fa fa-list text-success"></i></div>
+                                                <select type="text" class="form-control" ng-model="Novedad.Tipo" id="txtTipoN" placeholder="Tipo Novedad">
+                                                    <option value="SOAT">SOAT</option>
+                                                    <option value="TARJETA DE OPERACION">TARJETA DE OPERACION</option>
+                                                    <option value="TECNO MECANICA">TECNO MECANICA</option>
+                                                </select>
 
-                                             </div>
+                                            </div>
                                         </div>
                                     </div>
-                                    
+
                                     <div class="col-md-3">
                                         <div class="form-group">
                                             <label  for="txtCodigoN">Código *</label>
@@ -485,7 +477,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    
+
                                     <div class="col-xs-5">
                                         <div class="form-group">
                                             <label  for="txtEntidad">Entidad *</label>
@@ -495,8 +487,8 @@
                                             </div>
                                         </div>
                                     </div>
-                                    
-                                    
+
+
                                     <div class="col-md-3">
                                         <div class="form-group">
                                             <label  for="txtFechaExp">Fecha Expedicion</label>
@@ -506,7 +498,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    
+
                                     <div class="col-md-3">
                                         <div class="form-group">
                                             <label  for="txtFechaInicio">Fecha Inicio</label>
@@ -516,7 +508,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    
+
                                     <div class="col-md-3">
                                         <div class="form-group">
                                             <label  for="txtFechaVen">Fecha Vencimiento</label>
@@ -526,23 +518,23 @@
                                             </div>
                                         </div>
                                     </div>
-                                    
+
                                     <div class="col-md-3">
                                         <div class="form-group">
                                             <label for="cboEstadoN">Estado *</label>
-                                             <div class="input-group">
+                                            <div class="input-group">
                                                 <div class="input-group-addon"><i class="fa fa-check-square-o text-success"></i></div>
                                                 <select type="text" class="form-control" ng-model="Novedad.Estado" id="cboEstadoN" placeholder="Estado">
                                                     <option value="VIGENTE">VIGENTE</option>
                                                     <option value="NO VIGENTE">NO VIGENTE</option>
                                                 </select>
 
-                                             </div>
+                                            </div>
                                         </div>
                                     </div>                                                                                                            
-                                    
+
                                 </div>
-                                
+
                                 <div class="row" ng-show="Novedad.Tipo == 'TARJETA DE OPERACION'">
                                     <div class="col-md-4">
                                         <div class="form-group">
@@ -553,7 +545,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    
+
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <label  for="txtRadioAcc">Radio de Accion</label>
@@ -563,27 +555,27 @@
                                             </div>
                                         </div>
                                     </div>
-                                    
+
                                 </div>                             
                             </form>
                         </div>
                     </div>
 
                     <div class="modal-footer">
-                                                                                                                                                  
+
                         <button class="btn btn-success btn-addon" type="button"  title="Nuevo" ng-click="InitNovedad()"><i class="fa fa-pencil"></i> Nuevo &nbsp; </button>
                         <!-- ng-disabled="frmVehiculo.$invalid" -->                                
                         <button class="btn btn-primary  btn-addon" type="button"  title="Registrar Novedad" ng-click="AgregarNovedad()"><i class="fa fa-check"></i>Guardar</button>
 
                         <button class="btn btn-danger  btn-addon" type="button" data-dismiss="modal"  title="Cerrar"><i class="fa fa-times"></i> Cerrar &nbsp;</button>                          
-                                                                        
+
                     </div>  
 
                 </div>
             </div>
         </div>  
         <div ng-include="'../trl/views/configuracion/documentoVehiculo.html'"></div>        
-        
+
     </div>
 </div>
 
