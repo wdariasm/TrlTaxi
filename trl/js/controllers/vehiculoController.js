@@ -9,6 +9,7 @@ app.controller("vehiculoController", ["$scope", "vehiculoService", "marcaService
    $scope.editNovedad = false;
    $scope.valPlaca = false;
    $scope.ClaseVehiculo = [];
+   $scope.Documentos = [];
    $scope.TablaVehiculo = {};
    $scope.Titulo ="Nuevo";
    
@@ -131,6 +132,7 @@ app.controller("vehiculoController", ["$scope", "vehiculoService", "marcaService
     
     $scope.get = function(item){
         loadNovedad(item.IdVehiculo);
+        getDocumentos(item.IdVehiculo);
         $scope.Vehiculo = item;
         $scope.Vehiculo.FechaArriendo = moment($scope.Vehiculo.FechaArriendo).format("L");
         $scope.Vehiculo.FProxMantenimiento = moment($scope.Vehiculo.FProxMantenimiento).format("L");
@@ -190,6 +192,7 @@ app.controller("vehiculoController", ["$scope", "vehiculoService", "marcaService
     $scope.VerModalImagenes = function (){
         $("#mdImagenes").modal("show");        
         serverData.data = $scope.Vehiculo;   
+        serverData.data.IdMantenimiento =  null;
         $scope.$emit("ImagenVehiculo", "Cargue de documento Vehículo: ");             
     };
     
@@ -224,6 +227,18 @@ app.controller("vehiculoController", ["$scope", "vehiculoService", "marcaService
                 console.log("Some Error Occured " + JSON.stringify(err));
         }); 
     }
+    
+    function getDocumentos(id){
+        var promise = vehiculoService.getDocumentos(id);
+        promise.then(function(d) {                                                                  
+            $scope.Documentos = d.data;            
+        }, function(err) {           
+                toaster.pop('error','Error','Cargar documentos vehiculo');
+                console.log("Some Error Occured " + JSON.stringify(err));
+        }); 
+    }
+    
+    
             
      function initTablaNovedad() {
         $scope.TablaNovedad = new ngTableParams({

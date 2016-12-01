@@ -1,44 +1,45 @@
-<div ng-controller="documentoVehiculoCtrl as dv">
+<div ng-controller="documentoVehiculoCtrl as dv">            
     <div class="modal fade bs-example-modal-lg" id="mdImagenes" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" style="margin-top: 3%;">
         <div class="modal-dialog modal-lg" style="width: 28%">                                   
             <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <div class="modal-title">{{dv.Titulo}}</div>
-                </div>
+                <form name="frmDocumentos" id="frmDocumentos">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <div class="modal-title">{{dv.Titulo}}</div>
+                    </div>
 
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label for="cboPropiedad">TIPO *</label>
-                                <div class="input-group">
-                                    <div class="input-group-addon"><i class="fa fa-list-ul text-success"></i></div>
-                                    <select  class="form-control" ng-model="dv.Archivo.Tipo" id="cboPropiedad" placeholder="" required>
-                                        <option value="INTERIOR">INTERIOR</option>
-                                        <option value="EXTERIOR">EXTERIOR</option>
-                                        <option value="NA">NA</option>                                                
-                                    </select>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="cboPropiedad">TIPO *</label>
+                                    <div class="input-group">
+                                        <div class="input-group-addon"><i class="fa fa-list-ul text-success"></i></div>
+                                        <select  class="form-control" ng-model="dv.Archivo.dvTipoDoc" id="cboPropiedad" placeholder="" required>
+                                            <option value="INTERIOR">INTERIOR</option>
+                                            <option value="EXTERIOR">EXTERIOR</option>
+                                            <option value="NA">NA</option>                                                
+                                        </select>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
 
-                        <div class="col-md-12">
-                            <input  id="flArchivo" uploader-model="dv.Archivo.Imagen"  name="flArchivo" class="file-loading" type="file"  data-min-file-count="1"  accept="image/*">
-                        </div>
+                            <div class="col-md-12">
+                                <input  id="flArchivoVeh" uploader-model="dv.Archivo.Imagen" onchange="angular.element(this).scope().SeleccionarArchivo();"  name="flArchivo" class="file-loading" type="file"  data-min-file-count="1"  accept="image/*">
+                            </div>
 
+                        </div>
                     </div>
-                </div>
 
-                <div class="modal-footer">
-                    
-                    <button class="btn btn-success btn-addon" type="button"  title="Nuevo" ng-click="InitNovedad()"><i class="fa fa-pencil"></i> Nuevo &nbsp; </button>
+                    <div class="modal-footer">
+
+                        <button class="btn btn-success btn-addon" type="button"  title="Nuevo" ng-click="dv.NuevoDocumento()"><i class="fa fa-pencil"></i> Nuevo &nbsp; </button>
                         <!-- ng-disabled="frmVehiculo.$invalid" -->                                
-                    <button class="btn btn-primary  btn-addon" type="button"  title="Registrar Novedad" ng-click="AgregarNovedad()"><i class="fa fa-check"></i>Guardar</button>
-                    
-                    <button type="button" class="btn btn-danger btn-addon" data-dismiss="modal"><i class="fa fa-times"></i> Cerrar &nbsp;&nbsp;</button>                    
-                </div>  
+                        <button class="btn btn-primary  btn-addon" type="button" ng-disabled="dv.Archivo.Boton"  title="Registrar Novedad" ng-click="dv.GuardarArchivo()"><i class="fa fa-check"></i>Guardar</button>
 
+                        <button type="button" class="btn btn-danger btn-addon" data-dismiss="modal"><i class="fa fa-times"></i> Cerrar &nbsp;&nbsp;</button>                    
+                    </div>  
+                </form>
             </div>
 
         </div>
@@ -46,7 +47,7 @@
 </div>
 
 <script>   
-    $('#flArchivo').fileinput({                   
+    $('#flArchivoVeh').fileinput({                   
         uploadAsync:false,
         minFileCount:1,
         maxFileCount:1,
@@ -57,11 +58,7 @@
         showRemove :false,
         language: "es", 
         autoReplace: true,
-        allowedFileExtensions: ["jpg", "png"],
-        initialPreview: [
-            '<img src="images/picture.png" class=" file-preview-image" style="height:160px">'
-            
-        ],
+        allowedFileExtensions: ["jpg", "png"],        
         initialPreviewConfig: [
             {caption: "Imagen",   key: 11}
         ]                

@@ -422,7 +422,17 @@
                                         <h3 class="panel-title">Galería de Imagenes</h3>
                                     </div>
                                     <div class="panel-body">
-
+                                        <div class="row">
+                                            <div ng-repeat="item in Documentos">                                                
+                                                <ul class="first col-md-3">
+                                                    <li>
+                                                        <img  src="{{item.dvRuta}}" alt="Documentos vehículo"   style="max-height: 220px; max-width:  220px;" title="Click, para ampliar imagen">
+                                                        <div class="text" style="font-size: 5px;">{{item.dvNombre}}</div>
+                                                    </li>
+                                                </ul>                                                 
+                                            </div>
+                                        </div>
+                                            
                                     </div>
                                 </div>
                             </form>
@@ -625,6 +635,6 @@
                 $('.paneldebotones').addClass('fijar');
             }
         });
-    });
+    });        
     
 </script>

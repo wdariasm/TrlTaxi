@@ -61,5 +61,6 @@ Route::group(['middleware' => 'cors'], function () {
         include 'Routes/routesPdfContrato.php';
         include 'Routes/MotivoRoutes.php';
         include 'Routes/soporteRoutes.php';
+        include 'Routes/GpsRoutes.php';
     });
 });

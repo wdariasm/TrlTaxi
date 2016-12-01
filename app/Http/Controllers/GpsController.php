@@ -55,7 +55,7 @@ class GpsController extends Controller
     {
        try{            
             $key = $request->get("gpKey");           
-            $gps = Gps::find($imei);
+            $gps = Gps::where('gpImei', $imei)->first();
             $gps->gpKey = $key;
             $gps->save();
             return JsonResponse::create(array('message' => "Correcto", "request" =>"Imei Actualizado Correctamente"), 200);

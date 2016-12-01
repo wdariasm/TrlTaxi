@@ -34,6 +34,17 @@ app.service("vehiculoService",[ '$http', function ($http) {
         return req;	
     };
     
+    this.postDocumento = function (formData) { 
+        var req = $http.post(uri+'/api/vehiculo/documento', formData,{transformRequest: angular.identity, 
+            headers: {'Content-Type': undefined}});
+        return req;
+    };
+    
+    this.getDocumentos = function (id) {
+        var req = $http.get(uri+'/api/vehiculo/' + id + "/documentos");
+        return req;
+    };
+    
     
 }]);
 
