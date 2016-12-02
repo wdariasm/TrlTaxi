@@ -452,7 +452,10 @@
                                             <label  for="txtPlacaC">Placa *</label>
                                             <div class="input-group">
                                                 <div class="input-group-addon"><i class="fa fa-car text-success"></i></div>                                                
-                                                <input type="text" class="form-control" ng-model="Imei.Placa"  solo-numeros id="txtPlacaC" name="txtPlacaC"  ng-keyup="buscar($event)" required  maxlength="6" />
+                                                <input type="text" class="form-control" ng-model="Gps.Placa"  id="txtPlacaC" name="txtPlacaC"  ng-keyup="buscar($event)" required  maxlength="6" />
+                                                <span class="input-group-btn">
+                                                    <button type="button"  class="btn btn-info btn-md "   ng-click="BuscarPlacaImei()" data-toggle="tooltip" data-placement="right" title="Buscar Vehículo"><i class=" fa fa-search"></i></button>
+                                                </span>
                                             </div>
                                         </div>
                                         </div>
@@ -462,7 +465,7 @@
                                                 <label for="" class="active">Movil *</label>
                                                 <div class="input-group ">
                                                     <div class="input-group-addon"><i class="fa fa-sort-numeric-desc text-success"></i></div>
-                                                    <input id="txtMovilC" type="text" class="form-control"  ng-model="Imei.movil" name="txtMovilC" required  readonly>                                                
+                                                    <input id="txtMovilC" type="text" class="form-control"  ng-model="Gps.Movil" name="txtMovilC" required  readonly>                                                
                                                 </div>
                                             </div>
                                         </div>
@@ -473,7 +476,7 @@
                                                 <label for="" >IMEI Actual *</label>
                                                 <div class="input-group ">
                                                     <div class="input-group-addon"><i class="fa fa-sort-numeric-desc text-success"></i></div>
-                                                    <input id="txtImeiCC" type="text" class="form-control"  ng-model="Imei.imei" name="txtImeiCC"   readonly maxlength="25">
+                                                    <input id="txtGpsCC" type="text" class="form-control"  ng-model="Gps.ImeiActual" name="txtGpsCC"   readonly maxlength="25">
                                                 </div>
                                             </div>
                                                                                         
@@ -485,7 +488,7 @@
                                                   <label for="" >Nuevo IMEI *</label>
                                                 <div class="input-group ">
                                                     <div class="input-group-addon"><i class="fa fa-sort-numeric-desc text-success"></i></div>
-                                                    <input id="txtImeiC" type="text" class="form-control"  ng-model="Imei.nuevoI" name="txtImeiC" required  maxlength="25">
+                                                    <input id="txtGpsC" type="text" class="form-control"  ng-model="Gps.ImeiNuevo" name="txtGpsC" required  maxlength="25">
                                                 </div>
                                             </div>                                                                                      
                                         </div>
@@ -493,19 +496,34 @@
                                         <div class="row">
                                             
                                              <div class="col-md-3">
-                                                <button  class="btn btn-success btn-block btn-addon"   type="button" title="Nuevo / Cancelar">
+                                                 <button  class="btn btn-success btn-block btn-addon" ng-click="NuevoImei()"   type="button" title="Nuevo / Cancelar">
                                                     <i class="fa fa-edit"></i>Nuevo
                                                 </button>
                                             </div>
                                             
                                             <div class="col-md-3">
-                                                <button ng-disabled="frmCambiar.$invalid"  class="btn btn-block btn-primary btn-addon"   type="button" title="Guardar" ng-click="cambiarImei()">
+                                                <button ng-disabled="frmCambiar.$invalid"  class="btn btn-block btn-primary btn-addon"   type="button" title="Guardar" ng-click="GuardarImei()">
                                                     <i class="fa fa-check"></i>Guardar
                                                 </button>
                                             </div>
                                         </div>
 
                                     </form>
+                                    
+                                    <div class="col-md-6">
+                                         <br/> <br/>
+                                        <label style="padding-left: 20px;">PASOS:</label>
+                                            <ol class="nota" style="padding-left: 40px;">
+                                               <li>Ingrese la Placa  y presione ENTER o click en el boton (buscar) para verificar si existe</li>
+                                               <li>Ingrese el Nuevo IMEI</li>
+                                            </ol>
+                                          <label style="padding-left: 20px;">CONSIDERACIONES:</label>
+                                            <ol class="nota" style="padding-left: 40px;">
+                                               <li>El IMEI Actual Sera Desactivado, Solo debe existir un IMEI activo por cada placa</li>
+                                               <li>Si el IMEI nuevo Existe solo se cambiara la placa</li>
+                                               <li>Si el IMEI nuevo NO existe se creará un nuevo registro</li>
+                                            </ol>
+                                    </div>
                                 </div>
                             </div>
 

@@ -16,6 +16,7 @@ app.controller("vehiculoController", ["$scope", "vehiculoService", "marcaService
    $scope.Novedades = [];
    $scope.Novedad = {};
    $scope.TablaNovedad = {};
+   $scope.Gps ={}; 
    $scope.PlacaGlobal = "";
    $scope.IdVehiculoGlobal = "";
    // Para Select
@@ -46,7 +47,7 @@ app.controller("vehiculoController", ["$scope", "vehiculoService", "marcaService
             Linea: "",
             TipoContrato : "",
             Empresa: ""            
-        };        
+        };               
     } 
     
     $scope.InitNovedad = function  (){
@@ -328,7 +329,77 @@ app.controller("vehiculoController", ["$scope", "vehiculoService", "marcaService
             });
     };
     
+    //FUNCIONES PARA CAMBIAR IMEI 
+    
+    
+    $scope.BuscarPlacaImei = function () {
+        $scope.valPlaca = false;
+        if (!$scope.Gps.Placa) {
+            toaster.pop("info", "¡Validación!", "Por favor ingrese la placa");
+            return;
+        }
+        toaster.pop("wait", "Espere... consultando información..");
+        var promiseGet = vehiculoService.getGps($scope.Gps.Placa);
+        promiseGet.then(function (d) {
+            toaster.clear();
+            if (!d.data) {                
+                toaster.pop('info', '¡Alerta!', 'Placa No se encuentra registrada.');
+            }else{
+                $scope.valPlaca = true;
+                $scope.Gps.Movil = d.data.Movil;
+                $scope.Gps.IdVehiculo = d.data.IdVehiculo;
+                if(d.data.Gps){
+                    $scope.Gps.ImeiActual = d.data.Gps.gpImei;
+                }
+            }
+        }, function (err) {
+            toaster.pop('error', '¡Error validar placa!', err.data, 0);
+            console.log("Some Error Occured " + JSON.stringify(err));
+        });
+    };
+    
+    $scope.buscar = function (event){
+        if (event.keyCode === 13){
+            $scope.BuscarPlacaImei();          
+        };
+    };
+    
+    
+    $scope.GuardarImei =  function (){
         
+        if(!$scope.Gps.IdVehiculo){
+            toaster.pop("info", "¡Validación!", "Estimado Usuario(a), la placa no se encuentra registrada " +
+                         " en el sistema. Por favor verifique.");
+            return;
+        }
+        
+        if(!$scope.Gps.ImeiNuevo){
+            toaster.pop("info", "¡Validación!", "Estimado Usuario(a), por favor ingrese el nuevo número IMEI.");                         
+            return;
+        }
+        toaster.pop("wait", "Espere... procesando información.");
+        var promise =vehiculoService.postGps($scope.Gps);
+        promise.then(function(d) {
+            toaster.pop('success', '¡Control de Información!', "Datos guardados correctamente.");
+            $scope.NuevoImei();
+        }, function(err) {
+            toaster.pop('error', '¡Error guardar imei!', err.data, 0);
+            console.log("Some Error Occured " + JSON.stringify(err));
+        });
+    
+    };
+    
+    $scope.NuevoImei=  function (){
+        $scope.Gps={};
+        $scope.Gps = {
+            ImeiActual : "",
+            Movil : ""            
+        };
+    };
+    
+    $scope.NuevoImei();
+    
+    
    
 }]);
 

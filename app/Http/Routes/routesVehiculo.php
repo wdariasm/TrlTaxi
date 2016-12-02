@@ -5,6 +5,8 @@
     
     Route::get('api/vehiculo/{id}/documentos','DocumentoController@getDocumento');
     
+    Route::get('api/vehiculo/{placa}/gps','VehiculoController@getGpsVehiculo');
+    
     Route::put('api/vehiculo/updateEstado/{placa}','VehiculoController@UpdateEstado');
     Route::resource("api/vehiculo","VehiculoController");
     

@@ -14,23 +14,23 @@ class GpsController extends Controller
     {
         try{              
             $data = $request->all();             
-            $placa = $data["placa"];
-            $IdVehiculo = $data["placa"];
-            $ImeiActual = $data["imeiActual"];
-            $ImeiNuevo = $data["imeiNuevo"];            
+            $placa = $data["Placa"];
+            $IdVehiculo = $data["IdVehiculo"];
+            $ImeiActual = $data["ImeiActual"];
+            $ImeiNuevo = $data["ImeiNuevo"];            
             
             if ($ImeiActual !==""){
-                DB::update("UPDATE gps SET Estado = 'INACTIVO' WHERE gpVehiculo = $IdVehiculo ");
+                DB::update("UPDATE gps SET gpEstado = 'INACTIVO' WHERE gpVehiculoId = $IdVehiculo ");
             }
             
-            $smartphone = Gps::find($ImeiNuevo);            
+            $smartphone = Gps::where("gpImei", $ImeiNuevo)->first();            
             if (empty($smartphone)){                
                 $smart = new Gps();                
                 $smart->gpImei = $ImeiNuevo;                
                 $smart->gpLatitud = '0';
                 $smart->gpLongitud = '0';
                 $smart->gpEstado = 'ACTIVO';
-                $smart->gpVehiculoId = $placa;
+                $smart->gpVehiculoId = $IdVehiculo;
                 $smart->gpKey = '0';                
                 $smart->gpFecha = '0000-00-00';
                 $smart->gpPlaca = $placa;
@@ -39,7 +39,7 @@ class GpsController extends Controller
             } else {
                 $smartphone->gpPlaca = $placa;
                 $smartphone->gpVehiculoId = $IdVehiculo;                
-                $smartphone->Estado = 'ACTIVO';
+                $smartphone->gpEstado = 'ACTIVO';
                 $smartphone->save();
                 return JsonResponse::create(array('message' => "Correcto", "request" =>"Imei Actualizado Correctamente"), 200);
             }            

@@ -3,6 +3,11 @@ app.service("vehiculoService",[ '$http', function ($http) {
         var req = $http.get(uri+'/api/vehiculo/' + id);
         return req;
     };
+    
+    this.getGps = function (placa) {
+        var req = $http.get(uri+'/api/vehiculo/' + placa + "/gps");
+        return req;
+    };
        
     this.getAll = function () {
         var req = $http.get(uri+'/api/vehiculo');
@@ -16,6 +21,11 @@ app.service("vehiculoService",[ '$http', function ($http) {
         
     this.post = function (vehiculo) { 
         var req = $http.post(uri+'/api/vehiculo',vehiculo); 
+        return req; 
+    };
+    
+    this.postGps = function (gps) { 
+        var req = $http.post(uri+'/api/gps',gps); 
         return req; 
     };
           

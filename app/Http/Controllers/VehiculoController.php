@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Vehiculo;
+use App\Gps;
 use Illuminate\Http\JsonResponse;
 
 
@@ -24,7 +25,16 @@ class VehiculoController extends Controller
 
     public function ValidarPlaca($placa){
         return Vehiculo::where("Placa",$placa)->select("Placa","IdVehiculo")->first();
-    }         
+    }  
+    
+    public function getGpsVehiculo($placa){
+        $vehiculo =  Vehiculo::where("Placa",$placa)->select("Placa","IdVehiculo", "Movil")->first();
+        if(!empty($vehiculo)){
+            $vehiculo->Gps = Gps::where("gpVehiculoId", $vehiculo->IdVehiculo)
+                    ->where("gpEstado", "ACTIVO")->first();
+        }
+        return $vehiculo;
+    }  
 
     /**
      * Store a newly created resource in storage.
