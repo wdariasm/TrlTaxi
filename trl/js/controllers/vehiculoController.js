@@ -233,8 +233,8 @@ app.controller("vehiculoController", ["$scope", "vehiculoService", "marcaService
         promise.then(function(d) {                                                                  
             $scope.Documentos = d.data;            
         }, function(err) {           
-                toaster.pop('error','Error','Cargar documentos vehiculo');
-                console.log("Some Error Occured " + JSON.stringify(err));
+            toaster.pop('error','Error','Cargar documentos vehiculo');
+            console.log("Some Error Occured " + JSON.stringify(err));
         }); 
     }
     

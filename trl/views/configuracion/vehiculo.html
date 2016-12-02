@@ -6,7 +6,7 @@
                     <ul class="nav nav-tabs nav-justified" id="tabPanels">
                         <li class="active"> <a href="#tabListado" data-toggle="tab">Listado de Vehículos </a></li>
                         <li><a href="#tabRegistro" data-toggle="tab">{{Titulo}} Vehículo </a></li>
-                        <li><a href="#tabNovedad" data-toggle="tab">Novedades</a></li>
+                        <li><a href="#tabImei" data-toggle="tab">Asignacion de IMEI</a></li>
                     </ul>
                     <div class="tab-content">
                         <br/>
@@ -422,25 +422,91 @@
                                         <h3 class="panel-title">Galería de Imagenes</h3>
                                     </div>
                                     <div class="panel-body">
-                                        <div class="row">
-                                            <div ng-repeat="item in Documentos">                                                
-                                                <ul class="first col-md-3">
-                                                    <li>
-                                                        <img  src="{{item.dvRuta}}" alt="Documentos vehículo"   style="max-height: 220px; max-width:  220px;" title="Click, para ampliar imagen">
-                                                        <div class="text" style="font-size: 5px;">{{item.dvNombre}}</div>
-                                                    </li>
-                                                </ul>                                                 
+
+                                        <ul class="row first">                         
+                                            <div ng-repeat="item in Documentos">
+                                                <li>
+                                                    <img  src="{{item.dvRuta}}" alt="{{item.dvNombre}}" class="img-responsive img-thumbnail"  style="max-height: 220px; max-width:  220px;" title="Click, para ampliar imagen">
+                                                    <div class="text" style="font-size: 5px;">{{item.dvNombre}}</div>
+                                                </li>                                                                                            
                                             </div>
-                                        </div>
-                                            
+                                        </ul>                                        
+
                                     </div>
                                 </div>
                             </form>
                         </div>
 
-                        <div class="tab-pane" id="tabNovedad">
-                            <div class="">
-                                
+                        <div class="tab-pane" id="tabImei">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">Cambiar IMEI</h3>
+                                </div>
+
+                                <div class="panel-body">
+
+                                    <form name="frmCambiar" novalidate class="col-sm-6">
+                                        <div class="row">
+                                        <div class="col-md-7">                                                                                    
+                                        <div class="form-group">
+                                            <label  for="txtPlacaC">Placa *</label>
+                                            <div class="input-group">
+                                                <div class="input-group-addon"><i class="fa fa-car text-success"></i></div>                                                
+                                                <input type="text" class="form-control" ng-model="Imei.Placa"  solo-numeros id="txtPlacaC" name="txtPlacaC"  ng-keyup="buscar($event)" required  maxlength="6" />
+                                            </div>
+                                        </div>
+                                        </div>
+
+                                        <div class="col-md-5">
+                                            <div class="form-group">
+                                                <label for="" class="active">Movil *</label>
+                                                <div class="input-group ">
+                                                    <div class="input-group-addon"><i class="fa fa-sort-numeric-desc text-success"></i></div>
+                                                    <input id="txtMovilC" type="text" class="form-control"  ng-model="Imei.movil" name="txtMovilC" required  readonly>                                                
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-7">
+                                            
+                                            <div class="form-group">
+                                                <label for="" >IMEI Actual *</label>
+                                                <div class="input-group ">
+                                                    <div class="input-group-addon"><i class="fa fa-sort-numeric-desc text-success"></i></div>
+                                                    <input id="txtImeiCC" type="text" class="form-control"  ng-model="Imei.imei" name="txtImeiCC"   readonly maxlength="25">
+                                                </div>
+                                            </div>
+                                                                                        
+                                        </div>
+
+                                        <div class="col-md-7">
+                                            
+                                            <div class="form-group">
+                                                  <label for="" >Nuevo IMEI *</label>
+                                                <div class="input-group ">
+                                                    <div class="input-group-addon"><i class="fa fa-sort-numeric-desc text-success"></i></div>
+                                                    <input id="txtImeiC" type="text" class="form-control"  ng-model="Imei.nuevoI" name="txtImeiC" required  maxlength="25">
+                                                </div>
+                                            </div>                                                                                      
+                                        </div>
+                                        </div>
+                                        <div class="row">
+                                            
+                                             <div class="col-md-3">
+                                                <button  class="btn btn-success btn-block btn-addon"   type="button" title="Nuevo / Cancelar">
+                                                    <i class="fa fa-edit"></i>Nuevo
+                                                </button>
+                                            </div>
+                                            
+                                            <div class="col-md-3">
+                                                <button ng-disabled="frmCambiar.$invalid"  class="btn btn-block btn-primary btn-addon"   type="button" title="Guardar" ng-click="cambiarImei()">
+                                                    <i class="fa fa-check"></i>Guardar
+                                                </button>
+                                            </div>
+                                        </div>
+
+                                    </form>
+                                </div>
                             </div>
 
                         </div>
@@ -597,33 +663,33 @@
     });
 
     //$('#tabPanels a[href="#tabRegistro"]').tab('show');
-    
-    $(function() {
+
+    $(function () {
         $('input[name="txtFechaMto"]').daterangepicker({
             singleDatePicker: true,
-            showDropdowns: true           
-        }, 
-        function(start, end, label) {
-            $('#txtFechaMto').val(end.format('DD/MM/YYYY'));         
+            showDropdowns: true
+        },
+        function (start, end, label) {
+            $('#txtFechaMto').val(end.format('DD/MM/YYYY'));
         });
-        
+
         $('input[name="txtFechaArriendo"]').daterangepicker({
             singleDatePicker: true,
             showDropdowns: true
-        }, 
-        function(start, end, label) {
+        },
+        function (start, end, label) {
             $('#txtFechaArriendo').val(end.format('DD/MM/YYYY'));
         });
-        
-        $('.dateNovedad').each(function(){
+
+        $('.dateNovedad').each(function () {
             $(this).daterangepicker({
                 singleDatePicker: true,
                 showDropdowns: true
-            });               
-        });        
-        
+            });
+        });
+
     });
-    
+
     $(function () {
         var $win = $(window);
         // definir mediente $pos la altura en píxeles desde el borde superior de la ventana del navegador y el elemento
@@ -635,6 +701,15 @@
                 $('.paneldebotones').addClass('fijar');
             }
         });
-    });        
-    
+
+    });
+
+    $(document).ready(function () {
+        $('ul.first').bsPhotoGallery({
+            "classes": "col-lg-3 col-md-4 col-sm-3 col-xs-4 col-xxs-12",
+            "hasModal": true,
+            "fullHeight": false
+        });
+    });
+
 </script>
