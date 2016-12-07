@@ -182,10 +182,11 @@ app.controller("conductorController", ["$scope", "conductorService", "tipoDocume
         initialize();
         initNovedad();
         initLicencia();
-        getConductor(item.IdConductor);                
+        getConductor(item.IdConductor);               
         $scope.editMode = true;
         $scope.title = "Editar Conductor";        
         loadNovedad(item.IdConductor);
+        loadLicenciaConduccion(item.IdConductor);
         $('#tabPanels a[href="#tabRegistro"]').tab('show');
     };
     $scope.Nuevo = function (){
@@ -434,7 +435,7 @@ app.controller("conductorController", ["$scope", "conductorService", "tipoDocume
      $scope.AgregarLicencia = function (item){
         $scope.Conductor = item;
         
-        loadLicenciaConduccion(item.IdConductor);
+        
         initLicencia();
         $scope.LicenciaConduccion.lcConductor = item.IdConductor;
         $scope.LicenciaConduccion.Identificacion = item.Cedula;
@@ -475,7 +476,7 @@ app.controller("conductorController", ["$scope", "conductorService", "tipoDocume
             var promisePut  = conductorService.updateEstadoLicencia($scope.IdLicenciaG, objetc);        
                 promisePut.then(function (d) {                
                  toaster.pop('success', "Control de Información", d.data.message);                 
-                loadLicenciaConduccion(); 
+                
             }, function (err) {                              
                      toaster.pop('error', "Error", "Error al procesar Solicitud"); ;
                     console.log("Some Error Occured "+ JSON.stringify(err));
