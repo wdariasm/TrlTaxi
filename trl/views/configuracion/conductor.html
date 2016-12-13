@@ -385,71 +385,53 @@
     </div>
 
     <div class="modal fade bs-example-modal-lg" id="mdNovedades" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" style="margin-top: 5%;">
-        <div class="modal-dialog modal-lg" >                                   
+        <div class="modal-dialog modal-m" style="width: 60%">                                   
             <div class="modal-content">
+		<form name="frmNovedad" id="frmNovedad" novalidate>     
+		    <div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			<div class="modal-title">{{TituloNov}}  Conductor : <strong> {{Conductor.Nombre}}</strong></div>                         
+		    </div>
 
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <div class="modal-title">{{TituloNov}}  Placa : <strong> {{Conductor.Nombre}}</strong></div>                         
-                </div>
+		    <div class="modal-body">
+			<div class="row">
+			    <div class="col-xs-4">
+				<div class="form-group">
+				    <label for="txtEstado">Tipo *</label>
+				    <div class="input-group">    
+					<div class="input-group-addon"><i class="fa fa-list-ul text-success"></i></div>
+					<select type="text" class="form-control" ng-model="Novedad.nvTipo" id="txtEstado" placeholder="Tipo">
+					    <option value="CONTRALORIA">CONTRALORIA</option>
+					    <option value="PROCURADURIA">PROCURADURIA</option>
+					    <option value="POLICIA NACIONAL">POLICIA NACIONAL</option>
+					    <option value="SIMIT">SIMIT</option>
+					    <option value="EPS">EPS</option>
+					    <option value="ARL">ARL</option>
+					    <option value="FONDO PENSIONES">FONDO PENSIONES</option>
+					</select>
+				    </div>
+				</div>
+			    </div>
 
-                <div class="modal-body">
-                    <div class="row">
-                        <form name="frmNovedad" id="frmNovedad" novalidate>
-                            <div class=" panel panel-default">
-                                <div class=" panel-heading">Agregar Novedad </div>
-                                <div class="panel-body">
-                                    <div class="row">
-                                        <div class="col-xs-3">
-                                            <div class="form-group">
-                                                <label for="txtEstado">Tipo *</label>
-                                                <div class="input-group">    
-                                                    <div class="input-group-addon"><i class="fa fa-list-ul text-success"></i></div>
-                                                    <select type="text" class="form-control" ng-model="Novedad.nvTipo" id="txtEstado" placeholder="Tipo">
-                                                        <option value="CONTRALORIA">CONTRALORIA</option>
-                                                        <option value="PROCURADURIA">PROCURADURIA</option>
-                                                        <option value="POLICIA NACIONAL">POLICIA NACIONAL</option>
-                                                        <option value="SIMIT">SIMIT</option>
-                                                        <option value="EPS">EPS</option>
-                                                        <option value="ARL">ARL</option>
-                                                        <option value="FONDO PENSIONES">FONDO PENSIONES</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                        </div>
+			    <div class="col-xs-8">
+				<div class="form-group">
+				    <label for="txtNovedad">Descripción *</label>
+				    <textarea class="form-control"  required="" ng-model="Novedad.nvDescripcion" id="txtNovedad" placeholder="Descripción" style="max-height: 90px; width: 100%; max-width: 500px;"></textarea>
+				</div>
+			    </div>
 
-                                        <div class="col-xs-6">
-                                            <div class="form-group">
-                                                <label for="txtNovedad">Descripción *</label>
-                                                <textarea class="form-control"  required="" ng-model="Novedad.nvDescripcion" id="txtNovedad" placeholder="Descripción"></textarea>
-                                            </div>
-                                        </div>
+			</div>
+		    </div>
 
+		    <div class="modal-footer">
 
-
-                                        <div class="col-xs-3">
-                                            <div class="form-group">
-                                                <button type="button" ng-hide="editMode" class="btn btn-primary btn-addon" ng-click="AgregarNovedad()" style="margin-top:10%" ><i class="fa fa-book"></i> Agregar</button>
-                                                <button ng-disabled="frmNovedad.$invalid" type="button" ng-show="editMode" class="btn btn-primary btn-addon" ng-click="GuardarNovedad()" style="margin-top:10%" ><i class="fa fa-check"></i> Guardar</button>
-                                            </div>
-                                        </div>
-                                    </div>        
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-
-                <div class="modal-footer">
-
-                    <button class="btn btn-success btn-addon" type="button"  title="Nuevo" ng-click="InitNovedad()"><i class="fa fa-pencil"></i> Nuevo &nbsp; </button>
-                    <!-- ng-disabled="frmVehiculo.$invalid" -->                                
-                    <button class="btn btn-primary  btn-addon" type="button"  title="Registrar Novedad" ng-click="AgregarNovedad()"><i class="fa fa-check"></i>Guardar</button>
-
-                    <button class="btn btn-danger  btn-addon" type="button" data-dismiss="modal"  title="Cerrar"><i class="fa fa-times"></i> Cerrar &nbsp;</button>                          
-
-                </div>  
-
+			<button class="btn btn-success btn-addon" type="button"  title="Nuevo" ng-click="InitNovedad()"><i class="fa fa-pencil"></i> Nuevo &nbsp; </button>
+			<!-- ng-disabled="frmVehiculo.$invalid" -->     		    
+			<button type="button" ng-hide="editMode" class="btn btn-primary btn-addon" ng-click="AgregarNovedad()" ><i class="fa fa-book"></i> Agregar</button>
+			<button ng-disabled="frmNovedad.$invalid" type="button" ng-show="editMode" class="btn btn-primary btn-addon" ng-click="GuardarNovedad()" ><i class="fa fa-check"></i> Guardar</button>
+			<button class="btn btn-danger  btn-addon" type="button" data-dismiss="modal"  title="Cerrar"><i class="fa fa-times"></i> Cerrar &nbsp;</button>
+		    </div>  
+		</form>
             </div>
         </div>
     </div>
@@ -457,123 +439,108 @@
     <div class="modal fade bs-example-modal-lg" id="mdLicencia" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel2" style="margin-top: 5%;">
         <div class="modal-dialog modal-lg" >                                   
             <div class="modal-content">
+		<form name="frmLicencia" id="frmLicencia" novalidate>
+		    <div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			<div class="modal-title">{{TituloNov}}  Placa : <strong> {{Conductor.Nombre}}</strong></div>                         
+		    </div>
 
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <div class="modal-title">{{TituloNov}}  Placa : <strong> {{Conductor.Nombre}}</strong></div>                         
-                </div>
+		    <div class="modal-body">
+			<div class="row">
+			    
+			    <div class="col-xs-3">
+				<div class="form-group">
+				    <label for="txtNumero">Numero *</label>
+				    <div class="input-group">    
+					<div class="input-group-addon"><i class="fa fa-hashtag text-success"></i></div>
+					<input type="text" class="form-control" ng-model="LicenciaConduccion.Numero" id="txtNumero" placeholder="Numero Licencia" requred maxlength="12" solo-numeros ng-blur="validarNumero()">
+				    </div> 
+				</div>
+			    </div>
 
-                <div class="modal-body">
-                    <div class="row">
-                        <form name="frmLicencia" id="frmLicencia" novalidate>
-                            <div class=" panel panel-default">
-                                <div class=" panel-heading">Datos Licencia Conducción </div>
-                                <div class="panel-body">
-                                    <div class="row">
+			    <div class="col-xs-6">
+				<div class="form-group">
+				    <label for="OTLicencia">Transito *</label>
+				    <div class="input-group">    
+					<div class="input-group-addon"><i class="fa fa-book text-success"></i></div>
+					<input type="text" class="form-control" ng-model="LicenciaConduccion.OTLicencia" maxlength="80" id="txtOTLicencia" required="" placeholder="Organismo de transito">
+				    </div>
+				</div>
+			    </div>
 
-                                        <div class="col-xs-3">
-                                            <div class="form-group">
-                                                <label for="txtNumero">Numero *</label>
-                                                <div class="input-group">    
-                                                    <div class="input-group-addon"><i class="fa fa-hashtag text-success"></i></div>
-                                                    <input type="text" class="form-control" ng-model="LicenciaConduccion.Numero" id="txtNumero" placeholder="Numero Licencia" requred maxlength="12" solo-numeros ng-blur="validarNumero()">
-                                                </div> 
-                                            </div>
-                                        </div>
+			    <div class="col-xs-3">
+				<div class="form-group">
+				    <label for="txtFechaExpedicion">Fecha Expedición *</label>
+				    <div class="input-group">    
+					<div class="input-group-addon"><i class="fa fa-calendar-check-o text-success"></i></div>
+					<input type="text" class="form-control" ng-model="LicenciaConduccion.FechaExpedicion" id="txtFechaExpedicion" name="txtFechaExpedicion" placeholder="Fecha Expedicion" ng-change="formatoLicencia('FechaExpedicion')">
 
-                                        <div class="col-xs-6">
-                                            <div class="form-group">
-                                                <label for="OTLicencia">Transito *</label>
-                                                <div class="input-group">    
-                                                    <div class="input-group-addon"><i class="fa fa-book text-success"></i></div>
-                                                    <input type="text" class="form-control" ng-model="LicenciaConduccion.OTLicencia" maxlength="80" id="txtOTLicencia" required="" placeholder="Organismo de transito">
-                                                </div>
-                                            </div>
-                                        </div>
+				    </div>
+				</div>
+			    </div> 
+			    <div class="col-xs-3">
+				<div class="form-group">
+				    <label for="txtFechaVencimiento">Fecha Vencimiento *</label>
+				    <div class="input-group">    
+					<div class="input-group-addon"><i class="fa fa-calendar-check-o text-success"></i></div>
+					<input type="text" class="form-control" ng-model="LicenciaConduccion.FechaVencimiento" id="txtFechaVencimiento" name="txtFechaVencimiento" placeholder="Fecha Vencimiento" ng-change="formatoLicencia('FechaVencimiento')">
 
-                                        <div class="col-xs-3">
-                                            <div class="form-group">
-                                                <label for="txtFechaExpedicion">Fecha Expedición *</label>
-                                                <div class="input-group">    
-                                                    <div class="input-group-addon"><i class="fa fa-calendar-check-o text-success"></i></div>
-                                                    <input type="text" class="form-control" ng-model="LicenciaConduccion.FechaExpedicion" id="txtFechaExpedicion" name="txtFechaExpedicion" placeholder="Fecha Expedicion" ng-change="formatoLicencia('FechaExpedicion')">
+				    </div>
+				</div>
+			    </div>
 
-                                                </div>
-                                            </div>
-                                        </div> 
-                                        <div class="col-xs-3">
-                                            <div class="form-group">
-                                                <label for="txtFechaVencimiento">Fecha Vencimiento *</label>
-                                                <div class="input-group">    
-                                                    <div class="input-group-addon"><i class="fa fa-calendar-check-o text-success"></i></div>
-                                                    <input type="text" class="form-control" ng-model="LicenciaConduccion.FechaVencimiento" id="txtFechaVencimiento" name="txtFechaVencimiento" placeholder="Fecha Vencimiento" ng-change="formatoLicencia('FechaVencimiento')">
+			    <div class="col-xs-3">
+				<div class="form-group">
+				    <label for="txtEstado">Estado *</label>
+				    <div class="input-group">    
+					<div class="input-group-addon"><i class="fa fa-list-ul text-success"></i></div>
+					<select type="text" class="form-control" ng-model="LicenciaConduccion.Estado" id="txtEstado" placeholder="Estado">
+					    <option value="ACTIVA">ACTIVA</option>
+					    <option value="INACTIVA">INACTIVA</option>
+					</select>
 
-                                                </div>
-                                            </div>
-                                        </div>
+				    </div>
+				</div>
+			    </div>
 
-                                        <div class="col-xs-3">
-                                            <div class="form-group">
-                                                <label for="txtEstado">Estado *</label>
-                                                <div class="input-group">    
-                                                    <div class="input-group-addon"><i class="fa fa-list-ul text-success"></i></div>
-                                                    <select type="text" class="form-control" ng-model="LicenciaConduccion.Estado" id="txtEstado" placeholder="Estado">
-                                                        <option value="ACTIVA">ACTIVA</option>
-                                                        <option value="INACTIVA">INACTIVA</option>
-                                                    </select>
+			    <div class="col-xs-3">
+				<div class="form-group">
+				    <label for="txtCategoria">Categoria *</label>
+				    <div class="input-group">    
+					<div class="input-group-addon"><i class="fa fa-book text-success"></i></div>
+					<select required type="text" class="form-control" ng-model="LicenciaConduccion.Categoria" id="txtCategoria" placeholder="Categoria">
+					    <option value="C1">C1</option>
+					    <option value="C2">C2</option>
+					    <option value="C3">C3</option>
+					</select>
 
-                                                </div>
-                                            </div>
-                                        </div>
+				    </div>
+				</div>
+			    </div>
 
-                                        <div class="col-xs-3">
-                                            <div class="form-group">
-                                                <label for="txtCategoria">Categoria *</label>
-                                                <div class="input-group">    
-                                                    <div class="input-group-addon"><i class="fa fa-book text-success"></i></div>
-                                                    <select required type="text" class="form-control" ng-model="LicenciaConduccion.Categoria" id="txtCategoria" placeholder="Categoria">
-                                                        <option value="C1">C1</option>
-                                                        <option value="C2">C2</option>
-                                                        <option value="C3">C3</option>
-                                                    </select>
+			    <div class="col-xs-3">
+				<div class="form-group">
+				    <label for="txtlcConductor"> Cedula Conductor *</label>
+				    <div class="input-group">    
+					<div class="input-group-addon"><i class="fa fa-hashtag text-success"></i></div>
+					<input type="text" class="form-control" ng-model="LicenciaConduccion.Identificacion" id="txtlcConductor" placeholder="Id Conductor" disabled="" maxlength="10" solo-numeros >
+				    </div> 
+				</div>
+			    </div>			   
 
-                                                </div>
-                                            </div>
-                                        </div>
+			</div>
+		    </div>
 
-                                        <div class="col-xs-3">
-                                            <div class="form-group">
-                                                <label for="txtlcConductor"> Cedula Conductor *</label>
-                                                <div class="input-group">    
-                                                    <div class="input-group-addon"><i class="fa fa-hashtag text-success"></i></div>
-                                                    <input type="text" class="form-control" ng-model="LicenciaConduccion.Identificacion" id="txtlcConductor" placeholder="Id Conductor" disabled="" maxlength="10" solo-numeros >
-                                                </div> 
-                                            </div>
-                                        </div>
+		    <div class="modal-footer">
 
-                                        <div class="row">
-                                            <div class="col-xs-2 col-xs-offset-9">          
-                                                <br/>
-                                                <button  ng-disabled="frmLicencia.$invalid" class="btn btn-primary btn-block btn-addon"   type="button"  title="Guardar Licencia" ng-click="GuardarLicencia()"><i class="fa fa-check"></i> Guardar</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </form> 
-                    </div>
-                </div>
+			<button class="btn btn-success btn-addon" type="button"  title="Nuevo" ng-click="InitNovedad()"><i class="fa fa-pencil"></i> Nuevo &nbsp; </button>
+			<!-- ng-disabled="frmVehiculo.$invalid" -->                                
+			<button  ng-disabled="frmLicencia.$invalid" class="btn btn-primary  btn-addon"   type="button"  title="Guardar Licencia" ng-click="GuardarLicencia()"><i class="fa fa-check"></i> Guardar</button>
 
-                <div class="modal-footer">
+			<button class="btn btn-danger  btn-addon" type="button" data-dismiss="modal"  title="Cerrar"><i class="fa fa-times"></i> Cerrar &nbsp;</button>                          
 
-                    <button class="btn btn-success btn-addon" type="button"  title="Nuevo" ng-click="InitNovedad()"><i class="fa fa-pencil"></i> Nuevo &nbsp; </button>
-                    <!-- ng-disabled="frmVehiculo.$invalid" -->                                
-                    <button class="btn btn-primary  btn-addon" type="button"  title="Registrar Novedad" ng-click="AgregarNovedad()"><i class="fa fa-check"></i>Guardar</button>
-
-                    <button class="btn btn-danger  btn-addon" type="button" data-dismiss="modal"  title="Cerrar"><i class="fa fa-times"></i> Cerrar &nbsp;</button>                          
-
-                </div>  
-
+		    </div>  
+		</form>
             </div>
         </div>
     </div>

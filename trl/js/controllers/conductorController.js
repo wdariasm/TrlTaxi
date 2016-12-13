@@ -23,8 +23,7 @@ app.controller("conductorController", ["$scope", "conductorService", "tipoDocume
    $scope.SelEscolaridad = {};      
    $scope.$parent.SetTitulo("GESTION DE CONDUCTOR");
   
-    initialize();
-    initNovedad();
+    initialize();    
     initLicencia();
     loadEscolaridades();
     
@@ -180,7 +179,7 @@ app.controller("conductorController", ["$scope", "conductorService", "tipoDocume
     //Editar Conductor
     $scope.get = function(item) {
         initialize();
-        initNovedad();
+        $scope.InitNovedad();
         initLicencia();
         getConductor(item.IdConductor);               
         $scope.editMode = true;
@@ -191,7 +190,7 @@ app.controller("conductorController", ["$scope", "conductorService", "tipoDocume
     };
     $scope.Nuevo = function (){
         initialize();
-        initNovedad();
+        $scope.InitNovedad();
         initLicencia();
         $scope.Novedades=[];
         $scope.editMode = false;
@@ -202,13 +201,15 @@ app.controller("conductorController", ["$scope", "conductorService", "tipoDocume
    
    // NOVEDADES
    
-    function initNovedad() {
+    $scope.InitNovedad = function() {
         $scope.Novedad = {
             nvDescripcion:"",
             nvTipo:"CONTRALORIA"  
-        };        
-        
-    }
+        };               
+        $scope.editNovedad = false;
+    };
+    
+    $scope.InitNovedad();
    
     function loadNovedad (id){   
         $scope.Novedades=[];
@@ -241,7 +242,8 @@ app.controller("conductorController", ["$scope", "conductorService", "tipoDocume
     $scope.getNovedad = function(item) {
         $scope.Novedad=item;
         $scope.editNovedad = true;
-        $scope.active = "active";
+        $scope.TituloNov = "Editando novedad -> ";        
+        $("#mdNovedades").modal("show");
     };
     
     
@@ -361,6 +363,7 @@ app.controller("conductorController", ["$scope", "conductorService", "tipoDocume
      $scope.getLicencia = function(item) {
         $scope.LicenciaConduccion=item;
         $scope.editModeLic = true;        
+        $("#mdLicencia").modal("show");
     };
     
     function loadLicenciaConduccion (Id){

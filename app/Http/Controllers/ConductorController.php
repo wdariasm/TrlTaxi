@@ -156,7 +156,7 @@ class ConductorController extends Controller
             $novedad = Novedad::find($nvCodigo);
             $novedad->nvDescripcion = $data["nvDescripcion"]; 
             $novedad->nvTipo = $data["nvTipo"]; 
-            $novedad->nvEstado="ACTIVO"; 
+            $novedad->nvEstado= $data["nvEstado"]; 
             $novedad->save();
             
             return JsonResponse::create(array('message' => " Novedad Actualizada Correctamente", "request" =>json_encode($novedad->nvCodigo)), 200);
