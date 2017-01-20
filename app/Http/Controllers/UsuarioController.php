@@ -22,7 +22,8 @@ class UsuarioController extends Controller
     {
         return Usuario::join('rol', 'usuario.TipoAcceso', '=', 'rol.IdRol')
                 ->select('IdUsuario', 'Login', 'Nombre', 'Estado', 'Modulo', 'Sesion', 'FechaCnx','ValidarClave',
-                'ClienteId', 'PersonaId', 'ConductorId', 'TipoAcceso', 'Contrato', 'Email', 'rol.Descripcion' )->get();
+                'ClienteId', 'PersonaId', 'ConductorId', 'TipoAcceso', 'Contrato', 'Email', 'rol.Descripcion' )
+                ->where("Estado", "<>" , "BORRADO")->get();
     }
     
     public  function GetPermisos ($user){
@@ -124,7 +125,7 @@ class UsuarioController extends Controller
         $cabeceras .= 'To: '.$nombre.' <'.$para.'>' . "\r\n";
         $cabeceras .= 'From: Transporte Ruta Libre <info@trl.co>' . "\r\n";        
                
-        mail($para, $título, $mensaje, $cabeceras);
+        mail($para, $título, $mensaje, $cabeceras);       
     }
 
     /**
@@ -182,7 +183,7 @@ class UsuarioController extends Controller
                 $insert->save();
             }
 
-            return JsonResponse::create(array('message' => "Datos Actualizados Correctamente", "request" =>json_encode($usuario->IdUsuario)), 200);
+            return JsonResponse::create(array('message' => "Datos actualizados correctamente", "request" =>json_encode($usuario->IdUsuario)), 200);
         }catch (\Exception $exc) {
             return JsonResponse::create(array('file' => $exc->getFile(), "line"=> $exc->getLine(),  "message" =>json_encode($exc->getMessage())), 500);
         } 
@@ -456,6 +457,34 @@ class UsuarioController extends Controller
             return response()->json(['error' => $e->getMessage()], 403);
         }         
         return response()->json(['token'=>$newToken]);
+    }
+    
+    public function ReenviarEmail(Request $request)
+    {        
+        try{                                                  
+            $data = $request->all();                                           
+            
+            $bytes = openssl_random_pseudo_bytes(3,$cstrong);
+            $clave = strtoupper(bin2hex($bytes));
+            
+            $id = $data["IdUsuario"];
+            $usuario = Usuario::find($id);
+            if(empty($usuario)){
+                return JsonResponse::create(array('message' => 'error', 'request' =>'Usuario no se encuentra registrado en el sistema.'));
+            }
+            $usuario->Clave = password_hash($clave, PASSWORD_DEFAULT);            
+            $usuario->Sesion = 'CERRADA';
+            $usuario->ValidarClave = 'SI'; 
+            $usuario->Estado = 'POR CONFIRMAR';
+            $usuario->KeyConf = uniqid('TrL',true);
+            $usuario->save();                        
+            
+            $this->EnviarEmail($data, $id, $clave, $usuario->KeyConf);
+            
+            return JsonResponse::create(array('message' => "Correcto", "request" =>'Email enviado correctamente'), 200);
+        }catch (\Exception $exc) {
+            return JsonResponse::create(array('file' => $exc->getFile(), "line"=> $exc->getLine(),  "message" =>json_encode($exc->getMessage())), 500);
+        } 
     }
 
 }

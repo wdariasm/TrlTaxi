@@ -13,3 +13,10 @@
     
     /*usuarios por cliente*/
     Route::get('api/cliente/{id}/usuarios','UsuarioController@getUserByCliente');
+    
+    /* actualizar estado del usuario */
+    Route::put('api/usuario/updateEstado/{idUsuario}','UsuarioController@updateEstado');
+        
+    /* Reenviar email */
+    Route::post('api/usuario/enviarEmail','UsuarioController@ReenviarEmail');
+    

@@ -404,7 +404,18 @@ clienteService, conductorService , contratoService) {
    
      };
      
-     function initTabla() {
+    $scope.ReenviarEmail = function (item){
+        toaster.pop("wait", "Reenviando Email", "Espere por favor .... ")
+         var promisePut  = usuarioService.enviarEmail(item);        
+            promisePut.then(function (d) {                
+             toaster.pop('success', "Control de Información", d.data.message);                            
+        }, function (err) {                              
+                toaster.pop('error', "Error", "ERROR AL REENVIAR EMAIL DE CONFIRMACIÓN"); ;
+                console.log("Some Error Occured "+ JSON.stringify(err));
+        }); 
+    } 
+     
+    function initTabla() {
         $scope.TablaUsuario = new ngTableParams({
             page: 1,
             count: 10,

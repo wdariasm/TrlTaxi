@@ -35,7 +35,7 @@
                                 <th>SESION</th> 
                                 <th>FECHA CONEXION</th>    
                                 <th>ESTADO</th> 
-                                <th width="12%">ACCIÓN</th>
+                                <th width="14%">ACCIÓN</th>
                             </tr>
                         </thead>
 
@@ -49,9 +49,10 @@
                                <td>{{ items.Estado}}</td> 
                                <td>
                                     <center>
-                                        <a ng-click="get(items)" style="float: left; margin-left: 15px;" href="javascript:;"  title="Editar"><i class="fa fa-lg fa-pencil"></i></a>                                           
+                                        <a ng-click="get(items)" style="float: left; margin-left: 15px;" href="javascript:;"  title="Editar"><i class="fa fa-lg fa-pencil"></i></a>
                                         <a ng-click="CambiarPass(items.IdUsuario,  items.Nombre, items.Login)" style="float: left; margin-left: 15px;" href="javascript:;"  title="Cambiar Contraseña"><i class="fa fa-lg fa-refresh text-warning"></i></a>
-                                        <a ng-click="VerDesactivar(items.IdUsuario, 'BORRADO')"  style="float: left; margin-left: 15px;" href="javascript:;"  title="Borrar"><i class="fa fa-lg fa-trash text-danger"></i></a>
+					<a ng-click="ReenviarEmail(items)" style="float: left; margin-left: 15px;" href="javascript:;"  title="Reenviar Email de confirmación"><i class="fa fa-lg fa-envelope text-success"></i></a>
+                                        <a ng-click="VerDesactivar(items.IdUsuario, 'BORRADO')"  style="float: left; margin-left: 15px;" href="javascript:;"  title="Borrar"><i class="fa fa-lg fa-trash text-danger"></i></a>					
                                     </center>
                                </td>
                             </tr>

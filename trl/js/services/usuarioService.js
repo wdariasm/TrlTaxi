@@ -15,6 +15,13 @@ app.service("usuarioService", ['$http', function ($http) {
         return req;       
     };
     
+    this.enviarEmail = function (usuario) {
+        var req = $http.post(uri+'/api/usuario/enviarEmail', usuario);
+        return req;       
+    };
+    
+    
+    
     this.put = function (id,usuario) {        
         var req = $http.put(uri+'/api/usuario/' + id, usuario);
         return req;        
