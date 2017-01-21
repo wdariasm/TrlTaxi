@@ -91,6 +91,24 @@ class ConductorController extends Controller
             return JsonResponse::create(array('file' => $exc->getFile(), "line"=> $exc->getLine(),  "message" =>json_encode($exc->getMessage())), 500);
         } 
     }
+    
+    public function guardarImagen(Request $request)
+    {
+        try{  
+            $data = $request->all();                         
+            $conductor = Conductor::find($data['IdConductor']);                        
+            $conductor->RutaImg = "http://".$_SERVER['HTTP_HOST'].'/img/conductor/'.$conductor->Cedula.".jpg";
+            $conductor->save();
+            
+            if ($request->hasFile('RutaImg')) {
+                $request->file('RutaImg')->move("../img/conductor", $conductor->Cedula.".jpg");
+            }
+                        
+            return JsonResponse::create(array('message' => "Imagen guardada correctamente", "request" =>json_encode($conductor->IdConductor)), 200);
+        }catch (\Exception $exc) {
+            return JsonResponse::create(array('file' => $exc->getFile(), "line"=> $exc->getLine(),  "message" =>json_encode($exc->getMessage())), 500);
+        } 
+    }
 
     /**
      * Display the specified resource.
@@ -164,6 +182,7 @@ class ConductorController extends Controller
             return JsonResponse::create(array('file' => $exc->getFile(), "line"=> $exc->getLine(),  "message" =>json_encode($exc->getMessage())), 500);
         } 
     }
+    
     /**
      * Remove the specified resource from storage.
      *
@@ -177,7 +196,7 @@ class ConductorController extends Controller
     
     
        //Actualiza el estado (Funcion eliminar)
-      public function updateEstado(Request $request, $IdConductor){
+    public function updateEstado(Request $request, $IdConductor){
         try {
             $data = $request->all();
             $conductor = Conductor::find($IdConductor);
@@ -187,10 +206,6 @@ class ConductorController extends Controller
         }catch (\Exception $exc) {
             return JsonResponse::create(array('file' => $exc->getFile(), "line"=> $exc->getLine(),  "message" =>json_encode($exc->getMessage())), 500);
         } 
-    }
-
-    
-   
-    
+    }         
     
 }

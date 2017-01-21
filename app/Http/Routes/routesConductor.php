@@ -15,3 +15,6 @@ Route::get('api/conductor/{IdConductor}/licencias','LicenciaConduccionController
 
 /*Ver conductor con vehiculo*/
 Route::get('api/conductor/{id}/vehiculo','ConductorController@getConVehiculo'); 
+
+/* Guardar imagen del conductor */
+Route::post('api/conductor/imagen','ConductorController@guardarImagen');

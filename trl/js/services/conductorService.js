@@ -13,6 +13,12 @@ app.service("conductorService",[ '$http', function ($http) {
         var req = $http.post(uri+'/api/conductor',conductor); 
         return req; 
     };
+    
+    this.postImagen = function (formData) {        
+        var req = $http.post(uri+'/api/conductor/imagen', formData,{transformRequest: angular.identity, 
+            headers: {'Content-Type': undefined}});
+        return req;        
+    };
           
     this.put = function (id,conductor) {        
         var req = $http.put(uri+'/api/conductor/' + id, conductor);

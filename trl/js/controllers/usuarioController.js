@@ -418,7 +418,7 @@ clienteService, conductorService , contratoService) {
     function initTabla() {
         $scope.TablaUsuario = new ngTableParams({
             page: 1,
-            count: 10,
+            count: 12,
             sorting: undefined
         }, {
             filterDelay: 50,
@@ -428,8 +428,9 @@ clienteService, conductorService , contratoService) {
                 var c = b.filter().busqueda;
                 f = [];
                 c ? (c = c.toLowerCase(), f = $scope.Usuarios.filter(function (a) {
-                    return a.IdUsuario.toLowerCase().indexOf(c) > -1 ||
-                           a.Nombre.toLowerCase().indexOf(c) > -1 || 
+                    return a.Login.toLowerCase().indexOf(c) > -1 ||
+                           a.Nombre.toLowerCase().indexOf(c) > -1 ||
+                           a.Descripcion.toLowerCase().indexOf(c) > -1 ||
                            a.Estado.toLowerCase().indexOf(c) > -1                                                       
                 })) : f = $scope.Usuarios, f = b.sorting() ? f : f, b.total(f.length), a.resolve(f.slice((b.page() - 1) * b.count(), b.page() * b.count()))
             }
@@ -437,6 +438,10 @@ clienteService, conductorService , contratoService) {
     };
     
     initTabla();
+    
+    $scope.GetUsuarios = function (){
+        loadUsuarios();
+    };
      
 }]);
 

@@ -47,13 +47,13 @@ app.controller("conductorController", ["$scope", "conductorService", "tipoDocume
             TipoDocumento:"",
             Escolaridad:"",
             VehiculoId : 0,
-            Novedades : []
+            Novedades : [],
+            RutaImg : ""
         };        
         
     }
     
-    $scope.Cambiarformato= function (variable){
-        console.log(variable);
+    $scope.Cambiarformato= function (variable){        
         $scope.Conductor[variable] = moment($scope.Conductor[variable]).format('L');
     };  
     
@@ -165,16 +165,39 @@ app.controller("conductorController", ["$scope", "conductorService", "tipoDocume
             promise = conductorService.post($scope.Conductor);            
         }
         
+        var formData=new FormData();        
+        formData.append('Cedula', $scope.Conductor.Cedula);
+        formData.append('RutaImg', $scope.Conductor.RutaImg);
+                                       
+        toaster.pop("wait", "Procesando información", "Por favor espere....");
+        
         promise.then(function(d) {                                    
+            
+            if($scope.editMode){
+                $scope.Nuevo();
+                toaster.pop('success', "Control de Información", d.data.message); 
+            }else {                
+                formData.append('IdConductor', d.data.request);
+                guardarImagen(formData);
+            }            
             $scope.loadConductor();
-            $scope.Nuevo();
-           toaster.pop('success', "Control de Información", d.data.message); 
-             
-        }, function(err) {           
+            
+        }, function(err) {
                 toaster.pop('error', "Error", "Error al guardar Conductor");         
                 console.log("Some Error Occured " + JSON.stringify(err));
         });       
-   };
+    };
+    
+    function guardarImagen (objetoForm){                
+        var promise = conductorService.postImagen(objetoForm);                            
+        promise.then(function(d) {                                    
+            toaster.pop('success', "Control de Información", d.data.message); 
+            $scope.Nuevo();
+        }, function(err) {           
+            toaster.pop('error', "¡Error!", "Error al guardar imagen del conductor");         
+            console.log("Some Error Occured " + JSON.stringify(err));
+        }); 
+    }
    
     //Editar Conductor
     $scope.get = function(item) {
@@ -206,7 +229,7 @@ app.controller("conductorController", ["$scope", "conductorService", "tipoDocume
             nvDescripcion:"",
             nvTipo:"CONTRALORIA"  
         };               
-        $scope.editNovedad = false;
+        $scope.editNovedad = false;        
     };
     
     $scope.InitNovedad();
@@ -245,10 +268,7 @@ app.controller("conductorController", ["$scope", "conductorService", "tipoDocume
         $scope.TituloNov = "Editando novedad -> ";        
         $("#mdNovedades").modal("show");
     };
-    
-    
-	
-    
+        	    
     //Funcion que elimina
      $scope.VerDesactivar = function(IdConductor,  Estado) {
         $scope.Estado =Estado;
@@ -269,11 +289,8 @@ app.controller("conductorController", ["$scope", "conductorService", "tipoDocume
             }, function (err) {                              
                      toaster.pop('error', "Error", "Error al descativar Conductor"); ;
                     console.log("Some Error Occured "+ JSON.stringify(err));
-            }); 
-   
-     };
-    
-    
+            });    
+     };        
 
    //Valida si  ya existe la Cedula en la base de datos 
   
@@ -318,6 +335,9 @@ app.controller("conductorController", ["$scope", "conductorService", "tipoDocume
         promise.then(function(d) {                        
             loadNovedad($scope.Conductor.IdConductor);
            toaster.pop('success', "Control de Información", d.data.message); 
+            if($scope.editNovedad){  
+                $("#mdNovedades").modal("hide");
+            }
              
         }, function(err) {           
                 toaster.pop('error', "Error", "ERROR AL PROCESAR SOLICITUD");         
@@ -343,9 +363,24 @@ app.controller("conductorController", ["$scope", "conductorService", "tipoDocume
             console.log("Some Error Occured " + JSON.stringify(err));
         });
     };
+                       
+    
+    $scope.VerModalNovedad = function (){        
+        $("#mdNovedades").modal("show");
+        $scope.TituloNov = "Agregar Novedad ";
+        $scope.InitNovedad();        
+    };
     
     
-    //LICENCIA DE CONDUCCION
+    //LICENCIA DE CONDUCCION         
+    $scope.VerModalLicencias = function (){                
+        $scope.editModeLic = false;        
+        $scope.TituloNov = "Nueva licencia -> "; 
+        initLicencia();
+        $("#mdLicencia").modal("show");
+    };
+    
+    
      function initLicencia() {
         $scope.LicenciaConduccion = {
             IdLicencia:"",
@@ -358,11 +393,13 @@ app.controller("conductorController", ["$scope", "conductorService", "tipoDocume
             FechaReg:"",
             lcConductor:""
         };         
+        $scope.LicenciaConduccion.Identificacion = $scope.Conductor.Cedula;
     }
     
-     $scope.getLicencia = function(item) {
+    $scope.getLicencia = function(item) {
         $scope.LicenciaConduccion=item;
         $scope.editModeLic = true;        
+        $scope.TituloNov = "Editando licencia -> "; 
         $("#mdLicencia").modal("show");
     };
     
@@ -378,7 +415,7 @@ app.controller("conductorController", ["$scope", "conductorService", "tipoDocume
     }
     
     
-     $scope.GuardarLicencia = function (){
+    $scope.GuardarLicencia = function (){
         
          if (!$scope.LicenciaConduccion.Numero){
            toaster.pop('warning', "Ingresa el Numero"); 
@@ -421,6 +458,10 @@ app.controller("conductorController", ["$scope", "conductorService", "tipoDocume
             loadLicenciaConduccion($scope.Conductor.IdConductor);
              initLicencia();
            toaster.pop('success', "Control de Información", d.data.message); 
+           
+           if($scope.editModeLic){  
+               $("#mdLicencia").modal("hide"); 
+           }
              
         }, function(err) {           
                 toaster.pop('error', "Error", "ERROR AL PROCESAR SOLICITUD");         
@@ -430,8 +471,7 @@ app.controller("conductorController", ["$scope", "conductorService", "tipoDocume
    };
    
    //cambia el formato de fecha licencia 
-    $scope.formatoLicencia= function (variable){
-        console.log(variable);
+    $scope.formatoLicencia= function (variable){        
         $scope.LicenciaConduccion[variable] = moment($scope.LicenciaConduccion[variable]).format('L');
     };
     
