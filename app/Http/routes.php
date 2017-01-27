@@ -18,6 +18,7 @@ Route::get('/', function () {
 Route::group(['middleware' => 'cors'], function () {
     
     Route::post('api/usuario/autenticar', 'UsuarioController@autenticar');
+    Route::post('api/login/conductor', 'UsuarioController@autenticarConductor');    
     Route::get('api/usuario/{id}/{key}/confirmar','UsuarioController@ConfirmarCuenta');
     Route::get('api/usuario/{id}/recuperar/{idKey}/{key}','UsuarioController@VefiricarKey');
     Route::post('api/usuario/recordar', 'UsuarioController@RecuperarClave');

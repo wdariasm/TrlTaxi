@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Usuario;
 use App\UsuarioPermiso;
+use App\Conductor;
+use App\Gps;
 use Illuminate\Http\JsonResponse;
 use DB;
 use Tymon\JWTAuth\Exceptions\JWTException;
@@ -252,6 +254,57 @@ class UsuarioController extends Controller
         }
     }
     
+    public function autenticarConductor(Request $request){
+        try {
+            $dirIp= ip2long($request->ip());                    
+            if (!$dirIp){
+                $dirIp = 0;
+            }
+                        
+            $usuario = $request->get('email');
+            $password = $request->get('password');
+            $imei = $request->get('imei');
+                        
+            $user = Usuario::select('Estado','Sesion','Clave', 'Nombre', 'IdUsuario', 'TipoAcceso', 
+                    'Modulo', 'ConductorId')->where("Login",$usuario)->first();
+            
+            if (empty($user)){
+                return JsonResponse::create(array('error' => "Usuario no existe en el Sistema"), 500);                
+            }
+            
+            if($user->Estado != 'ACTIVO'){
+                return JsonResponse::create(array('error' => "Usuario bloqueado"), 500);                
+            }
+            
+            if($user->TipoAcceso != 3){
+                return JsonResponse::create(array('error' => "Tipo de acceso No permitido"), 500);     
+            }
+        
+            if (!password_verify($password, $user->Clave)) {
+                return JsonResponse::create(array('error' => "Credenciales no validas"), 500);                
+            }             
+                                           
+            if($user->Sesion == 'INICIADA'){
+                $result = DB::Select("SELECT DirIp, IF(DATE(FechaCnx) = CURRENT_DATE(), 'SI', 'NO') entrar"
+                        . " FROM usuario WHERE IdUsuario= '".$user['IdUsuario']."'");                
+                if ($result[0]->entrar == 'SI' && $dirIp!=$result[0]->DirIp ){
+                    return response()->json(['error' => 'Estimado Usuario(a), usted tiene una Sesion iniciada. '], 500);                    
+                }
+            }
+            
+            $this->buscarConductor($user->ConductorId, $imei);
+                        
+            $token = JWTAuth::fromUser($user, $this->getData($user));                       
+            DB::update("UPDATE usuario SET FechaCnx = NOW(), DirIp=$dirIp, Sesion='INICIADA' WHERE IdUsuario = ".$user['IdUsuario']."");
+            return response()->json(compact('token'));
+
+        } catch (JWTException $e) {
+            return response()->json(['error' => 'No se pudo crear el token'.$e], 500);            
+        } catch (\Exception $exc) {
+            return JsonResponse::create(array('error' => "No se puedo autenticar el usuario", "request" =>json_encode($exc->getMessage())), 500);
+        }
+    }        
+
     private function getData($user)
     {
         $data = [
@@ -262,6 +315,52 @@ class UsuarioController extends Controller
                 'Modulo'=> $user->Modulo
             ]];
         return $data;
+    }
+    
+    private function buscarConductor ($conductorId, $imei){
+        $conductor = Conductor::select("CdPlaca", "VehiculoId")->where("IdConductor", $conductorId)->first();        
+        $gps = Gps::select("gpImei")->where("gpVehiculoId", $conductor->VehiculoId)
+                    ->where("gpEstado", "ACTIVO")->first();
+        $imeiActual = "";        
+        if(!empty($gps)){
+           $imeiActual = $gps->gpImei; 
+        }
+        
+        $this->registrarImei($conductor->CdPlaca, $conductor->VehiculoId, $imeiActual, $imei);                
+    }
+    
+    private function registrarImei ($placa, $IdVehiculo,  $ImeiActual,  $ImeiNuevo){
+        try{                                   
+            
+            if ($ImeiActual !==""){
+                DB::update("UPDATE gps SET gpEstado = 'INACTIVO' WHERE gpVehiculoId = $IdVehiculo ");
+            }
+            
+            $smartphone = Gps::where("gpImei", $ImeiNuevo)->first();            
+            if (empty($smartphone)){                
+                $smart = new Gps();                
+                $smart->gpImei = $ImeiNuevo;                
+                $smart->gpLatitud = '0';
+                $smart->gpLongitud = '0';
+                $smart->gpEstado = 'ACTIVO';
+                $smart->gpVehiculoId = $IdVehiculo;
+                $smart->gpKey = '0';                
+                $smart->gpFecha = '0000-00-00';
+                $smart->gpPlaca = $placa;
+                $smart->save();
+                return JsonResponse::create(array('message' => "Correcto", "request" =>"Imei Guardado Correctamente"), 200);
+            } else {
+                $smartphone->gpPlaca = $placa;
+                $smartphone->gpVehiculoId = $IdVehiculo;                
+                $smartphone->gpEstado = 'ACTIVO';
+                $smartphone->save();
+                return JsonResponse::create(array('message' => "Correcto", "request" =>"Imei Actualizado Correctamente"), 200);
+            }            
+            return JsonResponse::create(array('message' => "Error", "request" =>"Error al Guardar IMEI"), 200);
+                                    
+        }catch (\Exception $exc) {
+            return JsonResponse::create(array('file' => $exc->getFile(), "line"=> $exc->getLine(),  "message" =>json_encode($exc->getMessage())), 500);
+        } 
     }
     
     public function ConfirmarCuenta($id, $key){
