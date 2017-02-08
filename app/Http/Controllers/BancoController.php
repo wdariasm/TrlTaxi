@@ -29,7 +29,7 @@ class BancoController extends Controller
     public function store(Request $request)
     {
         try{  
-            $data = $request->all(); 
+            $data = $request->all();             
             $banco= new Banco();                        
             $banco->bcNombre = $data["bcNombre"];
             $banco->save();

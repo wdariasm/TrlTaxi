@@ -283,8 +283,10 @@ class UsuarioController extends Controller
             if (!password_verify($password, $user->Clave)) {
                 return JsonResponse::create(array('error' => "Credenciales no validas"), 500);                
             }             
-                                           
+            
+            $enviarnotifiacion = false;            
             if($user->Sesion == 'INICIADA'){
+                $enviarnotifiacion = true;
                 $result = DB::Select("SELECT DirIp, IF(DATE(FechaCnx) = CURRENT_DATE(), 'SI', 'NO') entrar"
                         . " FROM usuario WHERE IdUsuario= '".$user['IdUsuario']."'");                
                 if ($result[0]->entrar == 'SI' && $dirIp!=$result[0]->DirIp ){
@@ -292,7 +294,7 @@ class UsuarioController extends Controller
                 }
             }
             
-            $this->buscarConductor($user->ConductorId, $imei);
+            $this->buscarConductor($user->ConductorId, $imei, $enviarnotifiacion);
                         
             $token = JWTAuth::fromUser($user, $this->getData($user));                       
             DB::update("UPDATE usuario SET FechaCnx = NOW(), DirIp=$dirIp, Sesion='INICIADA' WHERE IdUsuario = ".$user['IdUsuario']."");
@@ -317,17 +319,29 @@ class UsuarioController extends Controller
         return $data;
     }
     
-    private function buscarConductor ($conductorId, $imei){
+    private function buscarConductor ($conductorId, $imei, $enviarnotifiacion){
         $conductor = Conductor::select("CdPlaca", "VehiculoId")->where("IdConductor", $conductorId)->first();        
-        $gps = Gps::select("gpImei")->where("gpVehiculoId", $conductor->VehiculoId)
+        $gps = Gps::select("gpImei", "gpKey")->where("gpVehiculoId", $conductor->VehiculoId)
                     ->where("gpEstado", "ACTIVO")->first();
         $imeiActual = "";        
         if(!empty($gps)){
            $imeiActual = $gps->gpImei; 
+           
+           if($enviarnotifiacion && $gps->gpImei != $imei){
+               $payload = array(
+                    'title'         => "TRL (Cerrar Sesión)",
+                    'msg'           => "Estimado usuario se ha detectado un inicio de sesión en otro dispositivo. Su sesión ha caducado.",
+                    'std'           => 1000,
+                );
+                                        
+                $idPushvec = array();
+                $idPushvec[0] = $key = $gps->gpKey; 
+                $this->enviarNotificacion($idPushvec,$payload);  
+            }           
         }
         
         $this->registrarImei($conductor->CdPlaca, $conductor->VehiculoId, $imeiActual, $imei);                
-    }
+    }        
     
     private function registrarImei ($placa, $IdVehiculo,  $ImeiActual,  $ImeiNuevo){
         try{                                   
@@ -584,6 +598,28 @@ class UsuarioController extends Controller
         }catch (\Exception $exc) {
             return JsonResponse::create(array('file' => $exc->getFile(), "line"=> $exc->getLine(),  "message" =>json_encode($exc->getMessage())), 500);
         } 
+    }
+    
+    private function enviarNotificacion($array,$payload) {
+        $apiKey = 'AAAAi3Qf2F8:APA91bG7JP2FtXjzsSTNTqJlYVrSeLRKLL0QxjZ-VnpJWlWiUEjvc5jw241Y0SJI-DrHCJeTgFyPnFhCAXOMC0dZdE71EnnA6H_5HPEQjuVBJBJDirxUhLdzdmG7fd39wZXutJTTeBTSs85nB9WE3bSWHmjyR8WLcw';
+        $headers = array('Content-Type:application/json',"Authorization:key=$apiKey");
+
+        $data = array(
+            'data' => $payload,
+            'registration_ids' => $array
+        );
+
+        $ch = curl_init();
+        curl_setopt ($ch, CURLOPT_ENCODING, 'gzip');
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($ch, CURLOPT_URL, "https://fcm.googleapis.com/fcm/send");
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+        $res = curl_exec($ch);
+        curl_close($ch);
+        return $res;
     }
 
 }
