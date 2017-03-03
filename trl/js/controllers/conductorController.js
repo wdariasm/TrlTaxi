@@ -48,7 +48,8 @@ app.controller("conductorController", ["$scope", "conductorService", "tipoDocume
             Escolaridad:"",
             VehiculoId : 0,
             Novedades : [],
-            RutaImg : ""
+            RutaImg : "",
+            Imagen : ""
         };        
         
     }
@@ -178,7 +179,7 @@ app.controller("conductorController", ["$scope", "conductorService", "tipoDocume
                 toaster.pop('success', "Control de Información", d.data.message); 
             }else {                
                 formData.append('IdConductor', d.data.request);
-                guardarImagen(formData);
+                guardarImagen(formData, true);
             }            
             $scope.loadConductor();
             
@@ -188,14 +189,35 @@ app.controller("conductorController", ["$scope", "conductorService", "tipoDocume
         });       
     };
     
-    function guardarImagen (objetoForm){                
+    function guardarImagen (objetoForm, limpiar){                
         var promise = conductorService.postImagen(objetoForm);                            
         promise.then(function(d) {                                    
             toaster.pop('success', "Control de Información", d.data.message); 
-            $scope.Nuevo();
+            if(limpiar){
+                $scope.Nuevo();
+            }else {
+                $("#mdImagenConductor").modal("hide");
+                actualizarRutaImagen();
+            }
+            
+          
         }, function(err) {           
             toaster.pop('error', "¡Error!", "Error al guardar imagen del conductor");         
             console.log("Some Error Occured " + JSON.stringify(err));
+        }); 
+    }      
+    
+    function actualizarRutaImagen(){        
+        $('#imgPerfil').attr('src', '');
+        var promise = conductorService.get($scope.Conductor.IdConductor);
+        promise.then(function(d) {                        
+            $scope.Conductor.RutaImg = d.data.RutaImg;   
+             $('#imgPerfil').attr('src', $scope.Conductor.RutaImg);
+            console.log($scope.Conductor);
+            
+        }, function(err) {           
+                toaster.pop('error','¡Error!',"Error al cargar Conductores");           
+                console.log("Some Error Occured " + JSON.stringify(err));
         }); 
     }
    
@@ -220,8 +242,22 @@ app.controller("conductorController", ["$scope", "conductorService", "tipoDocume
         $scope.title = "Nuevo Conductor";
     };
     
-   
-   
+    $scope.ActualizarImagen = function (){
+        
+        if(!$scope.Conductor.Imagen){
+             toaster.pop('error', "¡Error!", "Por favor seleccione la imagen.");         
+            return;
+        }
+        
+        var formData=new FormData();        
+        formData.append('Cedula', $scope.Conductor.Cedula);
+        formData.append('RutaImg', $scope.Conductor.Imagen);
+        formData.append('IdConductor', $scope.Conductor.IdConductor);
+        guardarImagen(formData, false);        
+        
+    };
+    
+     
    // NOVEDADES
    
     $scope.InitNovedad = function() {
@@ -380,7 +416,7 @@ app.controller("conductorController", ["$scope", "conductorService", "tipoDocume
         $("#mdLicencia").modal("show");
     };
     
-    
+                    
      function initLicencia() {
         $scope.LicenciaConduccion = {
             IdLicencia:"",
@@ -526,6 +562,12 @@ app.controller("conductorController", ["$scope", "conductorService", "tipoDocume
             }); 
    
      };
+     
+     // CAMBIAR IMAGEN CONDUCTOR
+     
+    $scope.VerModalCambiarImagen = function (){                                
+        $("#mdImagenConductor").modal("show");
+    };
   
     $scope.loadConductor(); 
     

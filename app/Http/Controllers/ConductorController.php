@@ -97,7 +97,8 @@ class ConductorController extends Controller
         try{  
             $data = $request->all();                         
             $conductor = Conductor::find($data['IdConductor']);                        
-            $conductor->RutaImg = "http://".$_SERVER['HTTP_HOST'].'/img/conductor/'.$conductor->Cedula.".jpg";
+           // $conductor->RutaImg = "http://".$_SERVER['HTTP_HOST'].'/img/conductor/'.$conductor->Cedula.".jpg";
+             $conductor->RutaImg = "http://".$_SERVER['HTTP_HOST'].'/trltaxi/img/conductor/'.$conductor->Cedula.".jpg";
             $conductor->save();
             
             if ($request->hasFile('RutaImg')) {
