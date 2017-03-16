@@ -565,7 +565,7 @@ class ServicioController extends Controller
             $regid = DB::select("SELECT sm.gpKey FROM (conductor c INNER JOIN vehiculo v ON c.VehiculoId = v.IdVehiculo) INNER JOIN "
                 . "gps sm ON v.IdVehiculo = sm.gpVehiculoId WHERE sm.gpEstado='ACTIVO' AND  c.IdConductor=$idConductor LIMIT 1");
             if(!empty($regid)){
-                return $regid[0]->regid;
+                return $regid[0]->gpKey;
             }
             return null;
         }  catch (Exception $e) {
