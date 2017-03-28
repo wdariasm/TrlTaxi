@@ -582,7 +582,7 @@ class ServicioController extends Controller
             'registration_ids' => $array
         );
 
-        $ch = curl_init();
+      /*  $ch = curl_init();
         curl_setopt ($ch, CURLOPT_ENCODING, 'gzip');
         curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
         curl_setopt($ch, CURLOPT_URL, "https://fcm.googleapis.com/fcm/send");
@@ -591,7 +591,7 @@ class ServicioController extends Controller
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
         $res = curl_exec($ch);
-        curl_close($ch);
-        return $res;
+        curl_close($ch); */
+        return "Correcto";
     }
 }
