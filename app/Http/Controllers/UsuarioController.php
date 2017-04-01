@@ -97,7 +97,7 @@ class UsuarioController extends Controller
         $para  = $data['Email'];
         $nombre = $data['Nombre'];
         // título
-        $título = 'Confirmacion Email [Transporte Ruta Libre]';
+        $titulo = 'Confirmacion Email [Transporte Ruta Libre]';
         // mensaje
         
         $mensaje = "
@@ -126,8 +126,9 @@ class UsuarioController extends Controller
        
         $cabeceras .= 'To: '.$nombre.' <'.$para.'>' . "\r\n";
         $cabeceras .= 'From: Transporte Ruta Libre <info@trl.co>' . "\r\n";        
-               
-        mail($para, $título, $mensaje, $cabeceras);       
+          
+        $this->SenEmail($para, $titulo, $mensaje);
+        //mail($para, $título, $mensaje, $cabeceras);       
     }
 
     /**
@@ -407,7 +408,7 @@ class UsuarioController extends Controller
         
         $para  = $usuario->Email;
         $nombre = $usuario->Nombre;        
-        $título = utf8_encode("Cambio de Contraseña [Trl Transporte]");
+        $titulo = utf8_encode("Cambio de Contraseña [Trl Transporte]");
         // mensaje
         $mensaje = "
         <html>
@@ -428,8 +429,9 @@ class UsuarioController extends Controller
         $cabeceras  = 'MIME-Version: 1.0' . "\r\n";
         $cabeceras .= 'Content-type: text/html; charset=UTF-8' . "\r\n";
         $cabeceras .= 'To: '.$nombre.' <'.$para.'>' . "\r\n";
-        $cabeceras .= 'From: Transporte Ruta Libre <info@trl.co>' . "\r\n";  
-        mail($para, $título, $mensaje, $cabeceras);        
+        $cabeceras .= 'From: Transporte Ruta Libre <info@trl.co>' . "\r\n"; 
+        $this->SenEmail($para, $titulo, $mensaje);                
+        //mail($para, $título, $mensaje, $cabeceras);        
         return JsonResponse::create(array('message' => "Correcto", "request" =>'Email enviado Correctamente'), 200);
     }
 
@@ -518,7 +520,7 @@ class UsuarioController extends Controller
     
     private function enviarEmailClave($user, $para, $nombre, $clave){
          // título
-            $título = utf8_encode("Cambio de Contraseña [TRL Transporte]");
+            $titulo = utf8_encode("Cambio de Contraseña [TRL Transporte]");
             // mensaje
             $mensaje = "
             <html>
@@ -542,7 +544,8 @@ class UsuarioController extends Controller
             $cabeceras .= 'Content-type: text/html; charset=UTF-8' . "\r\n";
             $cabeceras .= 'To: '.$nombre.' <'.$para.'>' . "\r\n";
             $cabeceras .= 'From: Transporte Ruta Libre <info@trl.com.co>' . "\r\n";  
-            mail($para, $título, $mensaje, $cabeceras);       
+            $this->SenEmail($para, $titulo, $mensaje);
+            //mail($para, $título, $mensaje, $cabeceras);       
     }
 
     public function updateEstado(Request $request, $IdUsuario){
@@ -621,5 +624,31 @@ class UsuarioController extends Controller
         curl_close($ch);
         return $res;
     }
+    
+    private function SenEmail($para, $titulo, $mensaje){
+        $correo = new \PHPMailer(true); // notice the \  you have to use root namespace here
+        try {
+            $correo->isSMTP(); 
+            $correo->CharSet = "utf-8"; 
+            $correo->SMTPAuth = true;  
+            $correo->SMTPSecure = "tls"; 
+            $correo->Host = "smtp.gmail.com";
+            $correo->Port = 587; 
+            $correo->Username = "soportetrlapp@gmail.com";
+            $correo->Password =env('MAIL_PASSWORD');
+            $correo->setFrom("soportetrlapp@gmail.com", "Soporte TRL");
+            $correo->Subject = $titulo;
+            $correo->MsgHTML($mensaje);
+            $correo->addAddress($para, "Usuario TRL");
+            $correo->send();
+        } catch (phpmailerException $e) {
+            return $e;
+        } catch (\Exception $exc) {
+            return JsonResponse::create(array('file' => $exc->getFile(), "line"=> $exc->getLine(),  "message" =>json_encode($exc->getMessage())), 500);
+        }
+        return "Correcto";
+
+    }       
+    
 
 }

@@ -73,7 +73,7 @@ class SoporteController extends Controller
     }
     
     private function EmailNotificacion($para, $codigo, $soporte){
-        $título = utf8_encode("[Error TRL]");
+        $titulo = utf8_encode("[Error TRL]");
             // mensaje
             $mensaje = "
             <html>
@@ -99,6 +99,33 @@ class SoporteController extends Controller
             $cabeceras .= 'Content-type: text/html; charset=UTF-8' . "\r\n";
             $cabeceras .= 'To: '.$soporte->spNombre.' <'.$para.'>' . "\r\n";
             $cabeceras .= 'From: Transporte Ruta Libre <info@trl.com.co>' . "\r\n";  
-            mail($para, $título, $mensaje, $cabeceras);            
+            //mail($para, $título, $mensaje, $cabeceras);    
+            
+            $this->SenEmail($para, $titulo, $mensaje);
     }
+    
+    private function SenEmail($para, $titulo, $mensaje){
+        $correo = new \PHPMailer(true); // notice the \  you have to use root namespace here
+        try {
+            $correo->isSMTP(); 
+            $correo->CharSet = "utf-8"; 
+            $correo->SMTPAuth = true;  
+            $correo->SMTPSecure = "tls"; 
+            $correo->Host = "smtp.gmail.com";
+            $correo->Port = 587; 
+            $correo->Username = "soportetrlapp@gmail.com";
+            $correo->Password =env('MAIL_PASSWORD');
+            $correo->setFrom("soportetrlapp@gmail.com", "Soporte TRL");
+            $correo->Subject = $titulo;
+            $correo->MsgHTML($mensaje);
+            $correo->addAddress($para, "Usuario TRL");
+            $correo->send();
+        } catch (phpmailerException $e) {
+            return $e;
+        } catch (\Exception $exc) {
+            return JsonResponse::create(array('file' => $exc->getFile(), "line"=> $exc->getLine(),  "message" =>json_encode($exc->getMessage())), 500);
+        }
+        return "Correcto";
+
+    }  
 }

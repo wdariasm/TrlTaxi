@@ -367,7 +367,7 @@ class ServicioController extends Controller
     
     private function EnviarEmail($idServicio, $contrato,  $responsable, $email){
         // título
-        $título = 'Solicitud de servicio [TRL]';
+        $titulo = 'Solicitud de servicio [TRL]';
         // mensaje
         
         $mensaje = "
@@ -390,18 +390,14 @@ class ServicioController extends Controller
         </body>
         </html>
         ";
-       
-        $cabeceras  = 'MIME-Version: 1.0' . "\r\n";
-        $cabeceras .= 'Content-type: text/html; charset=UTF-8' . "\r\n";       
-        $cabeceras .= 'To: '.$responsable.' <'.$email.'>' . "\r\n";
-        $cabeceras .= 'From: Transporte Ruta Libre <info@trl.co>' . "\r\n";        
                
-        mail($email, $título, $mensaje, $cabeceras);
+        $this->SenEmail($email, $titulo, $mensaje);
+      //  mail($email, $título, $mensaje, $cabeceras);
     }
     
     private function EnviarEmailAsignar($idServicio,  $responsable, $email, $conductor){
         // título
-        $título = 'Asignación de servicio [TRL]';
+        $titulo = 'Asignación de servicio [TRL]';
         // mensaje
         
         $mensaje = "
@@ -430,13 +426,14 @@ class ServicioController extends Controller
         $cabeceras .= 'Content-type: text/html; charset=UTF-8' . "\r\n";       
         $cabeceras .= 'To: '.$conductor.' <'.$email.'>' . "\r\n";
         $cabeceras .= 'From: Transporte Ruta Libre <info@trl.com.co>' . "\r\n";        
-               
-        mail($email, $título, $mensaje, $cabeceras);
+          
+        $this->SenEmail($email, $titulo, $mensaje);
+        //mail($email, $título, $mensaje, $cabeceras);
     }
     
     private function EmailConfirmacion($idServicio,  $responsable, $email){
         // título
-        $título = 'Asignación de servicio [TRL]';
+        $titulo = 'Asignación de servicio [TRL]';
         // mensaje
         
         $mensaje = "
@@ -468,13 +465,14 @@ class ServicioController extends Controller
         $cabeceras .= 'Content-type: text/html; charset=UTF-8' . "\r\n";       
         $cabeceras .= 'To: '.$responsable.' <'.$email.'>' . "\r\n";
         $cabeceras .= 'From: Transporte Ruta Libre <info@trl.co>' . "\r\n";        
-               
-        mail($email, $título, $mensaje, $cabeceras);
+        
+        $this->SenEmail($email, $titulo, $mensaje);     
+        //($email, $título, $mensaje, $cabeceras);
     }
     
     private function EmailCalificacion($idServicio){
         // título
-        $título = utf8_encode('Calificación de servicio [TRL]');
+        $titulo = utf8_encode('Calificación de servicio [TRL]');
         // mensaje
         $servicio  =  $this->getCalificacion($idServicio);
         $user = \App\Usuario::select("Email", "IdUsuario")->where("Login", "=", $servicio->UserReg)->first();
@@ -513,7 +511,8 @@ class ServicioController extends Controller
         $cabeceras .= 'Content-type: text/html; charset=UTF-8' . "\r\n";       
         $cabeceras .= 'To: '.$servicio->Responsable.' <'.$email.'>' . "\r\n";
         $cabeceras .= 'From: Transporte Ruta Libre <info@trl.co>' . "\r\n";                
-        mail($email, $título, $mensaje, $cabeceras);
+        //mail($email, $título, $mensaje, $cabeceras);
+        $this->SenEmail($email, $titulo, $mensaje);
     }
     
     public function probando($key, $mensaje, $url){
@@ -592,6 +591,32 @@ class ServicioController extends Controller
         curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
         $res = curl_exec($ch);
         curl_close($ch);
-        return $res;
+        return $res; 
+        
     }
+    
+    private function SenEmail($para, $titulo, $mensaje){
+        $correo = new \PHPMailer(true); // notice the \  you have to use root namespace here
+        try {
+            $correo->isSMTP(); 
+            $correo->CharSet = "utf-8"; 
+            $correo->SMTPAuth = true;  
+            $correo->SMTPSecure = "tls"; 
+            $correo->Host = "smtp.gmail.com";
+            $correo->Port = 587; 
+            $correo->Username = "soportetrlapp@gmail.com";
+            $correo->Password =env('MAIL_PASSWORD');
+            $correo->setFrom("soportetrlapp@gmail.com", "Soporte TRL");
+            $correo->Subject = $titulo;
+            $correo->MsgHTML($mensaje);
+            $correo->addAddress($para, "Usuario TRL");
+            $correo->send();
+        } catch (phpmailerException $e) {
+            return $e;
+        } catch (\Exception $exc) {
+            return JsonResponse::create(array('file' => $exc->getFile(), "line"=> $exc->getLine(),  "message" =>json_encode($exc->getMessage())), 500);
+        }
+        return "Correcto";
+
+    }     
 }
