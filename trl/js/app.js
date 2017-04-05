@@ -129,6 +129,10 @@ var app;
                 templateUrl: 'views/proceso/cambiarClave.html'                        
             })
             
+            .when("/3/reporte/principal",{
+                templateUrl: 'views/reportes/reporte1.html'                        
+            })
+            
             .otherwise({
                 redirectTo:"/iniciando"               
             });      

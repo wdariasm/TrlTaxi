@@ -108,6 +108,12 @@ app.controller("homeController", ["$scope", "parametroService", "usuarioService"
         toaster.pop(tipo, titulo, mensaje, 0);
     };
     
+    
+     //ESTABLECER TITULO PRINCIPAL
+    $rootScope.SetTituloPpal = function (title){
+        $scope.Titulo = title;
+    };
+    
 }]);
 
 app.controller('salirController',['$scope', 'usuarioService', 'toaster', function ($scope, usuarioService, toaster) {

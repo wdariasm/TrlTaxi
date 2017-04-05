@@ -6,6 +6,8 @@
     
     Route::delete('api/usuario/{id}/cerrar','UsuarioController@cerrarSesion');
     
+    Route::delete('api/usuario/{id}/cerrarConductor','UsuarioController@cerrarConductor');
+    
     Route::get('api/usuario/{id}/permisos','UsuarioController@GetPermisos');
     
     /* Cambiar contraseña desde el administrador */

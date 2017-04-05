@@ -245,10 +245,17 @@ class ReporteController extends Controller
     }
     
     
-    
+    public function reporteAdminitrador(Request $request){
+        try {            
+            $data = $request->all();        
+            
+            
+            
+            
+            
+        }catch (\Exception $exc) {
+            return JsonResponse::create(array('file' => $exc->getFile(), "line"=> $exc->getLine(),  "message" =>json_encode($exc->getMessage())), 500);
+        } 
+    }
 
-   
-
-
-  
 }

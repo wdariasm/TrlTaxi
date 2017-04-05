@@ -213,6 +213,22 @@ class UsuarioController extends Controller
         } 
     }
     
+    
+    public function cerrarConductor($idConductor)
+    {
+        try{
+            DB::update("UPDATE usuario SET  Sesion='CERRADA' WHERE ConductorId = $idConductor");
+            
+            $conductor = Conductor::select("CdPlaca", "VehiculoId")->where("IdConductor", $idConductor)->first(); 
+            
+            DB::update("UPDATE gps SET  gpEstado='INACTIVO' WHERE gpVehiculoId = $conductor->VehiculoId");
+                                          
+            return JsonResponse::create(array('message' => 'Correcto', "request" =>'Session Cerrada Correctamente'), 200);
+        }catch (\Exception $exc) {
+            return JsonResponse::create(array('file' => $exc->getFile(), "line"=> $exc->getLine(),  "message" =>json_encode($exc->getMessage())), 500);
+        } 
+    }
+            
     public function autenticar(Request $request){
         try {
             $dirIp= ip2long($request->ip());                    

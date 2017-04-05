@@ -40,6 +40,7 @@ class GpsController extends Controller
                 $smartphone->gpPlaca = $placa;
                 $smartphone->gpVehiculoId = $IdVehiculo;                
                 $smartphone->gpEstado = 'ACTIVO';
+                $smartphone->gpFecha = date("Y-m-d H:i:s");
                 $smartphone->save();
                 return JsonResponse::create(array('message' => "Correcto", "request" =>"Imei Actualizado Correctamente"), 200);
             }            
@@ -72,7 +73,7 @@ class GpsController extends Controller
             $latitud = $request->get("gpLatitud");
             $longitud = $request->get("gpLongitud");
                                                 
-            DB::update("UPDATE gps SET gpLongitud = '".$longitud."' , gpLatitud = '".$latitud."'  WHERE gpImei = $imei ");    
+            DB::update("UPDATE gps SET gpLongitud = '".$longitud."' , gpLatitud = '".$latitud."', gpFecha = NOW()  WHERE gpImei = $imei ");    
             
             return JsonResponse::create(array('message' => "Correcto", "request" =>"Posicion actualizada correctamente"), 200);
         }catch (\Exception $exc) {
