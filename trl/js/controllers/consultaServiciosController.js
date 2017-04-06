@@ -12,8 +12,7 @@ function consultaServiciosController ($scope,  tiposervicioService, ngTableParam
 
     vm.GetServiciosTodos = function (){
         var valorF1 = $('#txtFechaI').val();
-        var valorF2  = $('#txtFechaF').val();    
-        console.log(valorF1);
+        var valorF2  = $('#txtFechaF').val();            
         vm.Filtro.FechaInicial =  valorF1 === "" ? fechaActual : valorF1;
         vm.Filtro.FechaFin = valorF2 ==="" ? fechaActual : valorF2;   
         vm.Filtro.TipoServicio = vm.TipoSelect.svCodigo;        
