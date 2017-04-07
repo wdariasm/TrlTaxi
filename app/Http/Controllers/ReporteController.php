@@ -262,6 +262,7 @@ class ReporteController extends Controller
             $ConductorId = $request->get('ConductorId');
             $ClienteId = $request->get('ClienteId');
             $NumeroContrato = $request->get('Contrato');
+            $Placa = $request->get('Placa');
             
 //            if($estado !=="TODOS"){
 //                $condicion =  " AND Estado = '". $estado ."'";
@@ -297,6 +298,10 @@ class ReporteController extends Controller
             
             if(!empty($NumeroContrato)){
                 $condicion .= " AND NumeroContrato = '" .$NumeroContrato ."'";
+            }
+            
+            if(!empty($Placa)){
+                $condicion .= " AND Placa = '" .$Placa ."'";
             }
                                                 
             $sql = "SELECT s.IdServicio, s.ContratoId, s.ClienteId, s.NumeroContrato, s.Responsable,"

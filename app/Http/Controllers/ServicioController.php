@@ -9,6 +9,7 @@ use App\Parada;
 use Illuminate\Http\JsonResponse;
 use DB;
 use App\Cliente;
+use App\Conductor;
 
 
 class ServicioController extends Controller
@@ -219,6 +220,7 @@ class ServicioController extends Controller
             $servicio->ValorTotal= $data["ValorTotal"];
             $servicio->Nota= $data["Nota"];            
             $servicio->Calificacion= 0;
+            $servicio->Placa= "";            
             $servicio->UserReg= $data["UserReg"];
             $servicio->FechaMod = new \DateTime();
             $servicio->save();
@@ -254,9 +256,10 @@ class ServicioController extends Controller
     
     public function asignar(Request $request){
         try{  
-            $data = $request->all();             
-            $result = Servicio::where('IdServicio', $data["IdServicio"] )          
-                ->update(['ConductorId' => $data ['ConductorId'], 'Estado' => 'ASIGNADO' ]);             
+            $data = $request->all();                                   
+            
+            $result = Servicio::where('IdServicio', $data["IdServicio"])          
+                ->update(['ConductorId' => $data['ConductorId'], 'Placa' => $data['Placa'], 'Estado' => 'ASIGNADO' ]);             
             $this->EnviarEmailAsignar($data["IdServicio"], $data["Responsable"], $data["Email"], $data["Nombre"]);
             $this->NotificacionConductor($data ['ConductorId'], $data["IdServicio"] );
             return JsonResponse::create(array('message' => "Servicio asignado correctamente", "request" =>json_encode($result)), 200);
@@ -347,7 +350,7 @@ class ServicioController extends Controller
             if($scConductorId === null || $scConductorId ===""){
                 $scConductorId = "NULL";
             }
-            $update = DB::update("UPDATE servicio SET  Estado='$estado', ConductorId=NULL WHERE IdServicio= $id");                     
+            $update = DB::update("UPDATE servicio SET  Estado='$estado', ConductorId=NULL, Placa ='' WHERE IdServicio= $id");                     
             if ($update){                  
                 
                 DB::insert("INSERT INTO serviciocancelado (scCancelacionId, scServicioId, scConductorId, scClienteId) "
