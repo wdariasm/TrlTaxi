@@ -53,8 +53,7 @@ class UsuarioController extends Controller
     {
          try{
             $data = $request->all();                        
-            $bytes = openssl_random_pseudo_bytes(3,$cstrong);
-            $clave = strtoupper(bin2hex($bytes));   
+            $clave = $this->generarClave();
             
             if(!isset($data["Login"])){
                 return JsonResponse::create(array('message' => "Error al crear usuario", "request" =>json_encode('Error')), 200);
@@ -90,6 +89,22 @@ class UsuarioController extends Controller
         } catch (\Exception $exc) {
             return JsonResponse::create(array('message' => "No se pudo guardar", "request" =>json_encode($exc->getMessage())), $exc->getCode());
         }
+    }
+    
+     private function generarClave (){
+    	$bytes = openssl_random_pseudo_bytes(3,$cstrong);
+        $clave = strtoupper(bin2hex($bytes)); 
+        if (is_numeric($clave)){
+			$clave = $clave . "" . $this->generarLetra();
+		}
+		return $clave;
+    }
+
+    private function generarLetra()
+    {
+    	$int = rand(0,24);	
+    	$a_z = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    	return  $a_z[$int];    
     }
     
     public function EnviarEmail($data, $idUsuario,  $clave, $key ){                  
@@ -594,10 +609,8 @@ class UsuarioController extends Controller
     public function ReenviarEmail(Request $request)
     {        
         try{                                                  
-            $data = $request->all();                                           
-            
-            $bytes = openssl_random_pseudo_bytes(3,$cstrong);
-            $clave = strtoupper(bin2hex($bytes));
+            $data = $request->all();                                                       
+            $clave = $this->generarClave();
             
             $id = $data["IdUsuario"];
             $usuario = Usuario::find($id);
