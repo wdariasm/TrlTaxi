@@ -28,6 +28,10 @@ var app;
                 templateUrl: 'views/cliente/prueba.html'
             })
             
+            .when("/2/reporte",{
+                templateUrl: 'views/servicio/reporte.html'
+            })
+            
             .when("/2/usuarios",{
                 templateUrl: 'views/cliente/usuario.html'
             })

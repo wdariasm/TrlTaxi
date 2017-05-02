@@ -4,18 +4,19 @@
 	    <div class="panel-heading">
 		<h3 class="panel-title">Selección de Filtros</h3>
 	    </div>
-	    <div class="panel-body">
-
-		<div class="col-md-3" >
+	    <div class="panel-body">	
+				
+		<div class="col-md-3">
 		    <div class="form-group">
-			<label  for="txtPlaca">Placa</label>
-			<div class="input-group">
-			    <div class="input-group-addon"><i class="fa fa-automobile text-success"></i></div>
-			    <input class="form-control" ng-model="rp.Filtro.Placa"  letras-numeros id="txtPlaca"   type="text"  required    maxlength="25" >
-			</div>
+			<label  for="txtNumero" >N° Contrato </label>
+			<div class="input-group">   
+			    <div class="input-group-addon"><i class="fa fa-list text-success"></i></div>    
+			    <select ng-model="rp.Seleccionar.Contrato" class="form-control"  id="cboContrato" ng-options="item as item.ctNumeroContrato for item in rp.Contratos track by item.IdContrato" required></select>			    
+			</div> 
 		    </div>
-		</div>
-
+		</div> 
+		
+		
 		<div class="col-md-3">
 		    <div class="form-group">
 			<label  for="cboZonaDestino">Zona </label>
@@ -25,47 +26,8 @@
 			</div> 
 		    </div>   
 		</div>
-
-		<div class="col-md-3">
-		    <div class="form-group">
-			<label  for="txtCedula" > Cliente </label>
-			<div class="input-group">    
-			    <div class="input-group-addon"><i class="fa fa-user-secret text-success"></i></div>
-			    <input  type="text" class="form-control" required="" ng-model="rp.Filtro.Cliente" maxlength="10" solo-numeros id="txtCedula" ng-blur="rp.ValidarIdentificacion()" >
-			</div> 
-		    </div>
-		</div>
-
-		<div class="col-md-3">
-		    <div class="form-group">
-			<label  for="txtContrato" > Contrato </label>
-			<div class="input-group">    
-			    <div class="input-group-addon"><i class="fa fa-hashtag text-success"></i></div>
-			    <input  type="text" class="form-control" required="" ng-model="rp.Filtro.Contrato" maxlength="10" solo-numeros id="txtContrato"  >
-			</div> 
-		    </div>
-		</div>
-
-		<div class="col-md-3">
-		    <div class="form-group">
-			<label  for="txtConductor" >Conductor </label>
-			<div class="input-group">    
-			    <div class="input-group-addon"><i class="fa fa-user text-success"></i></div>
-			    <input type="text" required="" class="form-control" ng-model="rp.Filtro.Conductor" id="txtConductor"  maxlength="10" ng-blur="rp.ValidarConductor()" solo-numeros >
-			</div> 
-		    </div>
-		</div>
-
-		<div class="col-md-3">
-		    <div class="form-group">
-			<label  for="txtValor" >Valor Servicio </label>
-			<div class="input-group">    
-			    <div class="input-group-addon"><i class="fa fa-money text-success"></i></div>
-			    <input  type="text" class="form-control" required="" ng-model="rp.Filtro.Valor" maxlength="10" solo-numeros id="txtValor" >
-			</div> 
-		    </div>
-		</div>	
-
+		
+		
 		<div class="col-md-3">
 		    <div class="form-group">
 			<label  for="cboTipoServicio">Tipo Servicio </label>
@@ -85,6 +47,16 @@
 			</div> 
 		    </div>   
 		</div>
+		
+		<div class="col-md-2">
+		    <div class="form-group">
+			<label  for="txtValor" >Valor Servicio </label>
+			<div class="input-group">    
+			    <div class="input-group-addon"><i class="fa fa-money text-success"></i></div>
+			    <input  type="text" class="form-control" required="" ng-model="rp.Filtro.Valor" maxlength="10" solo-numeros id="txtValor" >
+			</div> 
+		    </div>
+		</div>	
 
 		
                 <input type="hidden" id="txtFechaI" ng-model="cs.Filtro.FechaInicial" >
@@ -106,7 +78,7 @@
 		    </div>
 		</div>
 
-		<div class="col-md-2 col-md-offset-1 text-center">       
+		<div class="col-md-2  text-center">       
 		    <br/>
 		    <button   class="btn btn-danger btn-block btn-addon"   type="button"  title="Limpiar Filtros" ng-click="rp.Limpiar()"><i class="fa fa-pencil"></i> Limpiar</button>
 		</div>
@@ -234,3 +206,4 @@
 
 
 </script>
+

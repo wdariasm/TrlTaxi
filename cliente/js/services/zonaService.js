@@ -17,8 +17,12 @@ app.service("zonaService", ['$http', function ($http) {
     this.getPuntosAll = function () {
         var req = $http.get(uri+'/api/zona/puntos');
         return req;
-    };                               
-            
+    };    
     
+    this.getAll = function () {
+        var req = $http.get(uri+'/api/zona');
+        return req;
+    }; 
+                
 }]);
 
