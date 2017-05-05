@@ -25,7 +25,7 @@ var app;
             })
             
             .when("/2/perfil",{
-                templateUrl: 'views/cliente/prueba.html'
+                templateUrl: 'views/cliente/perfil.html'
             })
             
             .when("/2/reporte",{

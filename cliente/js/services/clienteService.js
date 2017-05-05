@@ -21,6 +21,11 @@ app.service("clienteService",[ '$http', function ($http) {
         var req = $http.get(uri+'/api/cliente/' + Identificacion +'/validar');
         return req;	
     };
+    
+    this.getDocumento = function () {
+        var req = $http.get(uri+'/api/tipoDocumento');
+        return req;
+    };  
 }]);
 
 
