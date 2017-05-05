@@ -10,6 +10,7 @@ use Illuminate\Http\JsonResponse;
 use DB;
 use App\Cliente;
 use App\Conductor;
+use App\ServicioContactos;
 
 
 class ServicioController extends Controller
@@ -229,6 +230,11 @@ class ServicioController extends Controller
             if(count($paradas)> 0){
                 $this->guardarParada($servicio->IdServicio, $paradas);
             }
+            
+            $contactos= $data["Contactos"];
+            if(count($contactos)> 0){
+                $this->guardarContacto($servicio->IdServicio, $contactos);
+            }
                                     
             if($data["EnviarEmail"]==="SI"){
                 $this->EnviarEmail($servicio->IdServicio, $data["NumeroContrato"], $data["Responsable"], $data["ParEmail"] );
@@ -253,6 +259,19 @@ class ServicioController extends Controller
             $insert->save();
         }
     }
+    
+    private function guardarContacto($idservicio, $contactos){
+        foreach ($contactos as $p) {
+            $insert = new ServicioContactos();
+            $insert->scIdServicio = $idservicio;
+            $insert->scNombre = $p['scNombre'];
+            $insert->scTelefono = $p['scTelefono'];
+            if(isset($p['scNota'])){
+                $insert->scNota = $p['scNota'];
+            }                                                
+            $insert->save();
+        }
+    }            
     
     public function asignar(Request $request){
         try{  

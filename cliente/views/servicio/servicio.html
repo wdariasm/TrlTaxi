@@ -334,42 +334,70 @@
 
                 <div class="panel panel-default" ng-show="Contrato.TipoServicio.length">
                     <div class="panel-heading">
-                        <h3 class="panel-title">Responsable / nota de servicio</h3>
+                        <h3 class="panel-title">Responsables / notas de servicio</h3>
                     </div>
                     <div class="panel-body" style="padding-bottom: 0px">
                         <div class="row">                            
-                            <div class="col-md-7">
-                                <div class="col-md-10">
-				    <div class="form-group">
-					<label for="txtResponsable">Responsable del Servicio <span>*</span> </label>
-					<div class="input-group">    
-					    <div class="input-group-addon"><i class="fa fa-user text-success"></i></div>
-					    <input type="text"  class="form-control" required="" ng-model="Servicio.Responsable" maxlength="100" id="txtResponsable" placeholder="Responsable del servicio" >
-					</div>
+			    <div class="col-md-4">
+				<div class="form-group">
+				    <label for="txtResponsable">Responsable del Servicio <span>*</span> </label>
+				    <div class="input-group">    
+					<div class="input-group-addon"><i class="fa fa-user text-success"></i></div>
+					<input type="text"  class="form-control"  ng-model="Contacto.scNombre" maxlength="60" id="txtResponsable" placeholder="Responsable del servicio" >
 				    </div>
-                                </div>
+				</div>
+			    </div>
 
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label for="txtTelefonoPpal">Teléfono </label>
-                                        <div class="input-group">    
-                                            <div class="input-group-addon"><i class="fa fa-mobile text-success"></i></div>
-                                            <input type="text" class="form-control" ng-model="Servicio.Telefono"  required="" maxlength="10" solo-numeros id="txtTelefonoPpal" placeholder="Teléfono" >
-                                        </div>
+			    <div class="col-md-2">
+				<div class="form-group">
+				    <label for="txtTelefonoPpal">Teléfono </label>
+				    <div class="input-group">    
+					<div class="input-group-addon"><i class="fa fa-mobile text-success"></i></div>
+					<input type="text"  class="form-control" ng-model="Contacto.scTelefono"  maxlength="15" solo-numeros id="txtTelefonoPpal" placeholder="Teléfono" >
 				    </div>
-                                </div>                                                               
-                            </div>
-                            <div class="col-md-5">
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <label for="txtNota">Nota del Servicio </label>                                                                            
-                                        <textarea class="form-control" rows="4" id="txtNota" ng-model="Servicio.Nota" placeholder="Nota o descripción del servicio" maxlength="250"></textarea>
+				</div>
+			    </div>                                                               
 
-				    </div>
+			    <div class="col-md-5">
+				<div class="form-group">
+				    <label for="txtNota">Nota Servicio / C.Costo </label>   
+				    <input type="text" id="txtNota" class="form-control"  ng-model="Contacto.scNota"  maxlength="200"  placeholder="Nota o Centro de Costo" >				    
+				</div>
+			    </div>
+			    
+			     <div class="col-md-1">                                        
+				<br/>
+				<button   class="btn btn-success btn-block btn-addon" style="margin-top: 4px;"  type="button"  title="Agregar Contacto" ng-click="AgregarContacto()"><i class="fa fa-plus"></i></button>
+			    </div>
+                        </div>	
 
-                                </div>
-                            </div>
-                        </div>
+			<div class="row" ng-show="Servicio.Contactos.length">
+			    <div class="col-md-12">
+				<table class="table table-striped table-condensed">
+				    <thead>
+					<tr>					    
+					    <th></th>
+					    <th>RESPONSABLE</th>
+					    <th>TELÉFONO</th>
+					    <th>NOTA</th>
+					    <th></th>
+					</tr>
+				    </thead>
+				    <tbody>
+					<tr ng-repeat="itemc in Servicio.Contactos">					    
+					    <td><span ng-if="$first" class="fa fa-star-o text-success" ></span></td>					    
+					    <td>{{itemc.scNombre}}</td>
+					    <td>{{itemc.scTelefono}}</td>
+					    <td>{{itemc.scNota}}</td>
+					    <td>
+						<a ng-click="QuitarContacto($index)"  href="javascript:;"  title="Quitar Contacto"><i class="fa fa-lg fa-trash text-danger"></i></a>
+					    </td>
+					</tr>					
+				    </tbody>
+				</table>
+			    </div>
+			</div> 
+
                     </div>
                 </div>
 
@@ -401,9 +429,9 @@
 					<table class="table table-striped table-condensed">
 					    <thead>
 						<tr>
-						    <td>#</td>
-						    <td>DIRECCIÓN</td>
-						    <td>VALOR</td>
+						    <th>#</th>
+						    <th>DIRECCIÓN</th>
+						    <th>VALOR</th>
 						    <td></td>
 						</tr>
 					    </thead>

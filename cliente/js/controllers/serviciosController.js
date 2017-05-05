@@ -3,6 +3,7 @@ app.controller('serviciosController',['$scope', 'zonaService', 'ngTableParams', 
     $scope.Zonas = [];
     $scope.Zona = {};
     $scope.Parada = {};    
+    $scope.Contacto = {};
     $scope.Contrato = {};
     $scope.Contratos = [];
     $scope.ContratoSelect = {};
@@ -16,6 +17,7 @@ app.controller('serviciosController',['$scope', 'zonaService', 'ngTableParams', 
     $scope.Plantilla = {};
     $scope.Puntos = [];
     $scope.editMode = false;
+    
 
     $scope.mapServicio;
     var markerOrigen = null;
@@ -100,7 +102,8 @@ app.controller('serviciosController',['$scope', 'zonaService', 'ngTableParams', 
             Parada : "NO",
             ValorTotal :0,
             Nota :"",
-            ModoServicio :"PROGRAMADO"
+            ModoServicio :"PROGRAMADO",
+            Contactos : []
         };
         
         $scope.Parada = {
@@ -112,6 +115,12 @@ app.controller('serviciosController',['$scope', 'zonaService', 'ngTableParams', 
         }; 
         $scope.ContratoSelect = {};
         $scope.Subtotal = 0;
+        
+        $scope.Contacto = {
+            scNombre  :"",
+            scTelefono : "",
+            scNota : ""
+        };
         
     }
 
@@ -564,6 +573,15 @@ app.controller('serviciosController',['$scope', 'zonaService', 'ngTableParams', 
             return;
         }
         
+        if($scope.Servicio.Contactos.length === 0){
+            toaster.pop('info', '¡Alerta!', "Por favor ingrese al menos un responsable del servicio.");
+            return;
+        }
+        
+        $scope.Servicio.Responsable = $scope.Servicio.Contactos[0].scNombre;
+        $scope.Servicio.Telefono = $scope.Servicio.Contactos[0].scTelefono;
+        $scope.Servicio.Nota = $scope.Servicio.Contactos[0].scNota;
+        
         if($scope.Servicio.FormaPago ===""){
             toaster.pop('info', '¡Alerta!', "Estimado Usuario(a), por favor seleccione la forma de Pago");
             return;
@@ -667,7 +685,28 @@ app.controller('serviciosController',['$scope', 'zonaService', 'ngTableParams', 
         $scope.Subtotal = total;
         $scope.Servicio.ValorTotal =  parseFloat($scope.Subtotal) + parseFloat($scope.Servicio.Valor);
         return total;
-    };            
+    };        
+    
+    // FUNCIONES DE CONTACTOS
+    
+    $scope.AgregarContacto = function (){
+        if (!$scope.Contacto.scNombre){
+            toaster.pop("info","¡Alerta!", "Por favor ingrese el nombre del Responsable");
+            return;
+        }        
+        
+        if(!$scope.Contacto.scTelefono){
+            toaster.pop("info","¡Alerta!", "Por favor ingrese el número de teléfono.");
+            return;
+        }        
+        
+        $scope.Servicio.Contactos.push($scope.Contacto);
+        $scope.Contacto = {};
+    };
+    
+    $scope.QuitarContacto =  function (index){        
+        $scope.Servicio.Contactos.splice(index,1);        
+    };
     
     $scope.UbicacionAutomatica= function (){
         if(navigator.geolocation){
