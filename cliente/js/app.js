@@ -32,6 +32,10 @@ var app;
                 templateUrl: 'views/servicio/reporte.html'
             })
             
+            .when("/2/centrocosto",{
+                templateUrl: 'views/servicio/reporteCosto.html'
+            })
+            
             .when("/2/usuarios",{
                 templateUrl: 'views/cliente/usuario.html'
             })

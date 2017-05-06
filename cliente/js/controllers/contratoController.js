@@ -1,8 +1,8 @@
-app.controller("contratoController", ["$scope",  "toaster",  "contratoService","ngTableParams",
-    function ($scope,toaster, contratoService, ngTableParams) {
+app.controller("contratoController", ["$scope",  "toaster",  "contratoService","ngTableParams", "$filter",
+    function ($scope,toaster, contratoService, ngTableParams, $filter) {
         
     $scope.Contrato = {};   
-    $scope.Contatos = [];
+    $scope.Contratos = [];
     $scope.TablaContrato = {};
     $scope.VerDetalle =false;
     
@@ -13,8 +13,13 @@ app.controller("contratoController", ["$scope",  "toaster",  "contratoService","
     
     function loadContratos(){
         var promise = contratoService.getByCliente($scope.$parent.Login.ClienteId, "Todos");
-        promise.then(function(d) {                        
-            $scope.Contatos = d.data;
+        promise.then(function(d) {                                                
+            if ($scope.$parent.Login.TipoAcceso == 5){               
+                $scope.Contratos = $filter('filter')( d.data, { ctNumeroContrato: $scope.$parent.Login.Contrato });
+            }else {
+                $scope.Contratos = d.data;
+            }
+            
             $scope.TablaContrato.reload();
         }, function(err) {           
                 toaster.pop('error','¡Error!',"Error al cargar contratos");
@@ -34,12 +39,12 @@ app.controller("contratoController", ["$scope",  "toaster",  "contratoService","
             getData: function (a, b) {
                 var c = b.filter().busqueda;
                 f = [];
-                c ? (c = c.toLowerCase(), f = $scope.Contatos.filter(function (a) {
+                c ? (c = c.toLowerCase(), f = $scope.Contratos.filter(function (a) {
                     return a.ctNitCliente.indexOf(c) > -1 ||
                            a.ctContratante.toLowerCase().indexOf(c) > -1 ||
                            a.ctNumeroContrato.indexOf(c) > -1 ||
                            a.ctEstado.toLowerCase().indexOf(c) > -1                                                       
-                })) : f = $scope.Contatos, f = b.sorting() ? f : f, b.total(f.length), a.resolve(f.slice((b.page() - 1) * b.count(), b.page() * b.count()))
+                })) : f = $scope.Contratos, f = b.sorting() ? f : f, b.total(f.length), a.resolve(f.slice((b.page() - 1) * b.count(), b.page() * b.count()))
             }
         });
     };

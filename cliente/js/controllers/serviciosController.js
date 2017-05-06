@@ -1,5 +1,5 @@
-app.controller('serviciosController',['$scope', 'zonaService', 'ngTableParams', 'toaster', "contratoService","funcionService","servicioService",
-    function ($scope,  zonaService, ngTableParams, toaster, contratoService, funcionService, servicioService) {
+app.controller('serviciosController',['$scope', 'zonaService', 'ngTableParams', 'toaster', "contratoService","funcionService","servicioService", '$filter',
+    function ($scope,  zonaService, ngTableParams, toaster, contratoService, funcionService, servicioService,  $filter) {
     $scope.Zonas = [];
     $scope.Zona = {};
     $scope.Parada = {};    
@@ -543,7 +543,17 @@ app.controller('serviciosController',['$scope', 'zonaService', 'ngTableParams', 
         init();
         var promise = contratoService.getByCliente($scope.Servicio.ClienteId, "ACTIVO");
         promise.then(function(d) {
-            $scope.Contratos = d.data;
+            
+            if ($scope.$parent.Login.TipoAcceso == 5){               
+                $scope.Contratos = $filter('filter')( d.data, { ctNumeroContrato: $scope.$parent.Login.Contrato });
+            } else {
+                $scope.Contratos = d.data;
+            }
+            
+            if($scope.Contratos.length  == 0){
+                toaster.pop('info','¡Información!',"No se encontraron contratos asociados a este usuario. ");
+            }
+                        
             $scope.ContratoSelect ={};
         }, function(err) {
                 toaster.pop('error','¡Error!',"Error al cargar contratos");

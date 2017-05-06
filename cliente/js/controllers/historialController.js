@@ -10,6 +10,7 @@ app.controller("historialController", ["$scope",  "toaster",  "servicioService",
     $scope.MotivoSel=null; 
     $scope.Motivos= [];
     $scope.Valor = {};
+    $scope.Cargando = false;
     
     $scope.$parent.SetTitulo("HISTORIAL DE SERVICIOS");        
     initTabla();                           
@@ -68,11 +69,13 @@ app.controller("historialController", ["$scope",  "toaster",  "servicioService",
         });
     };    
     
-    $scope.GetServicios = function (){
+    $scope.GetServicios = function (){                
+        $scope.Cargando = true;
          var promise = servicioService.getAll($scope.$parent.Login.ClienteId,
          $scope.$parent.Login.TipoAcceso, $scope.$parent.Login.Login);
         promise.then(function(d) {                        
             $scope.Servicios = d.data;
+            $scope.Cargando = false;
             $scope.TablaServicio.reload();             
         }, function(err) {           
                 toaster.pop('error','¡Error!',"Error al cargar Clientes");           
