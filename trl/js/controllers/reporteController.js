@@ -55,10 +55,10 @@ app.controller('reporteController', ['$scope', 'toaster', '$rootScope', 'zonaSer
         promiseGet.then(function (pl) {
             vm.Zonas = pl.data;
         },
-                function (errorPl) {
-                    toaster.pop("error", "¡Error!", "Error al cargar zonas");
-                    console.log('failure loading Zona', errorPl);
-                });
+        function (errorPl) {
+            toaster.pop("error", "¡Error!", "Error al cargar zonas");
+            console.log('failure loading Zona', errorPl);
+        });
     }
 
     function loadTipoServicio() {
@@ -152,7 +152,7 @@ app.controller('reporteController', ['$scope', 'toaster', '$rootScope', 'zonaSer
 
     vm.Buscar = function () {
         vm.VerConsulta = false;
-        if (vm.Filtro.Cliente !== "") {            
+        if (!vm.Filtro.Cliente && vm.Filtro.Cliente.trim() !== "") {            
             if (vm.Filtro.ClienteId == 0) {
                 toaster.pop('warning', '¡Alerta!', 'Cliente no existe en la base de datos');
                 return;
@@ -209,9 +209,12 @@ app.controller('reporteController', ['$scope', 'toaster', '$rootScope', 'zonaSer
     };
     
     vm.ExportarExcel=function(tableId){ 
-//        var exportHref=excelService.tableToExcel(tableId,'WireWorkbenchDataExport');
-//            setTimeout(function(){location.href=exportHref;},100); 
 
+        if(vm.Servicios.length==0){
+            toaster.pop('info', "¡Información!", "No se encontraron datos. Por favor realice una nueva busqueda. "); 
+            return;
+        }
+    
          var tmpElemento = document.createElement('a');
         // obtenemos la información desde el div que lo contiene en el html
         // Obtenemos la información de la tabla
@@ -220,7 +223,7 @@ app.controller('reporteController', ['$scope', 'toaster', '$rootScope', 'zonaSer
         var tabla_html = tabla_div.outerHTML.replace(/ /g, '%20');
         tmpElemento.href = data_type + ', ' + tabla_html;
         //Asignamos el nombre a nuestro EXCEL
-        tmpElemento.download = 'Nombre_De_Mi_Excel.xls';
+        tmpElemento.download = 'reporteTrl.xls';
         // Simulamos el click al elemento creado para descargarlo
         tmpElemento.click();
     };

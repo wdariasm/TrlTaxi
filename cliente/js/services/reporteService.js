@@ -5,6 +5,11 @@ app.service("reporteService",[ '$http', function ($http) {
         return req; 
     };
     
+    this.centroCosto = function (objeto) { 
+        var req = $http.post(uri+'/api/reporte/centrocosto',objeto); 
+        return req; 
+    };
+    
     this.getTipoServicio = function () {
         var req = $http.get(uri+'/api/tiposervicio');
         return req;

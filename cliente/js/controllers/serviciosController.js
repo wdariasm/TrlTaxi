@@ -544,15 +544,16 @@ app.controller('serviciosController',['$scope', 'zonaService', 'ngTableParams', 
         var promise = contratoService.getByCliente($scope.Servicio.ClienteId, "ACTIVO");
         promise.then(function(d) {
             
+            if(d.data.length  == 0){                
+                toaster.pop('info','¡Información!',"No se encontraron contratos asociados a este usuario. ");
+                return;
+            }
+            
             if ($scope.$parent.Login.TipoAcceso == 5){               
                 $scope.Contratos = $filter('filter')( d.data, { ctNumeroContrato: $scope.$parent.Login.Contrato });
             } else {
                 $scope.Contratos = d.data;
-            }
-            
-            if($scope.Contratos.length  == 0){
-                toaster.pop('info','¡Información!',"No se encontraron contratos asociados a este usuario. ");
-            }
+            }                        
                         
             $scope.ContratoSelect ={};
         }, function(err) {

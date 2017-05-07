@@ -5,65 +5,79 @@
 		<h3 class="panel-title">Selección de Filtros</h3>
 	    </div>
 	    <div class="panel-body">	
-		<div class="row">
-		<div class="col-md-3">
-		    <div class="form-group">
-			<label  for="txtNumero" >N° Contrato </label>
-			<div class="input-group">   
-			    <div class="input-group-addon"><i class="fa fa-list text-success"></i></div>    
-			    <select ng-model="rp.Seleccionar.Contrato" ng-disabled="rp.HabilitarContrato" class="form-control"  id="cboContrato" ng-options="item as item.ctNumeroContrato for item in rp.Contratos track by item.IdContrato" required></select>			    
-			</div> 
+
+		<form name="frmReporte">
+
+		    <div class="row">
+
+			<div class="col-md-3">
+			    <div class="form-group">
+				<label  for="txtCedula" > Cliente </label>
+				<div class="input-group">    
+				    <div class="input-group-addon"><i class="fa fa-user-secret text-success"></i></div>
+				    <input  type="text" class="form-control" required="" ng-model="rp.Filtro.Cliente" maxlength="10" solo-numeros id="txtCedula" ng-blur="rp.ValidarIdentificacion()" >
+				</div> 
+			    </div>
+			</div>
+
+			<div class="col-md-3">
+			    <div class="form-group">
+				<label  for="txtContrato" > Contrato </label>
+				<div class="input-group">    
+				    <div class="input-group-addon"><i class="fa fa-hashtag text-success"></i></div>
+				    <input  type="text" class="form-control" required="" ng-model="rp.Filtro.Contrato" maxlength="10" solo-numeros id="txtContrato"  >
+				</div> 
+			    </div>
+			</div>
+
+			<div class="col-md-4">
+			    <div class="form-group">
+				<label  for="txtCentroCosto" >Centro de Costo </label>
+				<div class="input-group">    
+				    <div class="input-group-addon"><i class="fa fa-money text-success"></i></div>
+				    <input  type="text" class="form-control" required="" ng-model="rp.Filtro.CentroCosto" maxlength="50"  id="txtCentroCosto" >
+				</div> 
+			    </div>
+			</div>	
+
+
+			<input type="hidden" id="txtFechaI" ng-model="cs.Filtro.FechaInicial" >
+			<input type="hidden" id="txtFechaF" ng-model="cs.Filtro.FechaFin">
+
+
 		    </div>
-		</div> 						
 
-		<div class="col-md-4">
-		    <div class="form-group">
-			<label  for="txtCentroCosto" >Centro de Costo </label>
-			<div class="input-group">    
-			    <div class="input-group-addon"><i class="fa fa-money text-success"></i></div>
-			    <input  type="text" class="form-control" required="" ng-model="rp.Filtro.CentroCosto" maxlength="50"  id="txtCentroCosto" >
-			</div> 
-		    </div>
-		</div>	
+		    <div class="col-md-4">
+			<div class="form-group">
+			    <div class="checkbox checkbox-primary" style="margin-top: 0; margin-bottom: 3px;">                                        
+				<input type="checkbox" id="chkFecha"  ng-model="rp.Filtro.PorFecha" ng-true-value="true" ng-false-value="false" >                                         
+				<label for="chkFecha" ><strong>Rango de fechas</strong></label>
+			    </div> 
 
-
-                <input type="hidden" id="txtFechaI" ng-model="cs.Filtro.FechaInicial" >
-		<input type="hidden" id="txtFechaF" ng-model="cs.Filtro.FechaFin">
-
-		<div class="col-md-4">
-		    <div class="form-group">
-			<div class="checkbox checkbox-primary" style="margin-top: 0; margin-bottom: 3px;">                                        
-			    <input type="checkbox" id="chkFecha"  ng-model="rp.Filtro.PorFecha" ng-true-value="true" ng-false-value="false" >                                         
-			    <label for="chkFecha" ><strong>Rango de fechas</strong></label>
-			</div> 
-
-			<div class="input-group">                                                                          
-			    <div id="reportrange" ng-disabled="rp.Filtro.PorFecha" class="pull-right" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; height: 34px;">
-				<i class=" fa fa-calendar text-success"></i>
-				<span></span> <b class="caret"></b>
-			    </div>  
+			    <div class="input-group">                                                                          
+				<div id="reportrange" ng-disabled="rp.Filtro.PorFecha" class="pull-right" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; height: 34px;">
+				    <i class=" fa fa-calendar text-success"></i>
+				    <span></span> <b class="caret"></b>
+				</div>  
+			    </div>
 			</div>
 		    </div>
-		</div>
-		</div>
 
 
-		<div class="row">
-
-		    <div class="col-md-2 col-md-offset-4 text-center">       
-			
+		    <div class="col-md-2 col-md-offset-2 text-center">  
+			<br/>
 			<button   class="btn btn-danger btn-block btn-addon"   type="button"  title="Limpiar Filtros" ng-click="rp.Limpiar()"><i class="fa fa-pencil"></i> Limpiar</button>
 		    </div>
 		    <div class="col-md-2 text-center">
-			
+			<br/>
 			<button   class="btn btn-primary btn-block btn-addon"   type="button"  title="Iniciar Busqueda" ng-click="rp.Buscar()"><i class="fa fa-check"></i>Buscar</button>
 		    </div>
 
 		    <div class="col-md-2  text-center">       
-			
+			<br/>
 			<button   class="btn btn-success btn-block btn-addon"   type="button"  title="Exportar" ng-click="rp.ExportarExcel('tbConsulta')"><i class="fa fa-file-excel-o"></i> Exportar</button>
 		    </div>
-		</div>
+		</form>
 	    </div>
 	</div>
 
@@ -93,11 +107,11 @@
 				    </thead>
 
 				    <tbody>
-					
+
 					<tr ng-show="rp.Cargando">
 					    <td colspan="11" class="text-center"><span class="fa fa-spinner fa-fw fa-pulse fa-5x text-info"></span></td>
 					</tr>
-					
+
 					<tr ng-repeat="item in $data"  ng-class="{'info': item.Estado == 'ASIGNADO', 'warning':  item.Estado == 'SOLICITADO' , 'success':  item.Estado != 'SOLICITADO' || item.Estado != 'ASIGNADO'  }">
 					    <td>{{ item.IdServicio}}</td>
 					    <td>{{ item.NumeroContrato}}</td>

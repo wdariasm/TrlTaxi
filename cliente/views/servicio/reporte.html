@@ -5,18 +5,18 @@
 		<h3 class="panel-title">Selección de Filtros</h3>
 	    </div>
 	    <div class="panel-body">	
-				
+
 		<div class="col-md-3">
 		    <div class="form-group">
 			<label  for="txtNumero" >N° Contrato </label>
 			<div class="input-group">   
 			    <div class="input-group-addon"><i class="fa fa-list text-success"></i></div>    
-			    <select ng-model="rp.Seleccionar.Contrato" class="form-control"  id="cboContrato" ng-options="item as item.ctNumeroContrato for item in rp.Contratos track by item.IdContrato" required></select>			    
+			    <select ng-model="rp.Seleccionar.Contrato" ng-disabled="rp.HabilitarContrato" class="form-control"  id="cboContrato" ng-options="item as item.ctNumeroContrato for item in rp.Contratos track by item.IdContrato" required></select>			    
 			</div> 
 		    </div>
 		</div> 
-		
-		
+
+
 		<div class="col-md-3">
 		    <div class="form-group">
 			<label  for="cboZonaDestino">Zona </label>
@@ -26,8 +26,8 @@
 			</div> 
 		    </div>   
 		</div>
-		
-		
+
+
 		<div class="col-md-3">
 		    <div class="form-group">
 			<label  for="cboTipoServicio">Tipo Servicio </label>
@@ -47,7 +47,7 @@
 			</div> 
 		    </div>   
 		</div>
-		
+
 		<div class="col-md-2">
 		    <div class="form-group">
 			<label  for="txtValor" >Valor Servicio </label>
@@ -58,7 +58,7 @@
 		    </div>
 		</div>	
 
-		
+
                 <input type="hidden" id="txtFechaI" ng-model="cs.Filtro.FechaInicial" >
 		<input type="hidden" id="txtFechaF" ng-model="cs.Filtro.FechaFin">
 
@@ -71,7 +71,7 @@
 
 			<div class="input-group">                                                                          
 			    <div id="reportrange" ng-disabled="rp.Filtro.PorFecha" class="pull-right" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; height: 34px;">
-				<i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
+				<i class=" fa fa-calendar  text-success"></i>
 				<span></span> <b class="caret"></b>
 			    </div>  
 			</div>
@@ -86,7 +86,7 @@
 		    <br/>
 		    <button   class="btn btn-primary btn-block btn-addon"   type="button"  title="Iniciar Busqueda" ng-click="rp.Buscar()"><i class="fa fa-check"></i>Buscar</button>
 		</div>
-		
+
 		<div class="col-md-2  text-center">       
 		    <br/>
 		    <button   class="btn btn-success btn-block btn-addon"   type="button"  title="Exportar" ng-click="rp.ExportarExcel('tbConsulta')"><i class="fa fa-file-excel-o"></i> Exportar</button>
@@ -123,6 +123,11 @@
 				    </thead>
 
 				    <tbody>
+					
+					<tr ng-show="rp.Cargando">
+					    <td colspan="11" class="text-center"><span class="fa fa-spinner fa-fw fa-pulse fa-5x text-info"></span></td>
+					</tr>
+					
 					<tr ng-repeat="item in $data"  ng-class="{'info': item.Estado == 'ASIGNADO', 'warning':  item.Estado == 'SOLICITADO' , 'success':  item.Estado != 'SOLICITADO' || item.Estado != 'ASIGNADO'  }">
 					    <td>{{ item.IdServicio}}</td>
 					    <td>{{ item.NumeroContrato}}</td>
@@ -135,14 +140,14 @@
 					    <td>{{ item.Hora}}</td>                                     
 					    <td>{{ item.Estado}}</td>
 					    <td>
-				    <center>
-					<a  style="float: left; margin-left: 3px;" href="javascript:;"  title="Asignar Servicio"><i class="fa fa-check fa-1x text-success"></i></a>					
-				    </center>
-				    </td>
-				    </tr>
-				    <tr ng-hide="rp.Servicios.length > 0">
-					<td colspan="11" align="center"><h4 class="text-danger"> No se encontraron servicios solicitados.</h4></td>
-				    </tr> 
+						<center>
+						    <a  style="float: left; margin-left: 3px;" href="javascript:;"  title="Asignar Servicio"><i class="fa fa-check fa-1x text-success"></i></a>					
+						</center>
+					    </td>
+					</tr>
+					<tr ng-show="rp.Servicios.length == 0 && !rp.Cargando">
+					    <td colspan="11" class="text-center text-danger " style="font-size: 18px;" ><strong>No se encontraron servicios para este usuario.</strong></td>
+					</tr>   
 				    </tbody>
 				</table>
 			    </div>
@@ -160,48 +165,48 @@
 
 <script type="text/javascript">
 
-    $(function () {
-    var cb = function(start, end) {
-    $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
-	    $('#txtFechaI').val(start.format('YYYY-MM-DD'));
-	    $('#txtFechaF').val(end.format('YYYY-MM-DD'));
-    };
-    var optionSet1 = {
-	startDate: moment().subtract(29, 'days'),
-	endDate: moment(),
-	minDate: '01/01/2010',
-	maxDate: '12/31/2030',
-	showDropdowns: true,
-	showWeekNumbers: true,
-	timePicker: false,
-	ranges: {
-	'Hoy': [moment(), moment()],
-		'Ayer': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-		'Ultimos 7 dias': [moment().subtract(6, 'days'), moment()],
-		'Ultimos 30 dias': [moment().subtract(29, 'days'), moment()],
-		'Este Mes': [moment().startOf('month'), moment().endOf('month')],
-		'Ultimo Mes': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
-	},
-	opens: 'right',
-	buttonClasses: ['btn btn-default'],
-	applyClass: 'btn-sm btn-primary',
-	cancelClass: 'btn-sm btn-warning',
-	format: 'MM/DD/YYYY',
-	separator: ' to ',
-	locale: {
-	applyLabel: 'Aplicar',
-		cancelLabel: 'Limpiar',
-		fromLabel: 'Desde',
-		toLabel: 'Hasta',
-		customRangeLabel: 'Rango',
-		daysOfWeek: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa'],
-		monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
-		firstDay: 1
-	}
-    };
-    $('#reportrange span').html(moment().format('MMMM D, YYYY') + ' - ' + moment().format('MMMM D, YYYY'));
-    $('#reportrange').daterangepicker(optionSet1, cb);
-    });
+            $(function () {
+            var cb = function(start, end) {
+            $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+                    $('#txtFechaI').val(start.format('YYYY-MM-DD'));
+                    $('#txtFechaF').val(end.format('YYYY-MM-DD'));
+            };
+                    var optionSet1 = {
+                    startDate: moment().subtract(29, 'days'),
+                            endDate: moment(),
+                            minDate: '01/01/2010',
+                            maxDate: '12/31/2030',
+                            showDropdowns: true,
+                            showWeekNumbers: true,
+                            timePicker: false,
+                            ranges: {
+                            'Hoy': [moment(), moment()],
+                                    'Ayer': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                                    'Ultimos 7 dias': [moment().subtract(6, 'days'), moment()],
+                                    'Ultimos 30 dias': [moment().subtract(29, 'days'), moment()],
+                                    'Este Mes': [moment().startOf('month'), moment().endOf('month')],
+                                    'Ultimo Mes': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+                            },
+                            opens: 'right',
+                            buttonClasses: ['btn btn-default'],
+                            applyClass: 'btn-sm btn-primary',
+                            cancelClass: 'btn-sm btn-warning',
+                            format: 'MM/DD/YYYY',
+                            separator: ' to ',
+                            locale: {
+                            applyLabel: 'Aplicar',
+                                    cancelLabel: 'Limpiar',
+                                    fromLabel: 'Desde',
+                                    toLabel: 'Hasta',
+                                    customRangeLabel: 'Rango',
+                                    daysOfWeek: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa'],
+                                    monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+                                    firstDay: 1
+                            }
+                    };
+                    $('#reportrange span').html(moment().format('MMMM D, YYYY') + ' - ' + moment().format('MMMM D, YYYY'));
+                    $('#reportrange').daterangepicker(optionSet1, cb);
+            });
 
 
 

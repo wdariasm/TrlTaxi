@@ -4,8 +4,12 @@ app.service("reporteService",[ '$http', function ($http) {
         var req = $http.post(uri+'/api/reporte/admin',banco); 
         return req; 
     };
-                 
-   
+    
+    this.centroCosto = function (objeto) { 
+        var req = $http.post(uri+'/api/reporte/centrocosto',objeto); 
+        return req; 
+    };
+                        
 }]);
 
 

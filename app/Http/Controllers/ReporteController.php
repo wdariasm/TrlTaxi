@@ -9,7 +9,184 @@ use Illuminate\Http\JsonResponse;
 
 class ReporteController extends Controller
 {
-   
+       
+    public function reporteAdminitrador(Request $request){
+        try {            
+            
+            $condicion = "";
+            $condFecha = "";            
+            
+           // $estado = $request->get('Estado');
+            $buscarPorFecha = $request->get('PorFecha');
+            $fechaInicial = $request->get('FechaInicio');
+            $fechaFinal = $request->get('FechaFin');
+            $TipoServicio = $request->get('TipoServicioId');            
+            $TipoVehiculo = $request->get('TipoVehiculoId');
+            $zona = $request->get('ZonaId');
+            $valorServicio = $request->get('Valor');
+            $ConductorId = $request->get('ConductorId');
+            $ClienteId = $request->get('ClienteId');
+            $NumeroContrato = $request->get('Contrato');
+            $Placa = $request->get('Placa');
+            
+//            if($estado !=="TODOS"){
+//                $condicion =  " AND Estado = '". $estado ."'";
+//            }
+            
+            if($buscarPorFecha){
+                $condFecha = " AND FechaServicio BETWEEN '$fechaInicial' AND '$fechaFinal'";
+            }
+            
+            if(!empty($TipoServicio) ){
+                $condicion .= " AND TipoServicidoId = ".$TipoServicio;
+            }
+            
+            if(!empty($TipoVehiculo)){
+                $condicion  .= " AND TipoVehiculoId = " .$TipoVehiculo;
+            }
+            
+            if(!empty($zona)){
+                $condicion .= " AND ( ZonaOrigen = " .$zona ." OR  ZonaDestino = ". $zona . " )";
+            }
+            
+            if(!empty($valorServicio) && $valorServicio !== "0"){
+                $condicion .= " AND ValorTotal >= " . intval($valorServicio);
+            }
+            
+            if(!empty($ConductorId) && $ConductorId !== "0"){
+                $condicion .= " AND ConductorId = " .$ConductorId;
+            }
+            
+            if(!empty($ClienteId) && $ClienteId !== "0"){
+                $condicion .= " AND ClienteId = " .$ClienteId;
+            }
+            
+            if(!empty($NumeroContrato)){
+                $condicion .= " AND NumeroContrato = '" .$NumeroContrato ."'";
+            }
+            
+            if(!empty($Placa)){
+                $condicion .= " AND Placa = '" .$Placa ."'";
+            }
+                                                
+            $sql = "SELECT s.IdServicio, s.ContratoId, s.ClienteId, s.NumeroContrato, s.Responsable,"
+                    . " s.Telefono, s.TipoServicidoId, ts.svDescripcion, s.FechaServicio, s.Hora, s.Valor, s.Estado, "
+                    . " s.DescVehiculo, s.TipoVehiculoId, s.ValorTotal, s.ConductorId FROM servicio s INNER JOIN  tiposervicio "
+                    . " ts ON s.TipoServicidoId=ts.svCodigo WHERE ContratoId > 0  " . $condicion . $condFecha 
+                    . "  order by s.IdServicio desc";
+                       
+            $servicio = DB::select($sql);            
+            return $servicio;                                                    
+            
+        }catch (\Exception $exc) {
+            return JsonResponse::create(array('file' => $exc->getFile(), "line"=> $exc->getLine(),  "message" =>json_encode($exc->getMessage())), 500);
+        } 
+    }
+    
+    public function reporteCliente(Request $request){
+        try {            
+            
+            $condicion = "";
+            $condFecha = "";            
+            
+           // $estado = $request->get('Estado');
+            $buscarPorFecha = $request->get('PorFecha');
+            $fechaInicial = $request->get('FechaInicio');
+            $fechaFinal = $request->get('FechaFin');
+            $TipoServicio = $request->get('TipoServicioId');            
+            $TipoVehiculo = $request->get('TipoVehiculoId');
+            $zona = $request->get('ZonaId');
+            $valorServicio = $request->get('Valor');            
+            $ClienteId = $request->get('ClienteId');
+            $NumeroContrato = $request->get('Contrato');            
+            
+            if($buscarPorFecha){
+                $condFecha = " AND FechaServicio BETWEEN '$fechaInicial' AND '$fechaFinal'";
+            }
+            
+            if(!empty($TipoServicio) ){
+                $condicion .= " AND TipoServicidoId = ".$TipoServicio;
+            }
+            
+            if(!empty($TipoVehiculo)){
+                $condicion  .= " AND TipoVehiculoId = " .$TipoVehiculo;
+            }
+            
+            if(!empty($zona)){
+                $condicion .= " AND ( ZonaOrigen = " .$zona ." OR  ZonaDestino = ". $zona . " )";
+            }
+            
+            if(!empty($valorServicio) && $valorServicio !== "0"){
+                $condicion .= " AND ValorTotal >= " . intval($valorServicio);
+            }
+                      
+            
+            if(!empty($ClienteId) && $ClienteId !== "0"){
+                $condicion .= " AND ClienteId = " .$ClienteId;
+            }
+            
+            if(!empty($NumeroContrato)){
+                $condicion .= " AND NumeroContrato = '" .$NumeroContrato ."'";
+            }
+                                                                    
+            $sql = "SELECT s.IdServicio, s.ContratoId, s.ClienteId, s.NumeroContrato, s.Responsable,"
+                    . " s.Telefono, s.TipoServicidoId, ts.svDescripcion, s.FechaServicio, s.Hora, s.Valor, s.Estado, "
+                    . " s.DescVehiculo, s.TipoVehiculoId, s.ValorTotal, s.ConductorId FROM servicio s INNER JOIN  tiposervicio "
+                    . " ts ON s.TipoServicidoId=ts.svCodigo WHERE ContratoId > 0  " . $condicion . $condFecha 
+                    . "  order by s.IdServicio desc";
+                       
+            $servicio = DB::select($sql);            
+            return $servicio;                                                    
+            
+        }catch (\Exception $exc) {
+            return JsonResponse::create(array('file' => $exc->getFile(), "line"=> $exc->getLine(),  "message" =>json_encode($exc->getMessage())), 500);
+        } 
+    }
+    
+    
+    public function reporteCentroCosto(Request $request){
+        try {            
+            
+            $condicion = "";
+            $condFecha = "";     
+                                
+            $buscarPorFecha = $request->get('PorFecha');
+            $fechaInicial = $request->get('FechaInicio');
+            $fechaFinal = $request->get('FechaFin');                        
+            $ClienteId = $request->get('ClienteId');
+            $NumeroContrato = $request->get('Contrato');            
+            
+            if($buscarPorFecha){
+                $condFecha = " AND FechaServicio BETWEEN '$fechaInicial' AND '$fechaFinal'";
+            }                                              
+            
+            if(!empty($ClienteId) && $ClienteId !== "0"){
+                $condicion .= " AND ClienteId = " .$ClienteId;
+            }
+            
+            if(!empty($NumeroContrato)){
+                $condicion .= " AND NumeroContrato = '" .$NumeroContrato ."'";
+            }
+            
+            $condCCosto = 'sc.scNota LIKE "%'. $request->get('CentroCosto') .'%"';
+                                                                    
+            $sql = "SELECT s.IdServicio, s.ContratoId, s.ClienteId, s.NumeroContrato, sc.scTelefono, "
+                    . "  s.TipoServicidoId, s.FechaServicio, s.Hora, s.Valor, s.Estado, "
+                    . " s.DescVehiculo, s.TipoVehiculoId, s.ValorTotal, sc.scNombre, sc.scNota "
+                    . " FROM servicio s INNER JOIN serviciocontactos sc ON s.IdServicio = sc.scIdServicio "
+                    . " WHERE Estado = 'FINALIZADO' and " .$condCCosto  . $condicion . $condFecha 
+                    . "  order by s.IdServicio desc";
+                       
+            $servicio = DB::select($sql);            
+            return $servicio;                                                    
+            
+        }catch (\Exception $exc) {
+            return JsonResponse::create(array('file' => $exc->getFile(), "line"=> $exc->getLine(),  "message" =>json_encode($exc->getMessage())), 500);
+        } 
+    }
+    
+    
+    
     public function GenerarPDF(){
         $pdf=new Fpdf();
         $pdf::AddPage();
@@ -232,150 +409,6 @@ class ReporteController extends Controller
         $pdf::Rect(8,276,193,9); // #42
         $pdf::Output();
         exit();
-    }
-
-        /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //       
-    }
-    
-    
-    public function reporteAdminitrador(Request $request){
-        try {            
-            
-            $condicion = "";
-            $condFecha = "";            
-            
-           // $estado = $request->get('Estado');
-            $buscarPorFecha = $request->get('PorFecha');
-            $fechaInicial = $request->get('FechaInicio');
-            $fechaFinal = $request->get('FechaFin');
-            $TipoServicio = $request->get('TipoServicioId');            
-            $TipoVehiculo = $request->get('TipoVehiculoId');
-            $zona = $request->get('ZonaId');
-            $valorServicio = $request->get('Valor');
-            $ConductorId = $request->get('ConductorId');
-            $ClienteId = $request->get('ClienteId');
-            $NumeroContrato = $request->get('Contrato');
-            $Placa = $request->get('Placa');
-            
-//            if($estado !=="TODOS"){
-//                $condicion =  " AND Estado = '". $estado ."'";
-//            }
-            
-            if($buscarPorFecha){
-                $condFecha = " AND FechaServicio BETWEEN '$fechaInicial' AND '$fechaFinal'";
-            }
-            
-            if(!empty($TipoServicio) ){
-                $condicion .= " AND TipoServicidoId = ".$TipoServicio;
-            }
-            
-            if(!empty($TipoVehiculo)){
-                $condicion  .= " AND TipoVehiculoId = " .$TipoVehiculo;
-            }
-            
-            if(!empty($zona)){
-                $condicion .= " AND ( ZonaOrigen = " .$zona ." OR  ZonaDestino = ". $zona . " )";
-            }
-            
-            if(!empty($valorServicio) && $valorServicio !== "0"){
-                $condicion .= " AND ValorTotal >= " . intval($valorServicio);
-            }
-            
-            if(!empty($ConductorId) && $ConductorId !== "0"){
-                $condicion .= " AND ConductorId = " .$ConductorId;
-            }
-            
-            if(!empty($ClienteId) && $ClienteId !== "0"){
-                $condicion .= " AND ClienteId = " .$ClienteId;
-            }
-            
-            if(!empty($NumeroContrato)){
-                $condicion .= " AND NumeroContrato = '" .$NumeroContrato ."'";
-            }
-            
-            if(!empty($Placa)){
-                $condicion .= " AND Placa = '" .$Placa ."'";
-            }
-                                                
-            $sql = "SELECT s.IdServicio, s.ContratoId, s.ClienteId, s.NumeroContrato, s.Responsable,"
-                    . " s.Telefono, s.TipoServicidoId, ts.svDescripcion, s.FechaServicio, s.Hora, s.Valor, s.Estado, "
-                    . " s.DescVehiculo, s.TipoVehiculoId, s.ValorTotal, s.ConductorId FROM servicio s INNER JOIN  tiposervicio "
-                    . " ts ON s.TipoServicidoId=ts.svCodigo WHERE ContratoId > 0  " . $condicion . $condFecha 
-                    . "  order by s.IdServicio desc";
-                       
-            $servicio = DB::select($sql);            
-            return $servicio;                                                    
-            
-        }catch (\Exception $exc) {
-            return JsonResponse::create(array('file' => $exc->getFile(), "line"=> $exc->getLine(),  "message" =>json_encode($exc->getMessage())), 500);
-        } 
-    }
-    
-    public function reporteCliente(Request $request){
-        try {            
-            
-            $condicion = "";
-            $condFecha = "";            
-            
-           // $estado = $request->get('Estado');
-            $buscarPorFecha = $request->get('PorFecha');
-            $fechaInicial = $request->get('FechaInicio');
-            $fechaFinal = $request->get('FechaFin');
-            $TipoServicio = $request->get('TipoServicioId');            
-            $TipoVehiculo = $request->get('TipoVehiculoId');
-            $zona = $request->get('ZonaId');
-            $valorServicio = $request->get('Valor');            
-            $ClienteId = $request->get('ClienteId');
-            $NumeroContrato = $request->get('Contrato');            
-            
-            if($buscarPorFecha){
-                $condFecha = " AND FechaServicio BETWEEN '$fechaInicial' AND '$fechaFinal'";
-            }
-            
-            if(!empty($TipoServicio) ){
-                $condicion .= " AND TipoServicidoId = ".$TipoServicio;
-            }
-            
-            if(!empty($TipoVehiculo)){
-                $condicion  .= " AND TipoVehiculoId = " .$TipoVehiculo;
-            }
-            
-            if(!empty($zona)){
-                $condicion .= " AND ( ZonaOrigen = " .$zona ." OR  ZonaDestino = ". $zona . " )";
-            }
-            
-            if(!empty($valorServicio) && $valorServicio !== "0"){
-                $condicion .= " AND ValorTotal >= " . intval($valorServicio);
-            }
-                      
-            
-            if(!empty($ClienteId) && $ClienteId !== "0"){
-                $condicion .= " AND ClienteId = " .$ClienteId;
-            }
-            
-            if(!empty($NumeroContrato)){
-                $condicion .= " AND NumeroContrato = '" .$NumeroContrato ."'";
-            }
-                                                                    
-            $sql = "SELECT s.IdServicio, s.ContratoId, s.ClienteId, s.NumeroContrato, s.Responsable,"
-                    . " s.Telefono, s.TipoServicidoId, ts.svDescripcion, s.FechaServicio, s.Hora, s.Valor, s.Estado, "
-                    . " s.DescVehiculo, s.TipoVehiculoId, s.ValorTotal, s.ConductorId FROM servicio s INNER JOIN  tiposervicio "
-                    . " ts ON s.TipoServicidoId=ts.svCodigo WHERE ContratoId > 0  " . $condicion . $condFecha 
-                    . "  order by s.IdServicio desc";
-                       
-            $servicio = DB::select($sql);            
-            return $servicio;                                                    
-            
-        }catch (\Exception $exc) {
-            return JsonResponse::create(array('file' => $exc->getFile(), "line"=> $exc->getLine(),  "message" =>json_encode($exc->getMessage())), 500);
-        } 
     }
 
 }

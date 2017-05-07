@@ -130,7 +130,11 @@ var app;
             })
             
             .when("/3/reporte/principal",{
-                templateUrl: 'views/reportes/reporte1.html'                        
+                templateUrl: 'views/reportes/general.html'                        
+            })
+            
+            .when("/3/reporte/centroCosto",{
+                templateUrl: 'views/reportes/centroCosto.html'                        
             })
             
             .otherwise({

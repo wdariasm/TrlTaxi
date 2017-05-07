@@ -1,14 +1,11 @@
-app.controller('reporteController', ['$scope', 'toaster', 'zonaService', 'funcionService',
-      'reporteService', 'ngTableParams', 'excelService', 'contratoService', '$filter',  function ($scope, toaster,
-      zonaService, funcionService, reporteService, ngTableParams, excelService, contratoService, $filter) {
+app.controller('reporteCostoController', ['$scope', 'toaster',  'funcionService',
+      'reporteService', 'ngTableParams',  'contratoService', '$filter',  function ($scope, toaster,
+       funcionService, reporteService, ngTableParams, contratoService, $filter) {
 
-    var vm = this;
-
-    vm.TipoVehiculos = [];
-    vm.TipoServicios = [];
+    var vm = this;  
     vm.Contratos = [];
     
-    $scope.$parent.SetTitulo("REPORTES CLIENTE");      
+    $scope.$parent.SetTitulo("REPORTES CENTRO DE COSTO CLIENTE");      
 
     vm.Filtro = {};
     vm.VerConsulta = false;
@@ -18,9 +15,7 @@ app.controller('reporteController', ['$scope', 'toaster', 'zonaService', 'funcio
     vm.HabilitarContrato = false;
     vm.Cargando = false;
     
-    loadZona();
-    loadTipoServicio();
-    loadTipoVehiculo();    
+            
     initTabla();    
     inicializarReporte();
     
@@ -30,61 +25,25 @@ app.controller('reporteController', ['$scope', 'toaster', 'zonaService', 'funcio
 
     function inicializarReporte() {
         
-        vm.Seleccionar = {
-            Zona: "", 
-            TipoVehiculo: "",
-            TipoServicio: "",
-            Contrato : ""
-        };
+        vm.Seleccionar = {  Contrato : ""   };
         
-        vm.Filtro = {                        
-            Valor: "",            
+        vm.Filtro = {                                       
             FechaInicio: moment().subtract(7, 'day').format("L"),
             FechaFin: moment().format("L"),
             ClienteId: $scope.$parent.Login.ClienteId,
             PorFecha: false,            
-            Contrato : "",
-            TipoServicioId : 0,
-            TipoVehiculoId : 0,
-            ZonaId : 0
+            Contrato : ""
         };
         
         if($scope.$parent.Login.TipoAcceso == 5){
             vm.HabilitarContrato = true;
-        }
+            if(vm.Contratos.length > 0){
+                 vm.Contratos = $filter('filter')( vm.Contratos, { ctNumeroContrato: $scope.$parent.Login.Contrato });
+                vm.Seleccionar.Contrato = vm.Contratos[0];
+            } 
+        }        
     }
 
-    function loadZona() {
-        var promiseGet = zonaService.getAll(); //The Method Call from service
-        promiseGet.then(function (pl) {
-            vm.Zonas = pl.data;
-        },
-        function (errorPl) {
-            toaster.pop("error", "¡Error!", "Error al cargar zonas");
-            console.log('failure loading Zona', errorPl);
-        });
-    }
-  
-    function loadTipoServicio() {
-        var promise = reporteService.getTipoServicio();
-        promise.then(function (d) {
-            vm.TipoServicios = d.data;
-        }, function (err) {
-            toaster.pop('error', '¡Error!', "Error al cargar Servicios");
-            console.log("Some Error Occured " + JSON.stringify(err));
-        });
-    }
-
-    function loadTipoVehiculo() {
-        var promise = reporteService.getTipoVehiculo();
-        promise.then(function (d) {
-            vm.TipoVehiculos = d.data;
-        }, function (err) {
-            toaster.pop('error', '¡Error!', "Error al cargar Tipo de Vehiculo");
-            console.log("Some Error Occured " + JSON.stringify(err));
-        });
-    }
-    
      function loadContratos (){        
         var promise = contratoService.getByCliente(vm.Filtro.ClienteId, "ACTIVO");
         promise.then(function(d) {
@@ -142,36 +101,31 @@ app.controller('reporteController', ['$scope', 'toaster', 'zonaService', 'funcio
     };
             
     vm.Buscar = function () {
-        vm.VerConsulta = true;
-        vm.Cargando = true;
+       
         if (vm.Filtro.ClienteId == 0) {
             toaster.pop('warning', '¡Alerta!', 'Cliente no existe en la base de datos');
             return;
-        }                       
+        }          
+        
+        if(!vm.Filtro.CentroCosto){
+            toaster.pop('warning', '¡Alerta!', 'Por favor ingrese el centro de costo.');
+            return;
+        }
+        
+        vm.VerConsulta = true;
+        vm.Cargando = true;
 
         if (vm.Filtro.PorFecha) {
             if (vm.Filtro.FechaInicio === "" || vm.Filtro.FechaInicio === "") {
                 toaster.pop('warning', '¡Alerta!', 'Por favor seleccione un rango de fechas');
                 return;
             }
-        }
-        
-        if(vm.Seleccionar.Zona){
-            vm.Filtro.ZonaId = vm.Seleccionar.Zona.znCodigo;
-        }
+        }                
         
          if(vm.Seleccionar.Contrato){
             vm.Filtro.Contrato = vm.Seleccionar.Contrato.ctNumeroContrato;
         }
-        
-        if(vm.Seleccionar.TipoVehiculo){
-            vm.Filtro.TipoVehiculoId = vm.Seleccionar.TipoVehiculo.tvCodigo;
-        }
-        
-        if(vm.Seleccionar.TipoServicio){
-            vm.Filtro.TipoServicioId = vm.Seleccionar.TipoServicio.svCodigo;
-        }
-        
+              
         if(vm.Filtro.PorFecha){
             var valorF1 = $('#txtFechaI').val();
             var valorF2  = $('#txtFechaF').val();                
@@ -179,7 +133,9 @@ app.controller('reporteController', ['$scope', 'toaster', 'zonaService', 'funcio
             vm.Filtro.FechaFin = valorF2 ==="" ? fechaActual : valorF2;
         }
         
-        var promisePost = reporteService.postCliente(vm.Filtro);
+        
+        
+        var promisePost = reporteService.centroCosto(vm.Filtro);
         promisePost.then(function (d) {            
             vm.Cargando = false;
             vm.Servicios =d.data;
@@ -218,6 +174,8 @@ app.controller('reporteController', ['$scope', 'toaster', 'zonaService', 'funcio
     };
 
 }]);
+
+
 
 
 

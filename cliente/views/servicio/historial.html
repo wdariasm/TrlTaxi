@@ -45,6 +45,11 @@
                             </thead>
 
                             <tbody>
+				
+				<tr ng-show="Cargando">
+				    <td colspan="11" class="text-center"><span class="fa fa-spinner fa-fw fa-pulse fa-5x text-info"></span></td>
+				</tr>
+				
 				<tr ng-repeat="item in $data" ng-class="{'info': item.Estado == 'ASIGNADO', 'warning':  item.Estado == 'SOLICITADO' || item.Estado == 'CANCELADO' , 'success':  item.Estado != 'SOLICITADO' || item.Estado != 'ASIGNADO'  }">
 				    <td>{{ item.IdServicio}}</td>
 				    <td>{{ item.NumeroContrato}}</td>
@@ -66,11 +71,7 @@
 				</div>
 			    </center>
 			    </td>
-			    </tr>
-
-			    <tr ng-show="Cargando">
-				<td colspan="11" class="text-center"><span class="fa fa-spinner fa-fw fa-pulse fa-5x text-info"></span></td>
-			    </tr>
+			    </tr>			   
 
 			    <tr ng-show="Servicios.length == 0 && !Cargando">
 				<td colspan="11" class="text-center text-danger " style="font-size: 18px;" ><strong>No se encontraron servicios para este usuario.</strong></td>
