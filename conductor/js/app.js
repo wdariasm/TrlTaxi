@@ -22,7 +22,11 @@ var app;
             
             .when("/1/cartera",{
                 templateUrl: 'views/servicio/cartera.html'
-            })                        
+            }) 
+            
+            .when("/1/reporte",{
+                templateUrl: 'views/servicio/reporte.html'
+            }) 
             
             .when("/2/usuario/clave",{
                 templateUrl: 'views/conductor/cambiarClave.html'

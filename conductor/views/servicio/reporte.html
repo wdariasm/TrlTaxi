@@ -1,0 +1,195 @@
+<div ng-controller="reporteController as rp">
+    <div class="container-fluid">
+	<div class="panel panel-default">
+	    <div class="panel-heading">
+		<h3 class="panel-title">Selección de Filtros</h3>
+	    </div>
+	    <div class="panel-body">	
+		
+		<form name="frmReporte" novalidate="">
+	
+		<div class="col-md-3">
+		    <div class="form-group">
+			<label  for="cboTipoServicio">Tipo Servicio </label>
+			<div class="input-group">
+			    <div class="input-group-addon"><i class="fa fa-check text-success"></i></div>
+			    <select ng-model="rp.Seleccionar.TipoServicio" class="form-control" id="cboTipoServicio" ng-options="item as item.svDescripcion for item in rp.TipoServicios track by item.svCodigo" required ></select>
+			</div>
+		    </div>
+		</div>
+	
+
+		<div class="col-md-2">
+		    <div class="form-group">
+			<label  for="txtValor" >Valor Servicio </label>
+			<div class="input-group">    
+			    <div class="input-group-addon"><i class="fa fa-money text-success"></i></div>
+			    <input  type="text" class="form-control" required="" ng-model="rp.Filtro.Valor" maxlength="10" solo-numeros id="txtValor" >
+			</div> 
+		    </div>
+		</div>	
+
+
+                <input type="hidden" id="txtFechaI" ng-model="cs.Filtro.FechaInicial" >
+		<input type="hidden" id="txtFechaF" ng-model="cs.Filtro.FechaFin">
+
+		<div class="col-md-4">
+		    <div class="form-group">
+			<div class="checkbox checkbox-primary" style="margin-top: 0; margin-bottom: 3px;">                                        
+			    <input type="checkbox" id="chkFecha"  ng-model="rp.Filtro.PorFecha" ng-true-value="true" ng-false-value="false" >                                         
+			    <label for="chkFecha" ><strong>Rango de fechas</strong></label>
+			</div> 
+
+			<div class="input-group">                                                                          
+			    <div id="reportrange" ng-disabled="rp.Filtro.PorFecha" class="pull-right" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; height: 34px;">
+				<i class=" fa fa-calendar  text-success"></i>
+				<span></span> <b class="caret"></b>
+			    </div>  
+			</div>
+		    </div>
+		</div>
+		
+		
+		<div class="col-md-3">
+		    <div class="form-group">
+			<label  for="txtCedula" >C.C Cliente </label>
+			<div class="input-group">    
+			    <div class="input-group-addon"><i class="fa fa-user-secret text-success"></i></div>
+			    <input  type="text" class="form-control" required="" ng-model="rp.Filtro.Cliente" maxlength="10" solo-numeros id="txtCedula" ng-blur="rp.ValidarIdentificacion()" >
+			</div> 
+		    </div>
+		</div>
+		
+
+		<div class="col-md-2 col-md-offset-5  text-center">       
+		    <br/>
+		    <button   class="btn btn-danger btn-block btn-addon"   type="button"  title="Limpiar Filtros" ng-click="rp.Limpiar()"><i class="fa fa-pencil"></i> Limpiar</button>
+		</div>
+		<div class="col-md-2 text-center">
+		    <br/>
+		    <button   class="btn btn-primary btn-block btn-addon"   type="button"  title="Iniciar Busqueda" ng-click="rp.Buscar()"><i class="fa fa-check"></i>Buscar</button>
+		</div>
+
+		<div class="col-md-2  text-center">       
+		    <br/>
+		    <button   class="btn btn-success btn-block btn-addon"   type="button"  title="Exportar" ng-click="rp.ExportarExcel('tbConsulta')"><i class="fa fa-file-excel-o"></i> Exportar</button>
+		</div>
+
+
+		</form>
+	    </div>
+	</div>
+
+	<div class="row" ng-show="rp.VerConsulta">
+	    <div class="col-md-12">
+		<div class="panel panel-default">
+		    <div class="panel-heading">Resultado Consulta</div>
+		    <div class="panel-body">
+
+			<div class="row">
+			    <div class="col-md-12">
+				<table id="tbConsulta" class="table table-striped table-condensed" ng-table="rp.TablaServicio"  style="margin-top: 15px;">
+				    <thead>
+					<tr>
+					    <th>ID</th>
+					    <th>CONTRATO</th>
+					    <th>RESPONSABLE</th>
+					    <th>TELEFONO</th>                                            
+					    <th>T.SERVICIO</th>					    
+					    <th>$ VALOR</th>
+					    <th>FECHA</th>
+					    <th>HORA</th>
+					    <th>ESTADO</th>
+					    <th width="6%">ACCION</th>
+					</tr>
+				    </thead>
+
+				    <tbody>
+					
+					<tr ng-show="rp.Cargando">
+					    <td colspan="11" class="text-center"><span class="fa fa-spinner fa-fw fa-pulse fa-5x text-info"></span></td>
+					</tr>
+					
+					<tr ng-repeat="item in $data"  ng-class="{'info': item.Estado == 'ASIGNADO', 'warning':  item.Estado == 'SOLICITADO' , 'success':  item.Estado != 'SOLICITADO' || item.Estado != 'ASIGNADO'  }">
+					    <td>{{ item.IdServicio}}</td>
+					    <td>{{ item.NumeroContrato}}</td>
+					    <td>{{ item.Responsable}}</td>
+					    <td >{{ item.Telefono}}</td>
+					    <td>{{ item.svDescripcion}}</td>					                                        
+					    <td >{{ item.ValorTotal | currency : "$" : 0}}</td>  
+					    <td>{{ item.FechaServicio}}</td>
+					    <td>{{ item.Hora}}</td>                                     
+					    <td>{{ item.Estado}}</td>
+					    <td>
+						<center>
+						    <a  style="float: left; margin-left: 3px;" href="javascript:;"  title="Asignar Servicio"><i class="fa fa-check fa-1x text-success"></i></a>					
+						</center>
+					    </td>
+					</tr>
+					<tr ng-show="rp.Servicios.length == 0 && !rp.Cargando">
+					    <td colspan="11" class="text-center text-danger " style="font-size: 18px;" ><strong>No se encontraron servicios para este usuario.</strong></td>
+					</tr>   
+				    </tbody>
+				</table>
+			    </div>
+			</div>
+			<div class="col-md-2" style="margin-top: 5px;">
+			    <label class="text-center text-primary" style="font-size: 18px;">Total: {{rp.Servicios.length}}</label>
+			</div>
+		    </div>
+		</div>
+	    </div>
+	</div>
+
+    </div>    
+</div>
+
+<script type="text/javascript">
+
+            $(function () {
+            var cb = function(start, end) {
+            $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+                    $('#txtFechaI').val(start.format('YYYY-MM-DD'));
+                    $('#txtFechaF').val(end.format('YYYY-MM-DD'));
+            };
+                    var optionSet1 = {
+                    startDate: moment().subtract(29, 'days'),
+                            endDate: moment(),
+                            minDate: '01/01/2010',
+                            maxDate: '12/31/2030',
+                            showDropdowns: true,
+                            showWeekNumbers: true,
+                            timePicker: false,
+                            ranges: {
+                            'Hoy': [moment(), moment()],
+                                    'Ayer': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                                    'Ultimos 7 dias': [moment().subtract(6, 'days'), moment()],
+                                    'Ultimos 30 dias': [moment().subtract(29, 'days'), moment()],
+                                    'Este Mes': [moment().startOf('month'), moment().endOf('month')],
+                                    'Ultimo Mes': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+                            },
+                            opens: 'right',
+                            buttonClasses: ['btn btn-default'],
+                            applyClass: 'btn-sm btn-primary',
+                            cancelClass: 'btn-sm btn-warning',
+                            format: 'MM/DD/YYYY',
+                            separator: ' to ',
+                            locale: {
+                            applyLabel: 'Aplicar',
+                                    cancelLabel: 'Limpiar',
+                                    fromLabel: 'Desde',
+                                    toLabel: 'Hasta',
+                                    customRangeLabel: 'Rango',
+                                    daysOfWeek: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa'],
+                                    monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+                                    firstDay: 1
+                            }
+                    };
+                    $('#reportrange span').html(moment().format('MMMM D, YYYY') + ' - ' + moment().format('MMMM D, YYYY'));
+                    $('#reportrange').daterangepicker(optionSet1, cb);
+            });
+
+
+
+</script>
+

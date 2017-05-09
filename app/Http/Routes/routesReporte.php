@@ -10,3 +10,6 @@
     
     /* Reporte centro de costo */
     Route::post('api/reporte/centrocosto','ReporteController@reporteCentroCosto');
+    
+    /* Reporte conductor */
+    Route::post('api/reporte/conductor','ReporteController@reporteConductor');

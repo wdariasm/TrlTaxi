@@ -1,70 +1,44 @@
-app.controller('reporteController', ['$scope', 'toaster', 'zonaService', 'funcionService',
-      'reporteService', 'ngTableParams', 'excelService', 'contratoService', '$filter',  function ($scope, toaster,
-      zonaService, funcionService, reporteService, ngTableParams, excelService, contratoService, $filter) {
+app.controller('reporteController', ['$scope', 'toaster',  'funcionService',
+      'reporteService', 'ngTableParams',   function ($scope, toaster,
+       funcionService, reporteService, ngTableParams) {
 
-    var vm = this;
-
-    vm.TipoVehiculos = [];
-    vm.TipoServicios = [];
-    vm.Contratos = [];
+    var vm = this;   
+    vm.TipoServicios = [];    
     
-    $scope.$parent.SetTitulo("REPORTES CLIENTE");      
+    $scope.$parent.SetTitulo("REPORTE CONDUCTOR");      
 
     vm.Filtro = {};
     vm.VerConsulta = false;
     vm.Servicios = [];    
     vm.TablaServicio ={};
-    vm.Seleccionar = {};
-    vm.HabilitarContrato = false;
+    vm.Seleccionar = {};    
     vm.Cargando = false;
     
-    loadZona();
-    loadTipoServicio();
-    loadTipoVehiculo();    
-    initTabla();    
-    inicializarReporte();
     
-    loadContratos();
+    loadTipoServicio();   
+    initTabla();    
+    inicializarReporte();        
         
     var fechaActual = new Date().toISOString().substr(0,10).toString();
 
     function inicializarReporte() {
         
-        vm.Seleccionar = {
-            Zona: "", 
-            TipoVehiculo: "",
-            TipoServicio: "",
-            Contrato : ""
+        vm.Seleccionar = {                        
+            TipoServicio: ""            
         };
         
         vm.Filtro = {                        
             Valor: "",            
             FechaInicio: moment().subtract(7, 'day').format("L"),
             FechaFin: moment().format("L"),
-            ClienteId: $scope.$parent.Login.ClienteId,
-            PorFecha: false,            
-            Contrato : "",
+            ClienteId: 0,
+            PorFecha: false,                        
             TipoServicioId : 0,
-            TipoVehiculoId : 0,
-            ZonaId : 0
-        };
-        
-        if($scope.$parent.Login.TipoAcceso == 5){
-            vm.HabilitarContrato = true;
-        }
+            ConductorId: $scope.$parent.Login.ConductorId,
+            Cliente : ""
+        };              
     }
-
-    function loadZona() {
-        var promiseGet = zonaService.getAll(); //The Method Call from service
-        promiseGet.then(function (pl) {
-            vm.Zonas = pl.data;
-        },
-        function (errorPl) {
-            toaster.pop("error", "¡Error!", "Error al cargar zonas");
-            console.log('failure loading Zona', errorPl);
-        });
-    }
-  
+ 
     function loadTipoServicio() {
         var promise = reporteService.getTipoServicio();
         promise.then(function (d) {
@@ -74,39 +48,7 @@ app.controller('reporteController', ['$scope', 'toaster', 'zonaService', 'funcio
             console.log("Some Error Occured " + JSON.stringify(err));
         });
     }
-
-    function loadTipoVehiculo() {
-        var promise = reporteService.getTipoVehiculo();
-        promise.then(function (d) {
-            vm.TipoVehiculos = d.data;
-        }, function (err) {
-            toaster.pop('error', '¡Error!', "Error al cargar Tipo de Vehiculo");
-            console.log("Some Error Occured " + JSON.stringify(err));
-        });
-    }
-    
-     function loadContratos (){        
-        var promise = contratoService.getByCliente(vm.Filtro.ClienteId, "ACTIVO");
-        promise.then(function(d) {
-            
-            if(d.data.length  == 0){                
-                toaster.pop('info','¡Información!',"No se encontraron contratos asociados a este usuario. ");
-                return;
-            }
-            
-            if ($scope.$parent.Login.TipoAcceso == 5){               
-                vm.Contratos = $filter('filter')( d.data, { ctNumeroContrato: $scope.$parent.Login.Contrato });
-                if(vm.Contratos.length > 0) vm.Seleccionar.Contrato = vm.Contratos[0];
-            } else {
-                vm.Contratos = d.data;
-            }  
-            
-            vm.Contratos = d.data;            
-        }, function(err) {
-                toaster.pop('error','¡Error!',"Error al cargar contratos");
-                console.log("Some Error Occured " + JSON.stringify(err));
-        });
-    };  
+     
     
     function initTabla() {
         vm.TablaServicio = new ngTableParams({
@@ -140,33 +82,40 @@ app.controller('reporteController', ['$scope', 'toaster', 'zonaService', 'funcio
         vm.Filtro[variable] = funcionService.FormatFecha(vm.Filtro[variable], 5);
         vm.Filtro[variable] = moment(vm.Filtro[variable]).format('L');
     };
+    
+    vm.ValidarIdentificacion = function () {
+        vm.Filtro.ClienteId = 0;
+        if (!vm.Filtro.Cliente) {
+            return;
+        }
+        var promisePost = reporteService.validarIdentificacion(vm.Filtro.Cliente);
+        promisePost.then(function (d) {
+            if (!d.data) {
+                toaster.pop('info', "Cliente no existe en la base de datos");
+            } else {
+                vm.Filtro.ClienteId = d.data.IdCliente;
+            }
+        }, function (err) {
+            toaster.pop('error', "Error", "Error al validar Identificación");
+            console.log("Some Error Occured " + JSON.stringify(err));
+        });
+    };
             
     vm.Buscar = function () {
-        vm.VerConsulta = true;
-        vm.Cargando = true;
-        if (vm.Filtro.ClienteId == 0) {
-            toaster.pop('warning', '¡Alerta!', 'Cliente no existe en la base de datos');
-            return;
-        }                       
-
+       
+        if (!vm.Filtro.Cliente && vm.Filtro.Cliente.trim() !=""){
+            if (vm.Filtro.ClienteId == 0) {
+                toaster.pop('warning', '¡Alerta!', 'Cliente no existe en la base de datos');
+                return;
+            }                       
+        }
+        
         if (vm.Filtro.PorFecha) {
             if (vm.Filtro.FechaInicio === "" || vm.Filtro.FechaInicio === "") {
                 toaster.pop('warning', '¡Alerta!', 'Por favor seleccione un rango de fechas');
                 return;
             }
-        }
-        
-        if(vm.Seleccionar.Zona){
-            vm.Filtro.ZonaId = vm.Seleccionar.Zona.znCodigo;
-        }
-        
-         if(vm.Seleccionar.Contrato){
-            vm.Filtro.Contrato = vm.Seleccionar.Contrato.ctNumeroContrato;
-        }
-        
-        if(vm.Seleccionar.TipoVehiculo){
-            vm.Filtro.TipoVehiculoId = vm.Seleccionar.TipoVehiculo.tvCodigo;
-        }
+        }              
         
         if(vm.Seleccionar.TipoServicio){
             vm.Filtro.TipoServicioId = vm.Seleccionar.TipoServicio.svCodigo;
@@ -179,7 +128,10 @@ app.controller('reporteController', ['$scope', 'toaster', 'zonaService', 'funcio
             vm.Filtro.FechaFin = valorF2 ==="" ? fechaActual : valorF2;
         }
         
-        var promisePost = reporteService.postCliente(vm.Filtro);
+        vm.VerConsulta = true;
+        vm.Cargando = true;
+        
+        var promisePost = reporteService.postConductor(vm.Filtro);
         promisePost.then(function (d) {            
             vm.Cargando = false;
             vm.Servicios =d.data;
@@ -212,7 +164,7 @@ app.controller('reporteController', ['$scope', 'toaster', 'zonaService', 'funcio
         var tabla_html = tabla_div.outerHTML.replace(/ /g, '%20');
         tmpElemento.href = data_type + ', ' + tabla_html;
         //Asignamos el nombre a nuestro EXCEL
-        tmpElemento.download = 'reporteCliente.xls';
+        tmpElemento.download = 'reporteCondudtor.xls';
         // Simulamos el click al elemento creado para descargarlo
         tmpElemento.click();
     };

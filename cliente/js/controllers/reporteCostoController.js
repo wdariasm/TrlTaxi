@@ -168,7 +168,7 @@ app.controller('reporteCostoController', ['$scope', 'toaster',  'funcionService'
         var tabla_html = tabla_div.outerHTML.replace(/ /g, '%20');
         tmpElemento.href = data_type + ', ' + tabla_html;
         //Asignamos el nombre a nuestro EXCEL
-        tmpElemento.download = 'Nombre_De_Mi_Excel.xls';
+        tmpElemento.download = 'reporteCentroCosto.xls';
         // Simulamos el click al elemento creado para descargarlo
         tmpElemento.click();
     };
