@@ -1,137 +1,532 @@
-<div ng-controller="clienteController" class="contenedor">
-    <div class="row white">
-        <div class="col s12 z-depth-1">
-            <div class="row">
-                <div class="col s12">
-                    <br/>
-                    <h2>Mi Perfil</h2>
-                </div>
+<div ng-controller="conductorController"  class="container-fluid">
+    <div class="row">
+	<div class="col-md-12">
+	    <form   name="frmConductor" id="frmConductor" novalidate>
+		<div class=" panel panel-default">
+		    <div class=" panel-heading">
+			<h3 class="panel-title">Datos básicos del conductor </h3>
+		    </div>
+
+		    <div class="panel-body">
+
+			<div class="row">
+			    <div class="col-md-3">                                                       				    
+				<div class="col-xs-12">
+				    <img id="imgPerfil" src="{{Conductor.RutaImg}}"  alt="Conductor" class="img-responsive img-thumbnail"  style="min-height: 200px; min-width: 200px;" >
+				</div>
+				<div class="col-xs-12 text-center">
+				    <br/>
+				    <button type="button" class="btn btn-success btn-large volver"  ng-click="VerModalCambiarImagen()" title="Cambiar foto perfil conductor"><i class="glyphicon glyphicon-camera"></i></button>
+				    <br/>
+				    <small class="texto">Cambiar Foto Perfil</small>
+				</div>
+			    </div>
+
+			    <div class="col-md-9">
+				<div class="row">
+				    <div class="col-xs-6">
+					<div class="form-group">
+					    <label  for="cboTipoDocumento">Tipo Documento <span>*</span></label>
+					    <div class="input-group">    
+						<div class="input-group-addon"><i class="fa fa-cc text-success"></i></div>
+						<input type="text" required="" class="form-control" ng-model="Conductor.TipoDocumento" id="txtCedula" placeholder="Tipo Documento"  maxlength="10"  >
+
+					    </div> 
+					</div>   
+				    </div>
+
+				    <div class="col-xs-6">
+					<div class="form-group">
+					    <label  for="txtCedula" >Cédula <span>*</span></label>
+					    <div class="input-group">    
+						<div class="input-group-addon"><i class="fa fa-hashtag text-success"></i></div>
+						<input type="text" required="" class="form-control" ng-model="Conductor.Cedula" id="txtCedula" placeholder="Identificación"  maxlength="10" ng-blur="validarIdentificacion()" solo-numeros >
+					    </div> 
+					</div>
+				    </div>
+
+				    <div class="col-xs-8">
+					<div class="form-group">
+					    <label for="txtNombre">Nombres <span>*</span></label>
+					    <div class="input-group">    
+						<div class="input-group-addon"><i class="fa fa-user text-success"></i></div>
+						<input type="text" class="form-control" ng-model="Conductor.Nombre" id="txtNombre" placeholder="Nombre Completo">
+					    </div>
+					</div>
+				    </div> 
+
+				    <div class="col-xs-4">
+					<div class="form-group">
+					    <label for="txtFechaNacimiento">Fecha Nacimiento <span>*</span></label>
+					    <div class="input-group">    
+						<div class="input-group-addon"><i class="fa fa-calendar-o text-success"></i></div>
+						<input type="text" required="" id="txtFechaNacimiento" ng-model="Conductor.FechaNacimiento"  name="txtFechaNacimiento" class="form-control" ng-change="Cambiarformato('FechaNacimiento')"  value=""  >
+					    </div>
+					</div>
+				    </div> 
+
+				    <div class="col-xs-4">
+					<div class="form-group">
+					    <label for="txtTelefonoPpal">Teléfono Principal <span>*</span></label>
+					    <div class="input-group">    
+						<div class="input-group-addon"><i class="fa fa-mobile text-success"></i></div>
+						<input type="text" required="" class="form-control" ng-model="Conductor.TelefonoPpal"  maxlength="10" id="txtTelefonoPpal" placeholder="teléfono " solo-numeros>
+
+					    </div>
+					</div>
+				    </div>		
+
+				    <div class="col-xs-4">
+					<div class="form-group">
+					    <label for="txtTelefono2">Móvil</label>
+					    <div class="input-group">    
+						<div class="input-group-addon"><i class="fa fa-phone text-success"></i></div>
+						<input type="text" class="form-control" maxlength="10" ng-model="Conductor.TelefonoDos" solo-numeros  id="txtTelefonoDos" placeholder="Móvil">
+					    </div>
+					</div>
+				    </div> 
+
+
+				    <div class="col-xs-4">
+					<div class="form-group">
+					    <label for="txtTelefono3">Teléfono</label>
+					    <div class="input-group">    
+						<div class="input-group-addon"><i class="fa fa-phone text-success"></i></div>
+						<input type="text" class="form-control" maxlength="10" solo-numeros ng-model="Conductor.TelefonoTres" id="txtTelefonoTres" placeholder="Teléfono">
+					    </div>
+					</div>
+				    </div> 
+
+				    <div class="col-xs-6">
+					<div class="form-group">
+					    <label for="txtDireccion">Dirección <span>*</span></label>
+					    <div class="input-group">    
+						<div class="input-group-addon"><i class="fa fa-globe text-success"></i></div>
+						<input type="text" required=""  class="form-control" ng-model="Conductor.Direccion" id="txtDireccion" placeholder="Dirección">
+					    </div>
+					</div>
+				    </div> 
+
+				    <div class="col-xs-6">
+					<div class="form-group">
+					    <label for="txtEmail">E-mail <span>*</span></label>
+					    <div class="input-group">    
+						<div class="input-group-addon"><i class="fa fa-envelope text-success"></i></div>
+						<input type="email" class="form-control" ng-model="Conductor.Email" id="txtEmail" placeholder="E-mail">
+					    </div>
+					</div>
+				    </div> 
+
+				    <div class="col-xs-5">
+					<div class="form-group">
+					    <label  for="txtEscolaridad">Escolaridad <span>*</span></label>
+					    <div class="input-group">    
+						<div class="input-group-addon"><i class="fa fa-mortar-board text-success"></i></div>                                                                                             
+						<input type="text" required=""  class="form-control" ng-model="Conductor.Escolaridad" id="txtEscolaridad" >						    
+					    </div> 
+					</div>   
+				    </div>
+
+				    <div class="col-xs-4">
+					<div class="form-group">
+					    <label for="txtFechaIngreso">Fecha Ingreso <span>*</span></label>
+					    <div class="input-group">    
+						<div class="input-group-addon"><i class="fa fa-calendar-check-o text-success"></i></div>
+						<input required="" type="text" class="form-control" ng-model="Conductor.FechaIngreso" id="txtFechaIngreso" name="txtFechaIngreso" placeholder="Fecha Ingreso" ng-change="Cambiarformato('FechaIngreso')">
+
+					    </div>
+					</div>
+				    </div> 
+
+				    <div class="col-xs-3">
+					<div class="form-group">
+					    <label for="txtEstado">Estado <span>*</span></label>
+					    <div class="input-group">    
+						<div class="input-group-addon"><i class="fa fa-list-ul text-success"></i></div>
+						<select required type="text" class="form-control" ng-model="Conductor.Estado" id="txtEstado" placeholder="Estado">
+						    <option value="ACTIVO">ACTIVO</option>
+						    <option value="EN RPOCESO">EN RPOCESO</option>
+						    <option value="RETIRADO">RETIRADO</option>
+						</select>
+					    </div>
+					</div>
+				    </div>
+
+				</div>
+			    </div>
+			</div>
+
+			<div class="row">
+			    <div class="col-xs-3">
+				<div class="form-group">
+				    <label for="txtNumeroCuenta">Numero de Cuenta </label>
+				    <div class="input-group">    
+					<div class="input-group-addon"><i class="fa fa-hashtag text-success"></i></div>
+					<input type="text" class="form-control" ng-model="Conductor.NumeroCuenta" maxlength="45" id="txtNumeroCuenta" placeholder="Número de Cuenta">
+				    </div>
+				</div>
+			    </div>
+
+
+			    <div class="col-xs-3">
+				<div class="form-group">
+				    <label for="txtCdPlaca">Placa <span>*</span></label>
+				    <div class="input-group">    
+					<div class="input-group-addon"><i class="fa fa-eraser text-success"></i></div>
+					<input type="text" class="form-control" ng-model="Conductor.CdPlaca" maxlength="6" id="txtCdPlaca" required="" placeholder="Placa" ng-blur="ValidarPlaca()">
+				    </div>
+				</div>
+			    </div>
+
+
+
+			    <div class="col-xs-6">
+				<div class="form-group">
+				    <label for="txtObservacion">Observacion</label>
+				    <div class="input-group">    
+					<div class="input-group-addon"><i class="fa fa-book text-success"></i></div>
+					<input type="text" class="form-control" ng-model="Conductor.Observacion" maxlength="255" id="txtObservacion" placeholder="Observación">
+				    </div>
+				</div>
+			    </div>
+			</div>				   
+		    </div>
+		</div>
+	    </form>   
+
+
+	    <div class="col-md-12">
+		<div class="panel panel-default">
+		    <div class="panel-heading">                                    
+			<h3 class="panel-title">Licencias</h3>
+		    </div> 
+
+		    <table border="0" cellspacing="0" class="table table-condensed table-hover table-striped" style="float:height; margin-top: 10px;">
+			<thead>
+			    <tr>
+				<th class="center">NUMERO</th>                                
+				<th>O.T LICENCIA</th>  
+				<th>F. EXPEDICIÓN</th>
+				<th>F. VENCIMIENTO</th>
+				<th>ESTADO</th>
+				<th>CATEGORIA</th>
+				<th>ID CONDUCTOR</th>
+				<th width="5%">ACCIÓN</th>
+			    </tr>
+			</thead>
+
+			<tbody>
+			    <tr data-ng-repeat="items in Licencias">
+				<td class="center">{{ items.Numero}}</td>
+				<td>{{ items.OTLicencia}}</td>
+				<td>{{items.FechaExpedicion}}</td>
+				<td>{{items.FechaVencimiento}}</td>
+				<td>{{items.Estado}}</td>
+				<td>{{items.Categoria}}</td>
+				<td>{{items.Cedula}}</td>
+				<td>
+			<center>
+			    <a data-ng-click="getLicencia(items)" href="javascript:;"  title="Ver"><i class=" fa fa-1x fa-search text-success"></i></a>                                        
+			</center>
+			</td>
+			</tr>
+			<tr ng-hide="Licencias.length">
+			    <td colspan="8"><h4 class="text-danger text-center">No se encontraron registros.</h4> </td>
+			</tr>
+			</tbody>
+		    </table>
+		</div>
+	    </div>    
+
+
+
+	    <div class="col-md-12">
+		<div class="panel panel-default">
+		    <div class="panel-heading">
+			<h3 class="panel-title">Listado de Novedades</h3>
+		    </div>
+
+		    <table border="0" cellspacing="0" class="table table-striped table-condensed table-hover" >
+			<thead>
+			    <tr>
+				<th class="center">TIPO</th>                                
+				<th>DESCRIPCIÓN</th>  
+				<th>FECHA DE REGISTRO</th>
+				<th>ESTADO</th>
+				<th width="7%">ACCIÓN</th>
+			    </tr>
+			</thead>
+
+			<tbody>
+			    <tr data-ng-repeat="items in Novedades">
+				<td class="center">{{ items.nvTipo}}</td>
+				<td>{{ items.nvDescripcion}}</td>
+				<td>{{items.nvFechaReg}}</td>
+				<td>{{items.nvEstado}}</td>
+				<td>
+			<center>
+			    <a data-ng-click="getNovedad(items)" style="float: left; margin-left: 15px;" href="javascript:;"  title="Ver"><i class=" fa fa-1x fa-search text-success"></i></a>				    
+			</center>
+			</td>
+			</tr>
+			<tr ng-hide="Novedades.length">
+			    <td colspan="5"><h4 class="text-danger text-center">No se encontraron registros.</h4> </td>
+			</tr>
+			</tbody>
+		    </table>
+		</div>
+	    </div>                               
+
+
+	</div>      
+    </div>
+
+    <div class="modal fade bs-example-modal-lg" id="mdNovedades" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" style="margin-top: 5%;">
+        <div class="modal-dialog modal-m" style="width: 60%">                                   
+            <div class="modal-content">
+		<form name="frmNovedad" id="frmNovedad" novalidate>     
+		    <div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			<div class="modal-title">{{TituloNov}}  Conductor : <strong> {{Conductor.Nombre}}</strong></div>                         
+		    </div>
+
+		    <div class="modal-body">
+			<div class="row">
+			    <div class="col-xs-4">
+				<div class="form-group">
+				    <label for="txtEstado">Tipo *</label>
+				    <div class="input-group">    
+					<div class="input-group-addon"><i class="fa fa-list-ul text-success"></i></div>
+					<select type="text" class="form-control" ng-model="Novedad.nvTipo" id="txtEstado" placeholder="Tipo">
+					    <option value="CONTRALORIA">CONTRALORIA</option>
+					    <option value="PROCURADURIA">PROCURADURIA</option>
+					    <option value="POLICIA NACIONAL">POLICIA NACIONAL</option>
+					    <option value="SIMIT">SIMIT</option>
+					    <option value="EPS">EPS</option>
+					    <option value="ARL">ARL</option>
+					    <option value="FONDO PENSIONES">FONDO PENSIONES</option>
+					</select>
+				    </div>
+				</div>
+			    </div>
+
+			    <div class="col-xs-8">
+				<div class="form-group">
+				    <label for="txtNovedad">Descripción *</label>
+				    <textarea class="form-control"  required="" ng-model="Novedad.nvDescripcion" id="txtNovedad" placeholder="Descripción" style="max-height: 90px; width: 100%; max-width: 500px;"></textarea>
+				</div>
+			    </div>
+
+			</div>
+		    </div>
+
+		    <div class="modal-footer">				
+			<button class="btn btn-danger  btn-addon" type="button" data-dismiss="modal"  title="Cerrar"><i class="fa fa-times"></i> Cerrar &nbsp;</button>
+		    </div>  
+		</form>
             </div>
-
-            <div class="row">
-                <div class="col s4">
-                    <form  name="frmPerfil" id="frmPerfil" novalidate>
-                    <div class="row">
-                        <div class="input-field col s12">
-                            <input id="nombres" type="text"  ng-model="Cliente.Nombre" name="txtNombre" required ng-pattern="/^[A-Za-záéíóúñ]{3,}/" maxlength="50" placeholder="Nombre Completo">
-                            <label for="" class="{{active}}">Nombres: *</label>
-                            <div class="error" ng-show="frmPerfil.txtNombre.$dirty && frmPerfil.txtNombre.$invalid">
-                                <small ng-show="frmPerfil.txtNombre.$error.required">Nombre es Requerido</small>
-                                <small  ng-show="frmPerfil.txtNombre.$error.pattern">Debe tener Mas de 2 Caracteres</small>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="input-field col s12">
-                            <input id="nombres" type="text"  ng-model="Cliente.Direccion" name="txtDireccion" required maxlength="30" placeholder="Dirección">
-                            <label for="" class="{{active}}">Direccion Principal: *</label>
-                            <div class="error" ng-show="frmPerfil.txtDireccion.$dirty && frmPerfil.txtDireccion.$invalid">
-                                <small ng-show="frmPerfil.txtDireccion.$error.required">Dirección es Requerida</small>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="input-field col s12">
-                            <input id="telefono" type="text"  ng-model="Cliente.Telefono" name="txtTelefono" required ng-pattern="/^[0-9]{6,20}$/" placeholder="Telefono">
-                            <label for="" class="{{active}}">Telefono *</label>
-                            <div class="error" ng-show="frmPerfil.txtTelefono.$dirty && frmPerfil.txtTelefono.$invalid">
-                                <small ng-show="frmPerfil.txtTelefono.$error.required">Telefono es Requerido</small>
-                                <small  ng-show="frmPerfil.txtTelefono.$error.pattern">Debe tener Mas de 5 Numeros</small>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="input-field col s12">
-                            <label for="" class="{{active}}">Email *</label>
-                            <input type="text" class="box-text email" id="txtCorreo" name="txtCorreo" placeholder="Correo " ng-model="Cliente.Email" required ng-pattern="/^([\da-zA-Z_\.-]+)@([\da-zA-Z\.-]+)\.([a-zA-Z\.]{2,6})$/">
-                            <div class="error" ng-show="frmPerfil.txtCorreo.$dirty && frmPerfil.txtCorreo.$invalid">
-                               <small  ng-show="frmPerfil.txtCorreo.$error.required">Email es Requerido</small>
-                               <small  ng-show="frmPerfil.txtCorreo.$error.pattern">Email No Valido</small>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col s12">
-                            <button type="button"  ng-disabled="frmPerfil.$invalid" class="btn waves-effect waves-light"  ng-click="actualizar()"  >
-                               <i class="mdi-content-send right"></i>ACTUALIZAR DATOS
-                            </button>
-                        </div>
-                    </div>
-                    </form>
-                </div>
-
-                <div class="col s7 offset-s1">
-                    <div class="row">
-                        <form class="col s6 offset-s3" name="frmCambiar" novalidate>
-                            <h2>Cambiar Contraseña</h2>
-                            <div class="row">
-                                <div class="input-field col s12">
-                                    <input ng-model="User.clave"  type="password" name="txtClave1"  maxlength="15" required ng-pattern="/(?=^.{5,}$)(?=.*\d)(?![.\n])(?=.*[a-zA-Z]).*$/">
-                                    <label  >Nueva Contraseña *</label>
-                                    <div class="error" ng-show="frmCambiar.txtClave1.$dirty && frmCambiar.txtClave1.$invalid">
-                                        <small ng-show="frmCambiar.txtClave1.$error.required">Contraseña es Requerida</small>
-                                        <small  ng-show="frmCambiar.txtClave1.$error.pattern">Minimo 6 Caracteres[Numeros y Letras]</small>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="input-field col s12">
-                                    <input ng-model="User.claveConf"  type="password" name="txtClave2"  maxlength="15" required ng-pattern="/(?=^.{5,}$)(?=.*\d)(?![.\n])(?=.*[a-zA-Z]).*$/" >
-                                    <label >Confirmar Nueva Contraseña *</label>
-                                    <div class="error" ng-show="frmCambiar.txtClave2.$dirty && frmCambiar.txtClave2.$invalid">
-                                        <small ng-show="frmCambiar.txtClave2.$error.required">Contraseña es Requerida</small>
-                                        <small  ng-show="frmCambiar.txtClave2.$error.pattern">Minimo 6 Caracteres[Numeros y Letras]</small>
-                                    </div>
-                                </div>
-                                <div class="error" style="margin-left: 10px">
-                                    <small  ng-show="valPass">Contreseñas, NO son Iguales</small>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col s12">
-                                    <button  ng-disabled="frmCambiar.$invalid" class=" btn waves-effect waves-light teal" type="button" title="Guardar Contraseña" ng-click="cambiarClave()">
-                                        <i class="mdi-content-save right"></i>Guardar Contraseña
-                                    </button>
-                                </div>
-                            </div>
-                        </form>
-
-                    </div>
-
-                    <div class="row">
-                        <h2>Mis Direcciones Favoritas</h2>
-                        <table cellspacing="0" class="striped bordered">
-                            <thead>
-                                <tr>
-                                    <th>N°</th>
-                                    <th>LUGAR</th>
-                                    <th>DIRECCION</th>
-                                    <th width="15%">ACCION</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr data-ng-repeat="item in Direcciones">
-                                    <td>{{ $index + 1}}</td>
-                                    <td>{{ item.drNombre}}</td>
-                                    <td>{{ item.drDireccion}}</td>
-                                    <td>
-                                        <center>
-                                            <a data-ng-click="get(item)" style="float: left; margin-left: 3px;" href="javascript:;"  title="Editar"><i class="small small mdi-image-edit teal-text  darken-1"></i></a>
-                                            <a ng-click="eliminar(item.drCodigo)"  style="float: left; margin-left: 3px;" href="javascript:;"  title="Eliminar"><i class="small mdi-action-delete red-text text-deep-orange darken-1"></i></a>
-                                        </center>
-                                    </td>
-                                </tr>
-                            </tbody>
-
-                        </table>
-                    </div>
-                </div>
-            </div>
-
         </div>
     </div>
+
+    <div class="modal fade bs-example-modal-lg" id="mdLicencia" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel2" style="margin-top: 5%;">
+        <div class="modal-dialog modal-lg" >                                   
+            <div class="modal-content">
+		<form name="frmLicencia" id="frmLicencia" novalidate>
+		    <div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			<div class="modal-title">{{TituloNov}} Conductor : <strong> {{Conductor.Nombre}}</strong></div>                         
+		    </div>
+
+		    <div class="modal-body">
+			<div class="row">
+
+			    <div class="col-xs-3">
+				<div class="form-group">
+				    <label for="txtNumero">Numero *</label>
+				    <div class="input-group">    
+					<div class="input-group-addon"><i class="fa fa-hashtag text-success"></i></div>
+					<input type="text" class="form-control" ng-model="LicenciaConduccion.Numero" id="txtNumero" placeholder="Numero Licencia" requred maxlength="12" solo-numeros ng-blur="validarNumero()">
+				    </div> 
+				</div>
+			    </div>
+
+			    <div class="col-xs-6">
+				<div class="form-group">
+				    <label for="txtOTLicencia">Transito *</label>
+				    <div class="input-group">    
+					<div class="input-group-addon"><i class="fa fa-book text-success"></i></div>
+					<input type="text" class="form-control" ng-model="LicenciaConduccion.OTLicencia" maxlength="80" id="txtOTLicencia" required="" placeholder="Organismo de transito">
+				    </div>
+				</div>
+			    </div>
+
+			    <div class="col-xs-3">
+				<div class="form-group">
+				    <label for="txtFechaExpedicion">Fecha Expedición *</label>
+				    <div class="input-group">    
+					<div class="input-group-addon"><i class="fa fa-calendar-check-o text-success"></i></div>
+					<input type="text" class="form-control" ng-model="LicenciaConduccion.FechaExpedicion" id="txtFechaExpedicion" name="txtFechaExpedicion" placeholder="Fecha Expedicion" ng-change="formatoLicencia('FechaExpedicion')">
+
+				    </div>
+				</div>
+			    </div> 
+			    <div class="col-xs-3">
+				<div class="form-group">
+				    <label for="txtFechaVencimiento">Fecha Vencimiento *</label>
+				    <div class="input-group">    
+					<div class="input-group-addon"><i class="fa fa-calendar-check-o text-success"></i></div>
+					<input type="text" class="form-control" ng-model="LicenciaConduccion.FechaVencimiento" id="txtFechaVencimiento" name="txtFechaVencimiento" placeholder="Fecha Vencimiento" ng-change="formatoLicencia('FechaVencimiento')">
+
+				    </div>
+				</div>
+			    </div>			   
+
+			    <div class="col-xs-3">
+				<div class="form-group">
+				    <label for="txtCategoria">Categoria *</label>
+				    <div class="input-group">    
+					<div class="input-group-addon"><i class="fa fa-book text-success"></i></div>
+					<select required type="text" class="form-control" ng-model="LicenciaConduccion.Categoria" id="txtCategoria" placeholder="Categoria">
+					    <option value="C1">C1</option>
+					    <option value="C2">C2</option>
+					    <option value="C3">C3</option>
+					</select>
+
+				    </div>
+				</div>
+			    </div>
+
+			    <div class="col-xs-3">
+				<div class="form-group">
+				    <label for="txtEstado">Estado *</label>
+				    <div class="input-group">    
+					<div class="input-group-addon"><i class="fa fa-list-ul text-success"></i></div>
+					<select type="text" class="form-control" ng-model="LicenciaConduccion.Estado" id="txtEstado" placeholder="Estado">
+					    <option value="ACTIVA">ACTIVA</option>
+					    <option value="INACTIVA">INACTIVA</option>
+					</select>
+
+				    </div>
+				</div>
+			    </div>
+
+			    <div class="col-xs-3">
+				<div class="form-group">
+				    <label for="txtlcConductor"> Cedula Conductor *</label>
+				    <div class="input-group">    
+					<div class="input-group-addon"><i class="fa fa-hashtag text-success"></i></div>
+					<input type="text" class="form-control" ng-model="LicenciaConduccion.Identificacion" id="txtlcConductor" placeholder="Id Conductor" disabled="" maxlength="10" solo-numeros >
+				    </div> 
+				</div>
+			    </div>			   
+
+			</div>
+		    </div>
+
+		    <div class="modal-footer">			
+			<button class="btn btn-danger  btn-addon" type="button" data-dismiss="modal"  title="Cerrar"><i class="fa fa-times"></i> Cerrar &nbsp;</button>                          
+		    </div>  
+		</form>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal fade bs-example-modal-lg" id="mdImagenConductor" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" style="margin-top: 5%;">
+	<div class="modal-dialog modal-m" style="width: 40%">
+	    <div class="modal-content">
+		<form name="frmImagenConductor" id="frmImagenConductor" novalidate>
+		    <div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			<div class="modal-title">Cambiar imagen Conductor : <strong> {{Conductor.Nombre}}</strong></div>
+		    </div>
+
+		    <div class="modal-body">
+			<div class="row">
+			    <div class="col-xs-8 col-xs-offset-2">
+				<label>Seleccionar imagen</label>
+				<input  id="flImagen" uploader-model="Conductor.Imagen"  name="flImagen" class="file-loading" type="file"  data-min-file-count="1"  accept="image/*">
+			    </div>
+			</div>
+		    </div>
+
+		    <div class="modal-footer">			
+			<button class="btn btn-danger  btn-addon" type="button" data-dismiss="modal"  title="Cerrar"><i class="fa fa-times"></i> Cerrar &nbsp;</button>
+		    </div>
+		</form>
+	    </div>
+	</div>
+    </div>
+
 </div>
+
+<script>
+
+    $(function () {
+
+        $('input[name="txtFechaNacimiento"]').daterangepicker({
+            singleDatePicker: true,
+            showDropdowns: true,
+            dateFormat: 'dd/mm/yyyy'
+        },
+        function (start, end, label) {
+            $('#txtFechaNacimiento').val(end.format('DD/MM/YYYY'));
+        });
+
+        $('input[name="txtFechaIngreso"]').daterangepicker({
+            singleDatePicker: true,
+            showDropdowns: true,
+            format: 'DD/MM/YYYY'
+        },
+        function (start, end, label) {
+            $('#txtFechaIngreso').val(end.format('DD/MM/YYYY'));
+        });
+
+        $('input[name="txtFechaExpedicion"]').daterangepicker({
+            singleDatePicker: true,
+            showDropdowns: true,
+            format: 'DD/MM/YYYY'
+        },
+        function (start, end, label) {
+            $('#txtFechaExpedicion').val(end.format('DD/MM/YYYY'));
+        });
+
+        $('input[name="txtFechaVencimiento"]').daterangepicker({
+            singleDatePicker: true,
+            showDropdowns: true,
+            format: 'DD/MM/YYYY'
+        },
+        function (start, end, label) {
+            $('#txtFechaVencimiento').val(end.format('DD/MM/YYYY'));
+        });
+
+
+        $('#flImagen').fileinput({
+            uploadAsync: false,
+            minFileCount: 1,
+            maxFileCount: 1,
+            resizeImage: true,
+            maxImageWidth: 200,
+            maxImageHeight: 200,
+            showUpload: false,
+            showRemove: false,
+            language: "es",
+            autoReplace: true,
+            allowedFileExtensions: ["jpg", "png"],
+            initialPreview: [
+                '<img src="../img/conductor/default.png" class=" file-preview-image" style="height:160px">'
+
+            ],
+            initialPreviewConfig: [
+                {caption: "conductor", key: 11}
+            ]
+        });
+
+
+    });
+    $("input").prop('disabled', true);
+    $("select").prop('disabled', true);
+    $("textarea").prop('disabled', true);
+    $("#flImagen").prop('disabled', false);
+</script>
+

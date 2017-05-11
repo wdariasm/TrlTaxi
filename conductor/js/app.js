@@ -31,6 +31,10 @@ var app;
             .when("/2/usuario/clave",{
                 templateUrl: 'views/conductor/cambiarClave.html'
             })
+            
+            .when("/2/conductor/perfil",{
+                templateUrl: 'views/conductor/perfil.html'
+            })
                                    
             .when("/2/salir",{
                 templateUrl: 'views/conductor/salir.html'
