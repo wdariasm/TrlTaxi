@@ -27,7 +27,7 @@ class TransfertController extends Controller
     }
     
     public function getPrecioTransfert($plantilla, $tipovehiculo, $origen, $destino){
-        return Transfert::select('tfCodigo', 'tfNombre', 'tfValor')
+        return Transfert::select('tfCodigo', 'tfNombre', 'tfValor', 'tfValorCliente')
                 ->where('tfPlantilla', $plantilla)
                 ->where('tfTipoVehiculo', $tipovehiculo)
                 ->where('tfOrigen', $origen)
@@ -55,6 +55,7 @@ class TransfertController extends Controller
             $transfert->tfDestino = $data["tfDestino"]; 
             $transfert->tfTipoVehiculo = $data["tfTipoVehiculo"]; 
             $transfert->tfValor = $data["tfValor"]; 
+            $transfert->tfValorCliente = $data["tfValorCliente"]; 
             $transfert->tfUserReg = $data["tfUserReg"]; 
             $transfert->tfUserMod = $data["tfUserReg"]; 
             $transfert->tfEstado = $data["tfEstado"]; 
@@ -78,6 +79,7 @@ class TransfertController extends Controller
             $transfert->tfDestino = $data["tfDestino"]; 
             $transfert->tfTipoVehiculo = $data["tfTipoVehiculo"]; 
             $transfert->tfValor = $data["tfValor"];             
+            $transfert->tfValorCliente = $data["tfValorCliente"]; 
             $transfert->tfUserMod = $data["tfUserMod"]; 
             $transfert->tfEstado = $data["tfEstado"]; 
             $transfert->tfPlantilla = $data["tfPlantilla"]; 

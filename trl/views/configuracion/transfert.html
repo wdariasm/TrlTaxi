@@ -60,17 +60,27 @@
                                     </div>
                                 </div>
                             </div>
+			    
+			     <div class="col-xs-11">
+                                <div class="form-group">
+                                    <label  for="txtValorCliente">Valor Cliente*</label>
+                                    <div class="input-group">
+                                        <div class="input-group-addon"><i class="fa fa-usd"></i></div>
+                                        <input class="form-control" ng-model="Transfert.tfValor" solo-numeros id="txtValorCliente" name="txtValorCliente" type="text" fcsa-number="{ min: 0,  maxDecimals: 0  }" required   maxlength="10" >
+                                    </div>
+                                </div>
+                            </div>  
 
                             <div class="col-xs-11">
                                 <div class="form-group">
-                                    <label  for="txtValor">Valor *</label>
+                                    <label  for="txtValor">Valor Proveedor*</label>
                                     <div class="input-group">
                                         <div class="input-group-addon"><i class="fa fa-usd"></i></div>
                                         <input class="form-control" ng-model="Transfert.tfValor" solo-numeros id="txtValor" name="txtValor" type="text" fcsa-number="{ min: 0,  maxDecimals: 0  }" required   maxlength="10" >
                                     </div>
                                 </div>
                             </div>  
-
+			    			   			    			    
                             <div class="col-xs-11">
                                 <div class="form-group">
                                     <label for="txtEstado">Estado *</label>
@@ -130,7 +140,8 @@
                                 <th title="zona Origen">ORIGEN</th>
                                 <th title="Zona Destino">DESTINO</th>                                         
                                 <th title="Tipo de Vehículo">VEHICULO</th>
-                                <th>VALOR</th>
+                                <th title="Valor Cliente">V. CLIENTE</th>
+				<th title="Valor Proveedor">V. PROVEEDOR</th>
                                 <th>ESTADO</th>
                                 <th width="9%">ACCION</th>
                             </tr>
@@ -142,7 +153,8 @@
                                 <td>{{ item.znNombre }}</td>
                                 <td >{{ item.destino }}</td>
                                 <td>{{ item.tvDescripcion}}</td>
-                                <td >{{ item.tfValor | currency : "$" : 0}}</td>                        
+				<td >{{ item.tfValorCliente | currency : "$" : 0}}</td>
+                                <td >{{ item.tfValor | currency : "$" : 0}}</td> 				 
                                 <td>{{ item.tfEstado}}</td>
                                 <td>
                                     <center>

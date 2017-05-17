@@ -104,7 +104,8 @@ function  transfertController($scope, zonaService, ngTableParams, toaster, trans
             tfEstado : "ACTIVO",
             tfUserReg : "",
             tfUserMod : "",
-            tfPlantilla : ""
+            tfPlantilla : "",
+            tfValorCliente : 0
         };
     }
     
@@ -143,6 +144,11 @@ function  transfertController($scope, zonaService, ngTableParams, toaster, trans
     };      
 
     $scope.Guardar = function (){
+        
+        if(!$scope.frmTransfert.$valid){
+            toaster.pop('error','¡Error!', 'Por favor ingrese los datos requeridos (*).'); 
+            return;
+        }
         
         if(!$scope.ZonaOrigen){
             toaster.pop('info','¡Alerta!', 'Seleccione la zona origen');

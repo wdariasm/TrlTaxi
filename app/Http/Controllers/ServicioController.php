@@ -18,7 +18,7 @@ class ServicioController extends Controller
     public function index()
     {
         $servicio = DB::select("SELECT s.IdServicio, s.ContratoId, s.ClienteId, s.NumeroContrato, s.Responsable,"
-                . " s.Telefono, s.TipoServicidoId, ts.svDescripcion, s.FechaServicio, s.Hora, s.Valor, s.Estado, "
+                . " s.Telefono, s.TipoServicidoId, ts.svDescripcion, s.FechaServicio, s.Hora, s.Valor, s.ValorCliente, s.Estado, "
                 . " s.DescVehiculo, s.TipoVehiculoId, s.ValorTotal, s.ConductorId FROM servicio s INNER JOIN  tiposervicio "
                 . " ts ON s.TipoServicidoId=ts.svCodigo WHERE s.Estado <> 'FINALIZADO' AND s.Estado <> 'CANCELADO' order by s.IdServicio desc");
         return $servicio;            
@@ -42,7 +42,7 @@ class ServicioController extends Controller
             $condicion = " WHERE  s.UserReg = '".$usuario ."'";
         }        
         $servicio = DB::select("SELECT s.IdServicio, s.ContratoId, s.ClienteId, s.NumeroContrato, s.Responsable,"
-                . " s.Telefono, s.TipoServicidoId, ts.svDescripcion, s.FechaServicio, s.Hora, s.Valor, s.Estado, "
+                . " s.Telefono, s.TipoServicidoId, ts.svDescripcion, s.FechaServicio, s.Hora, s.Valor, s.ValorCliente, s.Estado, "
                 . " s.DescVehiculo, s.ValorTotal,s.ConductorId FROM servicio s INNER JOIN  tiposervicio ts ON "
                 . " s.TipoServicidoId=ts.svCodigo ". $condicion ." order by s.IdServicio desc");
         return $servicio;     
@@ -57,7 +57,7 @@ class ServicioController extends Controller
         $servicio = DB::select("SELECT s.IdServicio, s.ContratoId, s.ClienteId, s.NumeroContrato, s.Responsable,"
                 . " s.Telefono, s.TipoServicidoId, ts.svDescripcion, s.FechaServicio, s.Hora, s.Valor, s.Estado, "
                 . " s.DescVehiculo, s.ValorTotal, s.ConductorId, s.NumPasajeros, s.FormaPago, s.DireccionOrigen, "
-                . " s.DireccionDestino, s.LatOrigen, s.LngOrigen, s.LatDestino, s.LngDestino "
+                . " s.DireccionDestino, s.LatOrigen, s.LngOrigen, s.LatDestino, s.LngDestino, s.ValorCliente "
                 . " FROM servicio s INNER JOIN  tiposervicio ts ON s.TipoServicidoId=ts.svCodigo "
                 . " WHERE  s.ConductorId = $id ".$condicion . " order by s.IdServicio desc");
         return $servicio;     
@@ -96,7 +96,7 @@ class ServicioController extends Controller
                 $condTipo = " AND TipoServicidoId = ".$TipoServicio;
             }
             
-            $sql = "SELECT s.IdServicio, s.ContratoId, s.ClienteId, s.NumeroContrato, s.Responsable,"
+            $sql = "SELECT s.IdServicio, s.ContratoId, s.ClienteId, s.NumeroContrato, s.Responsable, s.ValorCliente, "
                     . " s.Telefono, s.TipoServicidoId, ts.svDescripcion, s.FechaServicio, s.Hora, s.Valor, s.Estado, "
                     . " s.DescVehiculo, s.TipoVehiculoId, s.ValorTotal, s.ConductorId FROM servicio s INNER JOIN  tiposervicio "
                     . " ts ON s.TipoServicidoId=ts.svCodigo WHERE ContratoId > 0  " . $condicion . $condFecha . $condTipo
@@ -113,7 +113,7 @@ class ServicioController extends Controller
     public function getSolicitados(){
         try{   
            
-            $sql = "SELECT s.IdServicio, s.ContratoId, s.ClienteId, s.NumeroContrato, s.Responsable,"
+            $sql = "SELECT s.IdServicio, s.ContratoId, s.ClienteId, s.NumeroContrato, s.Responsable, s.ValorCliente, "
                     . " s.Telefono, s.TipoServicidoId, ts.svDescripcion, s.FechaServicio, s.Hora, s.Valor, s.Estado, "
                     . " s.DescVehiculo, s.TipoVehiculoId, s.ValorTotal, s.ConductorId FROM servicio s INNER JOIN  tiposervicio "
                     . " ts ON s.TipoServicidoId=ts.svCodigo WHERE s.Estado = 'SOLICITADO' OR s.Estado = 'RECHAZADO' "
@@ -148,7 +148,7 @@ class ServicioController extends Controller
         $date2 = new \DateTime(str_replace("/", "-", $request->get('fechafin')." 00:00:00"));
         $fechaFin = $date2->format('Y-m-d');
         
-        $sql = "SELECT s.IdServicio, s.ContratoId, s.ClienteId, s.NumeroContrato, s.Responsable,"
+        $sql = "SELECT s.IdServicio, s.ContratoId, s.ClienteId, s.NumeroContrato, s.Responsable, s.ValorCliente, "
                 . " s.Telefono, s.TipoServicidoId, ts.svDescripcion, s.FechaServicio, s.Hora, s.Valor, s.Estado, "
                 . " s.DescVehiculo, s.TipoVehiculoId, s.ValorTotal, s.ConductorId FROM servicio s INNER JOIN  tiposervicio "
                 . " ts ON s.TipoServicidoId=ts.svCodigo WHERE s.Estado = 'FINALIZADO'  "
@@ -172,7 +172,7 @@ class ServicioController extends Controller
                 . " s.ValorTotal, 0)) 'Debito', SUM(IF(s.FormaPago = 'CHEQUE', s.ValorTotal, 0)) 'Cheque', "
                 . " SUM(s.ValorTotal) 'Total' FROM servicio s  WHERE s.Estado = 'FINALIZADO' AND s.ConductorId = $id"
                 . " AND  DATE(s.FechaServicio) BETWEEN '$fecha' AND '$fechaFin' GROUP BY s.ConductorId ";
-       
+               
         $servicio = DB::select($sql);       
         return $servicio;        
     }
@@ -200,7 +200,8 @@ class ServicioController extends Controller
             $servicio->FechaServicio = $date->format('Y-m-d');
             $hora = \DateTime::createFromFormat( 'H:i A', $data["Hora"]);
             $servicio->Hora= $hora->format('H:i:s'); 
-            $servicio->Valor= $data["Valor"]; 
+            $servicio->Valor= $data["Valor"];
+            $servicio->ValorCliente = $data["ValorCliente"];
             $servicio->NumPasajeros= $data["NumPasajeros"];
             $servicio->NumHoras= $data["NumHoras"];
             $servicio->Estado= "SOLICITADO";

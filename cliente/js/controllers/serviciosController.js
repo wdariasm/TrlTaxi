@@ -85,6 +85,7 @@ app.controller('serviciosController',['$scope', 'zonaService', 'ngTableParams', 
             FechaServicio: moment().format('L'),
             Hora: moment().format("hh:mm a"),
             Valor : 0,
+            ValorCliente : 0,
             NumHoras : "0",
             NumPasajeros : "0",
             ClienteId : $scope.$parent.Login.ClienteId,
@@ -340,15 +341,17 @@ app.controller('serviciosController',['$scope', 'zonaService', 'ngTableParams', 
         }
 
         $scope.Servicio.Valor = 0;
+        $scope.Servicio.ValorCliente = 0;
 
         var promise = contratoService.getTransfert($scope.Plantilla.plCodigo, $scope.TipoSelect.tvCodigo,
         $scope.Servicio.ZonaOrigen, $scope.Servicio.ZonaDestino);
         promise.then(function(d) {
             if(d.data){
                 $scope.Servicio.Valor = d.data.tfValor;
+                $scope.Servicio.ValorCliente = d.data.tfValorCliente;
                 $scope.Servicio.ValorTotal = parseInt(d.data.tfValor);
                 $scope.Servicio.Codigo = d.data.tfCodigo;
-                toaster.pop("info", "Valor del Servicio.", "$ "+ $scope.Servicio.Valor);
+                toaster.pop("info", "Valor del Servicio.", "$ "+ $scope.Servicio.ValorCliente);
             }else{
                toaster.pop('info','¡Alerta!',"Estimado Usuario(a), no se encontró el precio con estos " +
                             "parametros de ubicación y tipo de vehículo", 0);
@@ -419,7 +422,8 @@ app.controller('serviciosController',['$scope', 'zonaService', 'ngTableParams', 
     
     $scope.CambiarPrecio =  function(){
         $scope.Servicio.Valor = 0;
-        $scope.Servicio.ValorTotal= parseInt ($scope.Servicio.Valor) +  parseInt($scope.Subtotal);
+        $scope.Servicio.ValorCliente = 0;
+        $scope.Servicio.ValorTotal= parseInt ($scope.Servicio.ValorCliente) +  parseInt($scope.Subtotal);
     };
 
     $scope.Nuevo = function() {
@@ -578,7 +582,7 @@ app.controller('serviciosController',['$scope', 'zonaService', 'ngTableParams', 
                     " para el tipo de vehículo seleccionado ("+$scope.TipoSelect.tvDescripcion + ")",7000);
             return;
         }
-        if($scope.Servicio.Valor === 0){
+        if($scope.Servicio.ValorCliente === 0){
             toaster.pop('info', '¡Alerta!', "Valor del servicio no puede ser cero(0)."+
                             " Por favor hacer click en consultar precio");
             return;
@@ -694,7 +698,7 @@ app.controller('serviciosController',['$scope', 'zonaService', 'ngTableParams', 
             total += parseInt($scope.Servicio.Paradas[i].prValor);
         }          
         $scope.Subtotal = total;
-        $scope.Servicio.ValorTotal =  parseFloat($scope.Subtotal) + parseFloat($scope.Servicio.Valor);
+        $scope.Servicio.ValorTotal =  parseFloat($scope.Subtotal) + parseFloat($scope.Servicio.ValorCliente);
         return total;
     };        
     

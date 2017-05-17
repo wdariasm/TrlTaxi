@@ -142,6 +142,11 @@ app.controller("conductorController", ["$scope", "conductorService", "tipoDocume
    
     $scope.Guardar = function (){
         
+        if(!$scope.frmCliente.$valid){
+            toaster.pop('error','¡Error!', 'Por favor ingrese los datos requeridos (*).'); 
+            return;
+        }
+        
         $scope.Conductor.Nombre = $scope.Conductor.Nombre.toUpperCase();
         $scope.Conductor.Direccion = $scope.Conductor.Direccion.toUpperCase();
         $scope.Conductor.Observacion = $scope.Conductor.Observacion.toUpperCase();        
@@ -156,7 +161,7 @@ app.controller("conductorController", ["$scope", "conductorService", "tipoDocume
         if($scope.Conductor.VehiculoId === 0){
             toaster.pop('error','¡Error!', 'Placa no se encuentra registrada');
             return;
-        }
+        }                
 
         var promise;
         if($scope.editMode){            

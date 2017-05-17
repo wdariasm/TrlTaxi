@@ -93,8 +93,7 @@ function($scope, usuarioService,toaster,ngTableParams ,  funcionService, cliente
             toaster.pop('error','¡Error!', 'Por favor ingrese los datos requeridos (*).'); 
             return;
         }
-       
-       
+              
         if($scope.ValLogin){
             toaster.pop('error', '¡Error!', 'Nombre de usuario ya existe');
             return;
