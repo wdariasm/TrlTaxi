@@ -29,7 +29,7 @@ app.controller('plantillaController',['$scope',  'ngTableParams', 'toaster',"pla
             $scope.tbPlantilla.reload();
         },
         function(errorPl) {
-            toaster.pop("error","¡Error!", "Eror al cargar plantillas");
+            toaster.pop("error","¡Error!", "Error al cargar plantillas");
             console.log('failure loading Zona', errorPl);
         });
     }
@@ -39,7 +39,9 @@ app.controller('plantillaController',['$scope',  'ngTableParams', 'toaster',"pla
             plCodigo : 0,
             plDescripcion : "",            
             plEstado : "ACTIVO",
-            plTipoServicio : $scope.TipoId
+            plTipoServicio : $scope.TipoId,
+            plValorCliente : 0,
+            plValorProveedor : 0
         };
     }
     
@@ -78,6 +80,11 @@ app.controller('plantillaController',['$scope',  'ngTableParams', 'toaster',"pla
 
     $scope.Guardar = function (){
         
+        if(!$scope.frmPlatilla.$valid){
+            toaster.pop('error','¡Error!', 'Por favor ingrese los datos requeridos (*).'); 
+            return;
+        }
+                
         if(!$scope.TipoId){
             toaster.pop('error','¡Error!', 'No existe tipo de servicio');
             return;
@@ -150,16 +157,18 @@ app.controller('plantillaController',['$scope',  'ngTableParams', 'toaster',"pla
         var div1 = document.getElementById('liVistaDatos');                
                 div1.classList.remove('hidden');
                 div1.classList.add('visible');                                                  
-        $('#tabPanels a[href="#tabRegistro"]').tab('show');                
-        
+
         switch ($scope.TipoId){
-            case "1":                
+            case "1":
+                $('#tabPanels a[href="#tabRegistro"]').tab('show');
                 $scope.$emit("cargueTransfert", "iniciando cargue");
                 break;
             case "3":
+                $('#tabPanels a[href="#tabListado"]').tab('show');
                 $scope.$emit("cargueRuta", "iniciando cargue");
                 break;
             case "4":
+                $('#tabPanels a[href="#tabRegistro"]').tab('show');
                 $scope.$emit("cargueTraslado", "iniciando cargue");
                 break;
         }

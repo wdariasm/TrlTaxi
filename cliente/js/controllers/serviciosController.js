@@ -104,15 +104,18 @@ app.controller('serviciosController',['$scope', 'zonaService', 'ngTableParams', 
             ValorTotal :0,
             Nota :"",
             ModoServicio :"PROGRAMADO",
-            Contactos : []
+            Contactos : [],
+            ValorParadaProveedor : 0,
+            ValorParadaCliente : 0
         };
         
         $scope.Parada = {
-           prDireccion : "",
-           prLatiud : "",
-           prLongitud : "",
-           prValor : 0,
-           prFecha : ""
+            prDireccion : "",
+            prLatiud : "",
+            prLongitud : "",
+            prValor : 0,
+            prFecha : "",
+            prValorCliente :0
         }; 
         $scope.ContratoSelect = {};
         $scope.Subtotal = 0;
@@ -363,6 +366,23 @@ app.controller('serviciosController',['$scope', 'zonaService', 'ngTableParams', 
     }
 
 
+    function buscarValorParada () {
+        var promise = contratoService.getValorParada($scope.Plantilla.plCodigo);
+        promise.then(function(d) {
+            if(d.data){
+                $scope.Servicio.ValorParadaProveedor = parseInt(d.data.plValorProveedor);
+                $scope.Servicio.ValorParadaCliente = parseInt(d.data.plValorCliente);
+            }else{
+                toaster.pop('info','¡Alerta!',"Estimado Usuario(a), no se encontró el valor de parada para esta plantilla", 0);
+            }
+        }, function(err) {
+            toaster.pop('error','¡Error!',"Error al buscar parada ",0);
+            console.log("Some Error Occured " + JSON.stringify(err));
+        });
+
+    }
+
+
     // GESTIONAR POLYGONOS ///
 
     function dibujarPoligono (){
@@ -510,6 +530,7 @@ app.controller('serviciosController',['$scope', 'zonaService', 'ngTableParams', 
             if(pos >=0){
                 $scope.Plantilla = $scope.Contrato.Plantilla[pos];
                 getTipoVehiculo($scope.Plantilla.plCodigo);
+                buscarValorParada();
             }
         }else{
             $scope.titlePlantilla = "Dispobilidad ";
@@ -674,15 +695,18 @@ app.controller('serviciosController',['$scope', 'zonaService', 'ngTableParams', 
         if (!$scope.Parada.prDireccion){
             toaster.pop("info","¡Alerta!", "Por favor ingrese la dirección de parada");
             return;
-        }        
-        
-        if(!$scope.Servicio.Tipo.csValor){
-            toaster.pop("info","¡Alerta!", "Seleccione el tipo de servicio.");
+        }
+
+        if( $scope.Servicio.ValorParadaCliente ==0){
+            toaster.pop("info","¡Alerta!", "No se ha definido el valor de la parada para esta plantilla");
             return;
-        }        
+        }
+        
+
         $scope.Parada.prLatiud = 0;
         $scope.Parada.prLongitud  = 0;                  
-        $scope.Parada.prValor = $scope.Servicio.Tipo.csValor;
+        $scope.Parada.prValor = $scope.Servicio.ValorParadaProveedor;
+        $scope.Parada.prValorCliente = $scope.Servicio.ValorParadaCliente;
         $scope.Parada.prFecha = $scope.Servicio.FechaServicio;
         $scope.Servicio.Paradas.push($scope.Parada);
         $scope.Parada = {};
@@ -695,8 +719,8 @@ app.controller('serviciosController',['$scope', 'zonaService', 'ngTableParams', 
     $scope.TotalParada =  function (){
         var total = 0;
         for (var i=0; i<$scope.Servicio.Paradas.length; i++) {            
-            total += parseInt($scope.Servicio.Paradas[i].prValor);
-        }          
+            total += parseInt($scope.Servicio.Paradas[i].prValorCliente);
+        }
         $scope.Subtotal = total;
         $scope.Servicio.ValorTotal =  parseFloat($scope.Subtotal) + parseFloat($scope.Servicio.ValorCliente);
         return total;

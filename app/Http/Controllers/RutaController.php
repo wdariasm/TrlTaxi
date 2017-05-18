@@ -22,6 +22,14 @@ class RutaController extends Controller
         return $result; 
     }
 
+    public function getByPlanitlla($idPlantilla){
+        $result = DB::select("SELECT r.rtCodigo, r.rtNombre, r.rtDescripcion,r.rtValor,r.rtEstado, c.tvDescripcion, m.muNombre,"
+                        . " d.dtNombre, r.rtImagen from ruta r,clasevehiculo c,municipio m,departamento d"
+                        . " where r.rtTipoVehiculo=c.tvCodigo and r.rtCiudad=m.muCodigo and m.muDepartamento=d.dtCodigo "
+                         . " and r.rtEstado <>'BORRADO' and r.rtPlantilla = $idPlantilla ");
+                return $result;
+    }
+
     
     /**
      * Store a newly created resource in storage.

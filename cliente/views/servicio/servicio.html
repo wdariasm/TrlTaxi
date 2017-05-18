@@ -439,7 +439,7 @@
 						<tr ng-repeat="items in Servicio.Paradas">
 						    <td>{{$index + 1}}</td>
 						    <td>{{items.prDireccion}}</td>
-						    <td>{{items.prValor| currency : "$ " : 0 }}</td>
+						    <td>{{items.prValorCliente| currency : "$ " : 0 }}</td>
 						    <td>
 							<a ng-click="QuitarParada($index)"  href="javascript:;"  title="Quitar"><i class="fa fa-lg fa-trash text-danger"></i></a>
 						    </td>

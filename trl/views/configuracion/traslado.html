@@ -1,306 +1,267 @@
 <div class="container-fluid">
     <div class="row">
-        <div class="col-md-12">  
+        <div class="col-md-12">
             <div class="tabbable-line">
                 <ul class="nav nav-tabs nav-justified" id="tabPanels">
-                    <li class="active"> <a href="#tabPlantilla" data-toggle="tab">Plantilla</a></li>
+                    <li class="active"><a href="#tabPlantilla" data-toggle="tab">Plantilla</a></li>
                     <li><a href="#tabRegistroTraslado" data-toggle="tab">Nuevo Traslado</a></li>
                 </ul>
             </div>
         </div>
         <div class="tab-content">
             <div class="tab-pane active" id="tabPlantilla">
-                 <div class="container-fluid"  ng-controller="plantillaController" >
-                     <div class="row">                       
-                        <div class="col-md-4">            
-                            <br/>
-                            <form name="frmPlatilla" id="frmPlatilla" novalidate>                               
-                                <div class="row">
-                                    <div class="col-xs-12">
-                                        <div class="form-group">
-                                            <label for="txtDescripcion">Descripción *</label>
-                                               <div class="input-group">    
-                                                 <div class="input-group-addon"><i class="fa fa-edit text-success"></i></div>
-                                                 <input type="text" required="" class="form-control" ng-model="Plantilla.plDescripcion" maxlength="100" id="txtDescripcion" placeholder="Descripción">
+                <div ng-include="'../trl/views/configuracion/plantilla.html'"></div>
+            </div>
+        </div>
 
-                                               </div>
+        <div class="tab-pane " id="tabRegistroTraslado">
+            <div class="container-fluid" ng-controller="trasladoController">
+                <div class="row">
+                    <div class="col-md-4">
+                        <form name="frmTraslado" id="frmTraslado" novalidate>
+                            <h5 class="text-primary">{{title}}</h5>
+                            <div class="row">
+
+                                <div class="col-xs-10">
+                                    <div class="form-group">
+                                        <label for="txttlNombre">Nombre *</label>
+                                        <div class="input-group">
+                                            <div class="input-group-addon"><i class="fa fa-user text-success"></i></div>
+                                            <input required="" type="text" class="form-control"
+                                                   ng-model="Traslado.tlNombre" id="txttlNombre" placeholder="Nombre ">
                                         </div>
                                     </div>
-                                 
+                                </div>
 
-                                    <div class="col-xs-12">
-                                        <div class="form-group">
-                                            <label for="txtEstado">Estado *</label>
-                                             <div class="input-group">    
-                                                 <div class="input-group-addon"><i class="fa fa-list-ul text-success"></i></div>
-                                            <select type="text" class="form-control" ng-model="Plantilla.plEstado" id="txtEstado" placeholder="Estado">
+                                <div class="col-xs-10">
+                                    <div class="form-group">
+                                        <label for="cboTipoVehiculo">Tipo Vehiculo *</label>
+                                        <div class="input-group">
+                                            <div class="input-group-addon"><i class="fa fa-car text-success"></i></div>
+                                            <select ng-model="VehiculoSelect" class="form-control" id="cboTipoVehiculo"
+                                                    ng-options="item as item.tvCodigo +' - '+ item.tvDescripcion for item in TipoVehiculos track by item.tvCodigo"
+                                                    required></select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-xs-10">
+                                    <div class="form-group">
+                                        <label for="txttrValor"> Valor *</label>
+                                        <div class="input-group">
+                                            <div class="input-group-addon"><i class="fa fa-usd text-success"></i></div>
+                                            <input required="" type="text" class="form-control"
+                                                   ng-model="Traslado.tlValor" id="txttrValor"
+                                                   fcsa-number="{ min: 0,  maxDecimals: 0  }" maxlength="11"
+                                                   solo-numeros>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-xs-10">
+                                    <div class="form-group">
+                                        <label for="cboDepartamento">Departamento Origen *</label>
+                                        <div class="input-group">
+                                            <div class="input-group-addon"><i class="fa fa-globe text-success"></i>
+                                            </div>
+                                            <select ng-model="DeptSelect" class="form-control" id="cboDepartamento"
+                                                    ng-change="CambiaDept()"
+                                                    ng-options="item as item.dtCodigo +' - '+  item.dtNombre for item in DtoOrigen track by item.dtCodigo"
+                                                    required></select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-xs-10">
+                                    <div class="form-group">
+                                        <label for="cboMunicipio">Ciudad Origen *</label>
+                                        <div class="input-group">
+                                            <div class="input-group-addon"><i class="fa fa-globe text-success"></i>
+                                            </div>
+                                            <select ng-model="MunSelect" class="form-control" id="cboMunicipio"
+                                                    ng-options="item as item.muCodigo +' - '+  item.muNombre for item in Municipios track by item.muCodigo"
+                                                    required></select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-xs-10">
+                                    <div class="form-group">
+                                        <label for="cboDepartamentoDes">Departamento Destino*</label>
+                                        <div class="input-group">
+                                            <div class="input-group-addon"><i class="fa fa-globe text-success"></i>
+                                            </div>
+                                            <select ng-model="DepDestinoSelect" class="form-control"
+                                                    id="cboDepartamentoDes" ng-change="CambiaDepto()"
+                                                    ng-options="item as item.dtCodigo +' - '+  item.dtNombre for item in DtoOrigen track by item.dtCodigo"
+                                                    required></select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-xs-10">
+                                    <div class="form-group">
+                                        <label for="cboCiudad">Ciudad Destino *</label>
+                                        <div class="input-group">
+                                            <div class="input-group-addon"><i class="fa fa-globe text-success"></i>
+                                            </div>
+                                            <select ng-model="MuniSelect" class="form-control" id="cboCiudad"
+                                                    ng-options="item as  item.muNombre for item in MunicipiosDestino track by item.muCodigo"
+                                                    required></select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-xs-10">
+                                    <div class="form-group">
+                                        <label for="cboPlantilla">Plantilla *</label>
+                                        <div class="input-group">
+                                            <div class="input-group-addon"><i class="fa fa-book text-success"></i></div>
+                                            <select ng-model="PlantillaSelect" class="form-control" id="cboPlantilla"
+                                                    ng-options="item as  item.plDescripcion for item in Plantillas track by item.plCodigo"
+                                                    required></select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-xs-10">
+                                    <div class="form-group">
+                                        <label for="txttlEstado">Estado *</label>
+                                        <div class="input-group">
+                                            <div class="input-group-addon"><i class="fa fa-list-ul text-success"></i>
+                                            </div>
+                                            <select required type="text" class="form-control"
+                                                    ng-model="Traslado.tlEstado" id="txttlEstado"
+                                                    placeholder="tlEstado">
                                                 <option value="ACTIVO">ACTIVO</option>
-                                                <option value="INACTIVO">INACTIVO</option>                                               
+                                                <option value="INACTIVO">INACTIVO</option>
+                                                <option value="BORRADO">BORRADO</option>
                                             </select>
 
-                                             </div>
                                         </div>
                                     </div>
+                                </div>
 
-                                    <div class="row">
+                                <div class="row">
+                                    <div class="col-xs-5 col-xs-offset-1">
                                         <br/>
-                                        <div class="col-xs-5 col-xs-offset-1">                                                                    
-                                            <button   class="btn btn-success btn-block btn-addon"   type="button"  title="Nuevo / Cancelar" ng-click="nuevo()"><i class="fa fa-pencil"></i> Nuevo</button>
-                                        </div>
-                                        <div class="col-xs-5">                                 
-                                            <button  ng-disabled="frmPlatilla.$invalid"  class="btn btn-primary btn-block btn-addon"   type="button"  title="Registrar Tipo Vehiculo" ng-click="Guardar()"><i class="fa fa-check"></i>Guardar</button>
-                                         </div>
+                                        <button class="btn btn-success btn-block btn-addon" type="button"
+                                                title="Nuevo Traslado" ng-click="nuevo()"><i class="fa fa-pencil"></i>Nuevo
+                                        </button>
                                     </div>
+                                    <div class="col-xs-5">
+                                        <br/>
+                                        <button ng-disabled="frmTraslado.$invalid"
+                                                class="btn btn-primary btn-block btn-addon" type="button"
+                                                title="Registrar Traslado" ng-click="Guardar()"><i
+                                                class="fa fa-check"></i> Guardar
+                                        </button>
+                                    </div>
+                                </div>
 
-
-                                </div>                                
-                            </form>
-                        </div>
-
-                        <div class="col-md-8">
-                            <br/>
-                            <div class="row">
-                                <div class="col-xs-12">
-                                    <table border="0" cellspacing="0" class="table table-striped" >
-                                        <thead>
-                                            <tr>
-                                                <th class="center">CODIGO</th>                                
-                                                <th>DESCRIPCIÓN</th>
-                                                <th>TIPO</th>
-                                                <th>ESTADO</th>
-                                                <th width="12%">ACCIÓN</th>
-                                            </tr>
-                                        </thead>
-
-                                        <tbody>
-                                            <tr data-ng-repeat="items in Plantillas">
-                                                <td class="center">{{ items.plCodigo}}</td>
-                                                <td>{{ items.plDescripcion }}</td>
-                                                <td>{{ items.svDescripcion }}</td>
-                                                <td>{{ items.plEstado}}</td>
-                                                <td>
-                                                    <center>
-                                                            <a data-ng-click="Get(items)" style="float: left; margin-left: 15px;" href="javascript:;"  title="Editar"><i class="fa fa-lg fa-pencil"></i></a>
-                                                            <a ng-click="VerDesactivar(items.plCodigo, 'BORRADO')"  style="float: left; margin-left: 15px;" href="javascript:;"  title="Eliminar"><i class="fa fa-lg fa-trash text-danger"></i></a>
-                                                    </center>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>                                     
-                                </div>                            
                             </div>
+                        </form>
+                    </div>
+                    <div class="col-xs-8">
+                        <div class="row">
+                            <div class="col-xs-8">
+                                <label for="search">Filtro</label>
+                                <div class="input-group">
+                                    <div class="input-group-addon"><i class="fa  fa-search text-primary"></i></div>
+                                    <input class="form-control" id="search" type="search" placeholder=""
+                                           ng-model="TablaTraslado.filter()['busqueda']">
+                                </div>
+                            </div>
+                            <div class="" style="float:width; margin-top:30px;">
+                                <label class=" text-primary" style="font-size: 18px;">Total:
+                                    {{Traslados.length}}</label>
+                            </div>
+                        </div>
+                        <table class="table table-hover table-condensed" ng-table="TablaTraslado"
+                               style="float:height; margin-top: 50px;">
+                            <thead>
+                            <tr>
+                                <th>CODIGO</th>
+                                <th>NOMBRE</th>
+                                <th>TIPO VEHÍCULO</th>
+                                <th>VALOR</th>
+                                <th>CIUDAD ORIGEN</th>
+                                <!-- <th>CIUDAD DESTINO</th>-->
+                                <th>PLANTILLA</th>
+                                <th>ESTADO</th>
+                                <th width="12%">ACCION</th>
+
+
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr data-ng-repeat="items in $data">
+                                <td class="center">{{ items.tlCodigo}}</td>
+                                <td>{{ items.tlNombre }}</td>
+                                <td>{{ items.tvDescripcion}}</td>
+                                <td>{{ items.tlValor}}</td>
+                                <td>{{ items.muNombre}}</td>
+                                <!--<td>{{ items.muNombre}}</td> -->
+                                <td>{{ items.plDescripcion}}</td>
+                                <td>{{ items.tlEstado}}</td>
+                                <td>
+                                    <center>
+                                        <a data-ng-click="get(items)" style="float: left; margin-left: 15px;"
+                                           href="javascript:;" title="Editar"><i
+                                                class="fa  fa-1x fa-lg fa-pencil text-success"></i></a>
+                                        <a data-ng-click="VerDesactivarTras(items.IdTraslado, 'RETIRADO')"
+                                           style="float: left; margin-left: 15px;" href="javascript:;" title="Eliminar"><i
+                                                class="fa fa-1x fa-lg fa-trash text-danger"></i></a>
+                                    </center>
+                                </td>
+                            </tr>
+
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="modal fade bs-example-modal-sm" id="mdConfir" tabindex="-1" role="dialog"
+                         aria-labelledby="mySmallModalLabel" style="margin-top: 10%;">
+                        <div class="modal-dialog modal-sm" style="width: 30%">
+                            <div class="modal-content">
+
+                                <div class="modal-header">
+                                    <div class="modal-title">Activar / Inactivar Traslado</div>
+                                </div>
+
+                                <div class="modal-body">
+                                    <div class="row">
+                                        <div class="col-xs-12">
+                                            <label>¿Está seguro de ejecutar esta acción? '{{tlEstado}}' </label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                                    <button type="button" class="btn btn-primary" ng-click="DesactivarTraslado()">
+                                        Aceptar
+                                    </button>
+                                </div>
+
+                            </div>
+
                         </div>
                     </div>
                 </div>
+
             </div>
-            
-            <div class="tab-pane " id="tabRegistroTraslado">
-                <div   class="container-fluid"  ng-controller="trasladoController">
-                    <div class="row">
-                        <div class="col-md-4">
-                            <form   name="frmTraslado" id="frmTraslado" novalidate>
-                                <h5 class="text-primary">{{title}}</h5>
-                                    <div class="row">
-
-                                        <div class="col-xs-10">
-                                              <div class="form-group">
-                                                 <label for="txttlNombre">Nombre *</label>
-                                                     <div class="input-group">    
-                                                          <div class="input-group-addon"><i class="fa fa-user text-success"></i></div>
-                                                          <input required="" type="text" class="form-control" ng-model="Traslado.tlNombre" id="txttlNombre" placeholder="Nombre ">
-                                                     </div>
-                                             </div>
-                                        </div> 
-
-                                        <div class="col-xs-10">
-                                            <div class="form-group">
-                                                <label  for="cboTipoVehiculo">Tipo Vehiculo *</label>
-                                                    <div class="input-group">    
-                                                        <div class="input-group-addon"><i class="fa fa-car text-success"></i></div>
-                                                           <select ng-model="VehiculoSelect" class="form-control" id="cboTipoVehiculo" ng-options="item as item.tvCodigo +' - '+ item.tvDescripcion for item in TipoVehiculos track by item.tvCodigo" required></select>           
-                                                    </div> 
-                                            </div>   
-                                        </div>
-
-                                         <div class="col-xs-10">
-                                            <div class="form-group">
-                                                <label for="txttrValor"> Valor *</label>
-                                                     <div class="input-group">    
-                                                         <div class="input-group-addon"><i class="fa fa-usd text-success"></i></div>
-                                                         <input required="" type="text" class="form-control" ng-model="Traslado.tlValor" id="txttrValor"  fcsa-number="{ min: 0,  maxDecimals: 0  }" maxlength="11" solo-numeros >
-                                                      </div> 
-                                            </div>
-                                        </div>
-                                        
-                                        <div class="col-xs-10">
-                                            <div class="form-group">
-                                                <label  for="cboDepartamento">Departamento Origen *</label>
-                                                    <div class="input-group">    
-                                                        <div class="input-group-addon"><i class="fa fa-globe text-success"></i></div>
-                                                        <select ng-model="DeptSelect"  class="form-control" id="cboDepartamento" ng-change="CambiaDept()" ng-options="item as item.dtCodigo +' - '+  item.dtNombre for item in DtoOrigen track by item.dtCodigo" required></select>           
-                                                    </div> 
-                                            </div>   
-                                        </div>
-
-                                        <div class="col-xs-10">
-                                            <div class="form-group">
-                                                <label  for="cboMunicipio">Ciudad Origen *</label>
-                                                    <div class="input-group">    
-                                                        <div class="input-group-addon"><i class="fa fa-globe text-success"></i></div>
-                                                        <select ng-model="MunSelect"  class="form-control" id="cboMunicipio" ng-options="item as item.muCodigo +' - '+  item.muNombre for item in Municipios track by item.muCodigo" required></select>           
-                                                    </div> 
-                                            </div>   
-                                        </div>
-                                        
-                                        <div class="col-xs-10">
-                                            <div class="form-group">
-                                                <label  for="cboDepartamentoDes">Departamento Destino*</label>
-                                                    <div class="input-group">    
-                                                        <div class="input-group-addon"><i class="fa fa-globe text-success"></i></div>
-                                                        <select ng-model="DepDestinoSelect"  class="form-control" id="cboDepartamentoDes" ng-change="CambiaDepto()" ng-options="item as item.dtCodigo +' - '+  item.dtNombre for item in DtoOrigen track by item.dtCodigo" required></select>           
-                                                    </div> 
-                                            </div>   
-                                        </div>
-
-                                        <div class="col-xs-10">
-                                            <div class="form-group">
-                                                <label  for="cboCiudad">Ciudad Destino *</label>
-                                                    <div class="input-group">    
-                                                        <div class="input-group-addon"><i class="fa fa-globe text-success"></i></div>
-                                                        <select ng-model="MuniSelect"  class="form-control" id="cboCiudad" ng-options="item as  item.muNombre for item in MunicipiosDestino track by item.muCodigo" required></select>           
-                                                    </div> 
-                                            </div>   
-                                        </div>
-
-                                        <div class="col-xs-10">
-                                            <div class="form-group">
-                                                <label  for="cboPlantilla">Plantilla *</label>
-                                                    <div class="input-group">    
-                                                        <div class="input-group-addon"><i class="fa fa-book text-success"></i></div>
-                                                           <select   ng-model="PlantillaSelect" class="form-control" id="cboPlantilla" ng-options="item as  item.plDescripcion for item in Plantillas track by item.plCodigo" required></select>           
-                                                    </div> 
-                                            </div>   
-                                        </div>
-
-                                         <div class="col-xs-10">
-                                             <div class="form-group">
-                                                 <label for="txttlEstado">Estado *</label>
-                                                     <div class="input-group">    
-                                                         <div class="input-group-addon"><i class="fa fa-list-ul text-success"></i></div>
-                                                             <select required type="text" class="form-control" ng-model="Traslado.tlEstado" id="txttlEstado" placeholder="tlEstado">
-                                                                 <option value="ACTIVO">ACTIVO</option>
-                                                                 <option value="INACTIVO">INACTIVO</option>
-                                                                 <option value="BORRADO">BORRADO</option>
-                                                              </select>
-
-                                                      </div>
-                                              </div>
-                                         </div>
-
-                                          <div class="row">
-                                             <div class="col-xs-5 col-xs-offset-1">                                        
-                                                 <br/>
-                                                     <button   class="btn btn-success btn-block btn-addon"   type="button"  title="Nuevo Traslado" ng-click="nuevo()"><i class="fa fa-pencil"></i>Nuevo</button>
-                                             </div>
-                                             <div class="col-xs-5">          
-                                                 <br/>
-                                                      <button  ng-disabled="frmTraslado.$invalid"  class="btn btn-primary btn-block btn-addon"   type="button"  title="Registrar Traslado" ng-click="Guardar()"><i class="fa fa-check"></i> Guardar</button>
-                                             </div>
-                                         </div>
-
-                                     </div>                                
-                            </form> 
-                        </div>   
-                        <div class="col-xs-8">
-                            <div class="row">
-                                <div class="col-xs-8">
-                                    <label  for="search">Filtro</label>
-                                        <div class="input-group">
-                                            <div class="input-group-addon"><i class="fa  fa-search text-primary"></i></div>
-                                            <input  class="form-control" id="search" type="search" placeholder="" ng-model="TablaTraslado.filter()['busqueda']">
-                                        </div>
-                                 </div>
-                                 <div class="" style="float:width; margin-top:30px;">
-                                        <label class=" text-primary" style="font-size: 18px;">Total: {{Traslados.length}}</label>
-                                 </div>
-                            </div>
-                               <table class="table table-hover table-condensed" ng-table="TablaTraslado" style="float:height; margin-top: 50px;">
-                                   <thead>
-                                       <tr>
-                                           <th>CODIGO</th>
-                                           <th>NOMBRE</th>                                        
-                                           <th>TIPO VEHÍCULO</th>
-                                           <th>VALOR</th>
-                                           <th>CIUDAD ORIGEN</th>
-                                          <!-- <th>CIUDAD DESTINO</th>-->
-                                           <th>PLANTILLA</th>
-                                           <th>ESTADO</th>
-                                           <th width="12%">ACCION</th>
-
-
-                                       </tr>
-                                   </thead>
-                                    <tbody>
-                                        <tr data-ng-repeat="items in $data">
-                                            <td class="center">{{ items.tlCodigo}}</td>
-                                            <td>{{ items.tlNombre }}</td>
-                                            <td>{{ items.tvDescripcion}}</td> 
-                                            <td>{{ items.tlValor}}</td> 
-                                            <td>{{ items.muNombre}}</td> 
-                                            <!--<td>{{ items.muNombre}}</td> -->
-                                            <td>{{ items.plDescripcion}}</td> 
-                                            <td>{{ items.tlEstado}}</td> 
-                                            <td>
-                                                    <center>
-                                                        <a data-ng-click="get(items)" style="float: left; margin-left: 15px;" href="javascript:;"  title="Editar"><i class="fa  fa-1x fa-lg fa-pencil text-success"></i></a>
-                                                        <a data-ng-click="VerDesactivarTras(items.IdTraslado, 'RETIRADO')"  style="float: left; margin-left: 15px;" href="javascript:;"  title="Eliminar"><i class="fa fa-1x fa-lg fa-trash text-danger"></i></a>
-                                                    </center>
-                                            </td>
-                                        </tr>
-
-                                   </tbody>
-                               </table>
-                        </div>
-                         <div class="modal fade bs-example-modal-sm" id="mdConfir" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" style="margin-top: 10%;">
-                                <div class="modal-dialog modal-sm" style="width: 30%" >                                   
-                                    <div class="modal-content">
-                                       
-                                        <div class="modal-header">
-                                            <div class="modal-title">Activar / Inactivar  Traslado</div>
-                                        </div>
-                                        
-                                        <div class="modal-body">
-                                            <div class="row">
-                                                <div class="col-xs-12">
-                                                    <label>¿Está seguro de ejecutar esta acción? '{{tlEstado}}' </label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
-                                            <button type="button" class="btn btn-primary" ng-click="DesactivarTraslado()">Aceptar</button>
-                                        </div>  
-                                        
-                                    </div>
-                                                                     
-                                </div>
-                          </div>
-                    </div>
-                         
-                </div> 
-            </div>
-
         </div>
+
     </div>
+</div>
 </div>
 <script>
     $('#tabPanels a').click(function (e) {
         e.preventDefault();
         $(this).tab('show');
-        
+
     });
-    
+
     //$('#tabPanels a[href="#tabResgistroTraslado"]').tab('show');
 
 </script>

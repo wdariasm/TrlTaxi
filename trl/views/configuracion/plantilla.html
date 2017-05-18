@@ -7,26 +7,46 @@
                     <div class="col-xs-12">
                         <div class="form-group">
                             <label for="txtDescripcion">Descripción *</label>
-                               <div class="input-group">    
-                                 <div class="input-group-addon"><i class="fa fa-automobile text-success"></i></div>
-                                 <input type="text" required="" class="form-control" ng-model="Plantilla.plDescripcion" maxlength="100" id="txtDescripcion" placeholder="Descripción">
+			    <div class="input-group">    
+				<div class="input-group-addon"><i class="fa fa-automobile text-success"></i></div>
+				<input type="text" required="" class="form-control" ng-model="Plantilla.plDescripcion" maxlength="100" id="txtDescripcion" placeholder="Descripción">
 
-                               </div>
+			    </div>
                         </div>
                     </div>
+
+		    <div class="col-xs-12">
+			<div class="form-group">
+			    <label  for="txtValorCliente">Valor Cliente *</label>
+			    <div class="input-group">
+				<div class="input-group-addon"><i class="fa fa-usd"></i></div>
+				<input class="form-control" ng-model="Plantilla.plValorCliente" solo-numeros id="txtValorCliente" name="txtValorCliente" type="text" fcsa-number="{ min: 0,  maxDecimals: 0  }" required   maxlength="10" >
+			    </div>
+			</div>
+		    </div>  
+
+		    <div class="col-xs-12">
+			<div class="form-group">
+			    <label  for="txtValor">Valor Proveedor *</label>
+			    <div class="input-group">
+				<div class="input-group-addon"><i class="fa fa-usd"></i></div>
+				<input class="form-control" ng-model="Plantilla.plValorProveedor" solo-numeros id="txtValor" name="txtValor" type="text" fcsa-number="{ min: 0,  maxDecimals: 0  }" required   maxlength="10" >
+			    </div>
+			</div>
+		    </div>
 
 
                     <div class="col-xs-12">
                         <div class="form-group">
                             <label for="txtEstado">Estado *</label>
-                             <div class="input-group">    
-                                 <div class="input-group-addon"><i class="fa fa-list-ul text-success"></i></div>
-                            <select type="text" class="form-control" ng-model="Plantilla.plEstado" id="txtEstado" placeholder="Estado">
-                                <option value="ACTIVO">ACTIVO</option>
-                                <option value="INACTIVO">INACTIVO</option>                                               
-                            </select>
+			    <div class="input-group">    
+				<div class="input-group-addon"><i class="fa fa-list-ul text-success"></i></div>
+				<select type="text" class="form-control" ng-model="Plantilla.plEstado" id="txtEstado" placeholder="Estado">
+				    <option value="ACTIVO">ACTIVO</option>
+				    <option value="INACTIVO">INACTIVO</option>                                               
+				</select>
 
-                             </div>
+			    </div>
                         </div>
                     </div>
 
@@ -52,9 +72,11 @@
                     <table border="0" cellspacing="0" class="table table-striped" >
                         <thead>
                             <tr>
-                                <th class="center">CODIGO</th>                                
+                                <th class="center">N°</th>                                
                                 <th>DESCRIPCIÓN</th>
                                 <th>TIPO</th>
+				<th title="Valor Cliente">V. CLIENTE</th>
+				<th title="Valor proveedor">V. PROVEEDOR</th>
                                 <th>ESTADO</th>
                                 <th width="16%">ACCIÓN</th>
                             </tr>
@@ -63,17 +85,19 @@
                         <tbody>
                             <tr data-ng-repeat="items in Plantillas">
                                 <td class="center">{{ items.plCodigo}}</td>
-                                <td>{{ items.plDescripcion }}</td>
-                                <td>{{ items.svDescripcion }}</td>
+                                <td>{{ items.plDescripcion}}</td>
+				<td>{{ items.svDescripcion}}</td>
+				<td>{{ items.plValorCliente | currency : "$" : 0}}</td>
+				<td>{{ items.plValorProveedor | currency : "$" : 0}}</td>                                
                                 <td>{{ items.plEstado}}</td>
                                 <td>
-                                    <center>                                        
-                                        <a data-ng-click="Get(items)" style="float: left; margin-left: 15px;" href="javascript:;"  title="Editar"><i class="fa fa-lg fa-pencil"></i></a>
-                                        <a data-ng-click="AgregarDatos(items)" style="float: left; margin-left: 15px;" href="javascript:;"  title="Agregar Datos"><i class="fa fa-lg fa-search-plus text-success"></i></a>
-                                        <a ng-click="VerDesactivarPlantilla(items)"  style="float: left; margin-left: 15px;" href="javascript:;"  title="Eliminar datos plantilla"><i class="fa fa-lg fa-trash text-danger"></i></a>
-                                    </center>
-                                </td>
-                            </tr>
+			<center>                                        
+			    <a data-ng-click="Get(items)" style="float: left; margin-left: 15px;" href="javascript:;"  title="Editar"><i class="fa fa-lg fa-pencil"></i></a>
+			    <a data-ng-click="AgregarDatos(items)" style="float: left; margin-left: 15px;" href="javascript:;"  title="Agregar Datos"><i class="fa fa-lg fa-search-plus text-success"></i></a>
+			    <a ng-click="VerDesactivarPlantilla(items)"  style="float: left; margin-left: 15px;" href="javascript:;"  title="Eliminar datos plantilla"><i class="fa fa-lg fa-trash text-danger"></i></a>
+			</center>
+			</td>
+			</tr>
                         </tbody>
                     </table>                                     
                 </div>                            
@@ -94,7 +118,7 @@
                         <div class="col-xs-12">
                             <label class="text-danger" style="display: initial">Estimado usuario(a), tenga en cuenta que este proceso eliminará definitivamente todas las tarifas 
                                 configurados para esta plantilla: </label> <label style="display: inline-block"><strong>{{PlantillaGlobal.plDescripcion}}</strong></label>
-                                    
+
                         </div>
 
                         <div class="col-xs-12">

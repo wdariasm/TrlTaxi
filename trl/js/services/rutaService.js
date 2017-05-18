@@ -3,12 +3,12 @@ app.service("rutaService",[ '$http', function ($http) {
         var req = $http.get(uri+'/api/ruta/' + id);
         return req;
     };
-       
-    this.getAll = function () {
-        var req = $http.get(uri+'/api/ruta');
+
+    this.getAll = function (idPlantilla) {
+        var req = $http.get(uri+'/api/plantilla/' + idPlantilla + '/ruta');
         return req;
-    };                
-        
+    };
+
     this.post = function (formData) { 
 //        var req = $http.post(uri+'/api/ruta',ruta); 
 //        return req; 

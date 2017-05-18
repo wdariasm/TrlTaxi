@@ -25,4 +25,9 @@ app.service("contratoService",[ '$http', function ($http) {
         return req;
     };
 
+    this.getValorParada = function (id) {
+        var req = $http.get(uri+'/api/plantilla/' + id + '/parada');
+        return req;
+    };
+
 }]);

@@ -67,7 +67,7 @@ app.controller("homeController",  ["$scope", "parametroService", "usuarioService
             }else{
                 var ru = ruta.get();
                 if(ru === "/iniciando"){                   
-                    location.href = "#/1/servicios";                     
+                    location.href = "#/1/servicio";
                 }else{
                    location.href = "#"+ru;  
                 }

@@ -13,16 +13,7 @@ use DB;
 
 class PlantillaController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }   
-
+   
     /**
      * Store a newly created resource in storage.
      *
@@ -36,7 +27,9 @@ class PlantillaController extends Controller
             $plantilla= new Plantilla();                        
             $plantilla->plDescripcion = $data["plDescripcion"];
             $plantilla->plEstado = 'ACTIVO';
-            $plantilla->plTipoServicio = $data["plTipoServicio"];            
+            $plantilla->plValorProveedor = $data["plValorProveedor"]; 
+            $plantilla->plValorCliente = $data["plValorCliente"]; 
+            $plantilla->plTipoServicio = $data["plTipoServicio"]; 
             $plantilla->save();           
             return JsonResponse::create(array('message' => "Plantilla guardada correctamente", "request" =>json_encode($plantilla->plCodigo)), 200);
             
@@ -65,7 +58,11 @@ class PlantillaController extends Controller
             . " transfert t INNER JOIN clasevehiculo cv ON  t.tfTipoVehiculo=cv.tvCodigo WHERE tfPlantilla = $id");        
         return $result;        
     }
-    
+
+    public function getValoresParada($id){
+        return Plantilla::select("plValorCliente", "plValorProveedor")->find($id);
+    }
+
 
     /**
      * Muestra todas las plantillas activas  por tipo de servicio 
@@ -75,7 +72,7 @@ class PlantillaController extends Controller
     public function show($id)
     {
         return Plantilla::where('plTipoServicio',$id)->where('plEstado','=','ACTIVO')
-                ->select('plCodigo', 'plDescripcion', 'plTipoServicio')->get();
+                ->select('plCodigo', 'plDescripcion', 'plTipoServicio', 'plValorProveedor', 'plValorCliente')->get();
     }
 
     
@@ -94,7 +91,9 @@ class PlantillaController extends Controller
             $plantilla= Plantilla::find($id);                        
             $plantilla->plDescripcion = $data["plDescripcion"];
             $plantilla->plEstado = $data["plEstado"];
-            $plantilla->plTipoServicio = $data["plTipoServicio"];            
+            $plantilla->plTipoServicio = $data["plTipoServicio"];
+            $plantilla->plValorProveedor = $data["plValorProveedor"];
+            $plantilla->plValorCliente = $data["plValorCliente"];                        
             $plantilla->save();           
             return JsonResponse::create(array('message' => "Datos actualizados correctamente", "request" =>json_encode($plantilla->plCodigo)), 200);
             
