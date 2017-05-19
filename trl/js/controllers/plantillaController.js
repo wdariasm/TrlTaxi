@@ -168,7 +168,7 @@ app.controller('plantillaController',['$scope',  'ngTableParams', 'toaster',"pla
                 $scope.$emit("cargueRuta", "iniciando cargue");
                 break;
             case "4":
-                $('#tabPanels a[href="#tabRegistro"]').tab('show');
+                $('#tabPanels a[href="#tabRegistroTraslado"]').tab('show');
                 $scope.$emit("cargueTraslado", "iniciando cargue");
                 break;
         }

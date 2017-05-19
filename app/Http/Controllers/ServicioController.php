@@ -202,6 +202,7 @@ class ServicioController extends Controller
             $servicio->Hora= $hora->format('H:i:s'); 
             $servicio->Valor= $data["Valor"];
             $servicio->ValorCliente = $data["ValorCliente"];
+            $servicio->ValorParadas = $data["ValorParadas"];
             $servicio->NumPasajeros= $data["NumPasajeros"];
             $servicio->NumHoras= $data["NumHoras"];
             $servicio->Estado= "SOLICITADO";
@@ -255,6 +256,7 @@ class ServicioController extends Controller
             $insert->prLatiud = $p['prLatiud'];
             $insert->prLongitud = $p['prLongitud'];
             $insert->prValor = $p['prValor'];
+            $insert->prValorCliente = $p['prValorCliente'];
             $insert->prFecha = $p['prFecha'];            
             $insert->prEstado = 'ACTIVA';
             $insert->save();

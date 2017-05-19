@@ -106,7 +106,8 @@ app.controller('serviciosController',['$scope', 'zonaService', 'ngTableParams', 
             ModoServicio :"PROGRAMADO",
             Contactos : [],
             ValorParadaProveedor : 0,
-            ValorParadaCliente : 0
+            ValorParadaCliente : 0,
+            ValorParadas : 0
         };
         
         $scope.Parada = {
@@ -718,10 +719,13 @@ app.controller('serviciosController',['$scope', 'zonaService', 'ngTableParams', 
     
     $scope.TotalParada =  function (){
         var total = 0;
+        var totalProveedor= 0;
         for (var i=0; i<$scope.Servicio.Paradas.length; i++) {            
             total += parseInt($scope.Servicio.Paradas[i].prValorCliente);
+            totalProveedor += parseInt($scope.Servicio.Paradas[i].prValor);
         }
         $scope.Subtotal = total;
+        $scope.Servicio.ValorParadas = totalProveedor;
         $scope.Servicio.ValorTotal =  parseFloat($scope.Subtotal) + parseFloat($scope.Servicio.ValorCliente);
         return total;
     };        

@@ -1,5 +1,8 @@
-app.controller("trasladoController", ["$scope", "trasladoService","tipoVehiculoService", "departamentoService", "toaster","ngTableParams","plantillaService",
-function ($scope,trasladoService, tipoVehiculoService,departamentoService, toaster,ngTableParams,plantillaService) {
+app.controller("trasladoController", ["$scope", "$rootScope", "serverData", "trasladoService",
+    "tipoVehiculoService", "departamentoService", "toaster","ngTableParams","plantillaService", "funcionService",
+function ($scope, $rootScope, serverData, trasladoService, tipoVehiculoService,departamentoService, 
+    toaster,ngTableParams,plantillaService, funcionService) {
+        
     $scope.Traslado= {};
     $scope.Traslados= [];
     $scope.TipoVehiculos= [];
@@ -37,9 +40,18 @@ function ($scope,trasladoService, tipoVehiculoService,departamentoService, toast
        
     }
     initTraslado();
+    
+    $rootScope.$on("cargueTraslado", function (event, data) {        
+        loadTraslado(serverData.data.plCodigo);        
+        var pos = funcionService.arrayObjectIndexOf($scope.Plantillas,serverData.data.plCodigo , "plCodigo");
+        if(pos != "-1"){
+            $scope.PlantillaSelect =  $scope.Plantillas[pos];
+        }
+        
+    });
 
-    function loadTraslado (){
-        var promise = trasladoService.getAll();
+    function loadTraslado (id){
+        var promise = trasladoService.getAll(id);
         promise.then(function(d) {                        
             $scope.Traslados = d.data;
             $scope.TablaTraslado.reload();
@@ -139,7 +151,7 @@ function ($scope,trasladoService, tipoVehiculoService,departamentoService, toast
             
             toaster.pop('success', "Control de Información", d.data.message); 
             initTraslado();
-            loadTraslado();
+            loadTraslado($scope.PlantillaSelect.plCodigo);
         }, function(err) {           
                 toaster.pop('error', "¡Error!", "Error al guardar Traslado");         
                 console.log("Some Error Occured " + JSON.stringify(err));
@@ -179,7 +191,7 @@ function ($scope,trasladoService, tipoVehiculoService,departamentoService, toast
             var promisePut  = trasladoService.updateEstado($scope.IdTrasladopGlobal, objetc);        
                 promisePut.then(function (d) {                
                  toaster.pop('success', "Control de Información", d.data.message);                 
-                loadTraslado();
+                loadTraslado($scope.PlantillaSelect.plCodigo);
             }, function (err) {                              
                      toaster.pop('error', "Error", "Error al Desactivar Traslado"); ;
                     console.log("Some Error Occured "+ JSON.stringify(err));
@@ -208,8 +220,7 @@ function ($scope,trasladoService, tipoVehiculoService,departamentoService, toast
             }
         });
     };
-    initTabla();
-    loadTraslado();
+    initTabla();    
 }]);
 
 

@@ -16,9 +16,13 @@ class TrasladoController extends Controller
      */
     public function index()
     {
-       $result = DB::select("SELECT t.tlCodigo, t.tlNombre, t.tlValor,t.tlEstado, c.tvDescripcion, m.muNombre, p.plDescripcion"
-                . "  FROM traslados t INNER JOIN clasevehiculo c ON t.tlTipoVehiculo=c.tvCodigo INNER JOIN municipio m ON t.tlCiudadOrigen=m.muCodigo"
-                . " INNER JOIN plantilla p ON t.tlPlantilla=p.plCodigo");
+       return null;
+    }
+    
+    public function getByPlanitlla($idPlantilla){
+        $result = DB::select("SELECT t.tlCodigo, t.tlNombre, t.tlValor,t.tlEstado, c.tvDescripcion, m.muNombre "
+                . "  FROM traslados t INNER JOIN clasevehiculo c ON t.tlTipoVehiculo=c.tvCodigo "
+                . " INNER JOIN municipio m ON t.tlCiudadOrigen=m.muCodigo WHERE t.tlPlantilla= $idPlantilla");
         return $result; 
     }
 

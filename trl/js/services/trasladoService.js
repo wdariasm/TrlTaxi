@@ -4,10 +4,10 @@ app.service("trasladoService",[ '$http', function ($http) {
         return req;
     };
        
-    this.getAll = function () {
-        var req = $http.get(uri+'/api/traslado');
+    this.getAll = function (idPlantilla) {
+        var req = $http.get(uri+'/api/plantilla/' + idPlantilla + '/traslado');
         return req;
-    };                
+    };               
         
     this.post = function (traslado) { 
         var req = $http.post(uri+'/api/traslado',traslado); 
