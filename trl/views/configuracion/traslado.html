@@ -208,7 +208,7 @@
                                     <td class="center">{{ items.tlCodigo}}</td>
                                     <td>{{ items.tlNombre }}</td>
                                     <td>{{ items.tvDescripcion}}</td>
-                                    <td>{{ items.tlValor}}</td>
+                                    <td>{{ items.tlValor | currency : "$" : 0}}</td>
                                     <td>{{ items.muNombre}}</td>
                                     <!--<td>{{ items.muNombre}}</td> -->                                    
                                     <td>{{ items.tlEstado}}</td>

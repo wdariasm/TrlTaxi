@@ -17,9 +17,13 @@ class DisponibilidadController extends Controller
      */
     public function index()
     {
-          $result = DB::select("SELECT dp.dpCodigo, dp.dpNombre,  dp.dpValorHora, dp.dpEstado,"
+         return null;
+    }
+    
+    public function getByPlanitlla($idPlantilla){
+        $result = DB::select("SELECT dp.dpCodigo, dp.dpNombre,  dp.dpValorHora, dp.dpEstado,"
                 . " cv.tvDescripcion FROM disponibilidad dp INNER JOIN clasevehiculo cv ON dp.dpTipoVehiculo = cv.tvCodigo"
-                . " WHERE  dp.dpEstado <> 'INACTIVO' ");
+                . " WHERE  dp.dpEstado <> 'INACTIVO' AND dpPlantilla = $idPlantilla");
         return $result; 
     }
 
@@ -39,6 +43,7 @@ class DisponibilidadController extends Controller
             $disponibilidad->dpValorHora = $data["dpValorHora"];
             $disponibilidad->dpEstado = $data["dpEstado"];
             $disponibilidad->dpTipoVehiculo = $data["dpTipoVehiculo"];
+            $disponibilidad->dpPlantilla = $data["dpPlantilla"];
             $disponibilidad->save();
             
             return JsonResponse::create(array('message' => "Disponibilidad guardada correctamente", "request" =>json_encode($disponibilidad->dpCodigo)), 200);

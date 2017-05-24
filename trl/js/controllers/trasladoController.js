@@ -135,6 +135,12 @@ function ($scope, $rootScope, serverData, trasladoService, tipoVehiculoService,d
     };
    
    $scope.Guardar = function (){
+       
+        if(!$scope.frmTraslado.$valid){
+            toaster.pop('error','¡Error!', 'Por favor ingrese los datos requeridos (*).');
+            return;
+        }
+       
        $scope.Traslado.tlTipoVehiculo = $scope.VehiculoSelect.tvCodigo;
        $scope.Traslado.tlCiudadOrigen= $scope.MunSelect.muCodigo;
        $scope.Traslado.tlCiudadDestio = $scope.MuniSelect.muCodigo;

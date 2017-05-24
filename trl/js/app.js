@@ -64,7 +64,7 @@ var app;
                 templateUrl: 'views/configuracion/usuario.html'
             })
             
-             .when("/0/disponibilidad",{
+             .when("/:tipo/disponibilidad",{
                 templateUrl: 'views/configuracion/disponibilidad.html'
             })
             

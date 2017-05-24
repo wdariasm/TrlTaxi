@@ -1,7 +1,7 @@
 app.controller('plantillaController',['$scope',  'ngTableParams', 'toaster',"plantillaService", "$routeParams", "serverData",
     function ($scope, ngTableParams, toaster, plantillaService, $routeParams, serverData) {
     
-    var opcion =["1","3","4"];
+    var opcion =["1","2","3","4"];
     
     $scope.Plantillas = [];
     $scope.Plantilla = {};
@@ -32,7 +32,7 @@ app.controller('plantillaController',['$scope',  'ngTableParams', 'toaster',"pla
             toaster.pop("error","¡Error!", "Error al cargar plantillas");
             console.log('failure loading Zona', errorPl);
         });
-    }
+    }       
     
     function init(){
         $scope.Plantilla = {
@@ -163,10 +163,17 @@ app.controller('plantillaController',['$scope',  'ngTableParams', 'toaster',"pla
                 $('#tabPanels a[href="#tabRegistro"]').tab('show');
                 $scope.$emit("cargueTransfert", "iniciando cargue");
                 break;
-            case "3":
+                
+            case "2":
+                $('#tabPanels a[href="#tabDisponibilidad"]').tab('show');
+                $scope.$emit("cargueDisponibilidad", "iniciando cargue");
+                break;
+            
+             case "3":
                 $('#tabPanels a[href="#tabListado"]').tab('show');
                 $scope.$emit("cargueRuta", "iniciando cargue");
                 break;
+                
             case "4":
                 $('#tabPanels a[href="#tabRegistroTraslado"]').tab('show');
                 $scope.$emit("cargueTraslado", "iniciando cargue");

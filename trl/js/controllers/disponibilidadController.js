@@ -1,5 +1,7 @@
-app.controller("disponibilidadController", ["$scope", "disponibilidadService","tipoVehiculoService", "toaster",
-function ($scope,disponibilidadService, tipoVehiculoService,toaster) {
+app.controller("disponibilidadController", ["$scope", "$rootScope", "disponibilidadService","tipoVehiculoService", "toaster",
+     "serverData", "funcionService", "plantillaService",
+function ($scope, $rootScope, disponibilidadService, tipoVehiculoService,toaster, serverData, funcionService, plantillaService) {
+    
     $scope.Disponibilidad= {};
     $scope.Disponibilidades= [];
     $scope.TipoVehiculos= [];
@@ -7,9 +9,11 @@ function ($scope,disponibilidadService, tipoVehiculoService,toaster) {
     $scope.editMode = false;
     $scope.title = "NUEVA DISPONIBILIDAD"; 
     $scope.TipoSelect ={}; 
+    $scope.PlantillaSelect = {};
+    $scope.Plantillas = [];
    
     $scope.$parent.SetTitulo("DISPONIBILIDAD");
-    initDisponibilidad();  
+    
     function initDisponibilidad() {
         $scope.Disponibilidad = {
             dpCodigo:"",
@@ -20,9 +24,19 @@ function ($scope,disponibilidadService, tipoVehiculoService,toaster) {
         };           
     }
     initDisponibilidad();
+    
+     $rootScope.$on("cargueDisponibilidad", function (event, data) {        
+        loadDisponibilidad(serverData.data.plCodigo);
+        
+        var pos = funcionService.arrayObjectIndexOf($scope.Plantillas,serverData.data.plCodigo , "plCodigo");
+        if(pos != "-1"){
+            $scope.PlantillaSelect =  $scope.Plantillas[pos];
+        }
+        
+    });
 
-    function loadDisponibilidad (){
-        var promise = disponibilidadService.getAll();
+    function loadDisponibilidad (id){
+        var promise = disponibilidadService.getAll(id);
         promise.then(function(d) {                        
             $scope.Disponibilidades = d.data;
         }, function(err) {           
@@ -30,8 +44,22 @@ function ($scope,disponibilidadService, tipoVehiculoService,toaster) {
                 console.log("Some Error Occured " + JSON.stringify(err));
         }); 
     }
-   
-   
+    
+    function loadPlantilla() {
+        var promise = plantillaService.get(2);
+        promise.then(function (d) {
+            $scope.Plantillas = d.data;
+            if (d.data) {
+                $scope.PlantillaSelect = d.data[0];
+            }
+        }, function (err) {
+            toaster.pop('error', '¡Error!', "Error al cargar Plantillas");
+            console.log("Some Error Occured " + JSON.stringify(err));
+        });
+    }
+    
+    loadPlantilla();
+      
     function loadTipoVehiculo(){
         var promise = tipoVehiculoService.getAll();
         promise.then(function(d) {                        
@@ -48,9 +76,16 @@ function ($scope,disponibilidadService, tipoVehiculoService,toaster) {
     loadTipoVehiculo();
    
    $scope.Guardar = function (){
-        $scope.Disponibilidad.dpTipoVehiculo = $scope.TipoSelect.tvCodigo;
-       $scope.Disponibilidad.dpNombre = $scope.Disponibilidad.dpNombre.toUpperCase();                           
        
+        if(!$scope.frmDisponibilidad.$valid){
+            toaster.pop('error','¡Error!', 'Por favor ingrese los datos requeridos (*).');
+            return;
+        }
+        
+        $scope.Disponibilidad.dpTipoVehiculo = $scope.TipoSelect.tvCodigo;
+        $scope.Disponibilidad.dpNombre = $scope.Disponibilidad.dpNombre.toUpperCase();                           
+        $scope.Disponibilidad.dpPlantilla= $scope.PlantillaSelect.plCodigo;
+        
         var promise;
         if($scope.editMode){            
             promise = disponibilidadService.put($scope.Disponibilidad.dpCodigo, $scope.Disponibilidad);
@@ -59,7 +94,7 @@ function ($scope,disponibilidadService, tipoVehiculoService,toaster) {
         }
         
         promise.then(function(d) {                        
-            loadDisponibilidad();
+            loadDisponibilidad($scope.PlantillaSelect.plCodigo);
             toaster.pop('success', "Control de Información", d.data.message); 
             $scope.nuevo();
         }, function(err) {           
@@ -99,15 +134,14 @@ function ($scope,disponibilidadService, tipoVehiculoService,toaster) {
             var promisePut  = disponibilidadService.updateEstado($scope.IdDispGlobal, objetc);        
                 promisePut.then(function (d) {                
                  toaster.pop('success', "Control de Información", d.data.message);                 
-                loadDisponibilidad();
+                loadDisponibilidad($scope.PlantillaSelect.plCodigo);
             }, function (err) {                              
                      toaster.pop('error', "Error", "Error al Desactivar Disponibilidad"); ;
                     console.log("Some Error Occured "+ JSON.stringify(err));
             }); 
    
      };
-
-    loadDisponibilidad();
+    
 }]);
 
 

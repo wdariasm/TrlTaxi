@@ -3,11 +3,11 @@ app.service("disponibilidadService",[ '$http', function ($http) {
         var req = $http.get(uri+'/api/disponibilidad/' + id);
         return req;
     };
-       
-    this.getAll = function () {
-        var req = $http.get(uri+'/api/disponibilidad');
+               
+    this.getAll = function (idPlantilla) {
+        var req = $http.get(uri+'/api/plantilla/' + idPlantilla + '/disponibilidad');
         return req;
-    };                
+    };  
         
     this.post = function (disponibilidad) { 
         var req = $http.post(uri+'/api/disponibilidad',disponibilidad); 
