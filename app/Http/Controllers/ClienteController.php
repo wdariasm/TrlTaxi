@@ -112,6 +112,21 @@ class ClienteController extends Controller
     }
     
     
+    /*actualizar key de notificacion*/
+    public function updateKey(Request $request, $id)
+    {
+       try{            
+            $key = $request->get("KeyNotificacion");           
+            $cliente = Cliente::find($id);
+            $cliente->KeyNotificacion = $key;
+            $cliente->save();
+            return JsonResponse::create(array('message' => "Correcto", "request" =>"Key Actualizado Correctamente"), 200);
+        }catch (\Exception $exc) {
+            return JsonResponse::create(array('file' => $exc->getFile(), "line"=> $exc->getLine(),  "message" =>json_encode($exc->getMessage())), 500);
+        }             
+    }
+    
+    
     
     
     /**

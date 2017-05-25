@@ -213,12 +213,11 @@ app.controller("conductorController", ["$scope", "conductorService", "tipoDocume
     }      
     
     function actualizarRutaImagen(){        
-        $('#imgPerfil').attr('src', '');
+        $('#imgPerfil').attr('src', '');         
         var promise = conductorService.get($scope.Conductor.IdConductor);
         promise.then(function(d) {                        
             $scope.Conductor.RutaImg = d.data.RutaImg;   
-             $('#imgPerfil').attr('src', $scope.Conductor.RutaImg);
-            console.log($scope.Conductor);
+             $('#imgPerfil').attr('src', $scope.Conductor.RutaImg);            
             
         }, function(err) {           
                 toaster.pop('error','¡Error!',"Error al cargar Conductores");           
@@ -570,7 +569,8 @@ app.controller("conductorController", ["$scope", "conductorService", "tipoDocume
      
      // CAMBIAR IMAGEN CONDUCTOR
      
-    $scope.VerModalCambiarImagen = function (){                                
+    $scope.VerModalCambiarImagen = function (){                           
+        $('#flImagen').fileinput('clear');
         $("#mdImagenConductor").modal("show");
     };
   
