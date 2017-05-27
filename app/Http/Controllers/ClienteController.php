@@ -125,10 +125,7 @@ class ClienteController extends Controller
             return JsonResponse::create(array('file' => $exc->getFile(), "line"=> $exc->getLine(),  "message" =>json_encode($exc->getMessage())), 500);
         }             
     }
-    
-    
-    
-    
+         
     /**
      * Remove the specified resource from storage.
      *

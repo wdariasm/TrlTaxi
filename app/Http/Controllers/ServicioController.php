@@ -284,6 +284,7 @@ class ServicioController extends Controller
                 ->update(['ConductorId' => $data['ConductorId'], 'Placa' => $data['Placa'], 'Estado' => 'ASIGNADO' ]);             
             $this->EnviarEmailAsignar($data["IdServicio"], $data["Responsable"], $data["Email"], $data["Nombre"]);
             $this->NotificacionConductor($data ['ConductorId'], $data["IdServicio"] );
+            $this->NotificacionCliente($data ['ClienteId'], $data["IdServicio"] );            
             return JsonResponse::create(array('message' => "Servicio asignado correctamente", "request" =>json_encode($result)), 200);
         }catch (\Exception $exc) {
             return JsonResponse::create(array('file' => $exc->getFile(), "line"=> $exc->getLine(),  "message" =>json_encode($exc->getMessage())), 500);
@@ -584,6 +585,22 @@ class ServicioController extends Controller
         $this->enviarNotificacion($idPushvec,$payload);    
     }
     
+    public function NotificacionCliente($idCliente, $idServicio){
+        $payload = array(
+            'title'         => "TRL (Asignación de Servicio)",
+            'msg'           => "Estimado Cliente. Se ha asigando un conductor a su servicio N° ".$idServicio,
+            'std'           => 200,
+        );
+                                        
+        $idPushvec = array();        
+        $key = $this->obtenerKeyCliente($idCliente);
+        
+        if(!empty($key)){
+            $idPushvec[0] = $key;
+            $this->enviarNotificacion($idPushvec,$payload);    
+        }       
+    }
+    
     private  function obtenerRegid($idConductor){
         try {
             $regid = DB::select("SELECT sm.gpKey FROM (conductor c INNER JOIN vehiculo v ON c.VehiculoId = v.IdVehiculo) INNER JOIN "
@@ -595,7 +612,19 @@ class ServicioController extends Controller
         }  catch (Exception $e) {
             return JsonResponse::create(array('message' => "ErrorKey", "request" =>$e->getMessage()), 401);
         }
-    }  
+    } 
+    
+    private  function obtenerKeyCliente($idCliente){
+        try {
+            $regid = Cliente::where("IdCliente", $idCliente)->select("KeyNotificacion")->first();
+            if(!empty($regid)){                
+                return $regid->KeyNotificacion;
+            }            
+            return null;
+        }  catch (Exception $e) {
+            return JsonResponse::create(array('message' => "ErrorKey", "request" =>$e->getMessage()), 401);
+        }
+    } 
 
     private function enviarNotificacion($array,$payload) {
         $apiKey = 'AAAAi3Qf2F8:APA91bG7JP2FtXjzsSTNTqJlYVrSeLRKLL0QxjZ-VnpJWlWiUEjvc5jw241Y0SJI-DrHCJeTgFyPnFhCAXOMC0dZdE71EnnA6H_5HPEQjuVBJBJDirxUhLdzdmG7fd39wZXutJTTeBTSs85nB9WE3bSWHmjyR8WLcw';

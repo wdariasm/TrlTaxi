@@ -1,6 +1,6 @@
 <?php
 
-    /* Servicios solicitados */
+    /* Servicios solicitados */  
     Route::get('api/servicio/solicitados','ServicioController@getSolicitados');
     
     Route::resource("api/servicio","ServicioController");

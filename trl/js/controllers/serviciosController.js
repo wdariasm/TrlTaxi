@@ -452,7 +452,8 @@ app.controller('serviciosController',['$scope', 'zonaService', 'ngTableParams', 
             Email : $scope.AsigServicio.Conductor.Email,
             Responsable : $scope.AsigServicio.Responsable,
             Nombre :$scope.AsigServicio.Conductor.Nombre,
-            Placa : $scope.AsigServicio.Conductor.Placa
+            Placa : $scope.AsigServicio.Conductor.Placa,
+            ClienteId : $scope.AsigServicio.ClienteId
         };
         
         var promise = servicioService.asignar(obj);
