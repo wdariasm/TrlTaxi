@@ -10,6 +10,13 @@ use Illuminate\Http\JsonResponse;
 
 class GpsController extends Controller
 {
+    
+    public function show($imei)
+    {
+        return Gps::where("gpImei", $imei)->select("gpLatitud", "gpLongitud", "gpVehiculoId", "gpFecha")->first();
+    }
+    
+    
     public function store(Request $request)
     {
         try{              
@@ -80,4 +87,5 @@ class GpsController extends Controller
             return JsonResponse::create(array('file' => $exc->getFile(), "line"=> $exc->getLine(),  "message" =>json_encode($exc->getMessage())), 500);
         }   
     }
+        
 }

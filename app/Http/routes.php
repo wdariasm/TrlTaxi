@@ -28,7 +28,7 @@ Route::group(['middleware' => 'cors'], function () {
     Route::put('api/servicio/calificar/{id}','ServicioController@calificar');    
     Route::put('api/gps/posicion/{imei}','GpsController@setPosicion');    
     
-    //Route::group(['middleware' => 'jwt.auth'], function () {                 
+    Route::group(['middleware' => 'jwt.auth'], function () {                 
         include 'Routes/routesMarca.php';
         include 'Routes/routesTipoVehiculo.php';
         include 'Routes/routesServicio.php';
@@ -63,5 +63,5 @@ Route::group(['middleware' => 'cors'], function () {
         include 'Routes/MotivoRoutes.php';
         include 'Routes/soporteRoutes.php';
         include 'Routes/GpsRoutes.php';
-    //});
+    });
 });
