@@ -1,5 +1,7 @@
-app.controller('serviciosController',['$scope', 'zonaService', 'ngTableParams', 'toaster', "contratoService","funcionService","servicioService", '$filter',
-    function ($scope,  zonaService, ngTableParams, toaster, contratoService, funcionService, servicioService,  $filter) {
+app.controller('serviciosController',['$scope', '$rootScope', 'zonaService', 'ngTableParams', 'toaster',
+    "contratoService","funcionService","servicioService", '$filter', 'serverData',     function ($scope, $rootScope,  
+    zonaService, ngTableParams, toaster, contratoService, funcionService, servicioService,  $filter, serverData) {
+        
     $scope.Zonas = [];
     $scope.Zona = {};
     $scope.Parada = {};    
@@ -54,6 +56,22 @@ app.controller('serviciosController',['$scope', 'zonaService', 'ngTableParams', 
     init();
     
     $scope.AceptarCondicion = false;
+       
+    $rootScope.$on("cargarServicio", function (event, data) {        
+        if(data != null){
+            console.log("entree");                        
+            setTimeout(function(){ getservice(); $scope.editMode = true;   }, 2000);                                  
+        }        
+    });
+    
+    function getservice (){
+        console.log("nueva funcion ");
+        $scope.editMode = true;   
+        $scope.$digest()        
+        console.log($scope.editMode);
+    }
+    
+    
 
     function Poligono() {
         this.coordenadas = null;

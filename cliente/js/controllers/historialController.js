@@ -171,6 +171,13 @@ app.controller("historialController", ["$scope",  "toaster",  "servicioService",
         $scope.MotivoSel = item;        
     };
     
+    
+    $scope.EditarServicio = function (item){        
+        $scope.$emit("cargarServicio", item);
+        location.href = "#/1/servicio";
+    };
+    
+    
     $scope.GetServicios();
 }]);
 

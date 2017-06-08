@@ -44,7 +44,7 @@
             </div>
 
 
-            <div class="row" style="margin-bottom: 5px;">
+            <div class="row" style="margin-bottom: 5px;" ng-hide="editMode">
                 <div class="col-xs-12 text-center">
                     <button type="button" class="btn btn-floating  btn-large borrador" ng-disabled="frmServicio.$invalid"  ng-click="Validar()" title="Guardar"><i class="fa fa-check"></i></button>
                     <small class="texto">Guardar</small>
@@ -67,7 +67,7 @@
 			    <div class="form-group">
 				<label  for="txtNumero" >N° Contrato <span>*</span></label>
 				<div class="input-group">   
-				    <select ng-model="ContratoSelect" class="form-control" ng-change="BuscarContrato('COMBO')" id="cboMarca" ng-options="item as item.ctNumeroContrato for item in Contratos track by item.IdContrato" required></select>
+				    <select ng-model="ContratoSelect" ng-disabled="editMode" class="form-control" ng-change="BuscarContrato('COMBO')" id="cboMarca" ng-options="item as item.ctNumeroContrato for item in Contratos track by item.IdContrato" required></select>
 				    <!--<input  type="text" class="form-control" required="" ng-model="Servicio.NumeroContrato" maxlength="11" solo-numeros id="txtNumero" placeholder="Seleccionar Contrato"  >-->
 				    <span class="input-group-btn">
 					<button type="button"  class="btn btn-info btn-md "   ng-click="GetContratos()" data-toggle="tooltip" data-placement="right" title="Actualizar mis contratos"><i class=" fa fa-search"></i></button>

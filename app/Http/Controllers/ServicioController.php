@@ -9,8 +9,8 @@ use App\Parada;
 use Illuminate\Http\JsonResponse;
 use DB;
 use App\Cliente;
-use App\Conductor;
 use App\ServicioContactos;
+use App\Utilidades\EnviarEmail;
 
 
 class ServicioController extends Controller
@@ -238,8 +238,10 @@ class ServicioController extends Controller
                 $this->guardarContacto($servicio->IdServicio, $contactos);
             }
                                     
-            if($data["EnviarEmail"]==="SI"){
-                $this->EnviarEmail($servicio->IdServicio, $data["NumeroContrato"], $data["Responsable"], $data["ParEmail"] );
+            if($data["EnviarEmail"]==="SI"){                
+                $email = new EnviarEmail();
+                $email->EmailSolicitud($servicio->IdServicio, $data["NumeroContrato"], $data["Responsable"], $data["ParEmail"]);
+                unset($email);                
             }
                                     
             return JsonResponse::create(array('message' => "Servicio guardado correctamente", "request" =>json_encode($servicio->IdServicio)), 200);
@@ -275,7 +277,7 @@ class ServicioController extends Controller
             $insert->save();
         }
     }            
-    
+  
     public function asignar(Request $request){
         try{  
             $data = $request->all();                                   
@@ -300,6 +302,41 @@ class ServicioController extends Controller
      */
     public function update(Request $request, $id)
     {
+        try{
+                                    
+            $data = $request->all();                   
+            $servicio = Ruta::find($id);                                    
+            $servicio->Responsable = $data["Responsable"]; 
+            $servicio->Telefono = $data["Telefono"];                                    
+            $servicio->Valor= $data["Valor"];
+            $servicio->ValorCliente = $data["ValorCliente"];
+            $servicio->ValorParadas = $data["ValorParadas"];
+            $servicio->NumPasajeros= $data["NumPasajeros"];
+            $servicio->NumHoras= $data["NumHoras"];            
+            $servicio->FormaPago= $data["FormaPago"];
+            $servicio->DireccionOrigen= $data["DireccionOrigen"];
+            $servicio->DireccionDestino= $data["DireccionDestino"];
+            $servicio->ZonaOrigen= $data["ZonaOrigen"];
+            $servicio->ZonaDestino= $data["ZonaDestino"];
+            $servicio->LatOrigen= $data["LatOrigen"];
+            $servicio->LngOrigen= $data["LngOrigen"];
+            $servicio->LatDestino= $data["LatDestino"];
+            $servicio->LngDestino= $data["LngDestino"];
+            $servicio->PlantillaId= $data["PlantillaId"];                       
+            $servicio->Parada= $data["Parada"];
+            $servicio->ValorTotal= $data["ValorTotal"];
+            $servicio->Nota= $data["Nota"];                                      
+            $servicio->FechaMod = new \DateTime();
+            $servicio->save();
+            
+            return JsonResponse::create(array('message' => "Servicio Actualizado correctamente", "request" =>json_encode($ruta->rtCodigo)), 200);
+        }catch (\Exception $exc) {
+            return JsonResponse::create(array('file' => $exc->getFile(), "line"=> $exc->getLine(),  "message" =>json_encode($exc->getMessage())), 500);
+        } 
+    }
+    
+    public function updateEstado(Request $request, $id)
+    {
        try{
             $data = $request->all();            
             $result = Servicio::where('IdServicio', $id )          
@@ -317,7 +354,7 @@ class ServicioController extends Controller
             return JsonResponse::create(array('file' => $exc->getFile(), "line"=> $exc->getLine(),  "message" =>json_encode($exc->getMessage())), 500);
         }
     }
-    
+            
     //Actualiza el estado del servicio por el conductor
     public function updateServConductor(Request $request, $id){
         try {            
@@ -670,6 +707,5 @@ class ServicioController extends Controller
             return JsonResponse::create(array('file' => $exc->getFile(), "line"=> $exc->getLine(),  "message" =>json_encode($exc->getMessage())), 500);
         }
         return "Correcto";
-
     }     
 }

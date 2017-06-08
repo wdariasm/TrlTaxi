@@ -78,7 +78,7 @@ app.controller("contratoController", ["$scope",  "toaster",  "contratoService","
                 console.log("Some Error Occured " + JSON.stringify(err));
         });
     };    
-    
+            
 }]);
 
 
