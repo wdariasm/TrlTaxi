@@ -172,9 +172,9 @@ app.controller("historialController", ["$scope",  "toaster",  "servicioService",
     };
     
     
-    $scope.EditarServicio = function (item){        
-        $scope.$emit("cargarServicio", item);
-        location.href = "#/1/servicio";
+    $scope.EditarServicio = function (IdServicio){        
+        //$scope.$emit("cargarServicio", item);
+        location.href = "#/" + IdServicio +"/servicio";
     };
     
     

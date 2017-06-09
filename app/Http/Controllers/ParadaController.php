@@ -21,12 +21,12 @@ class ParadaController extends Controller
             $data = $request->all(); 
             $insert = new Parada();
             $insert->prServicio = $data['prServicio'];
-            $insert->prDireccion = $$data['prDireccion'];
-            $insert->prLatiud = $$data['prLatiud'];
-            $insert->prLongitud = $$data['prLongitud'];
-            $insert->prValor = $$data['prValor'];
-            $insert->prValorCliente = $$data['prValorCliente'];
-            $insert->prFecha = $$data['prFecha'];            
+            $insert->prDireccion = $data['prDireccion'];
+            $insert->prLatiud = $data['prLatiud'];
+            $insert->prLongitud = $data['prLongitud'];
+            $insert->prValor = $data['prValor'];
+            $insert->prValorCliente = $data['prValorCliente'];
+            $insert->prFecha = $data['prFecha'];            
             $insert->prEstado = 'ACTIVA';
             $insert->save();
             
@@ -45,7 +45,7 @@ class ParadaController extends Controller
      */
     public function show($id)
     {
-        //
+        return  Parada::where('prServicio', $id)->where('prEstado', 'ACTIVA')->get();
     }
 
     
@@ -70,8 +70,8 @@ class ParadaController extends Controller
     public function destroy($id)
     {
         try{              
-            Parada::where('IdParada', $id)->update(['prEstado' => 'CANCELADA']);                              
-            return JsonResponse::create(array('message' => "Contacto Eliminado Correctamente", "request" =>json_encode($insert->scIdContacto)), 200);
+            $result = Parada::where('IdParada', $id)->update(['prEstado' => 'CANCELADA']);                              
+            return JsonResponse::create(array('message' => "Contacto Eliminado Correctamente", "request" =>json_encode($result)), 200);
         }catch (\Exception $exc) {
             return JsonResponse::create(array('file' => $exc->getFile(), "line"=> $exc->getLine(),  "message" =>json_encode($exc->getMessage())), 500);
         } 

@@ -32,7 +32,16 @@ class ServicioController extends Controller
      */
     public function show($codigo)
     {
-        return Servicio::find($codigo);
+        $servicio =  Servicio::find($codigo);
+        if(isset($servicio)){
+            $servicio->Paradas = [];
+            if($servicio->Parada == "SI"){
+                $servicio->Paradas = Parada::where('prServicio', $codigo)->where('prEstado', 'ACTIVA')->get();
+            }            
+            $servicio->Contactos = ServicioContactos::where('scIdServicio', $codigo)
+                    ->where('scEstado', 'ACTIVO')->get();
+        }        
+        return $servicio;
     }
         
     public function getServicioCliente($id, $rol, $usuario)

@@ -41,7 +41,8 @@ class ContactoController extends Controller
      */
     public function show($id)
     {
-        //
+        $contactos = ServicioContactos::where('scIdServicio', $id)->where('scEstado', 'ACTIVO')->get();
+        return $contactos;
     }  
 
     /**
@@ -65,8 +66,8 @@ class ContactoController extends Controller
     public function destroy($id)
     {
         try{              
-            ServicioContactos::where('scIdContacto', $id)->update(['scEstado' => 'INACTIVO']);                              
-            return JsonResponse::create(array('message' => "Contacto Guardado Correctamente", "request" =>json_encode($insert->scIdContacto)), 200);
+           $result = ServicioContactos::where('scIdContacto', $id)->update(['scEstado' => 'INACTIVO']);                              
+            return JsonResponse::create(array('message' => "Contacto Guardado Correctamente", "request" =>json_encode($result)), 200);
         }catch (\Exception $exc) {
             return JsonResponse::create(array('file' => $exc->getFile(), "line"=> $exc->getLine(),  "message" =>json_encode($exc->getMessage())), 500);
         } 

@@ -12,7 +12,7 @@ var app;
             
         $routeProvider                                                
                                  
-            .when("/1/servicio",{
+            .when("/:id/servicio",{
                 templateUrl: 'views/servicio/servicio.html'
             })
             

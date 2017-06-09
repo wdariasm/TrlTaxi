@@ -65,7 +65,7 @@
 			    <center>   
 				
 				<div ng-if="item.Estado !== 'CANCELADO' && item.Estado !== 'FINALIZADO'" >
-				    <a ng-click="EditarServicio(item)" style="float: left; margin-left: 1px;" href="javascript:;"  title="Editar Servicio"><i class="fa fa-pencil fa-1x text-info"></i></a>
+				    <a ng-click="EditarServicio(item.IdServicio)" style="float: left; margin-left: 1px;" href="javascript:;"  title="Editar Servicio"><i class="fa fa-pencil fa-1x text-info"></i></a>
 				</div> 
 				
 				<div ng-if="item.Estado != 'ASIGNADO' && item.Estado !== 'SOLICITADO' && item.Estado !== 'CANCELADO' && item.Estado !== 'FINALIZADO'" >

@@ -44,7 +44,7 @@
             </div>
 
 
-            <div class="row" style="margin-bottom: 5px;" ng-hide="editMode">
+            <div class="row" style="margin-bottom: 5px;" ng-hide="Editar">
                 <div class="col-xs-12 text-center">
                     <button type="button" class="btn btn-floating  btn-large borrador" ng-disabled="frmServicio.$invalid"  ng-click="Validar()" title="Guardar"><i class="fa fa-check"></i></button>
                     <small class="texto">Guardar</small>
@@ -67,10 +67,10 @@
 			    <div class="form-group">
 				<label  for="txtNumero" >N° Contrato <span>*</span></label>
 				<div class="input-group">   
-				    <select ng-model="ContratoSelect" ng-disabled="editMode" class="form-control" ng-change="BuscarContrato('COMBO')" id="cboMarca" ng-options="item as item.ctNumeroContrato for item in Contratos track by item.IdContrato" required></select>
+				    <select ng-model="ContratoSelect" ng-disabled="Editar" class="form-control" ng-change="BuscarContrato('COMBO',true)" id="cboMarca" ng-options="item as item.ctNumeroContrato for item in Contratos track by item.IdContrato" required></select>
 				    <!--<input  type="text" class="form-control" required="" ng-model="Servicio.NumeroContrato" maxlength="11" solo-numeros id="txtNumero" placeholder="Seleccionar Contrato"  >-->
-				    <span class="input-group-btn">
-					<button type="button"  class="btn btn-info btn-md "   ng-click="GetContratos()" data-toggle="tooltip" data-placement="right" title="Actualizar mis contratos"><i class=" fa fa-search"></i></button>
+				    <span class="input-group-btn" >
+					<button type="button"  class="btn btn-info btn-md "  ng-disabled="Editar"  ng-click="GetContratos()" data-toggle="tooltip" data-placement="right" title="Actualizar mis contratos"><i class=" fa fa-search"></i></button>
 				    </span>
 				</div> 
 			    </div>
@@ -132,7 +132,7 @@
 					    <label  for="cboTipoServicio">Tipo Servicio <span>*</span></label>
 					    <div class="input-group">
 						<div class="input-group-addon"><i class="fa fa-check text-success"></i></div>
-						<select ng-model="Servicio.Tipo" class="form-control" id="cboTipoServicio" ng-options="item as item.csDescripcion for item in Contrato.TipoServicio track by item.csCodigo" required ng-change="TipoServicioCheck()"></select>
+						<select ng-model="Servicio.Tipo" ng-disabled="Editar" class="form-control" id="cboTipoServicio" ng-options="item as item.csDescripcion for item in Contrato.TipoServicio track by item.csCodigo" required ng-change="TipoServicioCheck()"></select>
 					    </div>
 					</div>
 				    </div>
@@ -142,7 +142,7 @@
 					    <label  for="txtFechaServicio">Fecha Servicio <span>*</span></label>
 					    <div class="input-group">
 						<div class="input-group-addon"><i class="fa fa-calendar-check-o text-success"></i></div>
-						<input type="text" id="txtFechaServicio" ng-model="Servicio.FechaServicio" name="txtFechaServicio" class="form-control" value="" ng-change="CambiarFormato('FechaServicio')" required readonly>                                                                                            
+						<input type="text" id="txtFechaServicio" ng-disabled="Editar" ng-model="Servicio.FechaServicio" name="txtFechaServicio" class="form-control" value="" ng-change="CambiarFormato('FechaServicio')" required readonly>                                                                                            
 					    </div>
 					</div>
 				    </div>
@@ -152,7 +152,7 @@
 					    <label  for="txtHora">Hora Servicio <span>*</span></label>
 					    <div class="input-group">
 						<div class="input-group-addon"><i class="fa fa-clock-o text-success"></i></div>
-						<input type="text" id="txtHora" ng-model="Servicio.Hora" name="txtHora" class="form-control" value="" required readonly>
+						<input type="text" id="txtHora" ng-disabled="Editar" ng-model="Servicio.Hora" name="txtHora" class="form-control" value="" required readonly>
 					    </div>
 					</div>
 				    </div> 
@@ -168,7 +168,7 @@
 					    <label  for="txtModo">Modo <span>*</span></label>
 					    <div class="input-group">
 						<div class="input-group-addon"><i class="fa fa-clock-o text-success"></i></div>
-						<select class="form-control" ng-model="Servicio.ModoServicio" id="txtModo" placeholder="Modo Servicio">
+						<select class="form-control" ng-model="Servicio.ModoServicio" ng-disabled="Editar" id="txtModo" placeholder="Modo Servicio">
 						    <option value="PROGRAMADO">PROGRAMADO</option>
 						    <option value="INMEDIATO">INMEDIATO</option>                                               
 						</select>
@@ -214,7 +214,7 @@
 						    <label  for="txtTipoVehiculo" >Tipo de Vehículo <span>*</span></label>
 						    <div class="input-group">   
 							<div class="input-group-addon"><i class="fa fa-gitlab"></i></div>
-							<select ng-model="TipoSelect" class="form-control"  id="txtTipoVehiculo" ng-options="item as item.tvDescripcion for item in Contrato.TipoVehiculo track by item.tvCodigo" required ng-change="CambiarPrecio()"></select>
+							<select ng-model="TipoSelect" ng-disabled="Editar" class="form-control"  id="txtTipoVehiculo" ng-options="item as item.tvDescripcion for item in Contrato.TipoVehiculo track by item.tvCodigo" required ng-change="CambiarPrecio()"></select>
 						    </div> 
 						</div>
 					    </div>
@@ -390,7 +390,8 @@
 					    <td>{{itemc.scTelefono}}</td>
 					    <td>{{itemc.scNota}}</td>
 					    <td>
-						<a ng-click="QuitarContacto($index)"  href="javascript:;"  title="Quitar Contacto"><i class="fa fa-lg fa-trash text-danger"></i></a>
+						<a ng-click="QuitarContacto($index)" ng-hide="Editar" href="javascript:;"  title="Quitar Contacto"><i class="fa fa-lg fa-trash text-danger"></i></a>
+						<a ng-click="EliminarContacto(itemc)" ng-show="Editar" href="javascript:;"  title="Eliminar Contacto"><i class="fa fa-lg fa-trash text-danger"></i></a>
 					    </td>
 					</tr>					
 				    </tbody>
@@ -441,7 +442,8 @@
 						    <td>{{items.prDireccion}}</td>
 						    <td>{{items.prValorCliente| currency : "$ " : 0 }}</td>
 						    <td>
-							<a ng-click="QuitarParada($index)"  href="javascript:;"  title="Quitar"><i class="fa fa-lg fa-trash text-danger"></i></a>
+							<a ng-click="QuitarParada($index)" ng-hide="Editar"  href="javascript:;"  title="Quitar"><i class="fa fa-lg fa-trash text-danger"></i></a>
+							<a ng-click="EliminarParada(items)" ng-show="Editar"  href="javascript:;"  title="Eliminar"><i class="fa fa-lg fa-trash text-danger"></i></a>
 						    </td>
 						</tr>
 						<tr>

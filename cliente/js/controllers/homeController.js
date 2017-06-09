@@ -65,13 +65,17 @@ app.controller("homeController",  ["$scope", "parametroService", "usuarioService
             if($scope.Login.ValidarClave ==="SI"){
                 location.href = "#/2/usuario/clave";                
             }else{
-                var ru = ruta.get();
+                var ru = ruta.get();                
                 if(ru === "/iniciando"){                   
-                    location.href = "#/1/servicio";
+                    location.href = "#/0/servicio";
                 }else{
-                   location.href = "#"+ru;  
-                }
-                 
+                    var n = ru.indexOf("servicio");                    
+                    if( n > 0){
+                        location.href = "#/0/servicio";                       
+                    }else {
+                        location.href = "#"+ru;  
+                    }                                       
+                }                 
             }
         }
     };
