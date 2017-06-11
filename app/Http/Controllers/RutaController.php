@@ -17,16 +17,18 @@ class RutaController extends Controller
     public function index()
     {
        $result = DB::select("SELECT r.rtCodigo, r.rtNombre, r.rtDescripcion,r.rtValor,r.rtEstado, c.tvDescripcion, m.muNombre,"
-                . " d.dtNombre, r.rtImagen from ruta r,clasevehiculo c,municipio m,departamento d"
-                . " where r.rtTipoVehiculo=c.tvCodigo and r.rtCiudad=m.muCodigo and m.muDepartamento=d.dtCodigo and r.rtEstado <>'BORRADO' ");
+                . " d.dtNombre, r.rtImagen, r.rtTipoVehiculo, r.rtValorCliente, r.rtDepartamento, r.rtCiudad "
+               . " from ruta r,clasevehiculo c,municipio m,departamento d where r.rtTipoVehiculo=c.tvCodigo "
+                . "  and r.rtCiudad=m.muCodigo and m.muDepartamento=d.dtCodigo and r.rtEstado <>'BORRADO' ");
         return $result; 
     }
 
     public function getByPlanitlla($idPlantilla){
         $result = DB::select("SELECT r.rtCodigo, r.rtNombre, r.rtDescripcion,r.rtValor,r.rtEstado, c.tvDescripcion, m.muNombre,"
-                        . " d.dtNombre, r.rtImagen from ruta r,clasevehiculo c,municipio m,departamento d"
+                        . " d.dtNombre, r.rtImagen, r.rtValorCliente, r.rtTipoVehiculo, r.rtDepartamento, r.rtCiudad, r.rtPlantilla"
+                        . "   from ruta r,clasevehiculo c,municipio m,departamento d"
                         . " where r.rtTipoVehiculo=c.tvCodigo and r.rtCiudad=m.muCodigo and m.muDepartamento=d.dtCodigo "
-                         . " and r.rtEstado <>'BORRADO' and r.rtPlantilla = $idPlantilla ");
+                        . " and r.rtEstado <>'BORRADO' and r.rtPlantilla = $idPlantilla ");
                 return $result;
     }
 
@@ -46,9 +48,10 @@ class RutaController extends Controller
             $ruta->rtDescripcion = $data["rtDescripcion"];
             $ruta->rtTipoVehiculo = $data["rtTipoVehiculo"];
             $ruta->rtValor = $data["rtValor"];
+            $ruta->rtValorCliente = $data["rtValorCliente"];
             $ruta->rtDepartamento = $data["rtDepartamento"];
             $ruta->rtCiudad = $data["rtCiudad"];
-            $ruta->rtEstado = $data["rtEstado"];
+            $ruta->rtEstado = 'ACTIVO';
             $ruta->rtImagen = "";
             $ruta->rtPlantilla = $data["rtPlantilla"];
             $ruta->save();
@@ -83,6 +86,7 @@ class RutaController extends Controller
             $ruta->rtDescripcion = $data["rtDescripcion"];
             $ruta->rtTipoVehiculo = $data["rtTipoVehiculo"];
             $ruta->rtValor = $data["rtValor"];
+            $ruta->rtValorCliente = $data["rtValorCliente"];
             $ruta->rtDepartamento = $data["rtDepartamento"];
             $ruta->rtCiudad = $data["rtCiudad"];
             $ruta->rtEstado = $data["rtEstado"];

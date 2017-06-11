@@ -11,67 +11,69 @@
                     <div class="tab-content">
                         <br/>
                         <div class="tab-pane active" id="tabListado">
-                            <div class="row">
-                                <div class="col-xs-6">
+			    <div class="panel panel-default">
+				<div class="panel-body">
+				    <div class="row">
+					<div class="col-xs-6">
+					    <div class="input-group">
+						<div class="input-group-addon"><i class="fa  fa-search text-primary"></i></div>
+						<input  class="form-control" id="search" type="search" placeholder="Buscar por placa, movil, tipo, estado" ng-model="TablaVehiculo.filter()['busqueda']">
+					    </div>
+					</div>
 
-                                    <div class="input-group">
-                                        <div class="input-group-addon"><i class="fa  fa-search text-primary"></i></div>
-                                        <input  class="form-control" id="search" type="search" placeholder="Buscar por placa, movil, tipo, estado" ng-model="TablaVehiculo.filter()['busqueda']">
-                                    </div>
+					<div class="col-xs-3" style="margin-top: 5px;">
+					    <label class=" text-primary" style="font-size: 18px;">Total: {{Vehiculos.length}}</label>
+					</div>                                
 
-                                </div>
+					<div class="col-xs-2">
+					    <button type="button" class="btn btn-success btn-addon" ng-click="LoadVehiculo()" ><i class="fa fa-refresh"></i> Actualizar</button>
+					</div>
 
-                                <div class="col-xs-3" style="margin-top: 5px;">
-                                    <label class=" text-primary" style="font-size: 18px;">Total: {{Vehiculos.length}}</label>
-                                </div>                                
+					<br/>
+				    </div>
+				</div>
 
-                                <div class="col-xs-2">
-                                    <button type="button" class="btn btn-success btn-addon" ng-click="LoadVehiculo()" ><i class="fa fa-refresh"></i> Actualizar</button>
-                                </div>
+				<div class="row">
+				    <div class="col-md-12">
+					<table class="table table-striped table-condensed" ng-table="TablaVehiculo">
+					    <thead>
+						<tr>
+						    <th>PLACA</th>
+						    <th>MOVIL</th>
+						    <th>CLASE</th>
+						    <th>TIPO</th>                                            
+						    <th>RUNT</th>
+						    <th>PROPIEDAD</th>
+						    <th>T.CONTRATO</th>
+						    <th>ESTADO</th>
+						    <th width="8%">ACCION</th>
+						</tr>
+					    </thead>
 
-                                <br/>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-md-12">
-
-                                    <table class="table table-striped table-condensed" ng-table="TablaVehiculo">
-                                        <thead>
-                                            <tr>
-                                                <th>PLACA</th>
-                                                <th>MOVIL</th>
-                                                <th>CLASE</th>
-                                                <th>TIPO</th>                                            
-                                                <th>RUNT</th>
-                                                <th>PROPIEDAD</th>
-                                                <th>T.CONTRATO</th>
-                                                <th>ESTADO</th>
-                                                <th width="8%">ACCION</th>
-                                            </tr>
-                                        </thead>
-
-                                        <tbody>
-                                            <tr ng-repeat="item in $data">
-                                                <td>{{ item.Placa}}</td>
-                                                <td>{{ item.Movil}}</td>
-                                                <td>{{ item.tvDescripcion}}</td>
-                                                <td >{{ item.Tipo}}</td>                                                                                
-                                                <td>{{ item.Runt}}</td>
-                                                <td>{{ item.Propiedad}}</td>
-                                                <td>{{ item.TipoContrato}}</td>
-                                                <td>{{ item.Estado}}</td>
-                                                <td>
-                                        <center>
-                                            <a ng-click="get(item)" style="float: left; margin-left: 3px;" href="javascript:;"  title="Editar"><i class="fa fa-pencil fa-1x text-success"></i></a>
-                                            <a  ng-click="VerNovedad(item)" style="float: left; margin-left: 8px;" href="javascript:;"  title="Asignar IMEI"><i class="fa fa-mobile text-danger fa-1x"></i></a>
-                                            <a ng-click="VerDesactivar(item.IdVehiculo, 'INACTIVO')"  style="float: left; margin-left: 8px;" href="javascript:;"  title="Eliminar"><i class="fa fa-power-off fa-1x text-warning"></i></a>                                               
-                                        </center>
-                                        </td>
-                                        </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
+					    <tbody>
+						<tr ng-repeat="item in $data">
+						    <td>{{ item.Placa}}</td>
+						    <td>{{ item.Movil}}</td>
+						    <td>{{ item.tvDescripcion}}</td>
+						    <td >{{ item.Tipo}}</td>                                                                                
+						    <td>{{ item.Runt}}</td>
+						    <td>{{ item.Propiedad}}</td>
+						    <td>{{ item.TipoContrato}}</td>
+						    <td>{{ item.Estado}}</td>
+						    <td>
+					    <center>
+						<a ng-click="get(item)" style="float: left; margin-left: 3px;" href="javascript:;"  title="Editar"><i class="fa fa-pencil fa-1x text-success"></i></a>
+						<a  ng-click="VerNovedad(item)" style="float: left; margin-left: 8px;" href="javascript:;"  title="Asignar IMEI"><i class="fa fa-mobile text-danger fa-1x"></i></a>
+						<a ng-click="VerDesactivar(item.IdVehiculo, 'INACTIVO')"  style="float: left; margin-left: 8px;" href="javascript:;"  title="Eliminar"><i class="fa fa-power-off fa-1x text-warning"></i></a>                                               
+					    </center>
+					    </td>
+					    </tr>
+					    </tbody>
+					</table>
+					<br/> <br/> <br/>
+				    </div>
+				</div>
+			    </div>
                             <div class="modal fade bs-example-modal-sm" id="mdConfirmacion" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" style="margin-top: 10%;">
                                 <div class="modal-dialog modal-sm" style="width: 30%" >                                   
                                     <div class="modal-content">
@@ -447,60 +449,60 @@
 
                                     <form name="frmCambiar" novalidate class="col-sm-6">
                                         <div class="row">
-                                        <div class="col-md-7">                                                                                    
-                                        <div class="form-group">
-                                            <label  for="txtPlacaC">Placa *</label>
-                                            <div class="input-group">
-                                                <div class="input-group-addon"><i class="fa fa-car text-success"></i></div>                                                
-                                                <input type="text" class="form-control" ng-model="Gps.Placa"  id="txtPlacaC" name="txtPlacaC"  ng-keyup="buscar($event)" required  maxlength="6" />
-                                                <span class="input-group-btn">
-                                                    <button type="button"  class="btn btn-info btn-md "   ng-click="BuscarPlacaImei()" data-toggle="tooltip" data-placement="right" title="Buscar Vehículo"><i class=" fa fa-search"></i></button>
-                                                </span>
-                                            </div>
-                                        </div>
-                                        </div>
+					    <div class="col-md-7">                                                                                    
+						<div class="form-group">
+						    <label  for="txtPlacaC">Placa *</label>
+						    <div class="input-group">
+							<div class="input-group-addon"><i class="fa fa-car text-success"></i></div>                                                
+							<input type="text" class="form-control" ng-model="Gps.Placa"  id="txtPlacaC" name="txtPlacaC"  ng-keyup="buscar($event)" required  maxlength="6" />
+							<span class="input-group-btn">
+							    <button type="button"  class="btn btn-info btn-md "   ng-click="BuscarPlacaImei()" data-toggle="tooltip" data-placement="right" title="Buscar Vehículo"><i class=" fa fa-search"></i></button>
+							</span>
+						    </div>
+						</div>
+					    </div>
 
-                                        <div class="col-md-5">
-                                            <div class="form-group">
-                                                <label for="" class="active">Movil *</label>
-                                                <div class="input-group ">
-                                                    <div class="input-group-addon"><i class="fa fa-sort-numeric-desc text-success"></i></div>
-                                                    <input id="txtMovilC" type="text" class="form-control"  ng-model="Gps.Movil" name="txtMovilC" required  readonly>                                                
-                                                </div>
-                                            </div>
-                                        </div>
+					    <div class="col-md-5">
+						<div class="form-group">
+						    <label for="" class="active">Movil *</label>
+						    <div class="input-group ">
+							<div class="input-group-addon"><i class="fa fa-sort-numeric-desc text-success"></i></div>
+							<input id="txtMovilC" type="text" class="form-control"  ng-model="Gps.Movil" name="txtMovilC" required  readonly>                                                
+						    </div>
+						</div>
+					    </div>
 
-                                        <div class="col-md-7">
-                                            
-                                            <div class="form-group">
-                                                <label for="" >IMEI Actual *</label>
-                                                <div class="input-group ">
-                                                    <div class="input-group-addon"><i class="fa fa-sort-numeric-desc text-success"></i></div>
-                                                    <input id="txtGpsCC" type="text" class="form-control"  ng-model="Gps.ImeiActual" name="txtGpsCC"   readonly maxlength="25">
-                                                </div>
-                                            </div>
-                                                                                        
-                                        </div>
+					    <div class="col-md-7">
 
-                                        <div class="col-md-7">
-                                            
-                                            <div class="form-group">
-                                                  <label for="" >Nuevo IMEI *</label>
-                                                <div class="input-group ">
-                                                    <div class="input-group-addon"><i class="fa fa-sort-numeric-desc text-success"></i></div>
-                                                    <input id="txtGpsC" type="text" class="form-control"  ng-model="Gps.ImeiNuevo" name="txtGpsC" required  maxlength="25">
-                                                </div>
-                                            </div>                                                                                      
-                                        </div>
+						<div class="form-group">
+						    <label for="" >IMEI Actual *</label>
+						    <div class="input-group ">
+							<div class="input-group-addon"><i class="fa fa-sort-numeric-desc text-success"></i></div>
+							<input id="txtGpsCC" type="text" class="form-control"  ng-model="Gps.ImeiActual" name="txtGpsCC"   readonly maxlength="25">
+						    </div>
+						</div>
+
+					    </div>
+
+					    <div class="col-md-7">
+
+						<div class="form-group">
+						    <label for="" >Nuevo IMEI *</label>
+						    <div class="input-group ">
+							<div class="input-group-addon"><i class="fa fa-sort-numeric-desc text-success"></i></div>
+							<input id="txtGpsC" type="text" class="form-control"  ng-model="Gps.ImeiNuevo" name="txtGpsC" required  maxlength="25">
+						    </div>
+						</div>                                                                                      
+					    </div>
                                         </div>
                                         <div class="row">
-                                            
-                                             <div class="col-md-3">
-                                                 <button  class="btn btn-success btn-block btn-addon" ng-click="NuevoImei()"   type="button" title="Nuevo / Cancelar">
+
+					    <div class="col-md-3">
+						<button  class="btn btn-success btn-block btn-addon" ng-click="NuevoImei()"   type="button" title="Nuevo / Cancelar">
                                                     <i class="fa fa-edit"></i>Nuevo
                                                 </button>
                                             </div>
-                                            
+
                                             <div class="col-md-3">
                                                 <button ng-disabled="frmCambiar.$invalid"  class="btn btn-block btn-primary btn-addon"   type="button" title="Guardar" ng-click="GuardarImei()">
                                                     <i class="fa fa-check"></i>Guardar
@@ -509,20 +511,20 @@
                                         </div>
 
                                     </form>
-                                    
+
                                     <div class="col-md-6">
-                                         <br/> <br/>
+					<br/> <br/>
                                         <label style="padding-left: 20px;">PASOS:</label>
-                                            <ol class="nota" style="padding-left: 40px;">
-                                               <li>Ingrese la Placa  y presione ENTER o click en el boton (buscar) para verificar si existe</li>
-                                               <li>Ingrese el Nuevo IMEI</li>
-                                            </ol>
-                                          <label style="padding-left: 20px;">CONSIDERACIONES:</label>
-                                            <ol class="nota" style="padding-left: 40px;">
-                                               <li>El IMEI Actual Sera Desactivado, Solo debe existir un IMEI activo por cada placa</li>
-                                               <li>Si el IMEI nuevo Existe solo se cambiara la placa</li>
-                                               <li>Si el IMEI nuevo NO existe se creará un nuevo registro</li>
-                                            </ol>
+					<ol class="nota" style="padding-left: 40px;">
+					    <li>Ingrese la Placa  y presione ENTER o click en el boton (buscar) para verificar si existe</li>
+					    <li>Ingrese el Nuevo IMEI</li>
+					</ol>
+					<label style="padding-left: 20px;">CONSIDERACIONES:</label>
+					<ol class="nota" style="padding-left: 40px;">
+					    <li>El IMEI Actual Sera Desactivado, Solo debe existir un IMEI activo por cada placa</li>
+					    <li>Si el IMEI nuevo Existe solo se cambiara la placa</li>
+					    <li>Si el IMEI nuevo NO existe se creará un nuevo registro</li>
+					</ol>
                                     </div>
                                 </div>
                             </div>

@@ -24,15 +24,15 @@ app.controller('serviciosController',['$scope', '$rootScope', 'zonaService', 'ng
     $scope.mapServicio;
     var markerOrigen = null;
     var markerDestino = null;
-    var infowindow = new google.maps.InfoWindow();
+    //var infowindow = new google.maps.InfoWindow();
     var options = {  componentRestrictions: {country: 'co'} };
     var mapa=null;
 
     var origenPlaceId = null;
     var destinoPlaceId = null;
-    var travelMode = google.maps.TravelMode.DRIVING;
-    var directionsService = new google.maps.DirectionsService;
-    var directionsDisplay = new google.maps.DirectionsRenderer;
+//    var travelMode = google.maps.TravelMode.DRIVING;
+//    var directionsService = new google.maps.DirectionsService;
+//    var directionsDisplay = new google.maps.DirectionsRenderer;
 
 
     $scope.vecPoligono = new Array(); /// Vector de Poligonos
@@ -48,10 +48,10 @@ app.controller('serviciosController',['$scope', '$rootScope', 'zonaService', 'ng
     //    
     $scope.AutocompleteOrigen=null;
     $scope.AutocompleteDestino =null;    
-    geolocate();
-    iniciarMapaZ();     
-    initAutocomplete();
-    initAutocompleteDestino();
+//    geolocate();
+//    iniciarMapaZ();     
+//    initAutocomplete();
+//    initAutocompleteDestino();
    // initAutocompleteParada();
     init();
     

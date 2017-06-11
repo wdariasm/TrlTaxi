@@ -18,7 +18,7 @@ class ContratoController extends Controller
     
     public function index(){
         try{
-            return Contrato::take(20)->get();      
+            return Contrato::all();      
         }catch (\Exception $exc) {
             return JsonResponse::create(array('file' => $exc->getFile(), "line"=> $exc->getLine(),  "message" =>json_encode($exc->getMessage())), 500);
         } catch (Exception $ex) {
@@ -86,11 +86,11 @@ class ContratoController extends Controller
             if($numeroCto !== "Correcto"){                
                 return $numeroCto;
             }             
-            $disponibilidad = $data["Disponibilidad"];            
+                     
             $plantillas = $data["Plantillas"];
             $tipoServicio = $data["TipoServicio"];            
                         
-            $msj = $this->llenarServicios($contrato->IdContrato, $tipoServicio, $disponibilidad, $plantillas);
+            $msj = $this->llenarServicios($contrato->IdContrato, $tipoServicio, $plantillas);
             if($msj !=="Correcto"){
                 return $msj;
             }            
@@ -103,7 +103,7 @@ class ContratoController extends Controller
     
     //FUNCIONES PRIVADAS //
     
-    private function llenarServicios($idContrato, $tipoServicio, $disponibilidad, $plantillas){
+    private function llenarServicios($idContrato, $tipoServicio, $plantillas){
         try{                        
             
             foreach ($tipoServicio as $ts) {
@@ -125,17 +125,7 @@ class ContratoController extends Controller
                     $insert->pcEstado = "ACTIVO";
                     $insert->save();
                 }
-            }
-            
-            if(count($disponibilidad) > 0){
-                foreach ($disponibilidad as $d) {
-                    $insert = new ContratoDisponibilidad();
-                    $insert->dcContratoId =$idContrato;
-                    $insert->dcDisponibilidad = $d['dpCodigo'];
-                    $insert->dcEstado = "ACTIVO";
-                    $insert->save();
-                }
-            }                                  
+            }                                              
             
             return "Correcto";
             
@@ -148,8 +138,7 @@ class ContratoController extends Controller
     {
          try{
             $data = $request->all();
-            $contrato = Contrato::find($id);
-            $contrato->ctClienteId = $data["ctClienteId"];
+            $contrato = Contrato::find($id);            
             $contrato->ctNitCliente = $data["ctNitCliente"]; 
             $contrato->ctContratante = $data["ctContratante"]; 
             $contrato->ctTelefono = $data["ctTelefono"]; 
@@ -163,15 +152,13 @@ class ContratoController extends Controller
             $contrato->ctFormaPago = json_encode($data["ctFormaPago"]); 
             $contrato->save();
             
-            ContratoTipoServicio::where('csContratoId',$id)->delete();
-            ContratoDisponibilidad::where('dcContratoId',$id)->delete();            
+            ContratoTipoServicio::where('csContratoId',$id)->delete();                        
             ContratoPlantilla::where('pcContratoId',$id)->delete();
-                        
-            $disponibilidad = $data["Disponibilidad"];            
+                                                
             $plantillas = $data["Plantillas"];
             $tipoServicio = $data["TipoServicio"];            
                         
-            $msj = $this->llenarServicios($id, $tipoServicio, $disponibilidad, $plantillas);
+            $msj = $this->llenarServicios($id, $tipoServicio, $plantillas);
             if($msj !=="Correcto"){
                 return $msj;
             }            

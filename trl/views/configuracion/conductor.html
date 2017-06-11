@@ -11,55 +11,58 @@
             <div class="tab-content">
                 <br/>
                 <div class="tab-pane active" id="tabListado">
-                    <div class="row">
-                        <div class="col-md-6">                                 
-                            <div class="input-group">
-                                <div class="input-group-addon"><i class="fa  fa-search text-primary"></i></div>
-                                <input  class="form-control" id="search" type="search" placeholder="Buscar Conductor" ng-model="TablaConductor.filter()['busqueda']">
-                            </div>
-                        </div>
+		    <div class="panel panel-default">
+			<div class="panel-body">
+			    <div class="row">
+				<div class="col-md-6">                                 
+				    <div class="input-group">
+					<div class="input-group-addon"><i class="fa  fa-search text-primary"></i></div>
+					<input  class="form-control" id="search" type="search" placeholder="Buscar Conductor" ng-model="TablaConductor.filter()['busqueda']">
+				    </div>
+				</div>
 
-                        <div class="col-md-2" style="margin-top: 5px;">
-                            <label class=" text-primary" style="font-size: 18px;">Total: {{Conductores.length}}</label>
-                        </div>
+				<div class="col-md-2" style="margin-top: 5px;">
+				    <label class=" text-primary" style="font-size: 18px;">Total: {{Conductores.length}}</label>
+				</div>
 
-                        <div class="col-md-2 col-md-offset-1">
-                            <button type="button" class="btn btn-success btn-addon" ng-click="loadConductor()" ><i class="fa fa-refresh"></i> Actualizar</button>
-                        </div>
+				<div class="col-md-2 col-md-offset-1">
+				    <button type="button" class="btn btn-success btn-addon" ng-click="loadConductor()" ><i class="fa fa-refresh"></i> Actualizar</button>
+				</div>
+			    </div>
+			</div>
+			<table class="table table-hover table-striped table-condensed" ng-table="TablaConductor" style="float:height; margin-top: 15px;">
+			    <thead>
+				<tr>
+				    <th>CEDULA</th>
+				    <th>NOMBRE</th>                                        
+				    <th>TELEFONO</th>
+				    <th>DIRECCION</th>
+				    <th>PLACA</th>
+				    <th>ESTADO</th>
+				    <th width="12%">ACCION</th>                                                                              
+				</tr>
+			    </thead>
+			    <tbody>
+				<tr data-ng-repeat="items in $data">
+				    <td class="center">{{ items.Cedula}}</td>
+				    <td>{{ items.Nombre}}</td>
+				    <td>{{ items.TelefonoPpal}}</td> 
+				    <td>{{ items.Direccion}}</td> 
+				    <td>{{items.CdPlaca}}</td> 
+				    <td>{{ items.Estado}}</td> 
+				    <td>
+			    <center>
+				<a data-ng-click="get(items)" style="float: left; margin-left: 15px;" href="javascript:;"  title="Editar"><i class="fa  fa-1x fa-lg fa-pencil text-success"></i></a>
+				<a data-ng-click="VerDesactivar(items.IdConductor, 'RETIRADO')"  style="float: left; margin-left: 15px;" href="javascript:;"  title="Eliminar"><i class="fa fa-1x fa-lg fa-trash text-danger"></i></a>
+				<a  ng-click="AgregarLicencia(items)" style="float: left; margin-left: 15px;" href="javascript:;"  title="Licencias"><i class="fa fa-book text-info fa-1x"></i></a>
+			    </center>
+			    </td>
+			    </tr>
 
-
-                    </div>
-                    <table class="table table-hover table-striped table-condensed" ng-table="TablaConductor" style="float:height; margin-top: 15px;">
-                        <thead>
-                            <tr>
-                                <th>CEDULA</th>
-                                <th>NOMBRE</th>                                        
-                                <th>TELEFONO</th>
-                                <th>DIRECCION</th>
-                                <th>PLACA</th>
-                                <th>ESTADO</th>
-                                <th width="12%">ACCION</th>                                                                              
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr data-ng-repeat="items in $data">
-                                <td class="center">{{ items.Cedula}}</td>
-                                <td>{{ items.Nombre}}</td>
-                                <td>{{ items.TelefonoPpal}}</td> 
-                                <td>{{ items.Direccion}}</td> 
-                                <td>{{items.CdPlaca}}</td> 
-                                <td>{{ items.Estado}}</td> 
-                                <td>
-                        <center>
-                            <a data-ng-click="get(items)" style="float: left; margin-left: 15px;" href="javascript:;"  title="Editar"><i class="fa  fa-1x fa-lg fa-pencil text-success"></i></a>
-                            <a data-ng-click="VerDesactivar(items.IdConductor, 'RETIRADO')"  style="float: left; margin-left: 15px;" href="javascript:;"  title="Eliminar"><i class="fa fa-1x fa-lg fa-trash text-danger"></i></a>
-                            <a  ng-click="AgregarLicencia(items)" style="float: left; margin-left: 15px;" href="javascript:;"  title="Licencias"><i class="fa fa-book text-info fa-1x"></i></a>
-                        </center>
-                        </td>
-                        </tr>
-
-                        </tbody>
-                    </table>
+			    </tbody>
+			</table>
+			<br/> <br/> <br/>
+		    </div>
                     <div class="modal fade bs-example-modal-sm" id="mdConfirmacion" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" style="margin-top: 10%;">
                         <div class="modal-dialog modal-sm" style="width: 30%" >                                   
                             <div class="modal-content">
@@ -694,7 +697,7 @@
             showRemove: false,
             language: "es",
             autoReplace: true,
-            allowedFileExtensions: ["jpg", "png"],            
+            allowedFileExtensions: ["jpg", "png"],
         });
 
 

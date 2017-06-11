@@ -5,14 +5,12 @@ app.controller("contratoController", ["$scope", 'tipoVehiculoService', "toaster"
     $scope.Contatos = [];
     $scope.TablaContrato = {};
     $scope.title = "Nuevo Contrato";
-    $scope.editMode = false;
-    $scope.Disponibilidades = [];
-    $scope.Plantillas = [];
-    $scope.VerPlantilla = true;
-    
-    $scope.TipoServicio = [];
-    $scope.titlePlantilla = "";
+    $scope.editMode = false;               
+    $scope.TipoServicio = [];    
     $scope.TipoContrato = [];
+                    
+    $scope.EditPlantilla = { sv1 : false, sv2 : false, sv3 : false, sv4 : false};
+    $scope.PlantillaTipo = {}; 
     
     $scope.Boton = { Guardar:false, Imprimir : true};
     
@@ -99,19 +97,26 @@ app.controller("contratoController", ["$scope", 'tipoVehiculoService', "toaster"
             ctUsuarReg : $scope.$parent.Login.Login,
             ctTelefono :"",
             TipoServicio : [],
-            Plantillas : [],
-            Disponibilidad : [],
+            Plantillas : [],            
             ctFormaPago : [],
             ctTipoContrato :"",   
             ctRecorridos : "",
             Validar : "0"
-        };      
+        };       
+        $scope.EditPlantilla = { sv1 : false, sv2 : false, sv3 : false, sv4 : false};
+        $scope.PlantillaTipo = {};
     }               
     
-    function loadPlantillas(id) {
+    function loadPlantillas(id, campo, valor) {
         var promiseGet = plantillaService.get(id); //The Method Call from service
-        promiseGet.then(function(pl) {
-            $scope.Plantillas = pl.data;            
+        promiseGet.then(function(pl) {            
+            $scope[campo] = pl.data;                    
+            if(valor != null){                
+                var pos = funcionService.arrayObjectIndexOf($scope[campo], valor, 'plCodigo');
+                if(pos >=0){                                          
+                    $scope.PlantillaTipo[campo] = $scope[campo][pos];                                        
+                }               
+            }
         },
         function(errorPl) {
             toaster.pop("error","¡Error!", "Eror al cargar plantillas de transfert");
@@ -119,44 +124,56 @@ app.controller("contratoController", ["$scope", 'tipoVehiculoService', "toaster"
         });
     }
     
-    function loadDisponibilidad (){
-        var promiseGet = disponibilidadService.getAll(); 
-        promiseGet.then(function(pl) {
-            $scope.Disponibilidades = pl.data;            
-        },
-        function(errorPl) {
-            toaster.pop("error","¡Error!", "Eror al cargar disponibilidad");
-            console.log('failure loading Zona', errorPl);
-        });
-    }
     
-    $scope.TipoServicioCheck = function(value) {
-        console.log(value);     
-        if(value.svPlantilla==="SI"){
-            $scope.titlePlantilla = "Plantillas " + value.svDescripcion;
-            loadPlantillas(value.svCodigo);
-            $scope.VerPlantilla = true;
-        }else{
-            $scope.titlePlantilla = "Dispobilidad ";
-            loadDisponibilidad();
-            $scope.VerPlantilla = false;
-        }
+    $scope.TipoServicioCheck = function(value) {           
+        var campo = value.svCampo;                                
+        $scope.EditPlantilla[campo] = $("#ts"+value.svCodigo).prop('checked');
+        
+        if($scope.EditPlantilla[campo]){                    
+            loadPlantillas(value.svCodigo, campo, null);                    
+        }  else {
+            $scope.PlantillaTipo[campo] = null;
+        }  
         
     };
     
     function validar(){
+        
+        
+        if(!$scope.frmContrato.$valid){
+            toaster.pop('error','¡Error!', 'Por favor ingrese los datos requeridos (*).');
+            return;
+        }
+        
         if($scope.Contrato.ctClienteId ===0){
             toaster.pop("info","¡Alerta!", "Cliente no registrado");
             return false;
         }
         
         if($scope.Contrato.TipoServicio.length===0){
-            toaster.pop("info","¡Alerta!", "Seleccione los servcios");
+            toaster.pop("info","¡Alerta!", "Seleccione los servicios");
             return false;
         }
+        $scope.Contrato.Plantillas = [];        
+        var mensaje = "";
         
-        if($scope.Contrato.Disponibilidad.length === 0 && $scope.Contrato.Plantillas.length === 0){
-            toaster.pop("info","¡Alerta!", "Seleccione una plantilla o una disponibilidad");
+        $.each($scope.Contrato.TipoServicio, function( key, value ) {              
+            var objPlantilla = $scope.PlantillaTipo[value.svCampo];                        
+            if(objPlantilla == undefined || objPlantilla == null){                                
+                mensaje += "Seleccione la plantilla para el servicio de " + value.svDescripcion + "\n";                                
+                return false;                
+            } else {
+                $scope.Contrato.Plantillas.push(objPlantilla);               
+            }                                                           
+        });
+        
+        if(mensaje.length  > 0){
+            toaster.pop("info","¡Alerta!", mensaje);
+            return false;
+        }
+                
+        if( $scope.Contrato.Plantillas.length === 0){
+            toaster.pop("info","¡Alerta!", "Seleccione al menos una plantilla");
             return false;
         }
         
@@ -179,8 +196,7 @@ app.controller("contratoController", ["$scope", 'tipoVehiculoService', "toaster"
     };
     
     
-    function calcularDias (){
-               console.log("enter");
+    function calcularDias (){             
         var diferencia = funcionService.diferenciaDias($scope.Contrato.ctFechaInicio, $scope.Contrato.ctFechaFinal);
         if (diferencia < 0) {            
             toaster.pop("error","¡Validación!","Estimado Usuario(a), la fecha de finalización del contrato debe ser posterior" +
@@ -189,11 +205,6 @@ app.controller("contratoController", ["$scope", 'tipoVehiculoService', "toaster"
          $scope.Contrato.ctDuracion = diferencia + " DÍAS";
     }
         
-    
-    $scope.TipoPlantillaCheck = function(value,checked) {        
-        console.log($scope.Contrato.Plantillas);
-    };       
-    
     $scope.NuevoContrato = function (){
         $scope.title = "Nuevo Contrato";
         $scope.editMode = false;
@@ -249,7 +260,7 @@ app.controller("contratoController", ["$scope", 'tipoVehiculoService', "toaster"
             $scope.NuevoContrato();
               
         }, function(err) {           
-            toaster.pop('error', "¡Error!", err.data.request, 0);   
+            toaster.pop('error', "¡Error!", err.data, 0);   
             console.log("Some Error Occured " + JSON.stringify(err));
         });   
         
@@ -260,12 +271,22 @@ app.controller("contratoController", ["$scope", 'tipoVehiculoService', "toaster"
         promise.then(function(d) {
             if(d.data){                              
                 $scope.Contrato.ctFormaPago =  angular.copy(JSON.parse(d.data.ctFormaPago));
-//                $scope.Contrato.FechaFin = new Date(d.data.ctFechaFinal).toLocaleDateString('en-GB');
-//                $scope.Contrato.TipoServicio = d.data.TipoServicio;
-//                $scope.Contrato.Plantilla = d.data.Plantilla;
-//                if($scope.Contrato.TipoServicio === 0){
-//                    toaster.pop('error', 'No se encontraón servicios asociados a este contrato', 0);
-//                }      
+                               
+                var plantillas = d.data.Plantilla;                                
+                
+                $.each(plantillas, function( key, value ) {                      
+                    var pos = funcionService.arrayObjectIndexOf($scope.TipoServicio, value.pcTipoServicio, 'svCodigo');
+                    if(pos >=0){                        
+                        var tipo = $scope.TipoServicio[pos];
+                        $scope.Contrato.TipoServicio.push(tipo);     
+                        $scope.EditPlantilla[tipo.svCampo] = true;
+                        loadPlantillas(tipo.svCodigo, tipo.svCampo, value.plCodigo);
+                    }
+                });                                                                
+                
+                if($scope.Contrato.TipoServicio === 0){
+                    toaster.pop('error', 'No se encontraón servicios asociados a este contrato', 0);
+                }      
 
             }else{
                 toaster.pop('error', "Número de contrato no existe");

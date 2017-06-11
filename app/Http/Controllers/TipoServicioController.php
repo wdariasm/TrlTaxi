@@ -20,7 +20,7 @@ class TipoServicioController extends Controller
     }
     
     public function getActivos(){
-        return TipoServicio::where('svEstado','ACTIVO')->select('svCodigo', 'svDescripcion', 'svPlantilla', 'svValorParada')->get();
+        return TipoServicio::where('svEstado','ACTIVO')->select('svCodigo', 'svDescripcion', 'svPlantilla', 'svValorParada', 'svCampo')->get();
     }
     
 

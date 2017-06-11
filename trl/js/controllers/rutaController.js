@@ -20,14 +20,18 @@ app.controller("rutaController", ["$scope", "$rootScope", "rutaService", "tipoVe
 
         $scope.$parent.SetTitulo("GESTIÓN DE RUTAS");
         initRuta();
-        loadDepartamento();
-        loadPlantilla();
+        
+        setTimeout(function (){
+            loadDepartamento();
+            loadPlantilla();
+        }, 900);
+        
 
         $rootScope.$on("cargueRuta", function (event, data) {
             loadRuta(serverData.data.plCodigo);
             var pos = funcionService.arrayObjectIndexOf($scope.Plantillas, serverData.data.plCodigo, "plCodigo");
             if (pos != "-1") {
-                $scope.PlantillaSelect = $scope.Plantillas[pos];
+                $scope.PlantillaSelect = $scope.Plantillas[pos];                
             }
 
         });
@@ -45,9 +49,11 @@ app.controller("rutaController", ["$scope", "$rootScope", "rutaService", "tipoVe
                 rtEstado: "ACTIVO",
                 rtImagen: '',
                 rtPlantilla: '0',
-                Imagen: ""
+                Imagen: "",
+                rtValorCliente : 0
             };
-            $scope.estadoImg = false;
+            $scope.estadoImg = false;            
+            $scope.VehiculoSelect = {};
         }
 
 
@@ -67,9 +73,7 @@ app.controller("rutaController", ["$scope", "$rootScope", "rutaService", "tipoVe
             var promise = tipoVehiculoService.getAll();
             promise.then(function (d) {
                 $scope.TipoVehiculos = d.data;
-                if (d.data) {
-                    $scope.VehiculoSelect = d.data[0];
-                }
+                
             }, function (err) {
                 toaster.pop('error', '¡Error!', "Error al cargar Tipo de Vehiculo");
                 console.log("Some Error Occured " + JSON.stringify(err));
@@ -96,7 +100,7 @@ app.controller("rutaController", ["$scope", "$rootScope", "rutaService", "tipoVe
             promise.then(function (d) {
                 $scope.Departamentos = d.data;
                 if (d.data) {
-                    $scope.DeptSelect = d.data[0];
+                    $scope.DeptSelect = d.data[3];
                     loadMunicipio($scope.DeptSelect.dtCodigo);
                 }
             }, function (err) {
@@ -124,23 +128,40 @@ app.controller("rutaController", ["$scope", "$rootScope", "rutaService", "tipoVe
         };
 
         $scope.Guardar = function () {
-
+            
+            
+            
             if(!$scope.frmRuta.$valid){
                 toaster.pop('error','¡Error!', 'Por favor ingrese los datos requeridos (*).');
                 return;
             }
+            
+            if(!$scope.VehiculoSelect){
+                toaster.pop('error','¡Error!', 'Por favor seleccione el tipo de vehículo.');
+                return;
+            }
+            
+            if(!$scope.MunSelect){
+                toaster.pop('error','¡Error!', 'Por favor seleccione el municipio.');
+                return;
+            }        
+            
+            $scope.Ruta.rtTipoVehiculo = $scope.VehiculoSelect.tvCodigo;
+            $scope.Ruta.rtCiudad = $scope.MunSelect.muCodigo;
+            $scope.Ruta.rtDepartamento =  $scope.MunSelect.muDepartamento;
 
             var formData = new FormData();
-            formData.append('rtTipoVehiculo', $scope.VehiculoSelect.tvCodigo);
+            formData.append('rtTipoVehiculo', $scope.Ruta.rtTipoVehiculo);
             formData.append('rtCiudad', $scope.MunSelect.muCodigo);
             formData.append('rtPlantilla', $scope.PlantillaSelect.plCodigo);
-            formData.append('rtDepartamento', $scope.DeptSelect.dtCodigo);
+            formData.append('rtDepartamento', $scope.MunSelect.muDepartamento);
             formData.append('rtNombre', $scope.Ruta.rtNombre.toUpperCase());
             formData.append('rtDescripcion', $scope.Ruta.rtDescripcion.toUpperCase());
             formData.append('rtValor', $scope.Ruta.rtValor);
             formData.append('trEstado', $scope.Ruta.trEstado);
             formData.append('rtImagen', $scope.Ruta.rtImagen);
-
+            formData.append('rtValorCliente', $scope.Ruta.rtValorCliente);
+            
             var promise;
             if ($scope.editMode) {
                 promise = rutaService.put($scope.Ruta.rtCodigo, $scope.Ruta);
@@ -149,7 +170,7 @@ app.controller("rutaController", ["$scope", "$rootScope", "rutaService", "tipoVe
             }
 
             promise.then(function (d) {
-                loadRuta();
+                loadRuta($scope.PlantillaSelect.plCodigo);
                 toaster.pop('success', "Control de Información", d.data.message);
                 initRuta();
             }, function (err) {
@@ -170,12 +191,34 @@ app.controller("rutaController", ["$scope", "$rootScope", "rutaService", "tipoVe
         };
 
         //edita la Ruta
-        $scope.get = function (item) {
-            $scope.Ruta = item;
+        $scope.get = function (item) {            
+            initRuta();
             $scope.editMode = true;
-            $scope.title = "Editar Ruta";
-            $scope.active = "active";
+            $scope.title = "Editar Ruta";            
+            
+            $scope.Ruta = item;                        
+            var pos = funcionService.arrayObjectIndexOf($scope.TipoVehiculos, item.rtTipoVehiculo, 'tvCodigo');
+            if(pos >=0){                                          
+                $scope.VehiculoSelect = $scope.TipoVehiculos[pos];                                        
+            }
+            
+            var pos1 = funcionService.arrayObjectIndexOf($scope.Departamentos, item.rtDepartamento, 'dtCodigo');
+            if(pos1 >=0){                                          
+                $scope.DeptSelect = $scope.Departamentos[pos1];                                        
+            }
+            $scope.MunSelect = {};
+            var pos2 = funcionService.arrayObjectIndexOf($scope.Municipios, item.rtCiudad, 'muCodigo');
+            if(pos2 >=0){                                          
+                setTimeout(function (){
+                    $scope.$apply(function (){
+                        $scope.MunSelect = $scope.Municipios[pos2];
+                    });
+                }, 2000);
+            }                                    
+            
+           
             $('#tabPanels a[href="#tabRegistroRuta"]').tab('show');
+                        
         };
 
         //Funcion que elimina
