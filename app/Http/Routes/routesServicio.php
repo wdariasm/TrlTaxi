@@ -33,5 +33,6 @@
     /* Servicio cartera  por conductor y rango de fecha*/
     Route::post('api/servicio/cartera','ServicioController@getCarteraConductorFecha');
     
-    
+    /* Cancelar Servicio */
+    Route::put('api/servicio/{id}/actualizar','ServicioController@updateServicio');
     

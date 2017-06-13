@@ -49,7 +49,14 @@
                     <button type="button" class="btn btn-floating  btn-large borrador" ng-disabled="frmServicio.$invalid"  ng-click="Validar()" title="Guardar"><i class="fa fa-check"></i></button>
                     <small class="texto">Guardar</small>
                 </div>
-            </div>           
+            </div>
+	    
+	    <div class="row" style="margin-bottom: 5px;" ng-show="Editar">
+                <div class="col-xs-12 text-center">
+                    <button type="button" class="btn btn-floating  btn-large borrador" ng-disabled="frmServicio.$invalid"  ng-click="Validar()" title="Actualizar"><i class="fa fa-save"></i></button>
+                    <small class="texto">Actualizar</small>
+                </div>
+            </div>
 
         </div>
     </div>
@@ -176,6 +183,28 @@
 					    </div>
 					</div>
 				    </div> 
+				    
+				    <div class="col-md-3" ng-hide="Editar">
+					<div class="form-group">
+					    <label  for="cboNumPasajeros">N° Pasajeros <span>*</span></label>     
+					    <div class="input-group">  
+						<div class="input-group-addon"><i class="fa fa-users"></i></div>                                
+						<select  class="form-control" ng-model="Servicio.NumPasajeros"  name="cboNumPasajeros" id="cboNumPasajeros" placeholder="Número de pasajeros" required>                                                     
+						    <option ng-repeat="n in []| rango:40" value="{{n}}">{{n}}</option>
+						</select>						
+					    </div>    
+					</div> 
+				    </div>
+				    
+				    <div class="col-md-3" ng-show="Editar">
+					<div class="form-group">
+					    <label  for="cboNumPasajeros">N° Pasajeros <span>*</span></label>     
+					    <div class="input-group">  
+						<div class="input-group-addon"><i class="fa fa-users"></i></div>
+						<input class="form-control" ng-model="Servicio.NumPasajeros"  solo-numeros id="txtNumPasajeros" type="text" required maxlength="3"  placeholder="N° Pasajeros">
+					    </div>    
+					</div> 
+				    </div>
 
 				</div>
 
@@ -184,37 +213,13 @@
 				    <div class="col-md-5 col-sm-5">
 
 					<div class="row">                                    
-					    <div class="col-md-6">
-						<div class="form-group">
-						    <label  for="cboNumPasajeros">N° Pasajeros <span>*</span></label>     
-						    <div class="input-group">  
-							<div class="input-group-addon"><i class="fa fa-users"></i></div>                                
-							<select  class="form-control" ng-model="Servicio.NumPasajeros" id="cboNumPasajeros" placeholder="Número de pasajeros" required>                                                     
-							    <option ng-repeat="n in []| rango:50" value="{{n}}">{{n}}</option>
-							</select>
-							<!-- <input class="form-control" ng-model="Servicio.NumPasajeros" solo-numeros id="txtNumPasajeros" type="text" required maxlength="3"  placeholder="N° Pasajeros">-->
-						    </div>    
-						</div> 
-					    </div>
-					    <div class="col-md-6">
-						<div class="form-group">
-						    <label  for="cboNumHoras">N° Horas</label>     
-						    <div class="input-group">  
-							<div class="input-group-addon"><i class="fa fa-clock-o"></i></div>    
-							<select  class="form-control" ng-model="Servicio.NumHoras" id="cboNumHoras" placeholder="Número de Horas" ng-disabled="Servicio.Tipo.csTipoServicioId !== 2" >                                                     
-							    <option ng-repeat="n in []| rango:20" value="{{n}}">{{n}}</option>
-							</select>
-							<!-- <input class="form-control" ng-model="Servicio.NumHoras" solo-numeros id="txtNumHoras" ng-disabled="Servicio.Tipo.csTipoServicioId !==2" type="text" required maxlength="3"  placeholder="Horas">-->
-						    </div>    
-						</div> 
-					    </div>
-
+					    					    
 					    <div class="col-md-8">    
 						<div class="form-group">
 						    <label  for="txtTipoVehiculo" >Tipo de Vehículo <span>*</span></label>
 						    <div class="input-group">   
 							<div class="input-group-addon"><i class="fa fa-gitlab"></i></div>
-							<select ng-model="TipoSelect" ng-disabled="Editar" class="form-control"  id="txtTipoVehiculo" ng-options="item as item.tvDescripcion for item in Contrato.TipoVehiculo track by item.tvCodigo" required ng-change="CambiarPrecio()"></select>
+							<select ng-model="TipoSelect" ng-disabled="Editar" class="form-control" name="txtTipoVehiculo" id="txtTipoVehiculo" ng-options="item as item.tvDescripcion for item in Contrato.TipoVehiculo track by item.tvCodigo" required ng-change="CambiarPrecio()"></select>
 						    </div> 
 						</div>
 					    </div>

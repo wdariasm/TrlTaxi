@@ -1,6 +1,6 @@
-app.controller('serviciosController',['$scope', '$rootScope', 'zonaService', 'ngTableParams', 'toaster',
-    "contratoService","funcionService","servicioService", '$filter', '$timeout', '$routeParams',    function ($scope, $rootScope,  
-    zonaService, ngTableParams, toaster, contratoService, funcionService, servicioService,  $filter, $timeout, $routeParams) {
+app.controller('serviciosController',['$scope', 'zonaService',  'toaster', "contratoService","funcionService",
+    "servicioService", '$filter', '$routeParams',    function ($scope, zonaService, toaster, contratoService,
+    funcionService, servicioService,  $filter, $routeParams) {
         
     $scope.Zonas = [];
     $scope.Zona = {};
@@ -30,9 +30,9 @@ app.controller('serviciosController',['$scope', '$rootScope', 'zonaService', 'ng
 
     var origenPlaceId = null;
     var destinoPlaceId = null;
-//    var travelMode = google.maps.TravelMode.DRIVING;
-//    var directionsService = new google.maps.DirectionsService;
-//    var directionsDisplay = new google.maps.DirectionsRenderer;
+    var travelMode = google.maps.TravelMode.DRIVING;
+    var directionsService = new google.maps.DirectionsService;
+    var directionsDisplay = new google.maps.DirectionsRenderer;
 
 
     $scope.vecPoligono = new Array(); /// Vector de Poligonos
@@ -48,33 +48,15 @@ app.controller('serviciosController',['$scope', '$rootScope', 'zonaService', 'ng
     //    
     $scope.AutocompleteOrigen=null;
     $scope.AutocompleteDestino =null;    
-//    geolocate();
-//    iniciarMapaZ();     
-//    initAutocomplete();
-//    initAutocompleteDestino();
+    geolocate();
+    iniciarMapaZ();     
+    initAutocomplete();
+    initAutocompleteDestino();
    // initAutocompleteParada();
     init();
     
     $scope.AceptarCondicion = false;
-       
-    $rootScope.$on("cargarServicio", function (event, data) {    
-        console.log(data);
-        
-        if(data != null){
-            console.log("entree 6 ");  
-            $scope.Editar = true;
-            $timeout(function() {
-                 $rootScope.$apply();
-            });
-            
-            
-            $timeout(function (){ 
-                getServicio(data.IdServicio);
-                
-            }, 2000);                                  
-        }                 
-    });        
-
+                  
     function Poligono() {
         this.coordenadas = null;
         this.marcador = null;
@@ -447,9 +429,17 @@ app.controller('serviciosController',['$scope', '$rootScope', 'zonaService', 'ng
         var promise = contratoService.getTipoVehiculo(id);
         promise.then(function(d) {
             $scope.Contrato.TipoVehiculo = d.data;
-            if(d.data){
+            if(d.data){                                
                 $scope.TipoSelect = d.data[0];
             }
+            
+            if($scope.Editar){                
+                var pos = funcionService.arrayObjectIndexOf($scope.Contrato.TipoVehiculo, $scope.Servicio.TipoVehiculoId, 'tfTipoVehiculo');        
+                if(pos >=0){                            
+                    $scope.TipoSelect = $scope.Contrato.TipoVehiculo[pos];
+                }                 
+            }
+            
         }, function(err) {
                 toaster.pop('error','¡Error!',"Error al cargar tipos de vehículo",0);
                 console.log("Some Error Occured " + JSON.stringify(err));
@@ -599,12 +589,10 @@ app.controller('serviciosController',['$scope', '$rootScope', 'zonaService', 'ng
 
     $scope.GetContratos = function  (){
         
-        if($scope.Editar){
-            toaster.pop('info','¡Información!',"No es posible ejecutar esta acción. ");
-            return;
-        }
+        if(!$scope.Editar){                  
+            init();
+        }        
         
-        init();
         var promise = contratoService.getByCliente($scope.Servicio.ClienteId, "ACTIVO");
         promise.then(function(d) {
             
@@ -620,13 +608,29 @@ app.controller('serviciosController',['$scope', '$rootScope', 'zonaService', 'ng
             }                        
                         
             $scope.ContratoSelect ={};
+                        
+            if ($scope.Editar){                                
+                var pos = funcionService.arrayObjectIndexOf($scope.Contratos, parseInt($scope.Servicio.ContratoId), 'IdContrato');
+                if(pos >=0){                        
+                    $scope.ContratoSelect = $scope.Contratos[pos];
+                    $scope.BuscarContrato('COMBO', false);                    
+                }
+            }
         }, function(err) {
                 toaster.pop('error','¡Error!',"Error al cargar contratos");
                 console.log("Some Error Occured " + JSON.stringify(err));
         });
-    };   
+    };  
+    
+    $scope.GetContratos();
     
     $scope.Validar = function (){
+        
+        if(!$scope.frmServicio.$valid){
+            toaster.pop('error','¡Error!', 'Por favor ingrese los datos requeridos (*).');
+            return;
+        }
+        
         $scope.AceptarCondicion = false;
         if(!$scope.Servicio.Tipo.csTipoServicioId){
             toaster.pop('info','¡Alerta!','Seleccione el tipo de servicio');
@@ -637,7 +641,7 @@ app.controller('serviciosController',['$scope', '$rootScope', 'zonaService', 'ng
             return;
         }
         
-        if($scope.Servicio.NumPasajeros > $scope.TipoSelect.tvNumPasajero){
+        if(parseInt($scope.Servicio.NumPasajeros) > $scope.TipoSelect.tvNumPasajero){
             toaster.pop('info','¡Alerta!','Estimado Usuario(a), el número de pasajeros supera el limite permitido'+
                     " para el tipo de vehículo seleccionado ("+$scope.TipoSelect.tvDescripcion + ")",7000);
             return;
@@ -691,8 +695,13 @@ app.controller('serviciosController',['$scope', '$rootScope', 'zonaService', 'ng
 
                 break;
         }
-                
-        $("#mdConfirmacion").modal('show');
+           
+        if($scope.Editar){
+            $scope.Servicio.Parada = $scope.Servicio.Paradas.length > 0 ? "SI" : "NO";
+            actualizarServicio();
+        } else {        
+            $("#mdConfirmacion").modal('show');
+        }
     };
     
     
@@ -726,7 +735,7 @@ app.controller('serviciosController',['$scope', '$rootScope', 'zonaService', 'ng
         
     };
     
-    $scope.GetContratos();
+   
     
     // FUNCIONES DE PARADAS
     
@@ -923,23 +932,19 @@ app.controller('serviciosController',['$scope', '$rootScope', 'zonaService', 'ng
         $scope.$apply();
     }
     
-     if($routeParams.id != "0"){
-        $scope.Editar = true;
-        toaster.pop('wait','¡Espere ...!',"Cargando información.....");
-        setTimeout(function (){getServicio($routeParams.id);},2500) ;
-     }
+    if(parseInt($routeParams.id) !== 0){       
+       toaster.pop('wait','¡Espere ...!',"Cargando información.....");
+       setTimeout(function (){getServicio($routeParams.id);},1000) ;
+    }
         
     
     function getServicio(idServicio){
+        $scope.Editar = true;
         var promise = servicioService.get(idServicio);
-        promise.then(function(d) {
-            $scope.Servicio = d.data;                        
-            if(d.data != null){
-                var pos = funcionService.arrayObjectIndexOf($scope.Contratos, $scope.Servicio.ContratoId, 'IdContrato');
-                if(pos >=0){                    
-                    $scope.ContratoSelect = $scope.Contratos[pos];
-                    $scope.BuscarContrato('COMBO', false);                    
-                }
+        promise.then(function(d) {             
+            $scope.Servicio = d.data;
+            if(d.data != null){                
+                $scope.GetContratos();                
             }
             
             toaster.pop('info','¡Información!',"Datos cargados correctamente. Ahora es posible realizar las\n\
@@ -979,5 +984,19 @@ app.controller('serviciosController',['$scope', '$rootScope', 'zonaService', 'ng
                 console.log("Some Error Occured " + JSON.stringify(err));
         }); 
     }
+    
+    function actualizarServicio  (){
+        toaster.pop('wait','Actualizando servicio ....');
+        var promise = servicioService.put($scope.Servicio.IdServicio, $scope.Servicio);
+        promise.then(function(d) {                        
+            toaster.pop('success','¡Información!', d.data.message);
+            $scope.ContratoSelect = {};
+            $scope.Nuevo();
+            
+        }, function(err) {            
+            toaster.pop('error','¡Error!',err.data, 0);
+            console.log("Some Error Occured " + JSON.stringify(err));
+        });
+    };
     
 }]);

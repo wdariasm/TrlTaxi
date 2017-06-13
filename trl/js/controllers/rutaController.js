@@ -128,9 +128,7 @@ app.controller("rutaController", ["$scope", "$rootScope", "rutaService", "tipoVe
         };
 
         $scope.Guardar = function () {
-            
-            
-            
+                                    
             if(!$scope.frmRuta.$valid){
                 toaster.pop('error','¡Error!', 'Por favor ingrese los datos requeridos (*).');
                 return;
@@ -208,17 +206,11 @@ app.controller("rutaController", ["$scope", "$rootScope", "rutaService", "tipoVe
             }
             $scope.MunSelect = {};
             var pos2 = funcionService.arrayObjectIndexOf($scope.Municipios, item.rtCiudad, 'muCodigo');
-            if(pos2 >=0){                                          
-                setTimeout(function (){
-                    $scope.$apply(function (){
-                        $scope.MunSelect = $scope.Municipios[pos2];
-                    });
-                }, 2000);
+            if(pos2 >=0){                                                         
+                $scope.MunSelect = $scope.Municipios[pos2];               
             }                                    
-            
-           
-            $('#tabPanels a[href="#tabRegistroRuta"]').tab('show');
-                        
+                       
+            $('#tabPanels a[href="#tabRegistroRuta"]').tab('show');                        
         };
 
         //Funcion que elimina

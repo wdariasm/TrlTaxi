@@ -29,7 +29,7 @@ class ParadaController extends Controller
             $insert->prFecha = $data['prFecha'];            
             $insert->prEstado = 'ACTIVA';
             $insert->save();
-            
+                                    
             return JsonResponse::create(array('message' => "Para guardada correctamente", "request" =>json_encode($insert->IdParada)), 200);
             
         }catch (\Exception $exc) {
