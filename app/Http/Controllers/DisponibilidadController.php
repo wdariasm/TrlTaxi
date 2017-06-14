@@ -21,7 +21,7 @@ class DisponibilidadController extends Controller
     }
     
     public function getByPlanitlla($idPlantilla){
-        $result = DB::select("SELECT dp.dpCodigo, dp.dpNombre,  dp.dpValorHora, dp.dpEstado,"
+        $result = DB::select("SELECT dp.dpCodigo, dp.dpNombre,  dp.dpValorHora, dp.dpEstado, dp.dpValorCliente, "
                 . " cv.tvDescripcion FROM disponibilidad dp INNER JOIN clasevehiculo cv ON dp.dpTipoVehiculo = cv.tvCodigo"
                 . " WHERE  dp.dpEstado <> 'INACTIVO' AND dpPlantilla = $idPlantilla");
         return $result; 
@@ -41,6 +41,7 @@ class DisponibilidadController extends Controller
             $disponibilidad= new Disponibilidad();  
             $disponibilidad->dpNombre = $data["dpNombre"];
             $disponibilidad->dpValorHora = $data["dpValorHora"];
+            $disponibilidad->dpValorCliente = $data["dpValorCliente"];
             $disponibilidad->dpEstado = $data["dpEstado"];
             $disponibilidad->dpTipoVehiculo = $data["dpTipoVehiculo"];
             $disponibilidad->dpPlantilla = $data["dpPlantilla"];
@@ -77,6 +78,7 @@ class DisponibilidadController extends Controller
             $disponibilidad = Disponibilidad::find($dpCodigo);
             $disponibilidad->dpNombre = $data["dpNombre"];
             $disponibilidad->dpValorHora = $data["dpValorHora"];
+            $disponibilidad->dpValorCliente = $data["dpValorCliente"];
             $disponibilidad->dpEstado = $data["dpEstado"];
             $disponibilidad->dpTipoVehiculo = $data["dpTipoVehiculo"];
             $disponibilidad->save();

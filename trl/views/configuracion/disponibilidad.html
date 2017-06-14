@@ -52,13 +52,23 @@
 
 				<div class="col-md-11">
 				    <div class="form-group">
-					<label for="txtdpValorHora"> Valor / Hora *</label>
+					<label for="txtdpValorCliente"> Valor Cliente / Hora *</label>
+					<div class="input-group">    
+					    <div class="input-group-addon"><i class="fa fa-hashtag text-success"></i></div>
+					    <input required="" type="text" class="form-control" ng-model="Disponibilidad.dpValorCliente" id="txtdpValorCliente" fcsa-number="{ min: 0,  maxDecimals: 0  }"  maxlength="11" solo-numeros >
+					</div> 
+				    </div>
+				</div>
+				
+				<div class="col-md-11">
+				    <div class="form-group">
+					<label for="txtdpValorHora"> Valor Proveedor/ Hora *</label>
 					<div class="input-group">    
 					    <div class="input-group-addon"><i class="fa fa-hashtag text-success"></i></div>
 					    <input required="" type="text" class="form-control" ng-model="Disponibilidad.dpValorHora" id="txtdpValorHora" fcsa-number="{ min: 0,  maxDecimals: 0  }"  maxlength="11" solo-numeros >
 					</div> 
 				    </div>
-				</div>
+				</div>								
 
 				<div class="col-md-11">
 				    <div class="form-group">
@@ -97,9 +107,10 @@
 					<tr>
 					    <th class="center">#</th> 
 					    <th>NOMBRE</th>
-					    <th>VALOR / HORA</th>  
+					    <th title="Valor Cliente / Hora">V.CLIENTE /H.</th>  
+					    <th title="Valor Proveedor / Hora">V.PROVEEDOR /H.</th>  
 					    <th>ESTADO</th>
-					    <th>TIPO VEHICULO</th>
+					    <th title="Tipo de Vehículo">T. VEHÍCULO</th>
 					    <th width="12%">ACCIÓN</th>
 					</tr>
 				    </thead>
@@ -108,6 +119,7 @@
 					<tr data-ng-repeat="items in Disponibilidades">
 					    <td class="center">{{ items.dpCodigo}}</td>
 					    <td>{{ items.dpNombre}}</td>
+					    <td>{{items.dpValorCliente| currency : "$" : 0}}</td>
 					    <td>{{items.dpValorHora| currency : "$" : 0}}</td>
 					    <td>{{items.dpEstado}}</td>
 					    <td>{{items.tvDescripcion}}</td>

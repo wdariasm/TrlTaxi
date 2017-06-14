@@ -20,7 +20,8 @@ class TrasladoController extends Controller
     }
     
     public function getByPlanitlla($idPlantilla){
-        $result = DB::select("SELECT t.tlCodigo, t.tlNombre, t.tlValor,t.tlEstado, c.tvDescripcion, m.muNombre "
+        $result = DB::select("SELECT t.tlCodigo, t.tlNombre, t.tlValor, t.tlValorCliente, t.tlEstado, t.tlCiudadDestino, "
+                . " c.tvDescripcion, m.muNombre, t.tlDeptoDestino, t.tlDeptoOrigen, t.tlTipoVehiculo, t.tlCiudadOrigen "
                 . "  FROM traslados t INNER JOIN clasevehiculo c ON t.tlTipoVehiculo=c.tvCodigo "
                 . " INNER JOIN municipio m ON t.tlCiudadOrigen=m.muCodigo WHERE t.tlPlantilla= $idPlantilla");
         return $result; 
@@ -39,19 +40,19 @@ class TrasladoController extends Controller
             $data = $request->all(); 
             $traslado= new Traslado();                        
             $traslado->tlNombre = $data["tlNombre"];
-            $traslado->tlTipoVehiculo = $data["tlTipoVehiculo"];
+            $traslado->tlTipoVehiculo = $data["tlTipoVehiculo"];            
             $traslado->tlValor = $data["tlValor"];
+            $traslado->tlValorCliente = $data["tlValorCliente"];
             $traslado->tlCiudadOrigen = $data["tlCiudadOrigen"];
-            $traslado->tlCiudadDestio = $data["tlCiudadDestio"];
+            $traslado->tlCiudadDestino = $data["tlCiudadDestino"];            
+            $traslado->tlDeptoOrigen = $data["tlDeptoOrigen"];
+            $traslado->tlDeptoDestino = $data["tlDeptoDestino"];            
             $traslado->tlEstado = $data["tlEstado"];
             $traslado->tlPlantilla = $data["tlPlantilla"];
             
             $traslado->save();
-            
-             if ($request->hasFile('imagen')) {
-                $request->file('imagen')->move("../image/",$data["tlCodigo"].'.jpg');    
-            }
-            return JsonResponse::create(array('message' => "Traslado guardada correctamente", "request" =>json_encode($traslado->tlCodigo)), 200);
+                         
+            return JsonResponse::create(array('message' => "Traslado guardado correctamente", "request" =>json_encode($traslado->tlCodigo)), 200);
         }catch (\Exception $exc) {
             return JsonResponse::create(array('file' => $exc->getFile(), "line"=> $exc->getLine(),  "message" =>json_encode($exc->getMessage())), 500);
         } 
@@ -72,14 +73,17 @@ class TrasladoController extends Controller
             $traslado->tlNombre = $data["tlNombre"];
             $traslado->tlTipoVehiculo = $data["tlTipoVehiculo"];
             $traslado->tlValor = $data["tlValor"];
+            $traslado->tlValorCliente = $data["tlValorCliente"];
             $traslado->tlCiudadOrigen = $data["tlCiudadOrigen"];
-            $traslado->tlCiudadDestio = $data["tlCiudadDestio"];
+            $traslado->tlCiudadDestino = $data["tlCiudadDestino"];
+            $traslado->tlDeptoOrigen = $data["tlDeptoOrigen"];
+            $traslado->tlDeptoDestino = $data["tlDeptoDestino"]; 
             $traslado->tlEstado = $data["tlEstado"];
             $traslado->tlPlantilla = $data["tlPlantilla"];
             
             $traslado->save();
 
-            return JsonResponse::create(array('message' => "Datos Actualizados correctamente", "request" =>json_encode($traslado->tlCodigo)), 200);
+            return JsonResponse::create(array('message' => "Datos Actualizados Correctamente", "request" =>json_encode($traslado->tlCodigo)), 200);
         }catch (\Exception $exc) {
             return JsonResponse::create(array('file' => $exc->getFile(), "line"=> $exc->getLine(),  "message" =>json_encode($exc->getMessage())), 500);
         } 

@@ -175,7 +175,7 @@ app.controller('plantillaController',['$scope',  'ngTableParams', 'toaster',"pla
                 break;
                 
             case "4":
-                $('#tabPanels a[href="#tabRegistroTraslado"]').tab('show');
+                $('#tabPanels a[href="#tabListadoTraslado"]').tab('show');
                 $scope.$emit("cargueTraslado", "iniciando cargue");
                 break;
         }

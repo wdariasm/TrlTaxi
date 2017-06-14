@@ -18,9 +18,10 @@ function ($scope, $rootScope, disponibilidadService, tipoVehiculoService,toaster
         $scope.Disponibilidad = {
             dpCodigo:"",
             dpNombre:"",
-            dpValorHora:"",
+            dpValorHora: 0,
             dpEstado : "ACTIVO",
-            dpTipoVehiculo :''
+            dpTipoVehiculo :'',
+            dpValorCliente : 0
         };           
     }
     initDisponibilidad();

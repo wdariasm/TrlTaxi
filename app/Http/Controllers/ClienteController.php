@@ -14,7 +14,7 @@ class ClienteController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index(){
-             $result = DB::select("SELECT co.Identificacion, co.Nombres,  co.Direccion, co.MovilPpal, co.Estado, co.DigitoVerificacion,"
+             $result = DB::select("SELECT co.Identificacion, co.IdCliente, co.Nombres,  co.Direccion, co.MovilPpal, co.Estado, co.DigitoVerificacion,"
                 . " co.TipoPersona, co.TipoDocumento, co.Correo, es.tdDescripcion FROM clientes co INNER JOIN"
                      . "  tipodocumento es ON co.TipoDocumento = es.tdCodigo WHERE  Estado <> 'INACTIVO' ");
         return $result; 

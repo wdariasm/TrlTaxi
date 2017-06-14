@@ -35,6 +35,11 @@ app.service("servicioService",[ '$http', function ($http) {
         return req;                
     };
     
+    this.get = function (id){
+        var req = $http.get(uri+'/api/servicio/'+id);
+        return req;
+    };
+    
 }]);
 
 

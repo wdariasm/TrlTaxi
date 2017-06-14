@@ -7,7 +7,7 @@ app.controller('serviciosController',['$scope', 'zonaService', 'ngTableParams', 
     $scope.Servicio  = {};
     $scope.AsigServicio =  {};
     $scope.Conductores = [];
-    
+    $scope.VerDetalle = false;
     
     $scope.FechaBusqueda =  moment().format('L');
     
@@ -410,6 +410,7 @@ app.controller('serviciosController',['$scope', 'zonaService', 'ngTableParams', 
     
     $scope.VerAsignarServicio = function (item){
         $scope.AsigServicio = item;
+        $scope.VerDetalle = false;
         $scope.AsigServicio.Conductor = {};
         $('#mdAsignar').modal({
             backdrop: 'static',
@@ -420,6 +421,7 @@ app.controller('serviciosController',['$scope', 'zonaService', 'ngTableParams', 
         //$('#mdAsignar').modal('show');   
          
         getConductores(item.TipoVehiculoId);
+        getServicio($scope.AsigServicio.IdServicio)
     };
     
     function getConductores(tipo){
@@ -434,6 +436,21 @@ app.controller('serviciosController',['$scope', 'zonaService', 'ngTableParams', 
         }); 
         
     }
+    
+    function getServicio(idServicio){
+        var promise = servicioService.get(idServicio);
+        promise.then(function(d) {                         
+            if(d.data != null){                
+                $scope.AsigServicio.Contactos = d.data.Contactos;
+                $scope.AsigServicio.Paradas = d.data.Paradas;
+                $scope.AsigServicio.ValorParadas = d.data.ValorParadas;
+            }
+                       
+        }, function(err) {
+                toaster.pop('error','¡Error!',"Error al consultar servicio");
+                console.log("Some Error Occured " + JSON.stringify(err));
+        });    
+    };
     
     $scope.AsigServicio = {
         Conductor : {}
@@ -489,6 +506,10 @@ app.controller('serviciosController',['$scope', 'zonaService', 'ngTableParams', 
                 console.log("Some Error Occured " + JSON.stringify(err));
         }); 
     };        
+    
+    $scope.VerDetalleServicio = function (){
+        $scope.VerDetalle = !$scope.VerDetalle;        
+    };
                        
 }]);
 

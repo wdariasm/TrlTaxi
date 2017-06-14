@@ -173,9 +173,9 @@ function ($scope, clienteService, tipoDocumentoService,toaster,ngTableParams, fu
     };
     
      //Funcion que elimina
-        $scope.VerDesactivar = function(IdCliente,  Estado) {
+    $scope.VerDesactivar = function(IdCliente,  Estado) {
         $scope.Estado =Estado;
-        $scope.IdClienteGlobal = IdCliente;
+        $scope.IdClienteGlobal = IdCliente;        
         $('#mdConfirmacion').modal('show');         
     };
     
@@ -183,7 +183,7 @@ function ($scope, clienteService, tipoDocumentoService,toaster,ngTableParams, fu
      $scope.Desactivar = function() {
          var objetc = {
             Estado :$scope.Estado
-        };
+        };       
             $('#mdConfirmacion').modal('hide'); 
             var promisePut  = clienteService.updateEstado($scope.IdClienteGlobal, objetc);        
                 promisePut.then(function (d) {                
