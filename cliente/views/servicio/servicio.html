@@ -1,4 +1,4 @@
-<style>
+   <style>
     input{
         text-transform: none;
     }
@@ -28,7 +28,7 @@
                 </div>
             </div>
 
-            <div class="row" style="margin-bottom: 8px;" ng-show="Contrato.TipoServicio.length" >
+            <div class="row" style="margin-bottom: 8px;" ng-show="Servicio.Tipo.csTipoServicioId == 1" >
                 <div class="col-xs-12 text-center">
                     <button type="button" class="btn btn-floating  btn-large pdf"  ng-click="ConsultarPrecio()" title="Consultar valor del servicio"><i class="fa fa-usd"></i></button>
                     <small class="texto">Consultar</small>
@@ -205,6 +205,20 @@
 					    </div>    
 					</div> 
 				    </div>
+                           
+                           <div class="col-md-2" ng-show="Servicio.Tipo.csTipoServicioId == 3">                              
+                              <div class="radio radio-success" style="margin-top: 25px;">
+                                 <input type="radio" id="rdIda" ng-model="Asignacion.Ruta" value="ida" ng-change="CambiarPrecioRuta()">
+                                 <label for="rdIda">Sólo Ida</label> 
+                              </div>                                                        
+                           </div>
+                           
+                           <div class="col-md-2" ng-show="Servicio.Tipo.csTipoServicioId == 3">                              
+                              <div class="radio radio-danger" style="margin-top: 25px;"> 
+                                 <input type="radio" id="rdVuelta" ng-model="Asignacion.Ruta" value="doble"  ng-change="CambiarPrecioRuta()">
+                                 <label for="rdVuelta">Ida y Vuelta</label> 
+                              </div>                                                        
+                           </div>
 
 				</div>
 
@@ -219,12 +233,12 @@
 						    <label  for="txtTipoVehiculo" >Tipo de Vehículo <span>*</span></label>
 						    <div class="input-group">   
 							<div class="input-group-addon"><i class="fa fa-gitlab"></i></div>
-							<select ng-model="TipoSelect" ng-disabled="Editar" class="form-control" name="txtTipoVehiculo" id="txtTipoVehiculo" ng-options="item as item.tvDescripcion for item in Contrato.TipoVehiculo track by item.tvCodigo" required ng-change="CambiarPrecio()"></select>
+							<select ng-model="TipoSelect" ng-disabled="EditTipoVehiculo" class="form-control" name="txtTipoVehiculo" id="txtTipoVehiculo" ng-options="item as item.tvDescripcion for item in Contrato.TipoVehiculo track by item.tvCodigo" required ng-change="CambiarPrecio()"></select>
 						    </div> 
 						</div>
 					    </div>
 
-					    <div class="col-md-4">    
+                                 <div class="col-md-4" ng-show="Servicio.Tipo.csTipoServicioId == 1">    
 						<div class="form-group">     
 						    <br>
 						    <button type="button" class="btn btn-primary btn-block btn-addon" style="margin-top: 4%; " ng-click="ConsultarPrecio()" title="Consultar valor del servicio"><i class="fa fa-usd" style="margin-right: 7px;"></i>Consultar</button>
@@ -328,6 +342,30 @@
 					    </div>  
 
 					</div>    
+                              
+                              <div ng-show="Servicio.Tipo.csTipoServicioId == 3">
+                                 <div class="row">
+                                    <div class="col-md-12">
+                                       <div class="form-group">
+                                           <label  for="cboRutas" >Seleccionar Ruta <span>*</span></label>
+                                           <div class="input-group">   
+                                             <div class="input-group-addon"><i class="fa fa-road"></i></div>
+                                             <select ng-model="RutaSelect" ng-disabled="Editar" class="form-control" name="cboRutas" id="cboRutas" ng-options="item as item.rtNombre for item in LstRutas track by item.rtCodigo" required ng-change="CambiarPrecioRuta()"></select>
+                                           </div> 
+                                       </div>
+                                    </div>
+                                    
+                                    <div class="col-md-12">
+                                       <div class="form-group">
+                                          <label  for="cboRutas" >Descripción Ruta </label>
+                                          <div class="input-group">
+                                             <div class="input-group-addon"><i class="fa fa-road text-success"></i></div>
+                                             <textarea id="txtDescripcion" disabled="true" class="form-control" rows="3" ng-model="RutaSelect.rtDescripcion"  placeholder="Descripción" maxlength="255"></textarea>						                                                
+                                          </div>                                           
+                                       </div>
+                                    </div>
+                                 </div>
+                              </div>
 
 				    </div>
 				</div>

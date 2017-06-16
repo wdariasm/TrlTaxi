@@ -12,14 +12,17 @@ app.controller('serviciosController',['$scope', 'zonaService',  'toaster', "cont
     $scope.Boton = {"Cargando":true};
     $scope.$parent.SetTitulo("SOLICITAR SERVICIO");    
     
-    $scope.Asignacion = {  Manual : false,  Marcador : "Origen"    };
+    $scope.Asignacion = {  Manual : false,  Marcador : "Origen" , Ruta : "ida"   };
 
     $scope.Servicio  = {};
     $scope.TipoSelect = {}; // Select de tipo de Vehiculo;
     $scope.Plantilla = {};
     $scope.Puntos = [];
     $scope.Editar = false;
-    
+    $scope.RutaSelect = {};
+    $scope.TrasladoSelect = {};
+    $scope.LstRutas = [];
+    $scope.EditTipoVehiculo = false;
 
     $scope.mapServicio;
     var markerOrigen = null;
@@ -89,7 +92,7 @@ app.controller('serviciosController',['$scope', 'zonaService',  'toaster', "cont
             Valor : 0,
             ValorCliente : 0,
             NumHoras : "0",
-            NumPasajeros : "0",
+            NumPasajeros : 0,
             ClienteId : $scope.$parent.Login.ClienteId,
             ZonaOrigen :"",
             ZonaDestino : "",
@@ -425,8 +428,8 @@ app.controller('serviciosController',['$scope', 'zonaService',  'toaster', "cont
         dibujarPoligono();
     };
 
-    function getTipoVehiculo(id){
-        var promise = contratoService.getTipoVehiculo(id);
+    function getTipoVehiculo(id, tipo){
+        var promise = contratoService.getTipoVehiculo(id, tipo);
         promise.then(function(d) {
             $scope.Contrato.TipoVehiculo = d.data;
             if(d.data){                                
@@ -464,9 +467,11 @@ app.controller('serviciosController',['$scope', 'zonaService',  'toaster', "cont
         }
         
         $scope.Editar = false;
+        $scope.EditTipoVehiculo =false;
         $scope.title = "Nuevo Servicio";
         init();
         iniciarMapaZ();
+        $scope.Asignacion = {  Manual : false,  Marcador : "Origen" , Ruta : "ida"   };
     };
 
     $scope.get = function(item) {
@@ -532,35 +537,38 @@ app.controller('serviciosController',['$scope', 'zonaService',  'toaster', "cont
         });
     };
 
-    $scope.TipoServicioCheck = function() {
-        //console.log($scope.Servicio.Tipo);
-        if($scope.Servicio.Tipo.csPlantilla==="SI"){
-            
-            if($scope.Servicio.Tipo.csTipoServicioId == 1){                               
-                var div1 = document.getElementById('dvMapaServicio');                
-                div1.classList.remove('hidden');
-                div1.classList.add('visible');                                  
-                setTimeout(function (){ iniciarMapaZ();},200);                
-            }
-
-            $scope.titlePlantilla = "Plantillas " + $scope.Servicio.Tipo.csDescripcion;
-            if($scope.Contrato.Plantilla.length ===0){
-                toaster.pop('error','¡Error!', "No se definieron plantillas para este contrato");
-                return;
-            }
-
-            var pos = funcionService.arrayObjectIndexOf($scope.Contrato.Plantilla,$scope.Servicio.Tipo.csTipoServicioId, 'pcTipoServicio');
-            if(pos >=0){
-                $scope.Plantilla = $scope.Contrato.Plantilla[pos];
-                getTipoVehiculo($scope.Plantilla.plCodigo);
-                buscarValorParada();
-            }
-        }else{
-            $scope.titlePlantilla = "Dispobilidad ";
-           // loadDisponibilidad();
-            $scope.VerPlantilla = false;
+    $scope.TipoServicioCheck = function() {        
+        
+        if($scope.Servicio.Tipo.csTipoServicioId == 1){                               
+            var div1 = document.getElementById('dvMapaServicio');                
+            div1.classList.remove('hidden');
+            div1.classList.add('visible');                                  
+            setTimeout(function (){ iniciarMapaZ();},200);                
         }
 
+        $scope.titlePlantilla = "Plantillas " + $scope.Servicio.Tipo.csDescripcion;
+        if($scope.Contrato.Plantilla.length ===0){
+            toaster.pop('error','¡Error!', "No se definieron plantillas para este contrato");
+            return;
+        }
+
+        var pos = funcionService.arrayObjectIndexOf($scope.Contrato.Plantilla,$scope.Servicio.Tipo.csTipoServicioId, 'pcTipoServicio');
+        if(pos >=0){
+            $scope.Plantilla = $scope.Contrato.Plantilla[pos];            
+            if($scope.Servicio.Tipo.csTipoServicioId == 1){ 
+                $scope.EditTipoVehiculo = false;
+                buscarValorParada();
+                getTipoVehiculo($scope.Plantilla.plCodigo, $scope.Servicio.Tipo.csTipoServicioId );
+            } else if($scope.Servicio.Tipo.csTipoServicioId == 2) {
+                getTipoVehiculo($scope.Plantilla.plCodigo, $scope.Servicio.Tipo.csTipoServicioId );
+            } else if($scope.Servicio.Tipo.csTipoServicioId == 3){ //ruta
+                $scope.EditTipoVehiculo = true;
+                getRutas($scope.Plantilla.plCodigo);
+                getTiposVehiculos();
+            }else { //traslado
+                
+            }
+        }       
     };
 
     $scope.ConsultarPrecio = function (){
@@ -638,6 +646,11 @@ app.controller('serviciosController',['$scope', 'zonaService',  'toaster', "cont
         }
         if(!$scope.TipoSelect.tvCodigo){
             toaster.pop('info','¡Alerta!','Seleccione el tipo de vehículo');
+            return;
+        }
+        
+        if($scope.Servicio.NumPasajeros == 0){
+            toaster.pop('info','¡Alerta!','Seleccione el número de pasajeros');
             return;
         }
         
@@ -940,6 +953,7 @@ app.controller('serviciosController',['$scope', 'zonaService',  'toaster', "cont
     
     function getServicio(idServicio){
         $scope.Editar = true;
+        $scope.EditTipoVehiculo =  $scope.Editar;
         var promise = servicioService.get(idServicio);
         promise.then(function(d) {             
             $scope.Servicio = d.data;
@@ -998,5 +1012,55 @@ app.controller('serviciosController',['$scope', 'zonaService',  'toaster', "cont
             console.log("Some Error Occured " + JSON.stringify(err));
         });
     };
+    
+    function getRutas(idPlantilla) {
+        
+        var promise = contratoService.getRutas(idPlantilla);
+        promise.then(function(d) {
+            $scope.LstRutas = d.data;            
+            if($scope.Editar){                
+                var pos = funcionService.arrayObjectIndexOf($scope.Contrato.TipoVehiculo, $scope.Servicio.TipoVehiculoId, 'tfTipoVehiculo');        
+                if(pos >=0){                            
+                    $scope.TipoSelect = $scope.Contrato.TipoVehiculo[pos];
+                }                 
+            }
+            
+        }, function(err) {
+                toaster.pop('error','¡Error!',"Error al cargar rutas",0);
+                console.log("Some Error Occured " + JSON.stringify(err));
+        });
+    }
+    
+    function getTiposVehiculos() {        
+        var promise = contratoService.getTiposVehiculos();
+        promise.then(function(d) {
+            $scope.Contrato.TipoVehiculo = d.data;            
+                        
+        }, function(err) {
+                toaster.pop('error','¡Error!',"Error al cargar tipos de vehículo",0);
+                console.log("Some Error Occured " + JSON.stringify(err));
+        });
+    }
+    
+    $scope.CambiarPrecioRuta =  function (){
+        if(!$scope.RutaSelect){
+            return;
+        }
+        
+        $scope.Servicio.ValorCliente = $scope.RutaSelect.rtValorCliente;
+        $scope.Servicio.Valor = $scope.RutaSelect.rtValor;
+        
+        if($scope.Asignacion.Ruta =="doble"){
+            $scope.Servicio.ValorCliente += $scope.Servicio.ValorCliente;
+            $scope.Servicio.Valor += $scope.Servicio.Valor;
+        };
+        
+        toaster.pop("info", "Valor del Servicio.", "$ "+ $scope.Servicio.ValorCliente);
+        
+        var pos = funcionService.arrayObjectIndexOf($scope.Contrato.TipoVehiculo, $scope.RutaSelect.rtTipoVehiculo, 'tvCodigo');        
+        if(pos >=0){                            
+            $scope.TipoSelect = $scope.Contrato.TipoVehiculo[pos];
+        }  
+    };        
     
 }]);

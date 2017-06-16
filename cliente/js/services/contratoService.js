@@ -15,8 +15,8 @@ app.service("contratoService",[ '$http', function ($http) {
         return req;
     };
 
-    this.getTipoVehiculo = function (id) {
-        var req = $http.get(uri+'/api/plantilla/' + id + '/tipovehiculo');
+    this.getTipoVehiculo = function (id,tipo) {
+        var req = $http.get(uri+'/api/plantilla/' + id + '/tiposervicio/'+tipo+'/tipovehiculo');
         return req;
     };
 
@@ -29,5 +29,15 @@ app.service("contratoService",[ '$http', function ($http) {
         var req = $http.get(uri+'/api/plantilla/' + id + '/parada');
         return req;
     };
-
+    
+    this.getRutas = function (idPlantilla) {
+        var req = $http.get(uri+'/api/plantilla/' + idPlantilla + '/ruta');
+        return req;
+    };
+    
+    this.getTiposVehiculos = function () {
+        var req = $http.get(uri+'/api/tipoVehiculo');
+        return req;
+    }; 
+        
 }]);

@@ -51,11 +51,26 @@ class PlantillaController extends Controller
     }
         
     /*
-     * Obtener Tipos de Vehiculos por plantilla
+     * Obtener Tipos de Vehiculos por plantilla y tipo de servicio
      */
-    public function getTiposVehiculo($id) {
-        $result = DB::select("SELECT DISTINCT t.tfTipoVehiculo,cv.tvCodigo, cv.tvDescripcion , cv.tvNumPasajero, cv.tvRuta FROM "
-            . " transfert t INNER JOIN clasevehiculo cv ON  t.tfTipoVehiculo=cv.tvCodigo WHERE tfPlantilla = $id");        
+    public function getTiposVehiculo($id, $tipoServicio) {
+        
+        $sql = "";
+        switch ($tipoServicio) {
+            case 1:
+                $sql = "SELECT DISTINCT t.tfTipoVehiculo,cv.tvCodigo, cv.tvDescripcion , cv.tvNumPasajero, cv.tvRuta FROM "
+                    . " transfert t INNER JOIN clasevehiculo cv ON  t.tfTipoVehiculo=cv.tvCodigo WHERE tfPlantilla = $id ";
+                break;            
+            case 2:
+                $sql = "SELECT DISTINCT d.dpTipoVehiculo,cv.tvCodigo, cv.tvDescripcion , cv.tvNumPasajero, cv.tvRuta FROM "
+                . " disponibilidad d INNER JOIN clasevehiculo cv ON  d.dpTipoVehiculo =cv.tvCodigo WHERE d.dpPlantilla = $id";                
+                break; 
+            default:
+                return null;                
+           
+        }
+        
+        $result = DB::select($sql);        
         return $result;        
     }
 
