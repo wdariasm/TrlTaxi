@@ -230,6 +230,7 @@ class ServicioController extends Controller
             $servicio->ModoServicio= $data["ModoServicio"];
             $servicio->Parada= $data["Parada"];
             $servicio->ValorTotal= $data["ValorTotal"];
+            $servicio->DetallePlantillaId = $data["DetallePlantillaId"];            
             $servicio->Nota= $data["Nota"];            
             $servicio->Calificacion= 0;
             $servicio->Placa= "";            

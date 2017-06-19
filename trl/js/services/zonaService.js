@@ -43,5 +43,10 @@ app.service("zonaService", ['$http', function ($http) {
         var req = $http.get(uri+'/api/zona/puntos');
         return req;
     };  
+    
+    this.getZona = function (latitud, longitud) {
+        var req = $http.get(uri+'/api/zona/' + latitud + '/' +longitud);
+        return req;
+    };
 }]);
 

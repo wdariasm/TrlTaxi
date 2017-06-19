@@ -28,6 +28,33 @@ app.service("contratoService",[ '$http', function ($http) {
         var req = $http.get(uri+'/api/contrato/' + numero + '/tiposervicio');
         return req;
     };
+    
+    /* funciones para crear nuevos servicios*/
+    this.getDisponibilidad = function (plantilla, tipo){
+        var req = $http.get(uri+'/api/disponibilidad/plantilla/' + plantilla + '/tipo/' + tipo );
+        return req;
+    };
+    
+    this.getTraslados = function (idPlantilla) {
+        var req = $http.get(uri+'/api/plantilla/' + idPlantilla + '/traslado');
+        return req;
+    };
+    
+    this.getTipoVehiculo = function (id,tipo) {
+        var req = $http.get(uri+'/api/plantilla/' + id + '/tiposervicio/'+tipo+'/tipovehiculo');
+        return req;
+    };
+
+    this.getTransfert = function (plantilla, tipo, origen, destino){
+        var req = $http.get(uri+'/api/transfert/' + plantilla + '/' + tipo + '/' + origen + '/'+destino);
+        return req;
+    };
+
+    this.getValorParada = function (id) {
+        var req = $http.get(uri+'/api/plantilla/' + id + '/parada');
+        return req;
+    };
+    
          
 }]);
 

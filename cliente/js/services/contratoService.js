@@ -38,6 +38,16 @@ app.service("contratoService",[ '$http', function ($http) {
     this.getTiposVehiculos = function () {
         var req = $http.get(uri+'/api/tipoVehiculo');
         return req;
-    }; 
+    };
+    
+    this.getDisponibilidad = function (plantilla, tipo){
+        var req = $http.get(uri+'/api/disponibilidad/plantilla/' + plantilla + '/tipo/' + tipo );
+        return req;
+    };
+    
+    this.getTraslados = function (idPlantilla) {
+        var req = $http.get(uri+'/api/plantilla/' + idPlantilla + '/traslado');
+        return req;
+    };
         
 }]);

@@ -16,7 +16,7 @@
 
 
 </style>
-<div ng-controller="serviciosController"  class="container-fluid">
+<div ng-controller="nuevoservicioController"  class="container-fluid">
     <div id="paneldebotones" class="row text-right paneldebotones " style="position: absolute; margin-top: 30px; right: 15px; z-index: 100">
         <div class="col-xs-12" style="padding-top: 6px;">
 
@@ -74,10 +74,10 @@
 			    <div class="form-group">
 				<label  for="txtNumero" >N° Contrato <span>*</span></label>
 				<div class="input-group">   
-				    <select ng-model="ContratoSelect" ng-disabled="Editar" class="form-control" ng-change="BuscarContrato('COMBO',true)" id="cboMarca" ng-options="item as item.ctNumeroContrato for item in Contratos track by item.IdContrato" required></select>
-				    <!--<input  type="text" class="form-control" required="" ng-model="Servicio.NumeroContrato" maxlength="11" solo-numeros id="txtNumero" placeholder="Seleccionar Contrato"  >-->
-				    <span class="input-group-btn" >
-					<button type="button"  class="btn btn-info btn-md "  ng-disabled="Editar"  ng-click="GetContratos()" data-toggle="tooltip" data-placement="right" title="Actualizar mis contratos"><i class=" fa fa-search"></i></button>
+				   <!-- <select ng-model="ContratoSelect" ng-disabled="Editar" class="form-control" ng-change="BuscarContrato('COMBO',true)" id="cboMarca" ng-options="item as item.ctNumeroContrato for item in Contratos track by item.IdContrato" required></select> -->
+				    <input  type="text" class="form-control" required="" ng-model="Servicio.NumeroContrato" maxlength="11" solo-numeros id="txtNumero" placeholder="Ingresar Contrato"  >
+                            <span class="input-group-btn" >
+					<button type="button"  class="btn btn-info btn-md "  ng-disabled="Editar"  ng-click="BuscarContrato('TEXTO',true)" data-toggle="tooltip" data-placement="right" title="Buscar  Contrato"><i class=" fa fa-search"></i></button>
 				    </span>
 				</div> 
 			    </div>
@@ -535,7 +535,7 @@
 
 				<div class="row">
 				    <div class="col-md-4">
-					<label  for="cboPago" style="margin-top: 10px;">Form de Pago <span>*</span></label>
+					<label  for="cboPago" style="margin-top: 10px;">Form de Pago </label>
 				    </div>
 
 				    <div class="col-md-8">                                                                                                    
@@ -549,7 +549,7 @@
 				</div>
 				<div class="row" style="margin-top: 5px;">
 				    <div class="col-md-4 col-xs-5">                               
-					<label class="text-right" style="margin-top: 10px;" >Valor Servicio <span>*</span> </label>
+					<label class="text-right" style="margin-top: 10px;" >Valor Servicio </label>
 				    </div>
 				    <div class="col-md-8 col-xs-7">
 					<h3 for="txtValor" class="text-success text-right" style=" margin-top: 3px; ">{{  Servicio.ValorCliente  | currency : "$" : 0}}</h3>
@@ -558,7 +558,7 @@
 
 				<div class="row">
 				    <div class="col-md-4 col-xs-5">                               
-					<label class="text-right" style="margin-top: 10px;" >Total Paradas <span>*</span> </label>
+					<label class="text-right" style="margin-top: 10px;" >Total Paradas </label>
 				    </div>
 				    <div class="col-md-8 col-xs-7">
 					<h3 class="text-danger text-right" style=" margin-top: 3px; ">{{  Subtotal | currency : "$" : 0}}</h3>
@@ -567,7 +567,7 @@
 
 				<div class="row">
 				    <div class="col-md-4 col-xs-5">                               
-					<label class="text-right" style="margin-top: 10px;" >Total Servicio <span>*</span> </label>
+					<label class="text-right" style="margin-top: 10px;" >Total Servicio  </label>
 				    </div>
 				    <div class="col-md-8 col-xs-7">
 					<h2 class="text-primary text-right" style=" margin-top: 3px; ">{{  Servicio.ValorTotal | currency : "$" : 0}}</h2>

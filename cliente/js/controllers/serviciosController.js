@@ -1,9 +1,7 @@
 app.controller('serviciosController',['$scope', 'zonaService',  'toaster', "contratoService","funcionService",
     "servicioService", '$filter', '$routeParams',    function ($scope, zonaService, toaster, contratoService,
     funcionService, servicioService,  $filter, $routeParams) {
-        
-    $scope.Zonas = [];
-    $scope.Zona = {};
+           
     $scope.Parada = {};    
     $scope.Contacto = {};
     $scope.Contrato = {};
@@ -21,7 +19,9 @@ app.controller('serviciosController',['$scope', 'zonaService',  'toaster', "cont
     $scope.Editar = false;
     $scope.RutaSelect = {};
     $scope.TrasladoSelect = {};
+    $scope.TrasladoSelect = {};
     $scope.LstRutas = [];
+    $scope.LstTraslados = [];
     $scope.EditTipoVehiculo = false;
 
     $scope.mapServicio;
@@ -39,8 +39,7 @@ app.controller('serviciosController',['$scope', 'zonaService',  'toaster', "cont
 
 
     $scope.vecPoligono = new Array(); /// Vector de Poligonos
-    $scope.poly = null;
-    $scope.tbZona = {}; // Para Paginacion
+    $scope.poly = null;    
 
     $scope.title = "Nuevo Servicio";    
     $scope.Posicion = {
@@ -92,7 +91,7 @@ app.controller('serviciosController',['$scope', 'zonaService',  'toaster', "cont
             Valor : 0,
             ValorCliente : 0,
             NumHoras : "0",
-            NumPasajeros : 0,
+            NumPasajeros : "",
             ClienteId : $scope.$parent.Login.ClienteId,
             ZonaOrigen :"",
             ZonaDestino : "",
@@ -112,7 +111,8 @@ app.controller('serviciosController',['$scope', 'zonaService',  'toaster', "cont
             Contactos : [],
             ValorParadaProveedor : 0,
             ValorParadaCliente : 0,
-            ValorParadas : 0
+            ValorParadas : 0,
+            DetallePlantillaId : 0
         };
         
         $scope.Parada = {
@@ -130,7 +130,7 @@ app.controller('serviciosController',['$scope', 'zonaService',  'toaster', "cont
             scNombre  :"",
             scTelefono : "",
             scNota : ""
-        };
+        };        
         
     }
 
@@ -147,32 +147,27 @@ app.controller('serviciosController',['$scope', 'zonaService',  'toaster', "cont
                 toaster.pop('error','¡Error!','No pudo resolver la  posición');
                 return;
             }
-            expandViewportToFitPlace(mapa, place);
-            //$scope.markerOrigen.setIcon("images/origen.png");
-            //$scope.markerOrigen.setPosition(place.geometry.location);
-            //$scope.markerOrigen.setVisible(true);
-                if(!$scope.popup){
-                    $scope.popup = new google.maps.InfoWindow();
-                }
-
+            expandViewportToFitPlace(mapa, place);                      
+                       
             $scope.Servicio.LatOrigen = place.geometry.location.lat();
-            $scope.Servicio.LngOrigen  = place.geometry.location.lng();
-            buscarZona($scope.Servicio.LatOrigen, $scope.Servicio.LngOrigen,"ZonaOrigen");
+            $scope.Servicio.LngOrigen  = place.geometry.location.lng();            
             $scope.Servicio.DireccionOrigen =  place.formatted_address;            
-//            var address = '';
-//            if (place.address_components) {
-//              address = [
-//                (place.address_components[0] && place.address_components[0].short_name || ''),
-//                (place.address_components[1] && place.address_components[1].short_name || ''),
-//                (place.address_components[2] && place.address_components[2].short_name || '')
-//              ].join(' ');
-//            }
 
-//            infowindow.setContent('<div><strong>' + place.name + '</strong><br>' + address);
-//            infowindow.open($scope.mapServicio, $scope.markerOrigen);
-
-            origenPlaceId = place.place_id;
-            route(origenPlaceId, destinoPlaceId, travelMode, directionsService, directionsDisplay);
+            if($scope.Servicio.Tipo.csTipoServicioId == 1){
+                buscarZona($scope.Servicio.LatOrigen, $scope.Servicio.LngOrigen,"ZonaOrigen");
+                origenPlaceId = place.place_id;
+                route(origenPlaceId, destinoPlaceId, travelMode, directionsService, directionsDisplay);
+            } else if($scope.Servicio.Tipo.csTipoServicioId == 4){
+                origenPlaceId = place.place_id;
+                route(origenPlaceId, destinoPlaceId, travelMode, directionsService, directionsDisplay);
+            } else {                                  
+                var coordenada = new google.maps.LatLng($scope.Servicio.LatOrigen, $scope.Servicio.LngOrigen);
+                $scope.markerOrigen = new google.maps.Marker({position: coordenada, map: mapa,
+                    animation: google.maps.Animation.DROP, title:"Posición Cliente"                         
+                });                                                         
+                $scope.markerOrigen.setIcon("images/origen.png");              
+                $scope.markerOrigen.setVisible(true);            
+            }            
 
         });
     }
@@ -191,11 +186,16 @@ app.controller('serviciosController',['$scope', 'zonaService',  'toaster', "cont
             }
             expandViewportToFitPlace(mapa, place);
             $scope.Servicio.LatDestino = place.geometry.location.lat();
-            $scope.Servicio.LngDestino  = place.geometry.location.lng();
-            buscarZona($scope.Servicio.LatDestino, $scope.Servicio.LngDestino, 'ZonaDestino');
+            $scope.Servicio.LngDestino  = place.geometry.location.lng();            
             $scope.Servicio.DireccionDestino =  place.formatted_address;
+                      
+            if($scope.Servicio.Tipo.csTipoServicioId == 1){
+                buscarZona($scope.Servicio.LatDestino, $scope.Servicio.LngDestino, 'ZonaDestino');                
+            }
+            
             destinoPlaceId = place.place_id;
             route(origenPlaceId, destinoPlaceId, travelMode,directionsService, directionsDisplay);
+            
         });
     }
 
@@ -290,6 +290,23 @@ app.controller('serviciosController',['$scope', 'zonaService',  'toaster', "cont
           }
         });
     }
+    
+    function routePosicion(origen, destino, travel_mode, directionsService, directionsDisplay) {
+        if (!origen || !destino) {
+          return;
+        }
+        directionsService.route({
+          origin: origen,
+          destination:  destino,
+          travelMode: travel_mode
+        }, function(response, status) {
+          if (status === google.maps.DirectionsStatus.OK) {              
+            directionsDisplay.setDirections(response);
+          } else {
+              toaster.pop('error','¡Error!', 'Error al resolver dirección');
+          }
+        });
+    }
 
     function expandViewportToFitPlace(map, place) {
         if (place.geometry.viewport) {
@@ -358,9 +375,10 @@ app.controller('serviciosController',['$scope', 'zonaService',  'toaster', "cont
             if(d.data){
                 $scope.Servicio.Valor = d.data.tfValor;
                 $scope.Servicio.ValorCliente = d.data.tfValorCliente;
-                $scope.Servicio.ValorTotal = parseInt(d.data.tfValor);
+                $scope.Servicio.ValorTotal = parseInt(d.data.tfValorCliente);
                 $scope.Servicio.Codigo = d.data.tfCodigo;
-                toaster.pop("info", "Valor del Servicio.", "$ "+ $scope.Servicio.ValorCliente);
+                $scope.Servicio.DetallePlantillaId = d.data.tfCodigo;
+                toaster.pop("info", "Valor del Servicio.", "$ "+ $scope.Servicio.ValorCliente)      ;
             }else{
                toaster.pop('info','¡Alerta!',"Estimado Usuario(a), no se encontró el precio con estos " +
                             "parametros de ubicación y tipo de vehículo", 0);
@@ -368,6 +386,34 @@ app.controller('serviciosController',['$scope', 'zonaService',  'toaster', "cont
         }, function(err) {
                 toaster.pop('error','¡Error!',"Error al buscar precios ",0);
                 console.log("Some Error Occured " + JSON.stringify(err));
+        });
+    }
+    
+    function buscarDisponibilidad(){
+        if(!$scope.TipoSelect.tvCodigo){
+            toaster.pop('info','¡Alerta!','Seleccione el tipo de vehículo');
+            return;
+        }
+      
+        $scope.Servicio.Valor = 0;
+        $scope.Servicio.ValorCliente = 0;
+
+        var promise = contratoService.getDisponibilidad($scope.Plantilla.plCodigo, $scope.TipoSelect.tvCodigo);
+        promise.then(function(d) {
+            if(d.data){
+                $scope.Servicio.Valor = d.data.dpValorHora;
+                $scope.Servicio.ValorCliente = d.data.dpValorCliente;
+                $scope.Servicio.ValorTotal = parseInt(d.data.dpValorCliente);
+                $scope.Servicio.Codigo = d.data.dpCodigo;
+                $scope.Servicio.DetallePlantillaId = d.data.dpCodigo;
+                toaster.pop("info", "Valor del Servicio.", "$ "+ $scope.Servicio.ValorCliente)      ;
+            }else{
+               toaster.pop('info','¡Alerta!',"Estimado Usuario(a), no se encontró el precio con los " +
+                            "parametros ingresados", 0);
+            }
+        }, function(err) {
+                toaster.pop('error','¡Error!',"Error al buscar precios disponibilidad",0);
+                console.log("Some Error Occured Dispobilidad " + JSON.stringify(err));
         });
     }
 
@@ -386,47 +432,7 @@ app.controller('serviciosController',['$scope', 'zonaService',  'toaster', "cont
             console.log("Some Error Occured " + JSON.stringify(err));
         });
 
-    }
-
-
-    // GESTIONAR POLYGONOS ///
-
-    function dibujarPoligono (){
-        var punto = [];
-        for(var i = 0; i < $scope.vecPoligono.length; i++){
-            punto.push($scope.vecPoligono[i].coordenadas);
-        }
-
-        if($scope.poly !== null){
-            $scope.poly.setMap(null);
-        }
-
-        $scope.poly = new google.maps.Polygon({
-            paths: punto,
-            strokeColor: '#FF0000',
-            strokeOpacity: 0.8,
-            strokeWeight: 2,
-            fillColor: '#FF0000',
-            fillOpacity: 0.25
-        });
-        $scope.poly.setMap(mapa);
-    }
-
-    $scope.eliminarUltimoPunto = function (){
-        if ($scope.vecPoligono.length > 0){
-            $scope.vecPoligono[$scope.vecPoligono.length-1].marcador.setMap(null);
-            $scope.vecPoligono.pop();
-            dibujarPoligono();
-        }
-    };
-
-    function borrarPuntos(){
-        while($scope.vecPoligono.length > 0) {
-            $scope.vecPoligono[$scope.vecPoligono.length-1].marcador.setMap(null);
-            $scope.vecPoligono.pop();
-        }
-        dibujarPoligono();
-    };
+    }  
 
     function getTipoVehiculo(id, tipo){
         var promise = contratoService.getTipoVehiculo(id, tipo);
@@ -472,15 +478,7 @@ app.controller('serviciosController',['$scope', 'zonaService',  'toaster', "cont
         init();
         iniciarMapaZ();
         $scope.Asignacion = {  Manual : false,  Marcador : "Origen" , Ruta : "ida"   };
-    };
-
-    $scope.get = function(item) {
-
-        $scope.Editar = true;
-        $scope.title = "EDITAR ZONA";
-        $scope.Zona = item;
-        getPuntos(item.znCodigo);
-    };
+    };    
 
     $scope.BuscarContrato =  function (opcion, modifarServicio){
         if(modifarServicio) $scope.Servicio.ContratoId =0;
@@ -510,7 +508,7 @@ app.controller('serviciosController',['$scope', 'zonaService',  'toaster', "cont
                 $scope.Contrato.Plantilla = d.data.Plantilla;                
                 
                 if($scope.Contrato.TipoServicio === 0){
-                    toaster.pop('error', 'No se encontraón servicios asociados a este contrato', 0);
+                    toaster.pop('error', 'No se encontraron servicios asociados a este contrato', 0);
                 }
                 if($scope.Editar){ 
                     setDatosServicio(); 
@@ -539,7 +537,7 @@ app.controller('serviciosController',['$scope', 'zonaService',  'toaster', "cont
 
     $scope.TipoServicioCheck = function() {        
         
-        if($scope.Servicio.Tipo.csTipoServicioId == 1){                               
+        if($scope.Servicio.Tipo.csTipoServicioId != 3){                               
             var div1 = document.getElementById('dvMapaServicio');                
             div1.classList.remove('hidden');
             div1.classList.add('visible');                                  
@@ -562,11 +560,12 @@ app.controller('serviciosController',['$scope', 'zonaService',  'toaster', "cont
             } else if($scope.Servicio.Tipo.csTipoServicioId == 2) {
                 getTipoVehiculo($scope.Plantilla.plCodigo, $scope.Servicio.Tipo.csTipoServicioId );
             } else if($scope.Servicio.Tipo.csTipoServicioId == 3){ //ruta
-                $scope.EditTipoVehiculo = true;
+                $scope.EditTipoVehiculo = true;                
                 getRutas($scope.Plantilla.plCodigo);
                 getTiposVehiculos();
             }else { //traslado
-                
+                getTraslados($scope.Plantilla.plCodigo);
+                getTiposVehiculos();
             }
         }       
     };
@@ -579,6 +578,7 @@ app.controller('serviciosController',['$scope', 'zonaService',  'toaster', "cont
                 break;
 
             case 2:
+                buscarDisponibilidad();
                 break;
 
             case 3:
@@ -682,15 +682,7 @@ app.controller('serviciosController',['$scope', 'zonaService',  'toaster', "cont
         var tipo=  parseInt($scope.Servicio.Tipo.csTipoServicioId);
         switch (tipo) {
             case 1:
-                if(!$scope.Servicio.LatDestino || $scope.Servicio.LngDestino ===""){
-                    toaster.pop('info', '¡Alerta!', "Estimado Usuario(a), por favor seleccione la posicion de Destino.");
-                    return;
-                }
-                
-                if(!$scope.Servicio.DireccionDestino || $scope.Servicio.DireccionDestino===""){
-                    toaster.pop('info', '¡Alerta!', "Estimado Usuario(a), por favor ingrese la dirección  de Destino.");
-                    return;
-                }
+            case 4:
                 
                 if(!$scope.Servicio.LatOrigen || $scope.Servicio.LngOrigen ===""){
                     toaster.pop('info', '¡Alerta!', "Estimado Usuario(a), por favor seleccione la posicion de Origen.");
@@ -701,7 +693,39 @@ app.controller('serviciosController',['$scope', 'zonaService',  'toaster', "cont
                     toaster.pop('info', '¡Alerta!', "Estimado Usuario(a), por favor ingrese la dirección  de Origen.");
                     return;
                 }
+                
+                
+                if(!$scope.Servicio.LatDestino || $scope.Servicio.LngDestino ===""){
+                    toaster.pop('info', '¡Alerta!', "Estimado Usuario(a), por favor seleccione la posicion de Destino.");
+                    return;
+                }
+                
+                if(!$scope.Servicio.DireccionDestino || $scope.Servicio.DireccionDestino===""){
+                    toaster.pop('info', '¡Alerta!', "Estimado Usuario(a), por favor ingrese la dirección  de Destino.");
+                    return;
+                }                             
 
+                break;
+                
+            case 2: 
+                
+                if(!$scope.Servicio.LatOrigen || $scope.Servicio.LngOrigen ===""){
+                    toaster.pop('info', '¡Alerta!', "Estimado Usuario(a), por favor seleccione la posicion de Origen.");
+                    return;
+                }
+                
+                if(!$scope.Servicio.DireccionOrigen || $scope.Servicio.DireccionOrigen===""){
+                    toaster.pop('info', '¡Alerta!', "Estimado Usuario(a), por favor ingrese la dirección  de Origen.");
+                    return;
+                }
+                                
+                break;
+                
+             case 3: 
+                if(!$scope.RutaSelect){
+                    toaster.pop('info', '¡Alerta!', "Estimado Usuario(a), por favor seleccione la ruta.");
+                    return;
+                }
                 break;
 
             default:
@@ -761,8 +785,7 @@ app.controller('serviciosController',['$scope', 'zonaService',  'toaster', "cont
         if( $scope.Servicio.ValorParadaCliente ==0){
             toaster.pop("info","¡Alerta!", "No se ha definido el valor de la parada para esta plantilla");
             return;
-        }
-        
+        }        
 
         $scope.Parada.prLatiud = 0;
         $scope.Parada.prLongitud  = 0;                  
@@ -958,8 +981,13 @@ app.controller('serviciosController',['$scope', 'zonaService',  'toaster', "cont
         promise.then(function(d) {             
             $scope.Servicio = d.data;
             if(d.data != null){                
-                $scope.GetContratos();                
-            }
+                $scope.GetContratos();
+                if( parseInt($scope.Servicio.TipoServicidoId) === 1){
+                    var origen  = new google.maps.LatLng(parseFloat($scope.Servicio.LatOrigen), parseFloat($scope.Servicio.LngOrigen));
+                    var destino = new google.maps.LatLng(parseFloat($scope.Servicio.LatDestino),parseFloat($scope.Servicio.LngDestino));
+                    routePosicion(origen, destino,travelMode, directionsService, directionsDisplay);
+                }
+            }                       
             
             toaster.pop('info','¡Información!',"Datos cargados correctamente. Ahora es posible realizar las\n\
                          modificación de su ruta, contactos  y  paradas",6000);
@@ -1019,10 +1047,14 @@ app.controller('serviciosController',['$scope', 'zonaService',  'toaster', "cont
         promise.then(function(d) {
             $scope.LstRutas = d.data;            
             if($scope.Editar){                
-                var pos = funcionService.arrayObjectIndexOf($scope.Contrato.TipoVehiculo, $scope.Servicio.TipoVehiculoId, 'tfTipoVehiculo');        
-                if(pos >=0){                            
-                    $scope.TipoSelect = $scope.Contrato.TipoVehiculo[pos];
-                }                 
+                
+                var pos1 = funcionService.arrayObjectIndexOf($scope.LstRutas, $scope.Servicio.DetallePlantillaId, 'rtCodigo');        
+                if(pos1 >=0){                            
+                    $scope.RutaSelect = $scope.LstRutas[pos1];                    
+                    if( parseFloat($scope.Servicio.ValorCliente) >  parseFloat($scope.RutaSelect.rtValorCliente) ){
+                        $scope.Asignacion.Ruta = "doble";
+                    }
+                }                                                                
             }
             
         }, function(err) {
@@ -1031,10 +1063,35 @@ app.controller('serviciosController',['$scope', 'zonaService',  'toaster', "cont
         });
     }
     
+    function getTraslados(idPlantilla) {
+        
+        var promise = contratoService.getTraslados(idPlantilla);
+        promise.then(function(d) {
+            $scope.LstTraslados = d.data;            
+            if($scope.Editar){                                
+                var pos1 = funcionService.arrayObjectIndexOf($scope.LstTraslados, $scope.Servicio.DetallePlantillaId, 'tlCodigo');        
+                if(pos1 >=0){                            
+                    $scope.TrasladoSelect = $scope.LstTraslados[pos1];                    
+                }                                                                
+            }
+            
+        }, function(err) {
+                toaster.pop('error','¡Error!',"Error al cargar traslados",0);
+                console.log("Some Error Occured " + JSON.stringify(err));
+        });
+    }
+    
     function getTiposVehiculos() {        
         var promise = contratoService.getTiposVehiculos();
         promise.then(function(d) {
-            $scope.Contrato.TipoVehiculo = d.data;            
+            $scope.Contrato.TipoVehiculo = d.data;  
+            
+            if($scope.Editar){
+                var pos = funcionService.arrayObjectIndexOf($scope.Contrato.TipoVehiculo, $scope.Servicio.TipoVehiculoId, 'tvCodigo');        
+                if(pos >=0){                            
+                    $scope.TipoSelect = $scope.Contrato.TipoVehiculo[pos];
+                } 
+            }
                         
         }, function(err) {
                 toaster.pop('error','¡Error!',"Error al cargar tipos de vehículo",0);
@@ -1049,6 +1106,9 @@ app.controller('serviciosController',['$scope', 'zonaService',  'toaster', "cont
         
         $scope.Servicio.ValorCliente = $scope.RutaSelect.rtValorCliente;
         $scope.Servicio.Valor = $scope.RutaSelect.rtValor;
+        $scope.Servicio.DetallePlantillaId = $scope.RutaSelect.rtCodigo;
+        $scope.Servicio.DireccionOrigen = $scope.RutaSelect.rtNombre;
+        $scope.Servicio.DireccionDestino = $scope.RutaSelect.rtDescripcion;
         
         if($scope.Asignacion.Ruta =="doble"){
             $scope.Servicio.ValorCliente += $scope.Servicio.ValorCliente;
@@ -1061,6 +1121,23 @@ app.controller('serviciosController',['$scope', 'zonaService',  'toaster', "cont
         if(pos >=0){                            
             $scope.TipoSelect = $scope.Contrato.TipoVehiculo[pos];
         }  
-    };        
+    };   
+    
+    $scope.CambiarPrecioTraslado =  function (){
+        if(!$scope.TrasladoSelect){
+            return;
+        }
+        
+        $scope.Servicio.ValorCliente = $scope.TrasladoSelect.tlValorCliente;
+        $scope.Servicio.Valor = $scope.TrasladoSelect.tlValor;
+        $scope.Servicio.DetallePlantillaId = $scope.TrasladoSelect.tlCodigo;
+        
+        toaster.pop("info", "Valor del Servicio.", "$ "+ $scope.Servicio.ValorCliente);
+        
+        var pos = funcionService.arrayObjectIndexOf($scope.Contrato.TipoVehiculo, $scope.TrasladoSelect.tlTipoVehiculo, 'tvCodigo');
+        if(pos >=0){                            
+            $scope.TipoSelect = $scope.Contrato.TipoVehiculo[pos];
+        }  
+    };   
     
 }]);

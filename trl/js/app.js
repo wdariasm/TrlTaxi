@@ -98,7 +98,7 @@ var app;
             
                        
             .when("/1/servicios",{
-                templateUrl: 'views/contratos/solicitarServicio.html'
+                templateUrl: 'views/contratos/asignarServicio.html'
             })
             
             .when("/1/contratos",{

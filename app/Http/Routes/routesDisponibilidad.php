@@ -5,4 +5,7 @@ Route::put('api/disponibilidad/updateEstado/{dpCodigo}','DisponibilidadControlle
 
  /* Obtener tarifas disponibilidad por id de plantilla */
  Route::get('api/plantilla/{idPlantilla}/disponibilidad','DisponibilidadController@getByPlanitlla');
+ 
+ /* Obtener valor de disponibilidad */
+ Route::get('api/disponibilidad/plantilla/{idPlantilla}/tipo/{tipoVehiculo}','DisponibilidadController@getDisponiblidad');
 

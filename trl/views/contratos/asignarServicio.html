@@ -14,175 +14,7 @@
                 </ul>
             </div>
 
-            <div class="tab-content">
-                <div class="tab-pane" id="tabRegistro">
-                    <br/>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <form name="frmServicio" novalidate >
-				<div class="panel panel-default">
-				    <div class="panel-heading">
-					<h3 class="panel-title">Datos del Contrato</h3>
-				    </div>
-				    <div class="panel-body">
-
-					<div class="col-md-4">
-					    <div class="form-group">
-						<label  for="txtNumero" >N° Contrato *</label>
-						<div class="input-group">    
-						    <div class="input-group-addon"><i class="fa fa-sort-numeric-asc text-success"></i></div>
-						    <input  type="text" class="form-control" required="" ng-model="Servicio.NumeroContrato" maxlength="11" solo-numeros id="txtNumero" placeholder="Número de Contrato"  >
-						    <span class="input-group-btn">
-							<button class="btn btn-info btn-md "  type="button"  ng-click="BuscarContrato()" data-toggle="tooltip" data-placement="right" title="Buscar Contrato"><i class=" fa fa-search"></i></button>
-						    </span>
-						</div> 
-					    </div>
-					</div>
-
-					<div class="col-md-2">
-					    <div class="form-group">
-						<label  for="txtCedula" >Identificación </label>
-						<div class="input-group">    
-						    <div class="input-group-addon"><i class="fa fa-hashtag text-success"></i></div>
-						    <input  type="text" class="form-control" required="" ng-model="Servicio.Nit" maxlength="11" solo-numeros id="txtCedula" placeholder="Identificación" disabled >
-						</div> 
-					    </div>
-					</div>
-
-					<div class="col-md-6">
-					    <div class="form-group">
-						<label for="txtNombre">Nombre Completo </label>
-						<div class="input-group">    
-						    <div class="input-group-addon"><i class="fa fa-user text-success"></i></div>
-						    <input type="text"  class="form-control" required="" ng-model="Servicio.Nombre" maxlength="100" id="txtNombre" placeholder="Nombre Completo" disabled>
-						</div>
-					    </div>
-					</div>                                                                                                   
-
-					<div class="col-md-2">
-					    <div class="form-group">
-						<label for="txtTelefonoPpal">Teléfono </label>
-						<div class="input-group">    
-						    <div class="input-group-addon"><i class="fa fa-mobile text-success"></i></div>
-						    <input type="text" class="form-control" ng-model="Servicio.Telefono"  required="" maxlength="10" solo-numeros id="txtTelefonoPpal" placeholder="Teléfono" disabled>
-						</div>
-					    </div>
-					</div>
-
-					<div class="col-md-3">
-					    <div class="form-group">
-						<label for="txtTelefonoPpal">Fecha Inicio</label>
-						<div class="input-group">    
-						    <div class="input-group-addon"><i class="fa fa-calendar-minus-o text-success"></i></div>
-						    <input type="text" class="form-control" ng-model="Servicio.FechaInicio"  required="" maxlength="10" solo-numeros id="txtTelefonoPpal" placeholder="Inicio" disabled>
-						</div>
-					    </div>
-					</div>
-
-					<div class="col-md-3">
-					    <div class="form-group">
-						<label for="txtTelefonoPpal">Feccha Vencimiento</label>
-						<div class="input-group">    
-						    <div class="input-group-addon"><i class="fa fa-calendar-times-o text-success"></i></div>
-						    <input type="text" class="form-control" ng-model="Servicio.FechaFin"  required="" maxlength="10" solo-numeros id="txtTelefonoPpal" placeholder="F. Final" disabled>
-						</div>
-					    </div>
-					</div>
-
-					<div class="col-md-3">
-					    <div class="form-group">
-						<label for="txtTelefonoPpal">Estado</label>
-						<div class="input-group">    
-						    <div class="input-group-addon"><i class="fa fa-check text-success"></i></div>
-						    <input type="text" class="form-control" ng-model="Servicio.Estado"  required="" maxlength="10" solo-numeros id="txtTelefonoPpal" placeholder="Estado" disabled>
-						</div>
-					    </div>
-					</div>
-
-					<hr>
-
-					<div class="col-md-8">
-					    <div class="form-group">
-						<label for="txtResponsable">Responsable del Servicio </label>
-						<div class="input-group">    
-						    <div class="input-group-addon"><i class="fa fa-user text-success"></i></div>
-						    <input type="text"  class="form-control" required="" ng-model="Servicio.Responsable" maxlength="100" id="txtResponsable" placeholder="Responsable del servicio" >
-						</div>
-					    </div>
-					</div>  
-
-
-
-
-				    </div>
-				</div>
-
-
-				<div class="panel panel-default" ng-show="Servicio.TipoServicio.length">
-				    <div class="panel-heading">
-					<h3 class="panel-title">Seleccionar Servicio</h3>
-				    </div>
-				    <div class="panel-body">
-					<div class="row">
-					    <div class="col-md-12">
-
-						<div class="row">                        
-						    <div class="col-md-12">
-							<div ng-repeat="ts in Servicio.TipoServicio">
-							    <div class="col-md-3">     
-								<div class="radio radio-danger">                                                                                                    
-								    <input type="radio" id="ts{{ts.csCodigo}}" ng-model="Servicio.Tipo" ng-change="TipoServicioCheck()" ng-value="ts">
-								    <label for="ts{{ts.csCodigo}}">{{$index + 1}}. &nbsp; {{ts.csDescripcion}}</label>  
-								</div>
-							    </div> 
-							</div>
-						    </div>
-						</div>
-
-						<hr>
-
-
-						<div class="row">                                    
-						    <div class="col-md-6">
-							<div class="form-group">
-							    <label  for="txtOrigen">Dirección de origen *</label>     
-							    <div class="input-group">  
-								<div class="input-group-addon"><i class="fa fa-street-view"></i></div>                                
-								<input class="form-control" ng-model="Servicio.Origen"  id="txtOrigen" type="text" required maxlength="255"  placeholder="Ingresa tu ubicación">                                              
-							    </div>    
-							</div>                                
-						    </div>
-
-						    <div class="col-md-6">
-							<div class="form-group">
-							    <label  for="txtDestino">Dirección de destino *</label>     
-							    <div class="input-group">  
-								<div class="input-group-addon"><i class="fa fa-globe"></i></div>                                
-								<input class="form-control" ng-model="Servicio.Destino"  id="txtDestino" type="text" required maxlength="255"  placeholder="Ingresa tu ubicación">                                              
-							    </div>    
-							</div>                                
-						    </div>
-						</div>                                       
-					    </div>
-
-					    <div class="col-md-7">
-						<div class="row">
-						    <div class="col-md-12">
-							<div id="dvMapaServicio" style="width: 100%; height: 440px; margin-top: 10px;" ng-model="mapServicio">
-
-							</div>
-						    </div>
-						</div>
-					    </div>
-					</div>                                  
-				    </div>
-				</div>
-                            </form>
-                        </div>
-                    </div>
-
-                </div>
-
+            <div class="tab-content">              
                 <div class="tab-pane active" id="tabListado">
                     <br/>
                     <div class="row">
@@ -417,6 +249,11 @@
 		    </div>
 
                 </div>
+               
+                <div class="tab-pane" id="tabRegistro">     
+                   <br/>
+                  <div ng-include="'../trl/views/contratos/nuevoServicio.html'"></div>
+               </div>
 
                 <div class="tab-pane" id="tabTodos">
                     <div ng-controller="consultaServiciosController as cs">
@@ -555,7 +392,7 @@
 </div>
 
 <script type="text/javascript">
-            //$('#tabPanels a[href="#tabTodos"]').tab('show');
+      //$('#tabPanels a[href="#tabRegistro"]').tab('show');
 
             $('#tabPanels a').click(function (e) {
     e.preventDefault();

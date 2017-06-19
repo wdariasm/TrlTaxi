@@ -26,6 +26,11 @@ class DisponibilidadController extends Controller
                 . " WHERE  dp.dpEstado <> 'INACTIVO' AND dpPlantilla = $idPlantilla");
         return $result; 
     }
+    
+    public function getDisponiblidad($idPlantilla, $tipoVehiculo){
+        return Disponibilidad::where("dpPlantilla", $idPlantilla)->where("dpTipoVehiculo",$tipoVehiculo)
+                ->where("dpEstado", 'ACTIVO')->first();
+    }
 
     
     /**
