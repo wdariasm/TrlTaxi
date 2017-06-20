@@ -75,7 +75,7 @@ app.controller('nuevoservicioController',['$scope', 'zonaService',  'toaster', "
             DireccionOrigen : "",
             DireccionDestino : "",
             ContratoId : 0,
-            NumeroContrato:"1600006",
+            NumeroContrato:"",
             Nit : "",
             Telefono : "",
             Tipo : {},

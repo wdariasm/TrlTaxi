@@ -221,7 +221,8 @@ app.controller("servicioController", ["$scope",  "toaster",  "servicioService","
             return;
         }
         var obj = {
-            Estado : $scope.ValBoton.EstSiguiente                       
+            Estado : $scope.ValBoton.EstSiguiente,
+            EstadoAnt : $scope.ValBoton.EstAnterior
         };
         
         var promise = servicioService.actualizar($scope.ServicioDto.IdServicio, obj);

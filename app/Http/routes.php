@@ -65,7 +65,7 @@ Route::group(['middleware' => 'cors'], function () {
         include 'Routes/GpsRoutes.php';
         
         Route::resource("api/parada","ParadaController");
-        
+        Route::resource("api/detalle","DetalleServicioController");
         Route::resource("api/contacto","ContactoController");
     });
 });

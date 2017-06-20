@@ -1,5 +1,5 @@
-app.controller('serviciosController',['$scope',  'ngTableParams', 'toaster', "contratoService", "servicioService",
-    function ($scope,  ngTableParams, toaster, contratoService, servicioService) {
+app.controller('serviciosController',['$scope',  'ngTableParams', 'toaster',  "servicioService",
+    function ($scope,  ngTableParams, toaster, servicioService) {
     $scope.Zonas = [];       
     $scope.Zona = {};
     $scope.funcion = null;
@@ -16,24 +16,7 @@ app.controller('serviciosController',['$scope',  'ngTableParams', 'toaster', "co
     $scope.Servicios = [];
     $scope.ServicioTodos = [];
     $scope.TablaServicio ={};
-        
-    $scope.mapServicio;      
-    $scope.markerOrigen = null;    
-    var markerDestino = null;    
-    var infowindow = new google.maps.InfoWindow();
-    var options = {  componentRestrictions: {country: 'co'} };
-    
-    var origenPlaceId = null;
-    var destinoPlaceId = null;
-    var travelMode = google.maps.TravelMode.DRIVING;
-    var directionsService = new google.maps.DirectionsService;
-    var directionsDisplay = new google.maps.DirectionsRenderer;
-    
-    
-    $scope.vecPoligono = new Array(); /// Vector de Poligonos
-    $scope.poly = null;
-    $scope.tbZona = {}; // Para Paginacion
-    
+                           
     $scope.title = "Nuevo Servicio"; 
     $scope.Posicion = {
         Latitud : 10.4370725,
@@ -41,13 +24,7 @@ app.controller('serviciosController',['$scope',  'ngTableParams', 'toaster', "co
     };
             
     $scope.$parent.SetTitulo("GESTIÓN DE SERVICIOS");        
-    //loadZona();
-   
-    //  
-    
-    $scope.AutocompleteOrigen=null;   
-    $scope.AutocompleteDestino =null;          
-    
+       
     initTabla();           
       
     function initTabla() {

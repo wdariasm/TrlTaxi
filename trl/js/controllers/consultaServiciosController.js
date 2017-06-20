@@ -1,4 +1,5 @@
-function consultaServiciosController ($scope,  tiposervicioService, ngTableParams, toaster, contratoService, servicioService) {
+function consultaServiciosController ($scope,  tiposervicioService, ngTableParams, toaster,
+    contratoService, servicioService, funcionService, detalleService) {
     
     var vm = this;    
     var fechaActual = new Date().toISOString().substr(0,10).toString();
@@ -7,8 +8,27 @@ function consultaServiciosController ($scope,  tiposervicioService, ngTableParam
     vm.Filtro = { Estado : "TODOS", FechaChk : true , TipoServicio : 0, FechaInicial: fechaActual, FechaFin :fechaActual};
     vm.TipoSelect = {};
     vm.TablaTodos ={};
+    vm.Servicio = {};
+    vm.Detalle = {};
     
+    vm.Detalles = [];
     
+    function initDetalle (){
+        vm.Detalle = {
+            dtServicioId  : 0,
+            dtFechaInicio  :  moment().format('L'),
+            dtHoraInicio :  moment().format("hh:mm a"),
+            dtFechaFin  :  moment().format('L'),
+            dtHoraFin :  moment().format("hh:mm a"),
+            dtNumHoras : 0,
+            dtValorHora : 0,
+            dtValorTotal : 0,
+            dtResponsable : "",
+            dtObservacion : "",
+            dtEstado : "ACTIVO",
+            dtUser : $scope.$parent.Login.Login
+        };
+    }
 
     vm.GetServiciosTodos = function (){
         var valorF1 = $('#txtFechaI').val();
@@ -25,10 +45,7 @@ function consultaServiciosController ($scope,  tiposervicioService, ngTableParam
                 console.log("Some Error Occured " + JSON.stringify(err));
         }); 
     };
-    
-    
-    
-    
+                
     function geTipoServicios (){
         var promise = tiposervicioService.getActivos();
         vm.TipoServicio = [];
@@ -70,8 +87,96 @@ function consultaServiciosController ($scope,  tiposervicioService, ngTableParam
     
     geTipoServicios();
     initTablaTodos();
+    
+    vm.EditarServicio = function (item){
+        initDetalle();        
+        vm.Servicio = item;
+        vm.Detalle.dtServicioId = vm.Servicio.IdServicio;
+        consultarDetalle(vm.Servicio.IdServicio);
+        $("#mdAsignarDisponibilidad").modal("show");        
+    };
+    
+    vm.CambiarFormato=function (variable){
+        vm.Detalle[variable] = funcionService.FormatFecha(vm.Detalle[variable],5);        
+        vm.Detalle[variable] = moment(vm.Detalle[variable]).format('L');        
+    };
+    
+    vm.GuardarDetalle = function (){
+        
+        if(!$scope.frmDetalle.$valid){
+            toaster.pop('error','¡Error!', 'Por favor ingrese los datos requeridos (*).');
+            return;
+        }
+                
+        if(vm.Detalle.dtResponsable == ""){
+            toaster.pop('info','¡Alerta!','Ingrese el nombre del responsable');
+            return;
+        }
+        
+        if (vm.Detalle.dtNumHoras  == 0){
+            toaster.pop('info','¡Alerta!','Ingrese el número de horas');
+            return;
+        }
+        
+        if (vm.Detalle.dtValorHora  == 0){
+            toaster.pop('info','¡Alerta!','Ingrese el valor de la hora');
+            return;
+        }
+        
+        if (vm.Detalle.dtValorTotal  == 0){
+            toaster.pop('info','¡Alerta!','El valor total de la hora debe ser mayor a cero(0). ');
+            return;
+        }
+        
+        var promise = detalleService.post(vm.Detalle);
+        
+        promise.then(function(d) {                                      
+            toaster.pop('success','¡Información!','Datos guardada correctamente.');    
+            consultarDetalle(vm.Servicio.IdServicio);
+            
+        }, function(err) {           
+            toaster.pop('error','¡Error al guardar disponibilidad!', err.data, 0);
+            console.log("Some Error Occured " + JSON.stringify(err));
+        });
+        
+    };
+    
+    vm.NuevoDetalle =  function (){
+        initDetalle();
+        vm.Detalle.dtServicioId = vm.Servicio.IdServicio;
+        
+    };
+    
+    function consultarDetalle(id){
+        var promise = detalleService.get(id);        
+        promise.then(function(d) {                        
+            vm.Detalles = d.data;                       
+        }, function(err) {           
+                toaster.pop('error','¡Error al cargar servicios!',err.data);           
+                console.log("Some Error Occured " + JSON.stringify(err));
+        });
+    };
+    
+    vm.SubtoTotal =  function  (){        
+        if(!vm.Detalle.dtNumHoras || !vm.Detalle.dtValorHora){
+            vm.Detalle.dtValorTotal = 0;
+            return;
+        }        
+        vm.Detalle.dtValorTotal  = parseInt(vm.Detalle.dtNumHoras) * parseInt(vm.Detalle.dtValorHora);
+    };
+    
+    vm.CalcultarTotal = function (){       
+        var total = 0;
+        if(vm.Detalles.length > 0){                           
+            for (var i=0; i< vm.Detalles.length; i++) {            
+                total += parseInt(vm.Detalles[i].dtValorTotal);            
+            }                                
+        }
+        return total;
+    };
 };
  
-consultaServiciosController.$inject = ['$scope', 'tiposervicioService', 'ngTableParams', 'toaster', "contratoService", "servicioService"];
+consultaServiciosController.$inject = ['$scope', 'tiposervicioService', 'ngTableParams', 'toaster',
+    "contratoService", "servicioService", "funcionService", "detalleService"];
 
 app.controller('consultaServiciosController', consultaServiciosController);

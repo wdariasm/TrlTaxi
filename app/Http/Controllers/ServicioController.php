@@ -372,7 +372,10 @@ class ServicioController extends Controller
             $servicio = DB::update("UPDATE servicio SET Estado= '".$estado."' WHERE IdServicio=$id ");    
             if($estado === "FINALIZADO"){
                 $this->EmailCalificacion($id);
-            }
+            } 
+            
+            DB::insert("INSERT INTO servicio_estados (stServicioId, stEstado, stFecha ) VALUES ($id, '".$estado."', sysdate())");
+                        
             return JsonResponse::create(array('message' => "Servicio actualizado correctamente", "request" =>json_encode($servicio)), 200);
         } catch (\Exception $exc) {
             return JsonResponse::create(array('file' => $exc->getFile(), "line"=> $exc->getLine(),  "message" =>json_encode($exc->getMessage())), 500);
