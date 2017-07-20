@@ -5,6 +5,7 @@ app.controller('plantillaController',['$scope',  'ngTableParams', 'toaster',"pla
     
     $scope.Plantillas = [];
     $scope.Plantilla = {};
+    $scope.ObjPlantilla = {};
             
     $scope.editMode = false;                    
     $scope.title = "Nueva Plantilla"; 
@@ -113,7 +114,7 @@ app.controller('plantillaController',['$scope',  'ngTableParams', 'toaster',"pla
             console.log("Some Error Occured " + JSON.stringify(err));
         });  
     };
-    
+        
   
     $scope.VerDesactivarPlantilla = function (item){
         $scope.PlantillaGlobal = item;
@@ -180,6 +181,48 @@ app.controller('plantillaController',['$scope',  'ngTableParams', 'toaster',"pla
                 break;
         }
                 
+    };
+    
+    
+    $scope.VerModificar = function (item){
+        $scope.PlantillaGlobal = item;
+        $scope.ObjPlantilla.SelCliente = true;
+        $scope.ObjPlantilla.SelProveedor = true;
+        $scope.Mensaje.Boton = false;
+        $('#mdModificarPlnatilla').modal('show'); 
+    };
+    
+    
+    $scope.ActualizarValores = function (){
+        if (!$scope.ObjPlantilla.SelCliente && !$scope.ObjPlantilla.SelProveedor){
+            toaster.pop('warning', "¡Alerta!", "Por favor seleccione una de las operaciones a realizar.");
+            return;
+        }
+        
+        if ($scope.ObjPlantilla.SelCliente){
+            if(!$scope.ObjPlantilla.OperacionC){
+                toaster.pop('info', "¡Alerta!", "Seleccione la operación para el Cliente.");
+                return;
+            }
+            
+            if(!$scope.ObjPlantilla.plValorCliente){
+                toaster.pop('info', "¡Alerta!", "Ingrese el valor del Cliente.");
+                return;
+            }
+        }
+        
+        if ($scope.ObjPlantilla.SelProveedor){
+            if(!$scope.ObjPlantilla.OperacionP){
+                toaster.pop('info', "¡Alerta!", "Seleccione la operación para el Proveedor.");
+                return;
+            }
+            
+            if(!$scope.ObjPlantilla.plValorProveedor){
+                toaster.pop('info', "¡Alerta!", "Ingrese el valor del Proveedor.");
+                return;
+            }
+        }
+        
     };
 }]);
 

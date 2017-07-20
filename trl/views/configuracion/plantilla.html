@@ -78,7 +78,7 @@
 				<th title="Valor Cliente">V. CLIENTE</th>
 				<th title="Valor proveedor">V. PROVEEDOR</th>
                                 <th>ESTADO</th>
-                                <th width="16%">ACCIÓN</th>
+                                <th width="19%">ACCIÓN</th>
                             </tr>
                         </thead>
 
@@ -93,7 +93,8 @@
                                 <td>
 			<center>                                        
 			    <a data-ng-click="Get(items)" style="float: left; margin-left: 15px;" href="javascript:;"  title="Editar"><i class="fa fa-lg fa-pencil"></i></a>
-			    <a data-ng-click="AgregarDatos(items)" style="float: left; margin-left: 15px;" href="javascript:;"  title="Agregar Datos"><i class="fa fa-lg fa-search-plus text-success"></i></a>
+                      <a data-ng-click="VerModificar(items)" style="float: left; margin-left: 10px;" href="javascript:;"  title="Actualizar Valores"><i class="fa fa-lg fa-refresh  text-warning"></i></a>
+			    <a data-ng-click="AgregarDatos(items)" style="float: left; margin-left: 10px;" href="javascript:;"  title="Agregar Datos"><i class="fa fa-lg fa-search-plus text-success"></i></a>
 			    <a ng-click="VerDesactivarPlantilla(items)"  style="float: left; margin-left: 15px;" href="javascript:;"  title="Eliminar datos plantilla"><i class="fa fa-lg fa-trash text-danger"></i></a>
 			</center>
 			</td>
@@ -139,6 +140,129 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
                     <button type="button" class="btn btn-primary" ng-disabled="Mensaje.Boton" ng-click="EliminarDatos()">Aceptar</button>
+                </div>  
+            </div>
+        </div>
+    </div>
+   
+   
+   <div class="modal fade bs-example-modal-sm" id="mdModificarPlnatilla" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" style="margin-top: 5%;">
+        <div class="modal-dialog modal-sm" style="width: 50%" >                                   
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <div class="modal-title"> Actualizar Valores de la Plantilla {{PlantillaGlobal.plDescripcion}}</div>
+                </div>
+
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <label class="text-danger" style="display: initial">Estimado usuario(a), tenga en cuenta que este proceso actualizara los valores 
+                              de cada registro asociado a la plantilla: </label> <label style="display: inline-block"><strong>{{PlantillaGlobal.plDescripcion}}</strong></label>
+                              <br/>
+                        </div>
+
+                        <div class="col-xs-12">
+                           <br/>
+                           1. Seleccione el tipo de operación : Aumentar (+) o Disminuir (-) el Valor. <br/>
+                           2. Ingrese el monto a Aumentar o Disminuir. <br/>
+                        </div>
+                       
+                    </div>
+                   
+                     <div class="row">    
+                        <br/>
+                        
+                        <div class="col-xs-1 col-xs-offset-1">
+                           <br/>
+                           <div class="checkbox checkbox-primary">
+                              <input type="checkbox" id="chkCliente" ng-model="ObjPlantilla.SelCliente">
+                              <label for="chkCliente">                                  
+                              </label>
+                            </div>
+                        </div>
+                        
+                        <div class="col-xs-4">
+                           <div class="form-group">
+                            <label for="txtEstado">Operación *</label>
+                              <div class="input-group">    
+                                <div class="input-group-addon"><i class="fa fa-list-ul text-success"></i></div>
+                                <select type="text" class="form-control" ng-model="ObjPlantilla.OperacionC" id="txtEstado" placeholder="Estado">
+                                    <option value="Mas">Aumentar (+) </option>
+                                    <option value="Menos">Disminuir (-) </option>                                               
+                                </select>
+
+                              </div>
+                           </div>
+                        </div>
+                        
+                        <div class="col-xs-4">
+                           <div class="form-group">
+                               <label  for="txtValorCliente">Valor Cliente *</label>
+                               <div class="input-group">
+                                 <div class="input-group-addon"><i class="fa fa-usd"></i></div>
+                                 <input class="form-control" ng-model="ObjPlantilla.plValorCliente" solo-numeros id="txtValorCliente" name="txtValorCliente" type="text" fcsa-number="{ min: 0,  maxDecimals: 0  }" required   maxlength="10" >
+                               </div>
+                           </div>
+                         </div>
+                                                                                               
+                     </div>
+                   
+                     <div class="row">    
+                        <br/>
+                        
+                        <div class="col-xs-1 col-xs-offset-1">
+                           <br/>
+                           <div class="checkbox checkbox-primary">
+                              <input type="checkbox" id="chkCliente" ng-model="ObjPlantilla.SelProveedor">
+                              <label for="chkCliente">                                  
+                              </label>
+                            </div>
+                        </div>
+                        
+                        <div class="col-xs-4">
+                           <div class="form-group">
+                            <label for="txtEstado">Operación *</label>
+                              <div class="input-group">    
+                                <div class="input-group-addon"><i class="fa fa-list-ul text-success"></i></div>
+                                <select type="text" class="form-control" ng-model="ObjPlantilla.OperacionP" id="txtEstado" placeholder="Estado">
+                                    <option value="Mas">Aumentar (+) </option>
+                                    <option value="Menos">Disminuir (-) </option>                                               
+                                </select>
+
+                              </div>
+                           </div>
+                        </div>                                                                        
+                        
+                        <div class="col-xs-4">
+                           <div class="form-group">
+                               <label  for="txtValor">Valor Proveedor *</label>
+                               <div class="input-group">
+                                 <div class="input-group-addon"><i class="fa fa-usd"></i></div>
+                                 <input class="form-control" ng-model="ObjPlantilla.plValorProveedor" solo-numeros id="txtValor" name="txtValor" type="text" fcsa-number="{ min: 0,  maxDecimals: 0  }" required   maxlength="10" >
+                               </div>
+                           </div>
+                         </div>
+                        
+                     </div>
+                   
+                     <div class="row">
+
+                          <div class="col-xs-12 text-center">
+                              <label>{{Mensaje.Texto}}</label>
+                          </div>
+
+                          <div class="col-xs-12 text-center" ng-show="Mensaje.Cargando">
+                              <i class="fa fa-spinner fa-fw fa-pulse fa-3x text-info"></i>
+                          </div>
+                     </div>
+
+                    </div>
+                
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" ng-disabled="Mensaje.Boton" ng-click="ActualizarValores()">Aceptar</button>
                 </div>  
             </div>
         </div>
