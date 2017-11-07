@@ -64,6 +64,10 @@ var app;
                 templateUrl: 'views/configuracion/usuario.html'
             })
             
+            .when("/0/geolocalizacion",{
+                templateUrl: 'views/proceso/geolocalizacion.html'
+            })
+            
              .when("/:tipo/disponibilidad",{
                 templateUrl: 'views/configuracion/disponibilidad.html'
             })

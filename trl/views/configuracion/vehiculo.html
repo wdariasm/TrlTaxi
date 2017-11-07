@@ -6,7 +6,7 @@
                     <ul class="nav nav-tabs nav-justified" id="tabPanels">
                         <li class="active"> <a href="#tabListado" data-toggle="tab">Listado de Vehículos </a></li>
                         <li><a href="#tabRegistro" data-toggle="tab">{{Titulo}} Vehículo </a></li>
-                        <li><a href="#tabImei" data-toggle="tab">Asignacion de IMEI</a></li>
+                        <!--<li><a href="#tabImei" data-toggle="tab">Asignacion de IMEI</a></li> -->
                     </ul>
                     <div class="tab-content">
                         <br/>
@@ -62,9 +62,8 @@
 						    <td>{{ item.Estado}}</td>
 						    <td>
 					    <center>
-						<a ng-click="get(item)" style="float: left; margin-left: 3px;" href="javascript:;"  title="Editar"><i class="fa fa-pencil fa-1x text-success"></i></a>
-						<a  ng-click="VerNovedad(item)" style="float: left; margin-left: 8px;" href="javascript:;"  title="Asignar IMEI"><i class="fa fa-mobile text-danger fa-1x"></i></a>
-						<a ng-click="VerDesactivar(item.IdVehiculo, 'INACTIVO')"  style="float: left; margin-left: 8px;" href="javascript:;"  title="Eliminar"><i class="fa fa-power-off fa-1x text-warning"></i></a>                                               
+                                       <a ng-click="get(item)" style="float: left; margin-left: 4px;" href="javascript:;"  title="Editar"><i class="fa fa-pencil fa-1x text-success"></i></a>
+                                       <a ng-click="VerDesactivar(item.IdVehiculo, 'INACTIVO')"  style="float: left; margin-left: 9px;" href="javascript:;"  title="Eliminar"><i class="fa fa-trash fa-1x text-danger"></i></a>
 					    </center>
 					    </td>
 					    </tr>

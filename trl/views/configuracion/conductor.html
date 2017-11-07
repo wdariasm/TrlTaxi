@@ -28,6 +28,11 @@
 				<div class="col-md-2 col-md-offset-1">
 				    <button type="button" class="btn btn-success btn-addon" ng-click="loadConductor()" ><i class="fa fa-refresh"></i> Actualizar</button>
 				</div>
+                         
+                        <!--<div class="col-md-1">
+                           <span style="margin-top: 2%;" class="fa fa-question-circle fa-2x text-info" title="Ayuda"></span>
+				</div>-->
+                         
 			    </div>
 			</div>
 			<table class="table table-hover table-striped table-condensed" ng-table="TablaConductor" style="float:height; margin-top: 15px;">
@@ -39,11 +44,11 @@
 				    <th>DIRECCION</th>
 				    <th>PLACA</th>
 				    <th>ESTADO</th>
-				    <th width="12%">ACCION</th>                                                                              
+				    <th width="8%">ACCION</th>                                                                              
 				</tr>
 			    </thead>
 			    <tbody>
-				<tr data-ng-repeat="items in $data">
+				<tr data-ng-repeat="items in $data" ng-class="{'warning': items.Estado == 'RETIRADO'  }">
 				    <td class="center">{{ items.Cedula}}</td>
 				    <td>{{ items.Nombre}}</td>
 				    <td>{{ items.TelefonoPpal}}</td> 
@@ -52,9 +57,15 @@
 				    <td>{{ items.Estado}}</td> 
 				    <td>
 			    <center>
-				<a data-ng-click="get(items)" style="float: left; margin-left: 15px;" href="javascript:;"  title="Editar"><i class="fa  fa-1x fa-lg fa-pencil text-success"></i></a>
-				<a data-ng-click="VerDesactivar(items.IdConductor, 'RETIRADO')"  style="float: left; margin-left: 15px;" href="javascript:;"  title="Eliminar"><i class="fa fa-1x fa-lg fa-trash text-danger"></i></a>
-				<a  ng-click="AgregarLicencia(items)" style="float: left; margin-left: 15px;" href="javascript:;"  title="Licencias"><i class="fa fa-book text-info fa-1x"></i></a>
+                        <div ng-if="items.Estado == 'RETIRADO'">
+                           <a data-ng-click="VerDesactivar(items.IdConductor, 'ACTIVO')"  style=" margin-left: 15px;" href="javascript:;"  title="Activar Conductor"><i class="fa fa-1x fa-lg fa-check text-info"></i></a>
+                        </div>
+                         
+                         <div ng-if="items.Estado !== 'RETIRADO'">
+                           <a data-ng-click="get(items)" style="float: left; margin-left: 15px;" href="javascript:;"  title="Editar"><i class="fa  fa-1x fa-lg fa-pencil text-success"></i></a>
+                           <a data-ng-click="VerDesactivar(items.IdConductor, 'RETIRADO')"  style="float: left; margin-left: 15px;" href="javascript:;"  title="Eliminar"><i class="fa fa-1x fa-lg fa-trash text-danger"></i></a>
+                         </div>
+				
 			    </center>
 			    </td>
 			    </tr>
@@ -112,7 +123,7 @@
 
 			    <div class="row" style="margin-bottom: 5px;">
 				<div class="col-xs-12 text-center">
-				    <button type="button" ng-disabled="frmConductor.$invalid" class="btn btn-floating  btn-large borrador"  ng-click="Guardar()" title="Guardar"><i class="fa fa-file-text-o"></i></button>
+				    <button type="button" ng-disabled="frmConductor.$invalid" class="btn btn-floating  btn-large borrador"  ng-click="Guardar()" title="Guardar"><i class="fa fa-floppy-o"></i></button>
 				    <small class="texto">Guardar</small>
 				</div>
 			    </div>
@@ -614,7 +625,7 @@
 		</form>
 	    </div>
 	</div>
-    </div>
+    </div>        
 
 </div>
 

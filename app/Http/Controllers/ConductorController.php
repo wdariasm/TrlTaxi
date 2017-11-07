@@ -18,7 +18,7 @@ class ConductorController extends Controller
     public function index()       
     {
          $result = DB::select("SELECT co.IdConductor, co.Cedula,  co.Nombre, co.TelefonoPpal, co.Direccion, co.Estado,"
-                . " co.CdPlaca FROM conductor co  WHERE  co.Estado <> 'RETIRADO' ");
+                . " co.CdPlaca FROM conductor co order by co.Estado ");
         return $result; 
     }
 
@@ -201,8 +201,16 @@ class ConductorController extends Controller
         try {
             $data = $request->all();
             $conductor = Conductor::find($IdConductor);
-            $conductor->Estado = $data['Estado'];
+            $conductor->Estado = $data['Estado'];                       
             $conductor->save();
+                        
+            if ($conductor->Estado == "RETIRADO"){
+                //Inactivar usuario
+                DB::update("UPDATE usuario SET  Sesion='CERRADA', Estado='BORRADO' WHERE ConductorId = $IdConductor");
+            }else if($conductor->Estado == "ACTIVO") {
+                DB::update("UPDATE usuario SET  Sesion='CERRADA', Estado='POR CONFIRMAR' WHERE ConductorId = $IdConductor");
+            }
+            
             return JsonResponse::create(array('message' => "Datos Actualizados Correctamente", "request" =>json_encode($IdConductor)), 200);
         }catch (\Exception $exc) {
             return JsonResponse::create(array('file' => $exc->getFile(), "line"=> $exc->getLine(),  "message" =>json_encode($exc->getMessage())), 500);

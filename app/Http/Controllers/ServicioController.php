@@ -78,7 +78,7 @@ class ServicioController extends Controller
     public function getConductores($tipo){
         $result  =  DB::select("SELECT c.IdConductor, c.Cedula, c.Nombre, c.TelefonoPpal, c.Email, v.Placa,"
                 . "  v.IdVehiculo, c.Disposicion FROM conductor c INNER JOIN vehiculo v "
-                . " ON c.VehiculoId =  v.IdVehiculo WHERE v.ClaseVehiculo = $tipo");
+                . " ON c.VehiculoId =  v.IdVehiculo WHERE c.Estado='ACTIVO' AND v.ClaseVehiculo = $tipo");
         return $result;
     }
     
