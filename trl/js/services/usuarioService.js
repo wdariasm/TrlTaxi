@@ -4,60 +4,57 @@ app.service("usuarioService", ['$http', function ($http) {
         var req = $http.get(uri+'/api/usuario/' + id);
         return req;
     };
-            
+
     this.getAll = function () {
         var req = $http.get(uri+'/api/usuario');
         return req;
-    };   
-        
+    };
+
     this.post = function (usuario) {
         var req = $http.post(uri+'/api/usuario', usuario);
-        return req;       
+        return req;
     };
-    
+
     this.enviarEmail = function (usuario) {
         var req = $http.post(uri+'/api/usuario/enviarEmail', usuario);
-        return req;       
+        return req;
     };
-    
-    
-    
-    this.put = function (id,usuario) {        
+        
+    this.put = function (id,usuario) {
         var req = $http.put(uri+'/api/usuario/' + id, usuario);
-        return req;        
+        return req;
     };
-         
-    
+
+
     this.updateEstado=function(id, object){
         var req = $http.put(uri+'/api/usuario/updateEstado/' + id, object);
         return req;
     };
-    
+
      //Cambiar Contraseña
-    this.udpatePass = function (usuario) {        
+    this.udpatePass = function (usuario) {
         var req = $http.post(uri+'/api/usuario/cambiar', usuario);
-        return req;        
+        return req;
     };
-    
+
     this.cerrarSesion = function (usuario) {
         var req = $http.delete(uri+'/api/usuario/'+usuario+'/cerrar');
         return req;
     };
-    
+
      this.getPermisos = function (id) {
-        var req = $http.get(uri+'/api/usuario/'+id+'/permisos');        
+        var req = $http.get(uri+'/api/usuario/'+id+'/permisos');
         return req;
     };
-    
+
     this.validar = function (user) {
         var req = $http.get(uri+'/api/usuario/' + user + '/validar');
         return req;
     };
-    
+
     this.refrescar = function(){
         var req = $http.get(uri+'/api/usuario/token');
         return req;
     };
-    
-}]);
 
+}]);

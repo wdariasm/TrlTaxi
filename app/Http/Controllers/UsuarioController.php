@@ -166,7 +166,7 @@ class UsuarioController extends Controller
     }         
     
     public function validar($user){
-        return Usuario::where("Login",$user)->select("Login")->first();
+        return Usuario::where("Login",$user)->select("Login", "IdUsuario")->first();
     }
    
 
@@ -252,7 +252,11 @@ class UsuarioController extends Controller
             }
                         
             $usuario = $request->get('email');
-            $password = $request->get('password');
+            $password = $request->get('password');                                    
+            $tipo = $request->get('tipo');
+            if (!isset($tipo)){
+                $tipo = "MOVIL";
+            }                       
             
             $user = Usuario::select('Estado','Sesion','Clave', 'Nombre', 'IdUsuario', 'TipoAcceso', 'Modulo')->where("Login",$usuario)->first();
             if (empty($user)){
@@ -265,7 +269,11 @@ class UsuarioController extends Controller
         
             if (!password_verify($password, $user->Clave)) {
                 return JsonResponse::create(array('error' => "Credenciales no validas"), 500);                
-            }             
+            }
+            
+            if ($tipo === 'MOVIL' && ($user->TipoAcceso != 4 && $user->TipoAcceso !=5)){
+                return JsonResponse::create(array('error' => "Tipo de acceso No permitido"), 500);
+            }
                                            
             if($user->Sesion == 'INICIADA' && $user->TipoAcceso != 1){
                 $result = DB::Select("SELECT DirIp, IF(DATE(FechaCnx) = CURRENT_DATE(), 'SI', 'NO') entrar"
@@ -583,10 +591,9 @@ class UsuarioController extends Controller
        try {
            $data = $request->all();
            $usuario = Usuario::find($IdUsuario);
-           $usuario->Estado = $data['Estado'];
-           $msj = ($data['Estado'] === 'ACTIVO') ? 'ACTIVADO' : 'BORRADO';
+           $usuario->Estado = $data['Estado'];           
            $usuario->save();
-           return JsonResponse::create(array('message' => "USUARIO $msj CORRECTAMENTE", "request" =>json_encode($IdUsuario)), 200);
+           return JsonResponse::create(array('message' => "Usuario actualizado correctamente", "request" =>json_encode($IdUsuario)), 200);
        }catch (\Exception $exc) {
             return JsonResponse::create(array('file' => $exc->getFile(), "line"=> $exc->getLine(),  "message" =>json_encode($exc->getMessage())), 500);
         } 

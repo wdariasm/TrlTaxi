@@ -4,6 +4,7 @@ app.controller("homeController", ["$scope", "parametroService", "usuarioService"
     $scope.Titulo = "BIENVENIDO"; 
     $scope.Login = {};
     $scope.Configuracion = {};
+    $scope.Modulos ="";
     
     $scope.Cargando = true;
     $scope.Mensajeh = "Espere por favor, cargando configuración ...";
@@ -13,9 +14,11 @@ app.controller("homeController", ["$scope", "parametroService", "usuarioService"
     function getUser (){
         var promiseGet = usuarioService.get($scope.Login.IdUsuario); 
         promiseGet.then(function(pl) {            
-            $scope.Login = pl.data;    
+            $scope.Login = pl.data;                       
             sessionStorage.setItem("usuario","");
-            sessionStorage.setItem("usuario",btoa( JSON.stringify(pl.data)));             
+            sessionStorage.setItem("usuario",btoa( JSON.stringify(pl.data)));
+            $scope.Modulos = session.getModulos();            
+            session.getPermisos();
             $scope.getConfiguracion();
         },
         function(errorPl) {
@@ -26,7 +29,7 @@ app.controller("homeController", ["$scope", "parametroService", "usuarioService"
     $scope.getConfiguracion= function (){
         var promiseGet = parametroService.getAll(); 
         promiseGet.then(function(pl) {            
-            $scope.Configuracion = pl.data;
+            $scope.Configuracion = pl.data;            
             config.setConfig(btoa(JSON.stringify(pl.data)));
             validarVista();
         },
@@ -66,6 +69,7 @@ app.controller("homeController", ["$scope", "parametroService", "usuarioService"
     
     function validarUser (){                
         $scope.Login =  session.getUser();   
+        
         getUser();
     }
     
@@ -112,6 +116,19 @@ app.controller("homeController", ["$scope", "parametroService", "usuarioService"
      //ESTABLECER TITULO PRINCIPAL
     $rootScope.SetTituloPpal = function (title){
         $scope.Titulo = title;
+    };
+    
+    $scope.VerPermiso = function (permiso){
+        if(arrayPermiso.length === 0) return false;                
+        if (arrayPermiso.indexOf(permiso) !== -1){
+            return true;             
+        }
+	return false;
+    };
+    
+    $scope.VerModulo= function(modulo){          
+        if (modulo === "1") return true;        
+        return  false;
     };
     
 }]);

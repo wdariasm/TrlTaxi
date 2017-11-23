@@ -24,6 +24,16 @@ app.service("usuarioService", ['$http', function ($http) {
         var req = $http.get(uri+'/api/usuario/'+id+'/permisos');        
         return req;
     };
+    
+    this.updateEstado=function(id, object){
+        var req = $http.put(uri+'/api/usuario/updateEstado/' + id, object);
+        return req;
+    };
+    
+    this.enviarEmail = function (usuario) {
+        var req = $http.post(uri+'/api/usuario/enviarEmail', usuario);
+        return req;       
+    };
                 
      //Cambiar Contraseña     
     this.udpatePass = function (usuario) {        

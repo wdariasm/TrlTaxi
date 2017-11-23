@@ -13,15 +13,18 @@
                 <div class="tab-pane active" id="tabListado">
                     <br/>
                     <div class="row">
-                        <div class="col-xs-6">
-                         <label  for="search">Filtro</label>
+                        <div class="col-xs-6">                         
                              <div class="input-group">
                                  <div class="input-group-addon"><i class="fa  fa-search text-primary"></i></div>
-                                 <input  class="form-control" id="search" type="search" placeholder="" ng-model="TablaUsuario.filter()['busqueda']">
+                                 <input  class="form-control" id="search" type="search" placeholder="Buscar por login, nombre, tipo" ng-model="TablaUsuario.filter()['busqueda']">
                              </div>
                         </div>
-                        <div class="" style="float:width; margin-top:30px;">
+                        <div class="col-xs-2" style=" margin-top:7px;">
                                <label class=" text-primary" style="font-size: 18px;">Total: {{Usuarios.length}}</label>
+                        </div>
+                       
+                        <div class="col-xs-2">
+                           <button type="button" class="btn btn-success btn-addon" ng-click="GetUsuarios()" title="Actualizar usuarios"><i class="fa fa-refresh"></i> Actualizar</button>
                         </div>
                     </div>
 
@@ -34,7 +37,7 @@
                                 <th>SESION</th> 
                                 <th>FECHA CONEXION</th>    
                                 <th>ESTADO</th> 
-                                <th width="12%">ACCIÓN</th>
+                                <th width="13%">ACCIÓN</th>
                             </tr>
                         </thead>
 
@@ -45,12 +48,19 @@
                                <td>{{ items.Contrato }}</td>
                                <td>{{ items.Sesion }}</td>                               
                                <td>{{ items.FechaCnx}}</td> 
-                               <td>{{ items.Estado}}</td> 
+                               <td>{{ items.Estado }}</td> 
                                <td>
                                     <center>
                                         <a ng-click="get(items)" style="float: left; margin-left: 15px;" href="javascript:;"  title="Editar"><i class="fa fa-lg fa-pencil"></i></a>                                           
                                         <a ng-click="CambiarPass(items.IdUsuario,  items.Nombre, items.Login)" style="float: left; margin-left: 15px;" href="javascript:;"  title="Cambiar Contraseña"><i class="fa fa-lg fa-refresh text-warning"></i></a>
-                                        <a ng-click="VerDesactivar(items.IdUsuario, 'BORRADO')"  style="float: left; margin-left: 15px;" href="javascript:;"  title="Borrar"><i class="fa fa-lg fa-trash text-danger"></i></a>
+                                        <div ng-if="items.Estado != 'INACTIVO'">
+                                           <a ng-click="VerDesactivar(items.IdUsuario, 'INACTIVO')"  style="float: left; margin-left: 15px;" href="javascript:;"  title="Bloquear"><i class="fa fa-lg fa-lock text-danger"></i></a>
+                                        </div>
+                                        <div ng-if="items.Estado=='INACTIVO'">
+                                           <a ng-click="VerDesactivar(items.IdUsuario, 'ACTIVO')"  style="float: left; margin-left: 15px;" href="javascript:;"  title="Activar"><i class="fa fa-lg fa-unlock text-success"></i></a>
+                                        </div>
+                                         <a ng-click="ReenviarEmail(items)" ng-show="items.Estado == 'POR CONFIRMAR'" style="float: left; margin-left: 10px;" href="javascript:;"  title="Reenviar Email de confirmación"><i class="fa fa-lg fa-envelope text-success"></i></a>
+                                        
                                     </center>
                                </td>
                             </tr>
@@ -63,13 +73,13 @@
                             <div class="modal-content">
 
                                 <div class="modal-header">
-                                    <div class="modal-title">Activar / Borrar  Usuario</div>
+                                    <div class="modal-title">Activar / Bloquear  Usuario</div>
                                 </div>
 
                                 <div class="modal-body">
                                     <div class="row">
                                         <div class="col-xs-12">
-                                            <label>¿Está seguro de ejecutar esta acción? '{{Estado}}' </label>
+                                            <label>¿Está seguro de {{DescripcionEstado}} este usuario?  </label>
                                         </div>
                                     </div>
                                 </div>
@@ -96,7 +106,7 @@
                 <div class="panel-body">
                 <div class="row">
                                                                                 
-                    <div class="col-xs-3">
+                    <div class="col-xs-4">
                         <div class="form-group">
                             <label for="txtLogin">Login *</label>
                              <div class="input-group">    
@@ -106,34 +116,21 @@
                         </div>
                     </div>
                     
-                    <div class="col-xs-3">
+                    <div class="col-xs-4">
                         <div class="form-group">
                             <label for="txtTipoAcceso">Tipo Acceso *</label>
                              <div class="input-group">    
                                 <div class="input-group-addon"><i class="fa fa-universal-access"></i></div>
-                                <select ng-model="Usuario.TipoAcceso" class="form-control" id="txtTipoAcceso">
+                                <select ng-model="Usuario.TipoAcceso" class="form-control" id="txtTipoAcceso" ng-disabled="true">                                    
                                     <option value="4">CLIENTE</option>
-                                    <option value="5">SUBCLIENTE</option>
+                                    <option value="5">USUARIO CLIENTE</option>
                                 </select>
                              </div>
                         </div>
                     </div> 
-                                                                                                                                                           
-
-                    <div class="col-md-3">
-                        <div class="form-group">
-                            <label for="txtIdentificacion">Identificación </label>
-                            <div class="input-group">    
-                                <div class="input-group-addon"><i class="fa fa-user"></i></div>
-                                <input type="hidden"  ng-model="Usuario.ClienteId"  id="txtClienteId" >
-                                <input type="hidden"  ng-model="Usuario.PersonaId"   id="txtPersonaId" >
-                                <input type="hidden"  ng-model="Usuario.ConductorId" id="txtConductorId" >
-                                <input type="text" class="form-control"  ng-model="Usuario.Identificacion" maxlength="12" solo-numeros id="txtIdentificacion" placeholder="Identificación" ng-blur="BuscarIdentificacion()" required>
-                            </div>
-                        </div>
-                    </div> 
+                                                                                                                                                                             
                     
-                    <div class="col-md-3">
+                    <div class="col-md-4">
                         <div class="form-group">
                             <label for="txtContrato">N° Contraro*</label>
                              <div class="input-group">    

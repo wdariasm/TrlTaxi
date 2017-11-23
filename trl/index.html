@@ -65,19 +65,19 @@
 
                 <!-- Sidebar navigation -->
                 <ul class="nav sidebar-nav">                  
-                    <li>
+                   <li ng-show="VerModulo(Modulos[4])">
                         <a href="#/0/vehiculo"> <i class="sidebar-icon fa fa-taxi"></i> Vehículos </a>
                     </li>                    
-                    <li>
+                    <li ng-show="VerModulo(Modulos[1])">
                         <a href="#/1/contratos"> <i class="sidebar-icon fa fa-file-text-o"></i> Contratos   </a>
                     </li> 
                     
-                    <li>
+                    <li ng-show="VerModulo(Modulos[5])">
                         <a href="#/1/servicios"> <i class="sidebar-icon fa fa-street-view"></i> Solicitar Servicio </a>
                     </li>
                                        
                     
-                    <li class="dropdown">
+                    <li class="dropdown" ng-show="VerModulo(Modulos[5])">
                         <a class="dropdown-toggle" href="javascript:;" data-toggle="dropdown">
                             <i class="sidebar-icon fa fa-usd"></i>
                             Tarifas
@@ -109,7 +109,7 @@
                         </ul>
                     </li>    
                     
-                    <li class="dropdown">
+                    <li class="dropdown" ng-show="VerModulo(Modulos[2])">
                         <a class="dropdown-toggle" href="javascript:;" data-toggle="dropdown">
                             <i class="sidebar-icon fa fa-users"></i>
                             Personal
@@ -141,7 +141,7 @@
                     
                     
                     <li class="divider"></li>
-                     <li class="dropdown">
+                     <li class="dropdown" ng-show="VerModulo(Modulos[0])">
                         <a class="dropdown-toggle" href="javascript:;" data-toggle="dropdown">
                             <i class="sidebar-icon fa fa-cog"></i>
                             Configuracion
@@ -185,7 +185,7 @@
                         </ul>
                     </li>
                    
-		    <li class="dropdown">
+		    <li class="dropdown" ng-show="VerModulo(Modulos[3])">
                         <a class="dropdown-toggle" href="javascript:;" data-toggle="dropdown">
                             <i class="sidebar-icon fa fa-file-pdf-o"></i>
                             Reportes
@@ -204,7 +204,7 @@
                     </li>
 		    
 		    
-                    <li>
+                    <li ng-show="VerModulo(Modulos[4])">
                         <a href="#/2/mantenimiento" tabindex="-1"><i class="sidebar-icon fa fa-spinner"></i>Mantenimiento</a>
                     </li> 
                     

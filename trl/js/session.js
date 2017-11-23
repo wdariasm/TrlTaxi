@@ -1,3 +1,5 @@
+var arrayPermiso = [];
+
 var session = {
         
     setUsuario: function(usuario){      
@@ -49,11 +51,30 @@ var session = {
         if (obj){                       
             var js = JSON.parse(atob(obj));
             return js.Email;
-        }
-        
+        }        
     }, 
     
+    getPermisos:function (){        
+        var obj = sessionStorage.getItem("usuario");        
+        if (obj){      
+            var js = JSON.parse(atob(obj));              
+            arrayPermiso = js.permisos.split(",");            
+        } else{
+           location.href = "../inicio/index.html#/login";
+           return null;
+        }             
+    },  
     
+    getModulos:function (){        
+        var obj = sessionStorage.getItem("usuario");        
+        if (obj){      
+            var js = JSON.parse(atob(obj));             
+            return  js.Modulo;                 
+        } else{
+           location.href = "../inicio/index.html#/login";
+           return null;
+        }             
+    },  
     
     getError : function (){
         var js="";

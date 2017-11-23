@@ -1,4 +1,4 @@
-app.controller('localizacionController',['$scope', 'localizacionService', function ($scope, localizacionService)  {
+app.controller('localizacionController',['$scope', 'localizacionService', 'toaster', function ($scope, localizacionService, toaster)  {
     $scope.Posicion = {};
     $scope.Taxistas = [];
 
@@ -111,7 +111,7 @@ app.controller('localizacionController',['$scope', 'localizacionService', functi
             });
              $scope.mapPosicion.fitBounds(limits);
           } else {
-              toaster.pop('warning','¡Información!',"No Se Encontraron Coincidencias con estos parametros");                
+              toaster.pop('error','¡Información!',"No Se Encontraron Coincidencias con estos parametros");                
             }
         },
         function(errorPl) {

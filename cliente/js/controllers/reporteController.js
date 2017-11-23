@@ -18,6 +18,7 @@ app.controller('reporteController', ['$scope', 'toaster', 'zonaService', 'funcio
     vm.HabilitarContrato = false;
     vm.Cargando = false;
     
+    validaPermiso();
     loadZona();
     loadTipoServicio();
     loadTipoVehiculo();    
@@ -27,7 +28,17 @@ app.controller('reporteController', ['$scope', 'toaster', 'zonaService', 'funcio
     loadContratos();
         
     var fechaActual = new Date().toISOString().substr(0,10).toString();
-
+    
+    function validaPermiso(){
+        if ($scope.$parent.Login.TipoAcceso != 4){
+            toaster.pop("error", "¡Error!", "Acceso denegado a reporte.");
+            location.href = "#/0/servicio";
+            return;
+        }
+    }
+    
+    
+    
     function inicializarReporte() {
         
         vm.Seleccionar = {

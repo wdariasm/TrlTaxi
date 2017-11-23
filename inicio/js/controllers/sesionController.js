@@ -28,7 +28,8 @@ app.controller('sesionController', ['$scope' , 'sesionService', 'toaster','$auth
         
         var object = {
             email: $scope.Usuario.Login,
-            password: $scope.Usuario.Clave
+            password: $scope.Usuario.Clave, 
+            tipo : "WEB"
         };
        var promise = sesionService.login(object);
         promise.then(function(d) {            

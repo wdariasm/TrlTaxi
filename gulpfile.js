@@ -40,8 +40,22 @@ gulp.task('watch2', function () {
     gulp.watch('conductor/js/controllers/*.js', ['ctrlConductor']);    
 });
 
+
+gulp.task('ctrlInicio', function () {
+    gulp.src(["inicio/js/services/*.js", "inicio/js/controllers/*.js"])
+    .pipe(concat('vendors.js'))
+    .pipe(uglify().on('error', gutil.log))
+    .pipe(gulp.dest('inicio/dist/'));
+});
+
+gulp.task('watch3', function () {
+    gulp.watch('conductor/js/controllers/*.js', ['ctrlInicio']);    
+});
+
 gulp.task('default', ['controllers', 'watch']);
 
 gulp.task('cliente', ['ctrlCliente', 'watch1']);
 
 gulp.task('conductor', ['ctrlConductor', 'watch2']);
+
+gulp.task('inicio', ['ctrlInicio', 'watch3']);

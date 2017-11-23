@@ -11,6 +11,7 @@ function($scope, usuarioService,toaster,ngTableParams ,  funcionService, cliente
     $scope.valPass =false;
     $scope.ValLogin = false;
     $scope.IdUsuarioGlobal="";
+    $scope.DescripcionEstado = "";
     
     
     $scope.TablaUsuario = {};    
@@ -54,8 +55,7 @@ function($scope, usuarioService,toaster,ngTableParams ,  funcionService, cliente
             toaster.pop('error','¡Error!', "Error al cargar usuarios");  
             console.log('failure loading usuarios', errorPl);
         });
-    } 
-              
+    }              
     
     function permisosByUsuario (id){         
         $scope.Usuario.Permisos = [];       
@@ -100,7 +100,7 @@ function($scope, usuarioService,toaster,ngTableParams ,  funcionService, cliente
         }
         
         if($scope.Usuario.TipoAcceso === "5" && !$scope.ContratoSelect){
-            toaster.pop('info', '¡Alerta!', 'El tipo de usuario es SUBCLIENTE, por favor indique el contrato.');
+            toaster.pop('info', '¡Alerta!', 'por favor indique el Nro. de Contrato.');
             return;
         } 
         $scope.Usuario.Contrato = $scope.ContratoSelect.ctNumeroContrato ? $scope.ContratoSelect.ctNumeroContrato : 0;                   
@@ -110,7 +110,13 @@ function($scope, usuarioService,toaster,ngTableParams ,  funcionService, cliente
         var promise;
         if($scope.editMode){
             promise = usuarioService.put($scope.Usuario.IdUsuario, $scope.Usuario);
-        }else {                              
+        }else {    
+            
+            if ($scope.Usuario.TipoAcceso !== "5"){
+                toaster.pop('info', '¡Alerta!', 'Tipo de usuario no permitido.');
+                return;
+            }
+            
             promise = usuarioService.post($scope.Usuario);          
             $scope.Usuario.Permisos = funcionService.PermisoCliente();
         }
@@ -211,10 +217,30 @@ function($scope, usuarioService,toaster,ngTableParams ,  funcionService, cliente
         
     };
     
+    $scope.GetUsuarios =function(){
+        loadUsuarios();
+    };        
+    
+    $scope.ReenviarEmail = function (item){
+        toaster.pop("wait", "Reenviando Email", "Espere por favor .... ")
+         var promisePut  = usuarioService.enviarEmail(item);
+            promisePut.then(function (d) {
+             toaster.pop('success', "Control de Información", d.data.message);
+        }, function (err) {
+                toaster.pop('error', "Error", "ERROR AL REENVIAR EMAIL DE CONFIRMACIÓN"); ;
+                console.log("Some Error Occured "+ JSON.stringify(err));
+        });
+    }
+    
                  
    // Function 
     $scope.VerDesactivar = function(IdUsuario,  Estado) {
         $scope.Estado =Estado;
+        if ($scope.Estado == "INACTIVO"){
+            $scope.DescripcionEstado = "Bloquear";
+        } else{
+            $scope.DescripcionEstado = "Activar";
+        }
         $scope.IdUsuarioGlobal = IdUsuario;
         $('#mdConfirmacion').modal('show');         
     };
@@ -224,14 +250,14 @@ function($scope, usuarioService,toaster,ngTableParams ,  funcionService, cliente
            Estado :$scope.Estado
        };
            $('#mdConfirmacion').modal('hide'); 
-           var promisePut  = usuarioService.updateEstado($scope.IdUsuarioGlobal, objetc);        
-               promisePut.then(function (d) {                
-                toaster.pop('success', "Control de Información", d.data.message);                 
-              loadUsuarios();
-           }, function (err) {                              
-                    toaster.pop('error', "Error", "ERROR AL PROCESAR DESACTIVAR / ACTIVAR"); ;
-                   console.log("Some Error Occured "+ JSON.stringify(err));
-           }); 
+        var promisePut  = usuarioService.updateEstado($scope.IdUsuarioGlobal, objetc);        
+            promisePut.then(function (d) {                
+            toaster.pop('success', "Control de Información", d.data.message);                 
+            loadUsuarios();
+        }, function (err) {                              
+                 toaster.pop('error', "Error", "ERROR AL PROCESAR DESACTIVAR / ACTIVAR"); ;
+                console.log("Some Error Occured "+ JSON.stringify(err));
+        }); 
 
     };
      

@@ -38,7 +38,7 @@
     
     
     this.GetModuloUser = function (permisos){
-        var Modulos = ['CONFIGURACION','CONTRATOS','PERSONAL','REPORTES','VEHICULOS','SERVICIOS' ];
+        var Modulos = ['CONFIGURACION','CONTRATOS','PERSONAL','REPORTES','VEHICULOS','SERVICIOS', 'TARIFAS' ];
         var module = "";
         for (var i = 0, max = Modulos.length; i < max; i++) {
             module += this.arrayObjectIndexOf(permisos, Modulos[i], 'pmModulo') != -1 ? "1" : "0";
