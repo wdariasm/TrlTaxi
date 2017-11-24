@@ -5,13 +5,14 @@ function calificacionController($scope, $routeParams, servicioService, toaster )
     vm.Ocultar =  false;
     vm.Servicio = {};
     
-    vm.Calificar =  function (){        
+    vm.Calificar =  function (){     
+        
         if(!vm.Servicio.IdServicio){
             toaster.pop("error", "¡Validación!", "No se puede calificar el servicio. Servicio no asignado.");
             return;
         }
         
-        if(!vm.Servicio.Estado !=="FINALIZADO"){
+        if(vm.Servicio.Estado !== 'FINALIZADO'){
             toaster.pop("error", "¡Validación!", "No se puede calificar el servicio. Servicio no ha finalizado.");
             return;
         }                
@@ -43,6 +44,7 @@ function calificacionController($scope, $routeParams, servicioService, toaster )
                 if (vm.Servicio.Calificacion>0){
                     $('#txtCalificacion').rating('update',  parseInt(vm.Servicio.Calificacion));
                     toaster.pop("info", "¡Información!", "Estimado Cliente, el servicio ya ha sido calificado.");
+                    setTimeout( "location.href = '#/inicio/login'", 4000);
                 }
             }else{
                 toaster.pop("info", "¡Información!", "Servicio no asignado.");

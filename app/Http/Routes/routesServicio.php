@@ -25,7 +25,7 @@
     Route::post('api/servicio/fecha','ServicioController@getPorFecha');
     
     /* Cancelar Servicio */
-    Route::put('api/servicio/{id}/cancelar','ServicioController@cancelarServico');
+    Route::put('api/servicio/{id}/cancelar','ServicioController@cancelarServicio');
     
     /* Servicio por conductor y rango de fecha*/
     Route::post('api/servicio/conductor','ServicioController@getServicioConductorFecha');

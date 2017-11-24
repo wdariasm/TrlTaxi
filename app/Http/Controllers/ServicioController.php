@@ -295,8 +295,13 @@ class ServicioController extends Controller
             $result = Servicio::where('IdServicio', $data["IdServicio"])          
                 ->update(['ConductorId' => $data['ConductorId'], 'Placa' => $data['Placa'], 'Estado' => 'ASIGNADO' ]);             
             $this->EnviarEmailAsignar($data["IdServicio"], $data["Responsable"], $data["Email"], $data["Nombre"]);
-            $this->NotificacionConductor($data ['ConductorId'], $data["IdServicio"] );
-            $this->NotificacionCliente($data ['ClienteId'], $data["IdServicio"] );            
+            
+            $msjConductor = "Estimado usuario se le  ha asignado un servicio, por favor confirmar la aceptación del servicio N° ". $data["IdServicio"];            
+            $this->NotificacionConductor($data['ConductorId'], $msjConductor);
+            
+            $msjCliente = "Estimado Cliente. Se ha asigando un conductor a su servicio N° ". $data["IdServicio"];           
+            $this->NotificacionCliente($data['ClienteId'], $msjCliente);            
+            
             return JsonResponse::create(array('message' => "Servicio asignado correctamente", "request" =>json_encode($result)), 200);
         }catch (\Exception $exc) {
             return JsonResponse::create(array('file' => $exc->getFile(), "line"=> $exc->getLine(),  "message" =>json_encode($exc->getMessage())), 500);
@@ -368,15 +373,28 @@ class ServicioController extends Controller
     public function updateServConductor(Request $request, $id){
         try {            
             $data = $request->all();
-            $estado = $data['Estado'];
-            $servicio = DB::update("UPDATE servicio SET Estado= '".$estado."' WHERE IdServicio=$id ");    
-            if($estado === "FINALIZADO"){
-                $this->EmailCalificacion($id);
-            } 
+            $estado = $data['Estado'];            
+            $servicio = Servicio::where('IdServicio', $id)->select('ClienteId', 'Estado')->first();
+            if (!empty($servicio)) {
+                if($servicio->Estado != 'CANCELADO'){
+                    $result = DB::update("UPDATE servicio SET Estado= '".$estado."', FechaMod=NOW() WHERE IdServicio=$id ");    
+                    
+                    if($estado === "FINALIZADO"){
+                        $this->EmailCalificacion($id);
+                    }
+                    
+                    if($estado != 'RECHAZADO'){
+                        $msjCliente = "Estimado Cliente. El estado de su servicio N° ". $id . " es : ".$estado;           
+                        $this->NotificacionCliente($servicio->ClienteId, $msjCliente);         
+                    }
             
-            DB::insert("INSERT INTO servicio_estados (stServicioId, stEstado, stFecha ) VALUES ($id, '".$estado."', sysdate())");
-                        
-            return JsonResponse::create(array('message' => "Servicio actualizado correctamente", "request" =>json_encode($servicio)), 200);
+                    DB::insert("INSERT INTO servicio_estados (stServicioId, stEstado, stFecha ) VALUES ($id, '".$estado."', sysdate())");            
+                    return JsonResponse::create(array('message' => "Servicio actualizado correctamente", "request" =>json_encode($result)), 200);
+                }
+            }
+            
+            return JsonResponse::create(array('message' => "Servicio ha sido cancelado", "request" =>json_encode(0)), 200);
+            
         } catch (\Exception $exc) {
             return JsonResponse::create(array('file' => $exc->getFile(), "line"=> $exc->getLine(),  "message" =>json_encode($exc->getMessage())), 500);
         }
@@ -412,7 +430,7 @@ class ServicioController extends Controller
         }
     }
     
-    public function cancelarServico(Request $request, $id){
+    public function cancelarServicio(Request $request, $id){
         try{
             $data = $request->all();
             $scConductorId = $data['Conductor'];
@@ -429,7 +447,9 @@ class ServicioController extends Controller
                         . " VALUES ($motivo,$id,".$scConductorId.", ".$idCliente.") ");
                 
                 if ($scConductorId !== "NULL"){                   
-                    DB::update("UPDATE conductor SET Disposicion='LIBRE' WHERE IdConductor=".$scConductorId."");                            
+                    DB::update("UPDATE conductor SET Disposicion='LIBRE' WHERE IdConductor=".$scConductorId."");
+                    $msjConductor = "Estimado usuario el servicio N° ". $id . " ha sido cancelado.";          
+                    $this->NotificacionConductor($scConductorId, $msjConductor);
                 }
                                
             }	                        	    
@@ -622,10 +642,10 @@ class ServicioController extends Controller
 	curl_close($ch);
     }
     
-    public function NotificacionConductor ($idConductor, $idServicio){
+    public function NotificacionConductor ($idConductor, $mensaje){
         $payload = array(
-            'title'         => "TRL (Asignación de Servicio)",
-            'msg'           => "Estimado usuario se le  ha asignado un servicio, por favor confirmar la aceptación del servicio N° ".$idServicio,
+            'title'         => "TRL Servicio",
+            'msg'           => $mensaje,
             'std'           => 1,
         );
                                         
@@ -634,10 +654,10 @@ class ServicioController extends Controller
         $this->enviarNotificacion($idPushvec,$payload);    
     }
     
-    public function NotificacionCliente($idCliente, $idServicio){
+    public function NotificacionCliente($idCliente, $mensaje){
         $payload = array(
-            'title'         => "TRL (Asignación de Servicio)",
-            'msg'           => "Estimado Cliente. Se ha asigando un conductor a su servicio N° ".$idServicio,
+            'title'         => "TRL Servicio",
+            'msg'           => $mensaje,
             'std'           => 200,
         );
                                         
