@@ -57,8 +57,7 @@ class VehiculoController extends Controller
             $vehiculo->Estado = $data["Estado"]; 
             $vehiculo->Tipo = $data["Tipo"]; 
             $date = new \DateTime(str_replace("/", "-", $data["FechaArriendo"]));
-            $vehiculo->FechaArriendo = $date->format('Y-m-d H:i:s');
-            $vehiculo->NumPasajeros = $data["NumPasajeros"]; 
+            $vehiculo->FechaArriendo = $date->format('Y-m-d H:i:s');            
             $vehiculo->ClaseVehiculo = $data["ClaseVehiculo"]; 
             $vehiculo->Runt = $data["Runt"]; 
             $date2 = new \DateTime(str_replace("/", "-",$data["FProxMantenimiento"]));            

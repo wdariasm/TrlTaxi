@@ -327,11 +327,11 @@ class UsuarioController extends Controller
             $enviarnotifiacion = false;            
             if($user->Sesion == 'INICIADA'){
                 $enviarnotifiacion = true;
-                $result = DB::Select("SELECT DirIp, IF(DATE(FechaCnx) = CURRENT_DATE(), 'SI', 'NO') entrar"
-                        . " FROM usuario WHERE IdUsuario= '".$user['IdUsuario']."'");                
-                if ($result[0]->entrar == 'SI' && $dirIp!=$result[0]->DirIp ){
-                    return response()->json(['error' => 'Estimado Usuario(a), usted tiene una Sesion iniciada. '], 500);                    
-                }
+//                $result = DB::Select("SELECT DirIp, IF(DATE(FechaCnx) = CURRENT_DATE(), 'SI', 'NO') entrar"
+//                        . " FROM usuario WHERE IdUsuario= '".$user['IdUsuario']."'");                
+//                if ($result[0]->entrar == 'SI' && $dirIp!=$result[0]->DirIp ){
+//                    return response()->json(['error' => 'Estimado Usuario(a), usted tiene una Sesion iniciada. '], 500);                    
+//                }
             }
             
             $this->buscarConductor($user->ConductorId, $imei, $enviarnotifiacion);

@@ -8,6 +8,7 @@ app.controller('serviciosController',['$scope',  'ngTableParams', 'toaster',  "s
     $scope.AsigServicio =  {};
     $scope.Conductores = [];
     $scope.VerDetalle = false;
+    $scope.LabelDetalle = "Ver Detalle";
     
     $scope.FechaBusqueda =  moment().format('L');
     
@@ -21,7 +22,7 @@ app.controller('serviciosController',['$scope',  'ngTableParams', 'toaster',  "s
     $scope.Posicion = {
         Latitud : 10.4370725,
         Longitud : -75.524795
-    };
+    };        
             
     $scope.$parent.SetTitulo("GESTIÓN DE SERVICIOS");        
        
@@ -63,7 +64,7 @@ app.controller('serviciosController',['$scope',  'ngTableParams', 'toaster',  "s
     
     $scope.GetServicios();
     
-    $scope.VerAsignarServicio = function (item){
+    $scope.VerAsignarServicio = function (item){       
         $scope.AsigServicio = item;
         $scope.VerDetalle = false;
         $scope.AsigServicio.Conductor = {};
@@ -99,6 +100,11 @@ app.controller('serviciosController',['$scope',  'ngTableParams', 'toaster',  "s
                 $scope.AsigServicio.Contactos = d.data.Contactos;
                 $scope.AsigServicio.Paradas = d.data.Paradas;
                 $scope.AsigServicio.ValorParadas = d.data.ValorParadas;
+                $scope.AsigServicio.DireccionOrigen = d.data.DireccionOrigen;
+                $scope.AsigServicio.DireccionDestino =  d.data.DireccionDestino;
+                if ($scope.AsigServicio.DireccionDestino == ""){
+                    $scope.AsigServicio.DireccionDestino = "NO APLICA";
+                }
             }
                        
         }, function(err) {
@@ -163,7 +169,8 @@ app.controller('serviciosController',['$scope',  'ngTableParams', 'toaster',  "s
     };        
     
     $scope.VerDetalleServicio = function (){
-        $scope.VerDetalle = !$scope.VerDetalle;        
+        $scope.VerDetalle = !$scope.VerDetalle;         
+        $scope.LabelDetalle = ($scope.VerDetalle) ? "Ocultar Detalle" : "Ver Detalle";                
     };
                        
 }]);

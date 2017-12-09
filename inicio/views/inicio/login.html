@@ -69,7 +69,7 @@
                                         <div class="input-group">    
                                             <div class="input-group-addon"><i class="fa fa-key"></i></div>
                                             <!--ng-pattern="/(?=^.{6,}$)(?=.*\d)(?![.\n])(?=.*[a-zA-Z]).*$/" -->
-                                            <input type="password" class="form-control" id="txtClave" name="txtClave" ng-model="Usuario.Clave"  placeholder="Contraseña" required ng-pattern="/(?=^.{6,}$)(?=.*\d)(?![.\n])(?=.*[a-zA-Z]).*$/">
+                                            <input type="password" class="form-control" id="txtClave" name="txtClave" ng-model="Usuario.Clave"  placeholder="Contraseña" ng-enter="Iniciar()" required ng-pattern="/(?=^.{6,}$)(?=.*\d)(?![.\n])(?=.*[a-zA-Z]).*$/">
                                         </div>
                                     </div>
                                 </div>   

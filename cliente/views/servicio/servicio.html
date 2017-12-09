@@ -175,7 +175,7 @@
 					    <label  for="txtModo">Modo <span>*</span></label>
 					    <div class="input-group">
 						<div class="input-group-addon"><i class="fa fa-clock-o text-success"></i></div>
-						<select class="form-control" ng-model="Servicio.ModoServicio" ng-disabled="Editar" id="txtModo" placeholder="Modo Servicio">
+						<select class="form-control" ng-model="Servicio.ModoServicio" id="txtModo" placeholder="Modo Servicio" ng-disabled="EditModoServicio && !Editar">
 						    <option value="PROGRAMADO">PROGRAMADO</option>
 						    <option value="INMEDIATO">INMEDIATO</option>                                               
 						</select>

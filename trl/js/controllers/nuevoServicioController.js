@@ -23,7 +23,8 @@ app.controller('nuevoservicioController',['$scope', 'zonaService',  'toaster', "
     $scope.TrasladoSelect = {};
     $scope.LstRutas = [];
     $scope.LstTraslados = [];
-    $scope.EditTipoVehiculo = false;
+    $scope.EditTipoVehiculo = true;
+    $scope.EditModoServicio = true;
 
     $scope.mapServicio;
     var markerOrigen = null;
@@ -450,7 +451,8 @@ app.controller('nuevoservicioController',['$scope', 'zonaService',  'toaster', "
         }
         
         $scope.Editar = false;
-        $scope.EditTipoVehiculo =false;
+        $scope.EditTipoVehiculo =true;
+        $scope.EditModoServicio = true;
         $scope.title = "Nuevo Servicio";
         init();
         iniciarMapaZ();
@@ -527,18 +529,23 @@ app.controller('nuevoservicioController',['$scope', 'zonaService',  'toaster', "
 
         var pos = funcionService.arrayObjectIndexOf($scope.Contrato.Plantilla,$scope.Servicio.Tipo.csTipoServicioId, 'pcTipoServicio');
         if(pos >=0){
+            $scope.EditModoServicio = true;
+            $scope.EditTipoVehiculo = true;
+            $scope.Servicio.ModoServicio = "PROGRAMADO";
             $scope.Plantilla = $scope.Contrato.Plantilla[pos];            
-            if($scope.Servicio.Tipo.csTipoServicioId == 1){ 
-                $scope.EditTipoVehiculo = false;
+            if($scope.Servicio.Tipo.csTipoServicioId == 1){                 
                 buscarValorParada();
                 getTipoVehiculo($scope.Plantilla.plCodigo, $scope.Servicio.Tipo.csTipoServicioId );
-            } else if($scope.Servicio.Tipo.csTipoServicioId == 2) {
+                $scope.EditTipoVehiculo = false;
+                $scope.EditModoServicio = false;
+            } else if($scope.Servicio.Tipo.csTipoServicioId == 2) {                
                 getTipoVehiculo($scope.Plantilla.plCodigo, $scope.Servicio.Tipo.csTipoServicioId );
+                $scope.EditTipoVehiculo = false;
+                $scope.EditModoServicio = false;
             } else if($scope.Servicio.Tipo.csTipoServicioId == 3){ //ruta
-                $scope.EditTipoVehiculo = true;                
                 getRutas($scope.Plantilla.plCodigo);
                 getTiposVehiculos();
-            }else { //traslado
+            }else { //traslado                
                 getTraslados($scope.Plantilla.plCodigo);
                 getTiposVehiculos();
             }

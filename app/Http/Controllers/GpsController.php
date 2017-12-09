@@ -37,7 +37,7 @@ class GpsController extends Controller
                 $vehiculo ="";
             }
             $result = DB::select("SELECT c.IdConductor, c.Nombre, c.TelefonoPpal, c.Disposicion, v.Movil, c.CdPlaca,"
-                    . " gp.gpLatitud, gp.gpLongitud, c.RutaImg, gp.gpFecha,  MINUTE(TIMEDIFF(`gpFecha`,  NOW())) tiempo "
+                    . " gp.gpLatitud, gp.gpLongitud, c.RutaImg, gp.gpFecha,  MINUTE(TIMEDIFF(gpFecha,  NOW())) tiempo "
                     . " FROM ((gps  gp INNER JOIN vehiculo v ON gp.gpVehiculoId = v.IdVehiculo) "
                     . " INNER JOIN conductor c ON v.IdVehiculo = c.VehiculoId)  WHERE gp.gpEstado ='ACTIVO' "
                     . " AND CURRENT_DATE() = DATE(gp.gpFecha) $vehiculo $est  HAVING tiempo < 6 ");
@@ -95,7 +95,7 @@ class GpsController extends Controller
     {
        try{            
             $key = $request->get("gpKey");           
-            $gps = Gps::where('gpImei', $imei)->first();
+            $gps = Gps::where('gpImei', $imei)->first();            
             $gps->gpKey = $key;
             $gps->save();
             return JsonResponse::create(array('message' => "Correcto", "request" =>"Imei Actualizado Correctamente"), 200);

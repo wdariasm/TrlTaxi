@@ -253,6 +253,17 @@ class ServicioController extends Controller
                 $email->EmailSolicitud($servicio->IdServicio, $data["NumeroContrato"], $data["Responsable"], $data["ParEmail"]);
                 unset($email);                
             }
+            //asignar conductor, cuando es tipo de servicio transfer o disponibilidad
+            if($servicio->ModoServicio == "INMEDIATO" && ($servicio->TipoServicidoId == 1 || $servicio->TipoServicidoId==2)){
+                
+                $resultado = $this->BuscarConductorDisponible($servicio->LatOrigen, $servicio->LngOrigen, $servicio->TipoVehiculoId);
+                
+                if(!empty($resultado)){
+                    $conductor = $resultado[0]; 
+                    $this->asignarServicio($servicio->IdServicio, $conductor->IdConductor, $conductor->CdPlaca,  
+                          $servicio->Responsable, $conductor->Email, $conductor->Nombre, $servicio->ClienteId);
+                }
+            }
                                     
             return JsonResponse::create(array('message' => "Servicio guardado correctamente", "request" =>json_encode($servicio->IdServicio)), 200);
         }  catch (\Exception $exc) {
@@ -291,18 +302,15 @@ class ServicioController extends Controller
     public function asignar(Request $request){
         try{  
             $data = $request->all();                                   
+                        
+            $result = $this->asignarServicio($data["IdServicio"], $data['ConductorId'], $data['Placa'],
+                    $data["Responsable"], $data["Email"], $data["Nombre"], $data['ClienteId']);                                    
             
-            $result = Servicio::where('IdServicio', $data["IdServicio"])          
-                ->update(['ConductorId' => $data['ConductorId'], 'Placa' => $data['Placa'], 'Estado' => 'ASIGNADO' ]);             
-            $this->EnviarEmailAsignar($data["IdServicio"], $data["Responsable"], $data["Email"], $data["Nombre"]);
+            if ($result !=0){
+                return JsonResponse::create(array('message' => "Servicio asignado correctamente", "request" =>json_encode($result)), 200);
+            } 
+            return JsonResponse::create(array('message' => "Error al asignar servicio", "request" =>json_encode($result)), 200);
             
-            $msjConductor = "Estimado usuario se le  ha asignado un servicio, por favor confirmar la aceptación del servicio N° ". $data["IdServicio"];            
-            $this->NotificacionConductor($data['ConductorId'], $msjConductor);
-            
-            $msjCliente = "Estimado Cliente. Se ha asigando un conductor a su servicio N° ". $data["IdServicio"];           
-            $this->NotificacionCliente($data['ClienteId'], $msjCliente);            
-            
-            return JsonResponse::create(array('message' => "Servicio asignado correctamente", "request" =>json_encode($result)), 200);
         }catch (\Exception $exc) {
             return JsonResponse::create(array('file' => $exc->getFile(), "line"=> $exc->getLine(),  "message" =>json_encode($exc->getMessage())), 500);
         }
@@ -374,13 +382,16 @@ class ServicioController extends Controller
         try {            
             $data = $request->all();
             $estado = $data['Estado'];            
-            $servicio = Servicio::where('IdServicio', $id)->select('ClienteId', 'Estado')->first();
+            $servicio = Servicio::where('IdServicio', $id)->select('ClienteId', 'Estado', 'ConductorId')->first();
             if (!empty($servicio)) {
-                if($servicio->Estado != 'CANCELADO'){
-                    $result = DB::update("UPDATE servicio SET Estado= '".$estado."', FechaMod=NOW() WHERE IdServicio=$id ");    
+                if($servicio->Estado != 'CANCELADO' && $servicio->Estado != 'FINALIZADO'){
+                    $result = DB::update("UPDATE servicio SET Estado= '".$estado."', FechaMod=NOW() WHERE IdServicio=$id ");
                     
                     if($estado === "FINALIZADO"){
+                        DB::update("UPDATE conductor SET Disposicion= 'LIBRE' WHERE IdConductor=$servicio->ConductorId ");
                         $this->EmailCalificacion($id);
+                    } else if($estado === "EN SITIO"){
+                        DB::update("UPDATE conductor SET Disposicion= 'EN SERVICIO' WHERE IdConductor=$servicio->ConductorId ");
                     }
                     
                     if($estado != 'RECHAZADO'){
@@ -393,7 +404,7 @@ class ServicioController extends Controller
                 }
             }
             
-            return JsonResponse::create(array('message' => "Servicio ha sido cancelado", "request" =>json_encode(0)), 200);
+            return JsonResponse::create(array('message' => "Servicio NO permite cambio de estado", "request" =>json_encode(0)), 200);
             
         } catch (\Exception $exc) {
             return JsonResponse::create(array('file' => $exc->getFile(), "line"=> $exc->getLine(),  "message" =>json_encode($exc->getMessage())), 500);
@@ -423,7 +434,7 @@ class ServicioController extends Controller
     public function destroy($id)
     {
         try {
-            $servicio = DB::update("UPDATE servicio SET Estado= 'RECHAZADO', ConductorId=NULL WHERE IdServicio=$id ");
+            $servicio = DB::update("UPDATE servicio SET Estado= 'RECHAZADO', ConductorId=NULL, Placa ='' WHERE IdServicio=$id ");
             return JsonResponse::create(array('message' => "Servicio rechazado", "request" =>json_encode($servicio)), 200);
         } catch (\Exception $exc) {
             return JsonResponse::create(array('file' => $exc->getFile(), "line"=> $exc->getLine(),  "message" =>json_encode($exc->getMessage())), 500);
@@ -450,14 +461,50 @@ class ServicioController extends Controller
                     DB::update("UPDATE conductor SET Disposicion='LIBRE' WHERE IdConductor=".$scConductorId."");
                     $msjConductor = "Estimado usuario el servicio N° ". $id . " ha sido cancelado.";          
                     $this->NotificacionConductor($scConductorId, $msjConductor);
-                }
-                               
+                }                               
             }	                        	    
             return JsonResponse::create(array('bandera' => "Correcto", 'message' => "Servicio cancelado correctamente",), 200);
         } catch (\Exception $exc) {
             return JsonResponse::create(array('bandera' => "Error", 'file' => $exc->getFile(), "line"=> $exc->getLine(),  "message" =>json_encode($exc->getMessage())), 500);
         }
-    }        
+    }       
+    
+    private function BuscarConductorDisponible($latitud, $longitud, $tipoVehiculo){
+        try{                        
+            
+            $resultado = DB::select("SELECT c.IdConductor,  c.Disposicion, MINUTE(TIMEDIFF(gpFecha,  NOW())) tiempo, "
+                    . "  c.CdPlaca, c.Nombre, c.Email, "
+                    . " (6371 * ACOS( SIN(RADIANS(g.gpLatitud)) * SIN(RADIANS('$latitud')) + COS(RADIANS(g.gpLongitud - '$longitud')) * COS(RADIANS(g.gpLatitud)) * COS(RADIANS('$latitud')) ) ) AS distancia "
+                    . " FROM (conductor c INNER JOIN vehiculo v ON c.VehiculoId = v.IdVehiculo) INNER JOIN gps g ON v.IdVehiculo = g.gpVehiculoId "
+                    . " WHERE  g.gpEstado='ACTIVO' AND CURRENT_DATE() = DATE(g.gpFecha)  AND  c.Disposicion='LIBRE' "
+                    . " AND c.Estado = 'ACTIVO'  AND v.ClaseVehiculo = $tipoVehiculo "
+                    . " HAVING tiempo < 6 AND distancia <= 1 ORDER BY distancia ASC LIMIT 1 ");
+                                    
+            return $resultado;
+        
+        } catch (\Exception $exc) {
+            return JsonResponse::create(array('bandera' => "Error", 'file' => $exc->getFile(), "line"=> $exc->getLine(),  "message" =>json_encode($exc->getMessage())), 500);
+        }
+    }
+    
+    /*Asignar servicio al conductor ya sea manual o automatico */
+    private function asignarServicio($idServicio, $conductorId, $placa, $responsable, $emailConductor, $nombreConductor, $clienteId){
+        $result = Servicio::where('IdServicio', $idServicio)          
+                ->update(['ConductorId' => $conductorId, 'Placa' => $placa, 'Estado' => 'ASIGNADO' ]);
+        
+        if ($result != 0){
+            $this->EnviarEmailAsignar($idServicio, $responsable, $emailConductor, $nombreConductor);
+
+            $msjConductor = "Estimado usuario se le  ha asignado un servicio, por favor confirmar "
+                    . " la aceptación del servicio N° ". $idServicio;            
+            $this->NotificacionConductor($conductorId, $msjConductor);
+
+            $msjCliente = "Estimado Cliente. Se ha asigando un conductor a su servicio N° ". $idServicio;           
+            $this->NotificacionCliente($clienteId, $msjCliente); 
+        }
+        
+        return $result;
+    }
        
     
     private function EnviarEmail($idServicio, $contrato,  $responsable, $email){
@@ -575,6 +622,7 @@ class ServicioController extends Controller
         $mensaje = "
         <html>
         <head>
+          <meta http-equiv='Content-Type' content='text/html; charset=utf-8' /> 
           <title>".utf8_encode('Calificación de servicio') ."</title>
         </head>
         <body>
@@ -721,7 +769,7 @@ class ServicioController extends Controller
         $correo = new \PHPMailer(true); // notice the \  you have to use root namespace here
         try {
             $correo->isSMTP(); 
-            $correo->CharSet = "utf-8"; 
+            $correo->CharSet = "UTF-8"; 
             $correo->SMTPAuth = true;  
             $correo->SMTPSecure = "tls"; 
             $correo->Host = "smtp.gmail.com";
@@ -731,7 +779,7 @@ class ServicioController extends Controller
             $correo->setFrom("soportetrlapp@gmail.com", "Soporte TRL");
             $correo->Subject = $titulo;
             $correo->MsgHTML($mensaje);
-            $correo->addAddress($para, "Usuario TRL");
+            $correo->addAddress($para, "Usuario TRL");                        
             $correo->send();
         } catch (phpmailerException $e) {
             return $e;

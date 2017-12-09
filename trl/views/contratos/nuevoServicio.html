@@ -175,7 +175,7 @@
 					    <label  for="txtModo">Modo <span>*</span></label>
 					    <div class="input-group">
 						<div class="input-group-addon"><i class="fa fa-clock-o text-success"></i></div>
-						<select class="form-control" ng-model="Servicio.ModoServicio" ng-disabled="Editar" id="txtModo" placeholder="Modo Servicio">
+						<select class="form-control" ng-model="Servicio.ModoServicio" ng-disabled="EditModoServicio && !Editar" id="txtModo" placeholder="Modo Servicio" >
 						    <option value="PROGRAMADO">PROGRAMADO</option>
 						    <option value="INMEDIATO">INMEDIATO</option>                                               
 						</select>
@@ -381,7 +381,7 @@
                                     
                                     <div class="col-md-12">
                                        <div class="form-group">
-                                          <label  for="cboRutas" >Descripción Ruta </label>
+                                          <label  for="txtDescripcion" >Descripción Ruta </label>
                                           <div class="input-group">
                                              <div class="input-group-addon"><i class="fa fa-road text-success"></i></div>
                                              <textarea id="txtDescripcion" disabled="true" class="form-control" rows="3" ng-model="RutaSelect.rtDescripcion"  placeholder="Descripción" maxlength="255"></textarea>						                                                
