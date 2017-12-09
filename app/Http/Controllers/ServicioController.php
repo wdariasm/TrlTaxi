@@ -253,19 +253,25 @@ class ServicioController extends Controller
                 $email->EmailSolicitud($servicio->IdServicio, $data["NumeroContrato"], $data["Responsable"], $data["ParEmail"]);
                 unset($email);                
             }
+            
+            $mensaje = "Servicio guardado correctamente";
             //asignar conductor, cuando es tipo de servicio transfer o disponibilidad
             if($servicio->ModoServicio == "INMEDIATO" && ($servicio->TipoServicidoId == 1 || $servicio->TipoServicidoId==2)){
                 
                 $resultado = $this->BuscarConductorDisponible($servicio->LatOrigen, $servicio->LngOrigen, $servicio->TipoVehiculoId);
                 
+                $mensaje = "Estimado(a) cliente, no fue posible asignar un conductor al servicio. El Servicio ha sido guardado, a espera de ser asignado. ";
                 if(!empty($resultado)){
                     $conductor = $resultado[0]; 
-                    $this->asignarServicio($servicio->IdServicio, $conductor->IdConductor, $conductor->CdPlaca,  
-                          $servicio->Responsable, $conductor->Email, $conductor->Nombre, $servicio->ClienteId);
+                    $numReg = $this->asignarServicio($servicio->IdServicio, $conductor->IdConductor, $conductor->CdPlaca,  
+                          $servicio->Responsable, $conductor->Email, $conductor->Nombre, $servicio->ClienteId);                    
+                    if ($numReg != 0){
+                        $mensaje = "Servicio guardado correctamente. Asignado al Vehículo : $conductor->CdPlaca";
+                    }
                 }
             }
                                     
-            return JsonResponse::create(array('message' => "Servicio guardado correctamente", "request" =>json_encode($servicio->IdServicio)), 200);
+            return JsonResponse::create(array('message' => $mensaje, "request" =>json_encode($servicio->IdServicio)), 200);
         }  catch (\Exception $exc) {
             return JsonResponse::create(array('file' => $exc->getFile(), "line"=> $exc->getLine(),  "message" =>json_encode($exc->getMessage())), 500);
         }
@@ -489,8 +495,9 @@ class ServicioController extends Controller
     
     /*Asignar servicio al conductor ya sea manual o automatico */
     private function asignarServicio($idServicio, $conductorId, $placa, $responsable, $emailConductor, $nombreConductor, $clienteId){
-        $result = Servicio::where('IdServicio', $idServicio)          
-                ->update(['ConductorId' => $conductorId, 'Placa' => $placa, 'Estado' => 'ASIGNADO' ]);
+        
+        $result = DB::update("UPDATE servicio SET  Estado='ASIGNADO', ConductorId=$conductorId, Placa ='$placa',"
+                . " FechaAsignacion = NOW() WHERE IdServicio= $idServicio");
         
         if ($result != 0){
             $this->EnviarEmailAsignar($idServicio, $responsable, $emailConductor, $nombreConductor);
