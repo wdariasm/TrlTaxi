@@ -102,5 +102,74 @@ class TransfertController extends Controller
         }catch (\Exception $exc) {
             return JsonResponse::create(array('file' => $exc->getFile(), "line"=> $exc->getLine(),  "message" =>json_encode($exc->getMessage())), 500);
         }  
+    }        
+    
+    public function plantillaExcel(){
+        try {
+            
+            $fecha =date("Ymd");
+                       
+            \Excel::create('PlantillaTransfert_'.$fecha, function($excel) {               
+                
+                $zonas= \App\Zona::select('znCodigo', 'znNombre')->where('znEstado', '<>','BORRADO')
+                                ->orderBy('znCodigo', 'asc')->get(); 
+                
+                $tipoVehiculos = \App\TipoVehiculo::where('tvEstado','<>','BORRADO')
+                        ->select("tvDescripcion", "tvNumPasajero")->get();
+                
+                $claseVehiculo= $tipoVehiculos[2];
+                
+                $color = "#e7e7e7";
+                
+                $excel->sheet('Transfert', function($sheet) use($zonas, $color, $claseVehiculo) {
+                                                            
+                    $sheet->row(1, array( 'Descripcion', 'Zona Origen', "Zona Destino", "Valor Cliente", "Valor Proveedor", "Tipo Vehículo" ));                    
+                    $sheet->row(1, function($row) use($color) {   
+                        $row->setBackground($color);
+                    });
+                    
+                    $zona = $zonas[0];
+                    
+                    foreach($zonas as $index => $tipo) {
+                        $sheet->row($index+2, [
+                            "", $zona['znNombre'], $tipo->znNombre, "", "", $claseVehiculo['tvDescripcion']
+                        ]); 
+                    }                                        
+                });
+                
+                $excel->sheet('Zonas', function($sheet) use($zonas, $color) {
+                                                                        
+                    $sheet->row(1, array( 'ID', 'Nombre Zona' ));
+                    
+                    $sheet->row(1, function($row) use($color) {   
+                        $row->setBackground($color);
+                    });
+                                 
+                    foreach($zonas as $index => $tipo) {
+                        $sheet->row($index+2, [
+                            $tipo->znCodigo, $tipo->znNombre
+                        ]); 
+                    }
+                });
+                                     
+                $excel->sheet('TipoVehiculo', function($sheet) use ($tipoVehiculos, $color) {                                           
+                    $sheet->row(1, array( 'Tipo Vehículo', 'N. Pasajeros' ));
+                    
+                    $sheet->row(1, function($row) use ($color) {   
+                        $row->setBackground($color);
+                    });
+                                 
+                    foreach($tipoVehiculos as $index => $tipo) {
+                        $sheet->row($index+2, [
+                            $tipo->tvDescripcion, $tipo->tvNumPasajero
+                        ]); 
+                    }
+                });                                
+                                
+            })->export('xlsx');
+            
+        } catch (\Exception $exc) {
+            return JsonResponse::create(array('file' => $exc->getFile(), "line"=> $exc->getLine(),  "message" =>json_encode($exc->getMessage())), 500);
+        }  
     }
 }

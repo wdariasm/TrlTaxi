@@ -7,3 +7,6 @@
     
     /* Obtener plantillas transfer por id de plantilla */    
     Route::get('api/plantilla/{idPlantilla}/transfert','TransfertController@getByPlanitlla');
+    
+    /* Generar plantilla transfert en excel */
+    Route::get('api/transfert/excel','TransfertController@plantillaExcel');

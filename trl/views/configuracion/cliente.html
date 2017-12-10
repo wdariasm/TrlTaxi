@@ -33,13 +33,12 @@
 			<table class="table table-hover table-condensed" ng-table="TablaCliente" style="float:height; margin-top: 20px;">
 			    <thead>
 				<tr>
-				    <th>CEDULA</th>
+                           <th title="Tipo Documento">T.DOC</th>
+				   <th>CEDULA</th>
 				    <th>NOMBRE</th>  
 				    <th>DIRECCION</th>
 				    <th>TELEFONO</th>
-
-				    <th>ESTADO</th>                                         
-				    <th title="Tipo Documento">T.DOC</th>
+				    <th>ESTADO</th>                                         				    
 				    <th>T. PERSONA</th>
 				    <th width="7%">ACCÍON</th>
 				</tr>
@@ -47,15 +46,13 @@
 
 			    <tbody>
 				<tr data-ng-repeat="items in $data">
+                            <td>{{ items.TipoDocumento}}</td> 
 				    <td class="center">{{ items.Identificacion}}</td>
 				    <td>{{ items.Nombres}}</td>
 				    <td>{{ items.Direccion}}</td> 
 				    <td>{{ items.MovilPpal}}</td> 
-
-				    <td>{{ items.Estado}}</td>                                 
-				    <td>{{ items.TipoDocumento}}</td> 
+				    <td>{{ items.Estado}}</td>                                 				    
 				    <td>{{ items.TipoPersona}}</td> 
-
 				    <td>
 					<center>
 					    <a data-ng-click="get(items)" style="float: left; margin-left: 5px;" href="javascript:;"  title="Editar"><i class="fa fa-lg fa-pencil text-success"></i></a>

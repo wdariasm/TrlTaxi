@@ -15,8 +15,8 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::group(['middleware' => 'cors'], function () {
-    
+Route::group(['middleware' => 'cors'], function () {    
+//    Route::get('api/transfert/excel1','TransfertController@plantillaExcel');
     Route::post('api/usuario/autenticar', 'UsuarioController@autenticar');
     Route::post('api/login/conductor', 'UsuarioController@autenticarConductor');    
     Route::get('api/usuario/{id}/{key}/confirmar','UsuarioController@ConfirmarCuenta');

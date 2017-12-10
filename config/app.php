@@ -158,6 +158,7 @@ return [
         Anouar\Fpdf\FpdfServiceProvider::class,
         Tymon\JWTAuth\Providers\JWTAuthServiceProvider::class,
         Barryvdh\Cors\ServiceProvider::class,
+        Maatwebsite\Excel\ExcelServiceProvider::class,
         
 
     ],
@@ -207,7 +208,8 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
         'Fpdf'    => Anouar\Fpdf\Facades\Fpdf::class,
         'JWTAuth'   => Tymon\JWTAuthFacades\JWTAuth::class,
-        'JWTFactory' => Tymon\JWTAuthFacades\JWTFactory::class
+        'JWTFactory' => Tymon\JWTAuthFacades\JWTFactory::class,
+        'Excel' => Maatwebsite\Excel\Facades\Excel::class,
 
     ],
 
