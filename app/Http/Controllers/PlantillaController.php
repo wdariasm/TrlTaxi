@@ -8,6 +8,7 @@ use App\HistorialPlantilla;
 use App\Ruta;
 use App\Traslado;
 use App\Transfert;
+use App\Archivo;
 use Illuminate\Http\JsonResponse;
 use DB;
 
@@ -176,5 +177,61 @@ class PlantillaController extends Controller
         }catch (\Exception $exc) {
             return JsonResponse::create(array('file' => $exc->getFile(), "line"=> $exc->getLine(),  "message" =>json_encode($exc->getMessage())), 500);
         }  
+    }
+    
+    public function cargueArchivo(Request $request)
+    {
+        try{
+            
+            $data = $request->all();  
+            $result = 0;
+            
+            $archivo = new Archivo();
+            $archivo->IdTipo = $data["IdTipo"];
+            $archivo->IdPlantilla = $data["IdPlantilla"];
+            $archivo->Usuario = $data["Usuario"];                                             
+            $archivo->save();
+            
+            if ($request->hasFile('Archivo')) {
+               $file =  $request->file('Archivo');
+               $nombre = $archivo->IdArchivo . "_" . $file->getClientOriginalName();
+               $file->move("../archivos/plantilla", $nombre);
+               
+               //$archivo->Ruta = "http://".$_SERVER['HTTP_HOST'].'/archivos/plantilla/'.$nombre;
+               $archivo->Ruta = "http://".$_SERVER['HTTP_HOST'].'/trltaxi/archivos/plantilla/'.$nombre;
+               $archivo->save();
+               
+               $result = $this->importarDatos($archivo->Ruta, $archivo->IdPlantilla);
+            }
+            
+            $mensaje = $result == 0 ? "No fue posible realizar el cargue del archivo. " :"Archivo cargado correctamente. No Registros afectados: ". $result;
+                        
+            return JsonResponse::create(array('message' => $mensaje, "request" =>json_encode($archivo->IdArchivo)), 200);
+        }catch (\Exception $exc) {
+            return JsonResponse::create(array('file' => $exc->getFile(), "line"=> $exc->getLine(),  "message" =>json_encode($exc->getMessage())), 500);
+        } 
+    }
+    
+    private function importarDatos($path, $idPlantilla){
+        
+        DB::table('temptransfert')->truncate();
+        
+        $query = sprintf("LOAD DATA LOCAL INFILE '%s' INTO TABLE temptransfert FIELDS TERMINATED BY ';' "
+                . " OPTIONALLY ENCLOSED BY '\"' ESCAPED BY '\"' LINES TERMINATED BY '\\n' IGNORE 1 "
+                . " LINES (Descripcion,ZonaOrigen, ZonaDestino,ValorCliente,ValorProveedor,TipoVehiculo)", addslashes($path));
+       
+        $result = DB::connection()->getpdo()->exec($query);
+        
+        if($result > 0){
+            DB::update("UPDATE temptransfert t1  INNER JOIN zona z1 ON  t1.ZonaOrigen=z1.znNombre   SET t1.IdOrigen = z1.znCodigo");
+            DB::update("UPDATE temptransfert t1  INNER JOIN zona z1 ON  t1.ZonaDestino=z1.znNombre  SET t1.IdDestino = z1.znCodigo");
+            DB::update("UPDATE temptransfert t2  INNER JOIN clasevehiculo cv ON  cv.tvDescripcion=t2.TipoVehiculo  SET t2.IdVehiculo = cv.tvCodigo");
+            
+            $insert = DB::insert("INSERT INTO transfert SELECT NULL , Descripcion, IdOrigen, IdDestino, IdVehiculo,"
+                    . "  ValorProveedor, ValorCliente, NOW(), NOW(), 'admin', 'admin', 'ACTIVO', $idPlantilla as plantilla"
+                    . " FROM temptransfert WHERE  IdDestino IS NOT NULL  AND IdVehiculo IS NOT NULL");
+        }
+        
+        return $result;
     }
 }

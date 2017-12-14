@@ -1,270 +1,347 @@
 <div class="container-fluid"  ng-controller="plantillaController" >
-    <div class="row">                       
-        <div class="col-md-4">            
-            <br/>
-            <form name="frmPlatilla" id="frmPlatilla" novalidate>                               
-                <div class="row">
-                    <div class="col-xs-12">
-                        <div class="form-group">
-                            <label for="txtDescripcion">Descripción *</label>
-			    <div class="input-group">    
-				<div class="input-group-addon"><i class="fa fa-automobile text-success"></i></div>
-				<input type="text" required="" class="form-control" ng-model="Plantilla.plDescripcion" maxlength="100" id="txtDescripcion" placeholder="Descripción">
-
-			    </div>
-                        </div>
-                    </div>
-
-		    <div class="col-xs-12">
-			<div class="form-group">
-			    <label  for="txtValorCliente">Valor Parada Cliente *</label>
-			    <div class="input-group">
-				<div class="input-group-addon"><i class="fa fa-usd"></i></div>
-				<input class="form-control" ng-model="Plantilla.plValorCliente" solo-numeros id="txtValorCliente" name="txtValorCliente" type="text" fcsa-number="{ min: 0,  maxDecimals: 0  }" required   maxlength="10" >
-			    </div>
-			</div>
-		    </div>  
-
-		    <div class="col-xs-12">
-			<div class="form-group">
-			    <label  for="txtValor">Valor Parada Proveedor *</label>
-			    <div class="input-group">
-				<div class="input-group-addon"><i class="fa fa-usd"></i></div>
-				<input class="form-control" ng-model="Plantilla.plValorProveedor" solo-numeros id="txtValor" name="txtValor" type="text" fcsa-number="{ min: 0,  maxDecimals: 0  }" required   maxlength="10" >
-			    </div>
-			</div>
-		    </div>
-
-
-                    <div class="col-xs-12">
-                        <div class="form-group">
-                            <label for="txtEstado">Estado *</label>
-			    <div class="input-group">    
-				<div class="input-group-addon"><i class="fa fa-list-ul text-success"></i></div>
-				<select type="text" class="form-control" ng-model="Plantilla.plEstado" id="txtEstado" placeholder="Estado">
-				    <option value="ACTIVO">ACTIVO</option>
-				    <option value="INACTIVO">INACTIVO</option>                                               
-				</select>
-
-			    </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <br/>
-                        <div class="col-xs-5 col-xs-offset-1">                                                                    
-                            <button   class="btn btn-success btn-block btn-addon"   type="button"  title="Nuevo / Cancelar" ng-click="nuevo()"><i class="fa fa-pencil"></i> Nuevo</button>
-                        </div>
-                        <div class="col-xs-5">                                 
-                            <button  ng-disabled="frmPlatilla.$invalid"  class="btn btn-primary btn-block btn-addon"   type="button"  title="Registrar Tipo Vehiculo" ng-click="Guardar()"><i class="fa fa-check"></i>Guardar</button>
-                        </div>
-                    </div>
-
-
-                </div>                                
-            </form>
-        </div>
-
-        <div class="col-md-8">
-            <br/>
+   <div class="row">                       
+      <div class="col-md-4">            
+         <br/>
+         <form name="frmPlatilla" id="frmPlatilla" novalidate>                               
             <div class="row">
-                <div class="col-xs-12">
-                    <table border="0" cellspacing="0" class="table table-striped" >
-                        <thead>
-                            <tr>
-                                <th class="center">N°</th>                                
-                                <th>DESCRIPCIÓN</th>
-                                <th>TIPO</th>
-				<th title="Valor Cliente">V. CLIENTE</th>
-				<th title="Valor proveedor">V. PROVEEDOR</th>
-                                <th>ESTADO</th>
-                                <th width="19%">ACCIÓN</th>
-                            </tr>
-                        </thead>
+               <div class="col-xs-12">
+                  <div class="form-group">
+                     <label for="txtDescripcion">Descripción *</label>
+                     <div class="input-group">    
+                        <div class="input-group-addon"><i class="fa fa-automobile text-success"></i></div>
+                        <input type="text" required="" class="form-control" ng-model="Plantilla.plDescripcion" maxlength="100" id="txtDescripcion" placeholder="Descripción">
 
-                        <tbody>
-                            <tr data-ng-repeat="items in Plantillas">
-                                <td class="center">{{ items.plCodigo}}</td>
-                                <td>{{ items.plDescripcion}}</td>
-				<td>{{ items.svDescripcion}}</td>
-				<td>{{ items.plValorCliente | currency : "$" : 0}}</td>
-				<td>{{ items.plValorProveedor | currency : "$" : 0}}</td>                                
-                                <td>{{ items.plEstado}}</td>
-                                <td>
-			<center>                                        
-			    <a data-ng-click="Get(items)" style="float: left; margin-left: 15px;" href="javascript:;"  title="Editar"><i class="fa fa-lg fa-pencil"></i></a>
-                      <a data-ng-click="VerModificar(items)" style="float: left; margin-left: 10px;" href="javascript:;"  title="Actualizar Valores"><i class="fa fa-lg fa-refresh  text-warning"></i></a>
-			    <a data-ng-click="AgregarDatos(items)" style="float: left; margin-left: 10px;" href="javascript:;"  title="Agregar Datos"><i class="fa fa-lg fa-search-plus text-success"></i></a>
-			    <a ng-click="VerDesactivarPlantilla(items)"  style="float: left; margin-left: 15px;" href="javascript:;"  title="Eliminar datos plantilla"><i class="fa fa-lg fa-trash text-danger"></i></a>
-			</center>
-			</td>
-			</tr>
-                        </tbody>
-                    </table>                                     
-                </div>                            
+                     </div>
+                  </div>
+               </div>
+
+               <div class="col-xs-12">
+                  <div class="form-group">
+                     <label  for="txtValorCliente">Valor Parada Cliente *</label>
+                     <div class="input-group">
+                        <div class="input-group-addon"><i class="fa fa-usd"></i></div>
+                        <input class="form-control" ng-model="Plantilla.plValorCliente" solo-numeros id="txtValorCliente" name="txtValorCliente" type="text" fcsa-number="{ min: 0,  maxDecimals: 0  }" required   maxlength="10" >
+                     </div>
+                  </div>
+               </div>  
+
+               <div class="col-xs-12">
+                  <div class="form-group">
+                     <label  for="txtValor">Valor Parada Proveedor *</label>
+                     <div class="input-group">
+                        <div class="input-group-addon"><i class="fa fa-usd"></i></div>
+                        <input class="form-control" ng-model="Plantilla.plValorProveedor" solo-numeros id="txtValor" name="txtValor" type="text" fcsa-number="{ min: 0,  maxDecimals: 0  }" required   maxlength="10" >
+                     </div>
+                  </div>
+               </div>
+
+
+               <div class="col-xs-12">
+                  <div class="form-group">
+                     <label for="txtEstado">Estado *</label>
+                     <div class="input-group">    
+                        <div class="input-group-addon"><i class="fa fa-list-ul text-success"></i></div>
+                        <select type="text" class="form-control" ng-model="Plantilla.plEstado" id="txtEstado" placeholder="Estado">
+                           <option value="ACTIVO">ACTIVO</option>
+                           <option value="INACTIVO">INACTIVO</option>                                               
+                        </select>
+
+                     </div>
+                  </div>
+               </div>
+
+               <div class="row">
+                  <br/>
+                  <div class="col-xs-5 col-xs-offset-1">                                                                    
+                     <button   class="btn btn-success btn-block btn-addon"   type="button"  title="Nuevo / Cancelar" ng-click="nuevo()"><i class="fa fa-pencil"></i> Nuevo</button>
+                  </div>
+                  <div class="col-xs-5">                                 
+                     <button  ng-disabled="frmPlatilla.$invalid"  class="btn btn-primary btn-block btn-addon"   type="button"  title="Registrar Tipo Vehiculo" ng-click="Guardar()"><i class="fa fa-check"></i>Guardar</button>
+                  </div>
+               </div>
+
+
+               <div class ="row" ng-show="verDescargar">
+                  <br/> <br/>
+
+                  <div class="col-xs-8 col-xs-offset-2">                                                                    
+                     <button  class="btn btn-primary btn-block btn-addon"   type="button"  title="Descargar Plantilla" ng-click="descargarPlantilla()"><i class="fa fa-download"></i> Descargar Plantilla</button>
+                  </div>
+
+               </div>
+
+            </div>                                
+         </form>
+      </div>
+
+      <div class="col-md-8">
+         <br/>
+         <div class="row">
+            <div class="col-xs-12">
+               <table border="0" cellspacing="0" class="table table-striped" >
+                  <thead>
+                     <tr>
+                        <th class="center">N°</th>                                
+                        <th>DESCRIPCIÓN</th>
+                        <th>TIPO</th>
+                        <th title="Valor Cliente">V. CLIENTE</th>
+                        <th title="Valor proveedor">V. PROVEEDOR</th>
+                        <th>ESTADO</th>
+                        <th width="19%">ACCIÓN</th>
+                     </tr>
+                  </thead>
+
+                  <tbody>
+                     <tr data-ng-repeat="items in Plantillas">
+                        <td class="center">{{ items.plCodigo}}</td>
+                        <td>{{ items.plDescripcion}}</td>
+                        <td>{{ items.svDescripcion}}</td>
+                        <td>{{ items.plValorCliente | currency : "$" : 0}}</td>
+                        <td>{{ items.plValorProveedor | currency : "$" : 0}}</td>                                
+                        <td>{{ items.plEstado}}</td>
+                        <td>
+                           <center>                                        
+                              <a data-ng-click="Get(items)" style="float: left; margin-left: 5px;" href="javascript:;"  title="Editar"><i class="fa fa-lg fa-pencil"></i></a>                      
+                              <a data-ng-click="AgregarDatos(items)" style="float: left; margin-left: 7px;" href="javascript:;"  title="Agregar Datos"><i class="fa fa-lg fa-search-plus text-success"></i></a>
+                              <a data-ng-click="VerModificar(items)" style="float: left; margin-left: 7px;" href="javascript:;"  title="Actualizar Valores"><i class="fa fa-lg fa-refresh  text-warning"></i></a>
+                              <a data-ng-click="VerCargarDatos(items)" style="float: left; margin-left: 7px;" href="javascript:;"  title="Cargar Datos"><i class="fa fa-lg fa-upload  text-info"></i></a>
+                              <a ng-click="VerDesactivarPlantilla(items)"  style="float: left; margin-left: 7px;" href="javascript:;"  title="Eliminar datos plantilla"><i class="fa fa-lg fa-trash text-danger"></i></a>
+                           </center>
+                        </td>
+                     </tr>
+                  </tbody>
+               </table>                                     
+            </div>                            
+         </div>
+      </div>
+   </div>
+
+   <div class="modal fade bs-example-modal-sm" id="mdConfirmacionPlantilla" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" style="margin-top: 10%;">
+      <div class="modal-dialog modal-sm" style="width: 30%" >                                   
+         <div class="modal-content">
+
+            <div class="modal-header">
+               <div class="modal-title"> Borrar Datos Plantilla</div>
             </div>
-        </div>
-    </div>
 
-    <div class="modal fade bs-example-modal-sm" id="mdConfirmacionPlantilla" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" style="margin-top: 10%;">
-        <div class="modal-dialog modal-sm" style="width: 30%" >                                   
-            <div class="modal-content">
+            <div class="modal-body">
+               <div class="row">
+                  <div class="col-xs-12">
+                     <label class="text-danger" style="display: initial">Estimado usuario(a), tenga en cuenta que este proceso eliminará definitivamente todas las tarifas 
+                        configuradas para esta plantilla: </label> <label style="display: inline-block"><strong>{{PlantillaGlobal.plDescripcion}}</strong></label>
 
-                <div class="modal-header">
-                    <div class="modal-title"> Borrar Datos Plantilla</div>
-                </div>
+                  </div>
 
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="col-xs-12">
-                            <label class="text-danger" style="display: initial">Estimado usuario(a), tenga en cuenta que este proceso eliminará definitivamente todas las tarifas 
-                                configurados para esta plantilla: </label> <label style="display: inline-block"><strong>{{PlantillaGlobal.plDescripcion}}</strong></label>
+                  <div class="col-xs-12">
+                     <label>¿Está seguro de ejecutar esta acción?  </label>
+                  </div>
 
-                        </div>
+                  <div class="col-xs-12 text-center">
+                     <label>{{Mensaje.Texto}}</label>
+                  </div>
 
-                        <div class="col-xs-12">
-                            <label>¿Está seguro de ejecutar esta acción?  </label>
-                        </div>
+                  <div class="col-xs-12 text-center" ng-show="Mensaje.Cargando">
+                     <i class="fa fa-spinner fa-fw fa-pulse fa-3x text-info"></i>
+                  </div>
 
-                        <div class="col-xs-12 text-center">
-                            <label>{{Mensaje.Texto}}</label>
-                        </div>
-
-                        <div class="col-xs-12 text-center" ng-show="Mensaje.Cargando">
-                            <i class="fa fa-spinner fa-fw fa-pulse fa-3x text-info"></i>
-                        </div>
-
-                    </div>
-                </div>
-
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
-                    <button type="button" class="btn btn-primary" ng-disabled="Mensaje.Boton" ng-click="EliminarDatos()">Aceptar</button>
-                </div>  
+               </div>
             </div>
-        </div>
-    </div>
-   
-   
+
+            <div class="modal-footer">
+               <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+               <button type="button" class="btn btn-primary" ng-disabled="Mensaje.Boton" ng-click="EliminarDatos()">Aceptar</button>
+            </div>  
+         </div>
+      </div>
+   </div>
+
+
    <div class="modal fade bs-example-modal-sm" id="mdModificarPlnatilla" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" style="margin-top: 5%;">
-        <div class="modal-dialog modal-sm" style="width: 50%" >                                   
-            <div class="modal-content">
+      <div class="modal-dialog modal-sm" style="width: 50%" >                                   
+         <div class="modal-content">
 
-                <div class="modal-header">
-                    <div class="modal-title"> Actualizar Valores de la Plantilla {{PlantillaGlobal.plDescripcion}}</div>
-                </div>
-
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="col-xs-12">
-                            <label class="text-danger" style="display: initial">Estimado usuario(a), tenga en cuenta que este proceso actualizara los valores 
-                              de cada registro asociado a la plantilla: </label> <label style="display: inline-block"><strong>{{PlantillaGlobal.plDescripcion}}</strong></label>
-                              <br/>
-                        </div>
-
-                        <div class="col-xs-12">
-                           <br/>
-                           1. Seleccione el tipo de operación : Aumentar (+) o Disminuir (-) el Valor. <br/>
-                           2. Ingrese el monto a Aumentar o Disminuir. <br/>
-                        </div>
-                       
-                    </div>
-                   
-                     <div class="row">    
-                        <br/>
-                        
-                        <div class="col-xs-1 col-xs-offset-1">
-                           <br/>
-                           <div class="checkbox checkbox-primary">
-                              <input type="checkbox" id="chkCliente" ng-model="ObjPlantilla.SelCliente">
-                              <label for="chkCliente">                                  
-                              </label>
-                            </div>
-                        </div>
-                        
-                        <div class="col-xs-4">
-                           <div class="form-group">
-                            <label for="txtEstado">Operación *</label>
-                              <div class="input-group">    
-                                <div class="input-group-addon"><i class="fa fa-list-ul text-success"></i></div>
-                                <select type="text" class="form-control" ng-model="ObjPlantilla.OperacionC" id="txtEstado" placeholder="Estado">
-                                    <option value="Mas">Aumentar (+) </option>
-                                    <option value="Menos">Disminuir (-) </option>                                               
-                                </select>
-
-                              </div>
-                           </div>
-                        </div>
-                        
-                        <div class="col-xs-4">
-                           <div class="form-group">
-                               <label  for="txtValorCliente">Valor Cliente *</label>
-                               <div class="input-group">
-                                 <div class="input-group-addon"><i class="fa fa-usd"></i></div>
-                                 <input class="form-control" ng-model="ObjPlantilla.plValorCliente" solo-numeros id="txtValorCliente" name="txtValorCliente" type="text" fcsa-number="{ min: 0,  maxDecimals: 0  }" required   maxlength="10" >
-                               </div>
-                           </div>
-                         </div>
-                                                                                               
-                     </div>
-                   
-                     <div class="row">    
-                        <br/>
-                        
-                        <div class="col-xs-1 col-xs-offset-1">
-                           <br/>
-                           <div class="checkbox checkbox-primary">
-                              <input type="checkbox" id="chkCliente" ng-model="ObjPlantilla.SelProveedor">
-                              <label for="chkCliente">                                  
-                              </label>
-                            </div>
-                        </div>
-                        
-                        <div class="col-xs-4">
-                           <div class="form-group">
-                            <label for="txtEstado">Operación *</label>
-                              <div class="input-group">    
-                                <div class="input-group-addon"><i class="fa fa-list-ul text-success"></i></div>
-                                <select type="text" class="form-control" ng-model="ObjPlantilla.OperacionP" id="txtEstado" placeholder="Estado">
-                                    <option value="Mas">Aumentar (+) </option>
-                                    <option value="Menos">Disminuir (-) </option>                                               
-                                </select>
-
-                              </div>
-                           </div>
-                        </div>                                                                        
-                        
-                        <div class="col-xs-4">
-                           <div class="form-group">
-                               <label  for="txtValor">Valor Proveedor *</label>
-                               <div class="input-group">
-                                 <div class="input-group-addon"><i class="fa fa-usd"></i></div>
-                                 <input class="form-control" ng-model="ObjPlantilla.plValorProveedor" solo-numeros id="txtValor" name="txtValor" type="text" fcsa-number="{ min: 0,  maxDecimals: 0  }" required   maxlength="10" >
-                               </div>
-                           </div>
-                         </div>
-                        
-                     </div>
-                   
-                     <div class="row">
-
-                          <div class="col-xs-12 text-center">
-                              <label>{{Mensaje.Texto}}</label>
-                          </div>
-
-                          <div class="col-xs-12 text-center" ng-show="Mensaje.Cargando">
-                              <i class="fa fa-spinner fa-fw fa-pulse fa-3x text-info"></i>
-                          </div>
-                     </div>
-
-                    </div>
-                
-
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
-                    <button type="button" class="btn btn-primary" ng-disabled="Mensaje.Boton" ng-click="ActualizarValores()">Aceptar</button>
-                </div>  
+            <div class="modal-header">
+               <div class="modal-title"> Actualizar Valores de la Plantilla {{PlantillaGlobal.plDescripcion}}</div>
             </div>
-        </div>
-    </div>
+
+            <div class="modal-body">
+               <div class="row">
+                  <div class="col-xs-12">
+                     <label class="text-danger" style="display: initial">Estimado usuario(a), tenga en cuenta que este proceso actualizara los valores 
+                        de cada registro asociado a la plantilla: </label> <label style="display: inline-block"><strong>{{PlantillaGlobal.plDescripcion}}</strong></label>
+                     <br/>
+                  </div>
+
+                  <div class="col-xs-12">
+                     <br/>
+                     1. Seleccione el tipo de operación : Aumentar (+) o Disminuir (-) el Valor. <br/>
+                     2. Ingrese el monto a Aumentar o Disminuir. <br/>
+                  </div>
+
+               </div>
+
+               <div class="row">    
+                  <br/>
+
+                  <div class="col-xs-1 col-xs-offset-1">
+                     <br/>
+                     <div class="checkbox checkbox-primary">
+                        <input type="checkbox" id="chkCliente" ng-model="ObjPlantilla.SelCliente">
+                        <label for="chkCliente">                                  
+                        </label>
+                     </div>
+                  </div>
+
+                  <div class="col-xs-4">
+                     <div class="form-group">
+                        <label for="txtEstado">Operación *</label>
+                        <div class="input-group">    
+                           <div class="input-group-addon"><i class="fa fa-list-ul text-success"></i></div>
+                           <select type="text" class="form-control" ng-model="ObjPlantilla.OperacionC" id="txtEstado" placeholder="Estado">
+                              <option value="Mas">Aumentar (+) </option>
+                              <option value="Menos">Disminuir (-) </option>                                               
+                           </select>
+
+                        </div>
+                     </div>
+                  </div>
+
+                  <div class="col-xs-4">
+                     <div class="form-group">
+                        <label  for="txtValorCliente">Valor Cliente *</label>
+                        <div class="input-group">
+                           <div class="input-group-addon"><i class="fa fa-usd"></i></div>
+                           <input class="form-control" ng-model="ObjPlantilla.plValorCliente" solo-numeros id="txtValorCliente" name="txtValorCliente" type="text" fcsa-number="{ min: 0,  maxDecimals: 0  }" required   maxlength="10" >
+                        </div>
+                     </div>
+                  </div>
+
+               </div>
+
+               <div class="row">    
+                  <br/>
+
+                  <div class="col-xs-1 col-xs-offset-1">
+                     <br/>
+                     <div class="checkbox checkbox-primary">
+                        <input type="checkbox" id="chkCliente" ng-model="ObjPlantilla.SelProveedor">
+                        <label for="chkCliente">                                  
+                        </label>
+                     </div>
+                  </div>
+
+                  <div class="col-xs-4">
+                     <div class="form-group">
+                        <label for="txtEstado">Operación *</label>
+                        <div class="input-group">    
+                           <div class="input-group-addon"><i class="fa fa-list-ul text-success"></i></div>
+                           <select type="text" class="form-control" ng-model="ObjPlantilla.OperacionP" id="txtEstado" placeholder="Estado">
+                              <option value="Mas">Aumentar (+) </option>
+                              <option value="Menos">Disminuir (-) </option>                                               
+                           </select>
+
+                        </div>
+                     </div>
+                  </div>                                                                        
+
+                  <div class="col-xs-4">
+                     <div class="form-group">
+                        <label  for="txtValor">Valor Proveedor *</label>
+                        <div class="input-group">
+                           <div class="input-group-addon"><i class="fa fa-usd"></i></div>
+                           <input class="form-control" ng-model="ObjPlantilla.plValorProveedor" solo-numeros id="txtValor" name="txtValor" type="text" fcsa-number="{ min: 0,  maxDecimals: 0  }" required   maxlength="10" >
+                        </div>
+                     </div>
+                  </div>
+
+               </div>
+
+               <div class="row">
+
+                  <div class="col-xs-12 text-center">
+                     <label>{{Mensaje.Texto}}</label>
+                  </div>
+
+                  <div class="col-xs-12 text-center" ng-show="Mensaje.Cargando">
+                     <i class="fa fa-spinner fa-fw fa-pulse fa-3x text-info"></i>
+                  </div>
+               </div>
+
+            </div>
+
+
+            <div class="modal-footer">
+               <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+               <button type="button" class="btn btn-primary" ng-disabled="Mensaje.Boton" ng-click="ActualizarValores()">Aceptar</button>
+            </div>  
+         </div>
+      </div>
+   </div>
+
+   <div class="modal fade bs-example-modal-sm" id="mdCargueDatos" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" style="margin-top: 5%;">
+      <div class="modal-dialog modal-sm" style="width: 50%" >                                   
+         <div class="modal-content">
+
+            <div class="modal-header">
+               <div class="modal-title"> Cargue de Datos. Plantilla Seleccionada {{PlantillaGlobal.plDescripcion}}</div>
+            </div>
+
+            <div class="modal-body">
+               <div class="row">
+                  <div class="col-xs-12">
+                     <label class="text-danger" style="display: initial">Estimado usuario(a), tenga en cuenta que este proceso actualizara los valores 
+                        de cada registro asociado a la plantilla: </label> <label style="display: inline-block"><strong>{{PlantillaGlobal.plDescripcion}}</strong></label>
+                     <br/>
+                  </div>
+
+                  <div class="col-xs-12">
+                     <br/>
+                     1. Seleccione el archivo. Recuerde solo se permiten archivos con extension .CSV <br/>
+                     2. Click en Cargar <br/>
+                     3. Recuerde que esto puede tardar algunos minutos, dependiendo de la cantidad de datos. <br/>
+                  </div>
+
+               </div>
+
+               <form   name="frmCargue" id="frmCargue" novalidate>
+                  <br/>
+                  <div class="row">
+                     <div class="col-md-8 col-md-offset-2">
+                        <input  id="flArchivo" uploader-model="Archivo.Ruta" ng-disabled="frmCargue.$invalid"  name="flArchivo" class="file-loading" type="file"  data-min-file-count="1"  accept=".csv" required>
+                     </div>
+                  </div>
+                  
+               </form>              
+            </div>
+
+            <div class="modal-footer">
+               <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+               <button type="button" class="btn btn-primary"  ng-click="CargarDatos()">Cargar</button>
+            </div>  
+         </div>
+      </div>
+   </div>
+
+
 </div>
+
+<script type="text/javascript">
+   $(function () {
+      $('#flArchivo').fileinput({
+            uploadAsync: false,
+            minFileCount: 1,
+            maxFileCount: 1,
+            resizeImage: true,
+            maxImageWidth: 200,
+            maxImageHeight: 200,
+            showUpload: false,
+            showRemove: false,
+            language: "es",
+            autoReplace: true,
+            allowedFileExtensions: ["csv"],            
+            initialPreviewConfig: [
+                {caption: "Archivo", key: 11}
+            ]
+        });
+   });
+</script>

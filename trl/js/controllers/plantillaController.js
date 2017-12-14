@@ -1,11 +1,12 @@
-app.controller('plantillaController',['$scope',  'ngTableParams', 'toaster',"plantillaService", "$routeParams", "serverData",
-    function ($scope, ngTableParams, toaster, plantillaService, $routeParams, serverData) {
+app.controller('plantillaController',['$scope',  'ngTableParams', 'toaster',"plantillaService", "$routeParams", "serverData","$window",
+    function ($scope, ngTableParams, toaster, plantillaService, $routeParams, serverData, $window) {
     
     var opcion =["1","2","3","4"];
     
     $scope.Plantillas = [];
     $scope.Plantilla = {};
     $scope.ObjPlantilla = {};
+    $scope.Archivo = {};
             
     $scope.editMode = false;                    
     $scope.title = "Nueva Plantilla"; 
@@ -13,6 +14,7 @@ app.controller('plantillaController',['$scope',  'ngTableParams', 'toaster',"pla
     $scope.PlantillaGlobal =  {};
     $scope.TipoId = $routeParams.tipo;   
     $scope.Mensaje = {};
+    $scope.verDescargar = false;
     
     if(opcion.indexOf($scope.TipoId) === -1){
         toaster.pop("error","¡Error!", "Ruta no valida");
@@ -44,6 +46,10 @@ app.controller('plantillaController',['$scope',  'ngTableParams', 'toaster',"pla
             plValorCliente : 0,
             plValorProveedor : 0
         };
+        
+        if($scope.TipoId == 1){
+            $scope.verDescargar= true;
+        }
     }
     
     
@@ -224,6 +230,49 @@ app.controller('plantillaController',['$scope',  'ngTableParams', 'toaster',"pla
         }
         
     };
+    
+    $scope.descargarPlantilla = function (){  
+        
+        if ($scope.TipoId == 1){
+            window.open(uri+'/api/transfert/excel?code='+$window.sessionStorage.trl_token, '_blank',
+            'toolbar=no,scrollbars=no,resizable=no,top=100,left=400,width=200,height=100');
+        }                
+    };
+    
+    $scope.VerCargarDatos = function (item){
+        $scope.PlantillaGlobal = item;                
+        $('#mdCargueDatos').modal('show'); 
+    };
+    
+    $scope.CargarDatos=  function (){
+        
+        if(!$scope.frmCargue.$valid){
+            toaster.pop('error','¡Error!', 'Por favor seleccione el archivo.');
+            return;
+        }
+                
+        if (!$scope.Archivo.Ruta){
+            toaster.pop('info', "¡Alerta!", "Seleccione el Archivo.");
+            return;
+        }
+        
+        
+        var formData=new FormData();
+        formData.append('IdTipo', $scope.TipoId);
+        formData.append('IdPlantilla', $scope.PlantillaGlobal.plCodigo);
+        formData.append('Archivo', $scope.Archivo.Ruta);
+        formData.append('Usuario', $scope.$parent.Login.Login);
+        
+        var promise = plantillaService.postArchivo(formData);
+        promise.then(function(d) {
+            toaster.pop('success', "Control de Información", d.data.message);           
+        }, function(err) {
+            toaster.pop('error', "¡Error!", "Error al cargar archivo.");
+            console.log("Some Error Occured " + JSON.stringify(err));
+        });
+        
+    };
+                
 }]);
 
 

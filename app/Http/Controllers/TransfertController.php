@@ -119,23 +119,7 @@ class TransfertController extends Controller
                 
                 $claseVehiculo= $tipoVehiculos[2];
                 
-                $color = "#e7e7e7";
-                
-                $excel->sheet('Transfert', function($sheet) use($zonas, $color, $claseVehiculo) {
-                                                            
-                    $sheet->row(1, array( 'Descripcion', 'Zona Origen', "Zona Destino", "Valor Cliente", "Valor Proveedor", "Tipo Vehículo" ));                    
-                    $sheet->row(1, function($row) use($color) {   
-                        $row->setBackground($color);
-                    });
-                    
-                    $zona = $zonas[0];
-                    
-                    foreach($zonas as $index => $tipo) {
-                        $sheet->row($index+2, [
-                            "", $zona['znNombre'], $tipo->znNombre, "", "", $claseVehiculo['tvDescripcion']
-                        ]); 
-                    }                                        
-                });
+                $color = "#e7e7e7";                
                 
                 $excel->sheet('Zonas', function($sheet) use($zonas, $color) {
                                                                         
@@ -164,7 +148,23 @@ class TransfertController extends Controller
                             $tipo->tvDescripcion, $tipo->tvNumPasajero
                         ]); 
                     }
-                });                                
+                });   
+                
+                $excel->sheet('PlantillaTransfert', function($sheet) use($zonas, $color, $claseVehiculo) {
+                                                            
+                    $sheet->row(1, array( 'Descripcion', 'Zona Origen', "Zona Destino", "Valor Cliente", "Valor Proveedor", "Tipo Vehículo" ));                    
+                    $sheet->row(1, function($row) use($color) {   
+                        $row->setBackground($color);
+                    });
+                    
+                    $zona = $zonas[0];
+                    
+                    foreach($zonas as $index => $tipo) {
+                        $sheet->row($index+2, [
+                            "", $zona['znNombre'], $tipo->znNombre, "", "", $claseVehiculo['tvDescripcion']
+                        ]); 
+                    }                                        
+                });
                                 
             })->export('xlsx');
             

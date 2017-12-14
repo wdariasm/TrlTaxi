@@ -10,3 +10,5 @@
     /* Obtener valor de paradas */
     Route::get('api/plantilla/{id}/parada','PlantillaController@getValoresParada');
 
+    /*Cargue de plantillas por archivo*/
+    Route::post('api/plantilla/cargue','PlantillaController@cargueArchivo');

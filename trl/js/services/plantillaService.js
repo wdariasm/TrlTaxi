@@ -24,7 +24,13 @@ app.service("plantillaService", ['$http', function ($http) {
     this.delete = function (plantilla) {        
         var req = $http.post(uri+'/api/plantilla/borrar',plantilla); 
         return req;        
-    };              
+    }; 
+    
+    this.postArchivo = function (formData) {        
+        var req = $http.post(uri+'/api/plantilla/cargue', formData,{transformRequest: angular.identity, 
+            headers: {'Content-Type': undefined}});
+        return req;        
+    };
         
 }]);
 
