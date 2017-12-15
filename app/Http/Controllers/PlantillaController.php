@@ -185,11 +185,12 @@ class PlantillaController extends Controller
             
             $data = $request->all();  
             $nRegistros = 0;
-            
+            $fechaActual = new \DateTime();
             $archivo = new Archivo();
             $archivo->IdTipo = $data["IdTipo"];
             $archivo->IdPlantilla = $data["IdPlantilla"];
-            $archivo->Usuario = $data["Usuario"];                                             
+            $archivo->Usuario = $data["Usuario"];
+            $archivo->FechaRegistro = $fechaActual->format('Y-m-d H:i:s');   
             $archivo->save();
             
             if ($request->hasFile('Archivo')) {
@@ -197,8 +198,8 @@ class PlantillaController extends Controller
                $nombre = $archivo->IdArchivo . "_" . $file->getClientOriginalName();
                $file->move("../archivos/plantilla", $nombre);
                
-               //$archivo->Ruta = "http://".$_SERVER['HTTP_HOST'].'/archivos/plantilla/'.$nombre;
-               $archivo->Ruta = "http://".$_SERVER['HTTP_HOST'].'/trltaxi/archivos/plantilla/'.$nombre;
+               $archivo->Ruta = "http://".$_SERVER['HTTP_HOST'].'/archivos/plantilla/'.$nombre;
+               //$archivo->Ruta = "http://".$_SERVER['HTTP_HOST'].'/trltaxi/archivos/plantilla/'.$nombre;
                $archivo->save();
                              
                $result = $this->importarDatos($archivo->Ruta, $archivo->IdPlantilla,$nRegistros);

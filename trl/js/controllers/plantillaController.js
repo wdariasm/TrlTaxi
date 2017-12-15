@@ -129,6 +129,8 @@ app.controller('plantillaController',['$scope',  'ngTableParams', 'toaster',"pla
     };
     
     $scope.EliminarDatos = function (){
+        $scope.Mensaje.Texto = "";
+        $scope.Mensaje.Cargando = false;
         if(!$scope.PlantillaGlobal.plCodigo){
             $scope.Mensaje.Texto =  "ID de plantilla no valido";
             return;
@@ -266,6 +268,7 @@ app.controller('plantillaController',['$scope',  'ngTableParams', 'toaster',"pla
         var promise = plantillaService.postArchivo(formData);
         promise.then(function(d) {
             $scope.Archivo.Ruta =null;
+            $('#mdCargueDatos').modal('hide'); 
             toaster.pop('success', "Control de Información", d.data.message);           
         }, function(err) {
             toaster.pop('error', "¡Error!", "Error al cargar archivo.");
