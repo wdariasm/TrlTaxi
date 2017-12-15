@@ -184,7 +184,7 @@ class PlantillaController extends Controller
         try{
             
             $data = $request->all();  
-            $result = 0;
+            $nRegistros = 0;
             
             $archivo = new Archivo();
             $archivo->IdTipo = $data["IdTipo"];
@@ -200,11 +200,12 @@ class PlantillaController extends Controller
                //$archivo->Ruta = "http://".$_SERVER['HTTP_HOST'].'/archivos/plantilla/'.$nombre;
                $archivo->Ruta = "http://".$_SERVER['HTTP_HOST'].'/trltaxi/archivos/plantilla/'.$nombre;
                $archivo->save();
-               
-               $result = $this->importarDatos($archivo->Ruta, $archivo->IdPlantilla);
+                             
+               $result = $this->importarDatos($archivo->Ruta, $archivo->IdPlantilla,$nRegistros);
             }
             
-            $mensaje = $result == 0 ? "No fue posible realizar el cargue del archivo. " :"Archivo cargado correctamente. No Registros afectados: ". $result;
+            $mensaje = $nRegistros == 0 ? "No fue posible realizar el cargue del archivo. " 
+                     :"Archivo cargado correctamente.  Num. Registros leidos: ". $result;
                         
             return JsonResponse::create(array('message' => $mensaje, "request" =>json_encode($archivo->IdArchivo)), 200);
         }catch (\Exception $exc) {
@@ -212,22 +213,22 @@ class PlantillaController extends Controller
         } 
     }
     
-    private function importarDatos($path, $idPlantilla){
+    private function importarDatos($path, $idPlantilla, &$nRegistros){
         
         DB::table('temptransfert')->truncate();
         
         $query = sprintf("LOAD DATA LOCAL INFILE '%s' INTO TABLE temptransfert FIELDS TERMINATED BY ';' "
                 . " OPTIONALLY ENCLOSED BY '\"' ESCAPED BY '\"' LINES TERMINATED BY '\\n' IGNORE 1 "
-                . " LINES (Descripcion,ZonaOrigen, ZonaDestino,ValorCliente,ValorProveedor,TipoVehiculo)", addslashes($path));
+                . " LINES (Descripcion,ZonaOrigen, ZonaDestino,TipoVehiculo,ValorCliente,ValorProveedor)", addslashes($path));
        
         $result = DB::connection()->getpdo()->exec($query);
         
         if($result > 0){
-            DB::update("UPDATE temptransfert t1  INNER JOIN zona z1 ON  t1.ZonaOrigen=z1.znNombre   SET t1.IdOrigen = z1.znCodigo");
-            DB::update("UPDATE temptransfert t1  INNER JOIN zona z1 ON  t1.ZonaDestino=z1.znNombre  SET t1.IdDestino = z1.znCodigo");
-            DB::update("UPDATE temptransfert t2  INNER JOIN clasevehiculo cv ON  cv.tvDescripcion=t2.TipoVehiculo  SET t2.IdVehiculo = cv.tvCodigo");
+            DB::update("UPDATE temptransfert t1  INNER JOIN zona z1 ON  TRIM(t1.ZonaOrigen)=z1.znNombre   SET t1.IdOrigen = z1.znCodigo");
+            DB::update("UPDATE temptransfert t1  INNER JOIN zona z1 ON  TRIM(t1.ZonaDestino)=z1.znNombre  SET t1.IdDestino = z1.znCodigo");
+            DB::update("UPDATE temptransfert t2  INNER JOIN clasevehiculo cv ON  cv.tvDescripcion=TRIM(t2.TipoVehiculo)  SET t2.IdVehiculo = cv.tvCodigo");
             
-            $insert = DB::insert("INSERT INTO transfert SELECT NULL , Descripcion, IdOrigen, IdDestino, IdVehiculo,"
+            $nRegistros = DB::insert("INSERT INTO transfert SELECT NULL , Descripcion, IdOrigen, IdDestino, IdVehiculo,"
                     . "  ValorProveedor, ValorCliente, NOW(), NOW(), 'admin', 'admin', 'ACTIVO', $idPlantilla as plantilla"
                     . " FROM temptransfert WHERE  IdDestino IS NOT NULL  AND IdVehiculo IS NOT NULL");
         }

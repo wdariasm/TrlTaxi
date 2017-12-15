@@ -152,7 +152,7 @@ class TransfertController extends Controller
                 
                 $excel->sheet('PlantillaTransfert', function($sheet) use($zonas, $color, $claseVehiculo) {
                                                             
-                    $sheet->row(1, array( 'Descripcion', 'Zona Origen', "Zona Destino", "Valor Cliente", "Valor Proveedor", "Tipo Vehículo" ));                    
+                    $sheet->row(1, array( 'Descripcion', 'Zona Origen', "Zona Destino", "Tipo Vehículo", "Valor Cliente", "Valor Proveedor" ));                    
                     $sheet->row(1, function($row) use($color) {   
                         $row->setBackground($color);
                     });
@@ -161,7 +161,7 @@ class TransfertController extends Controller
                     
                     foreach($zonas as $index => $tipo) {
                         $sheet->row($index+2, [
-                            "", $zona['znNombre'], $tipo->znNombre, "", "", $claseVehiculo['tvDescripcion']
+                            "", $zona['znNombre'], $tipo->znNombre, $claseVehiculo['tvDescripcion'], "", ""
                         ]); 
                     }                                        
                 });

@@ -265,6 +265,7 @@ app.controller('plantillaController',['$scope',  'ngTableParams', 'toaster',"pla
         
         var promise = plantillaService.postArchivo(formData);
         promise.then(function(d) {
+            $scope.Archivo.Ruta =null;
             toaster.pop('success', "Control de Información", d.data.message);           
         }, function(err) {
             toaster.pop('error', "¡Error!", "Error al cargar archivo.");
