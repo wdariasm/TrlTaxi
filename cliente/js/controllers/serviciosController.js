@@ -505,7 +505,7 @@ app.controller('serviciosController',['$scope', 'zonaService',  'toaster', "cont
                                                                
                 $scope.Contrato.Nombre = d.data.ctContratante;                
                 $scope.Contrato.FormaPago =  angular.copy(JSON.parse(d.data.ctFormaPago));
-                $scope.Contrato.FechaFin = new Date(d.data.ctFechaFinal).toLocaleDateString('en-GB');
+                //$scope.Contrato.FechaFin = new Date(d.data.ctFechaFinal).toLocaleDateString('en-GB');
                 $scope.Contrato.TipoServicio = d.data.TipoServicio;
                 $scope.Contrato.Plantilla = d.data.Plantilla;                
                 
@@ -1111,8 +1111,8 @@ app.controller('serviciosController',['$scope', 'zonaService',  'toaster', "cont
             return;
         }
         
-        $scope.Servicio.ValorCliente = $scope.RutaSelect.rtValorCliente;
-        $scope.Servicio.Valor = $scope.RutaSelect.rtValor;
+        $scope.Servicio.ValorCliente = parseFloat($scope.RutaSelect.rtValorCliente);
+        $scope.Servicio.Valor = parseFloat($scope.RutaSelect.rtValor);
         $scope.Servicio.DetallePlantillaId = $scope.RutaSelect.rtCodigo;
         $scope.Servicio.DireccionOrigen = $scope.RutaSelect.rtNombre;
         $scope.Servicio.DireccionDestino = $scope.RutaSelect.rtDescripcion;
@@ -1124,7 +1124,7 @@ app.controller('serviciosController',['$scope', 'zonaService',  'toaster', "cont
         
         toaster.pop("info", "Valor del Servicio.", "$ "+ $scope.Servicio.ValorCliente);
         
-        var pos = funcionService.arrayObjectIndexOf($scope.Contrato.TipoVehiculo, $scope.RutaSelect.rtTipoVehiculo, 'tvCodigo');        
+        var pos = funcionService.arrayObjectIndexOf($scope.Contrato.TipoVehiculo, parseInt($scope.RutaSelect.rtTipoVehiculo), 'tvCodigo');        
         if(pos >=0){                            
             $scope.TipoSelect = $scope.Contrato.TipoVehiculo[pos];
         }  
@@ -1135,13 +1135,13 @@ app.controller('serviciosController',['$scope', 'zonaService',  'toaster', "cont
             return;
         }
         
-        $scope.Servicio.ValorCliente = $scope.TrasladoSelect.tlValorCliente;
-        $scope.Servicio.Valor = $scope.TrasladoSelect.tlValor;
+        $scope.Servicio.ValorCliente = parseFloat($scope.TrasladoSelect.tlValorCliente);
+        $scope.Servicio.Valor = parseFloat($scope.TrasladoSelect.tlValor);
         $scope.Servicio.DetallePlantillaId = $scope.TrasladoSelect.tlCodigo;
         
         toaster.pop("info", "Valor del Servicio.", "$ "+ $scope.Servicio.ValorCliente);
         
-        var pos = funcionService.arrayObjectIndexOf($scope.Contrato.TipoVehiculo, $scope.TrasladoSelect.tlTipoVehiculo, 'tvCodigo');
+        var pos = funcionService.arrayObjectIndexOf($scope.Contrato.TipoVehiculo, parseInt($scope.TrasladoSelect.tlTipoVehiculo), 'tvCodigo');
         if(pos >=0){                            
             $scope.TipoSelect = $scope.Contrato.TipoVehiculo[pos];
         }  

@@ -125,12 +125,13 @@ app.controller('plantillaController',['$scope',  'ngTableParams', 'toaster',"pla
     $scope.VerDesactivarPlantilla = function (item){
         $scope.PlantillaGlobal = item;
         $scope.Mensaje.Boton = false;
+        $scope.Mensaje.Texto = "";
+        $scope.Mensaje.Cargando = false;
         $('#mdConfirmacionPlantilla').modal('show'); 
     };
     
     $scope.EliminarDatos = function (){
-        $scope.Mensaje.Texto = "";
-        $scope.Mensaje.Cargando = false;
+        
         if(!$scope.PlantillaGlobal.plCodigo){
             $scope.Mensaje.Texto =  "ID de plantilla no valido";
             return;

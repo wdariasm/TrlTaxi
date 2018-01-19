@@ -1,4 +1,4 @@
-app.controller('ConfirmarController', function ($scope, $routeParams, sesionService) {
+app.controller('ConfirmarController', [ '$scope', '$routeParams', 'sesionService', function ($scope, $routeParams, sesionService) {
     $scope.idCliente = $routeParams.idCliente;
     $scope.haskey = $routeParams.haskey;
     $scope.msjError = "Procesando información,  Espere.....";
@@ -23,7 +23,7 @@ app.controller('ConfirmarController', function ($scope, $routeParams, sesionServ
         });
     }
     verificarUser();
-});
+}]);
 
 app.controller('recordarClaveController', ['$scope', 'sesionService', 'toaster',  function ($scope, sesionService, toaster) {
 

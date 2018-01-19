@@ -199,7 +199,7 @@ class PlantillaController extends Controller
                $file->move("../archivos/plantilla", $nombre);
                
                $archivo->Ruta = "http://".$_SERVER['HTTP_HOST'].'/archivos/plantilla/'.$nombre;
-               //$archivo->Ruta = "http://".$_SERVER['HTTP_HOST'].'/trltaxi/archivos/plantilla/'.$nombre;
+              // $archivo->Ruta = "http://".$_SERVER['HTTP_HOST'].'/trltaxi/archivos/plantilla/'.$nombre;
                $archivo->save();
                              
                $result = $this->importarDatos($archivo->Ruta, $archivo->IdPlantilla,$nRegistros);
@@ -218,13 +218,31 @@ class PlantillaController extends Controller
         
         DB::table('temptransfert')->truncate();
         
-        $query = sprintf("LOAD DATA LOCAL INFILE '%s' INTO TABLE temptransfert FIELDS TERMINATED BY ';' "
-                . " OPTIONALLY ENCLOSED BY '\"' ESCAPED BY '\"' LINES TERMINATED BY '\\n' IGNORE 1 "
-                . " LINES (Descripcion,ZonaOrigen, ZonaDestino,TipoVehiculo,ValorCliente,ValorProveedor)", addslashes($path));
-       
-        $result = DB::connection()->getpdo()->exec($query);
+//        $query = sprintf("LOAD DATA LOCAL INFILE '%s' INTO TABLE temptransfert FIELDS TERMINATED BY ';' "
+//                . " OPTIONALLY ENCLOSED BY '\"' ESCAPED BY '\"' LINES TERMINATED BY '\\n' IGNORE 1 "
+//                . " LINES (Descripcion,ZonaOrigen, ZonaDestino,TipoVehiculo,ValorCliente,ValorProveedor)", addslashes($path));      
+        //$result = DB::connection()->getpdo()->exec($query);
+        $fila = 0;
+        if (($gestor = fopen($path, "r")) !== FALSE) {
+            while (($datos = fgetcsv($gestor, 1000, ";")) !== FALSE) {                                
+                $data = array(
+                    'Descripcion' => $datos[0],
+                    'ZonaOrigen' => $datos[1],                    
+                    'ZonaDestino' => $datos[2],
+                    'TipoVehiculo' => $datos[3],
+                    'ValorCliente' => $datos[4],
+                    'ValorProveedor' => $datos[5]
+                );
+                
+                if ($fila <> 0){
+                    DB::table('temptransfert')->insert($data);
+                }                   
+                $fila++;
+            }
+            fclose($gestor);
+        }                        
         
-        if($result > 0){
+        if($fila > 0){
             DB::update("UPDATE temptransfert t1  INNER JOIN zona z1 ON  TRIM(t1.ZonaOrigen)=z1.znNombre   SET t1.IdOrigen = z1.znCodigo");
             DB::update("UPDATE temptransfert t1  INNER JOIN zona z1 ON  TRIM(t1.ZonaDestino)=z1.znNombre  SET t1.IdDestino = z1.znCodigo");
             DB::update("UPDATE temptransfert t2  INNER JOIN clasevehiculo cv ON  cv.tvDescripcion=TRIM(t2.TipoVehiculo)  SET t2.IdVehiculo = cv.tvCodigo");
@@ -234,6 +252,6 @@ class PlantillaController extends Controller
                     . " FROM temptransfert WHERE  IdDestino IS NOT NULL  AND IdVehiculo IS NOT NULL");
         }
         
-        return $result;
+        return $fila;
     }
 }
