@@ -1,6 +1,6 @@
 app.controller("vehiculoController", ["$scope", "vehiculoService", "marcaService", "tipoVehiculoService",
     "ngTableParams", "toaster", "novedadService","funcionService", "serverData",
-    function ($scope, vehiculoService, marcaService, tipoVehiculoService, ngTableParams, toaster, 
+    function ($scope, vehiculoService, marcaService, tipoVehiculoService, ngTableParams, toaster,
     novedadService, funcionService, serverData) {
    $scope.Vehiculo = {};
    $scope.Vehiculos = [];
@@ -12,44 +12,44 @@ app.controller("vehiculoController", ["$scope", "vehiculoService", "marcaService
    $scope.Documentos = [];
    $scope.TablaVehiculo = {};
    $scope.Titulo ="Nuevo";
-   
+
    $scope.Novedades = [];
    $scope.Novedad = {};
    $scope.TablaNovedad = {};
-   $scope.Gps ={}; 
+   $scope.Gps ={};
    $scope.PlacaGlobal = "";
    $scope.IdVehiculoGlobal = "";
    // Para Select
    $scope.MarcaSelect = {};
    $scope.ClaseSelect = {};
-   
+
    $scope.$parent.SetTitulo("GESTION DE VEHÍCULOS");
-   
+
    function init (){
-        $scope.Vehiculo = {            
+        $scope.Vehiculo = {
             IdVehiculo : 0,
             Placa : "",
             Modelo :"",
             Color : "",
             Cilindraje : "",
             Movil : "",
-            Estado : "ACTIVO", 
-            Propiedad : "PROPIO",            
-            FechaArriendo :  moment().format('L'),            
+            Estado : "ACTIVO",
+            Propiedad : "PROPIO",
+            FechaArriendo :  moment().format('L'),
             ClaseVehiculo : 1,
             Tipo : "",
-            Runt : "", 
+            Runt : "",
             FProxMantenimiento : moment().format('L'),
             Marca : "",
             NumMotor : "",
-            NumSerie : "", 
+            NumSerie : "",
             NumVin  :"",
             Linea: "",
             TipoContrato : "",
-            Empresa: ""            
-        };               
-    } 
-    
+            Empresa: ""
+        };
+    }
+
     $scope.InitNovedad = function  (){
         $scope.Novedad = {
             IdNovedad : 0,
@@ -63,50 +63,50 @@ app.controller("vehiculoController", ["$scope", "vehiculoService", "marcaService
             RadioAccion:  "",
             Vehiculo : "",
             Tipo :"SOAT"
-        };        
+        };
         $scope.editNovedad=false;
     };
-   
+
     $scope.LoadVehiculo = function (){
         var promise = vehiculoService.getAll();
-        promise.then(function(d) {                        
+        promise.then(function(d) {
             $scope.Vehiculos = d.data;
               $scope.TablaVehiculo.reload();
-        }, function(err) {                        
+        }, function(err) {
                 toaster.pop('error', '¡Error load vehículos!', err.data.error);
                 console.log("Some Error Occured " + JSON.stringify(err));
-        });             
+        });
     };
     $scope.LoadVehiculo();
-    
+
     function loadMarcas (){
         var promise = marcaService.getAll();
-        promise.then(function(d) {                        
-            $scope.Marcas = d.data; 
-            if ($scope.Marcas){                
+        promise.then(function(d) {
+            $scope.Marcas = d.data;
+            if ($scope.Marcas){
                 $scope.MarcaSelect = d.data[0];
-            }           
-        }, function(err) {           
+            }
+        }, function(err) {
                 toaster.pop('error', '¡Error!', err.data.error);
                 console.log("Some Error Occured " + JSON.stringify(err));
-        }); 
+        });
     }
-    
+
     function getClaseVehiculo (){
         var promise = tipoVehiculoService.getAll();
-        promise.then(function(d) {                        
+        promise.then(function(d) {
             $scope.ClaseVehiculo = d.data;
             if(d.data){
                 $scope.ClaseSelect = d.data[0];
             }
-        }, function(err) {           
-            toaster.pop('error', '¡Error load tipo vehículo !', err.data.error);                
-        }); 
+        }, function(err) {
+            toaster.pop('error', '¡Error load tipo vehículo !', err.data.error);
+        });
     }
-    
+
     loadMarcas();
     getClaseVehiculo();
-    
+
     function initTabla() {
         $scope.TablaVehiculo = new ngTableParams({
             page: 1,
@@ -123,14 +123,14 @@ app.controller("vehiculoController", ["$scope", "vehiculoService", "marcaService
                     return a.Placa.toLowerCase().indexOf(c) > -1 ||
                            a.Movil.toLowerCase().indexOf(c) > -1 ||
                            a.Tipo.toLowerCase().indexOf(c) > -1 ||
-                           a.Estado.toLowerCase().indexOf(c) > -1                                                       
+                           a.Estado.toLowerCase().indexOf(c) > -1
                 })) : f = $scope.Vehiculos, f = b.sorting() ? f : f, b.total(f.length), a.resolve(f.slice((b.page() - 1) * b.count(), b.page() * b.count()))
             }
         });
     };
-    
+
     initTabla();
-    
+
     $scope.get = function(item){
         loadNovedad(item.IdVehiculo);
         getDocumentos(item.IdVehiculo);
@@ -139,108 +139,109 @@ app.controller("vehiculoController", ["$scope", "vehiculoService", "marcaService
         $scope.Vehiculo.FProxMantenimiento = moment($scope.Vehiculo.FProxMantenimiento).format("L");
         $scope.editMode = true;
         $scope.Titulo = "Editando ";
-        var pos = funcionService.arrayObjectIndexOf($scope.ClaseVehiculo, parseInt($scope.Vehiculo.ClaseVehiculo), 'tvCodigo');            
+        var pos = funcionService.arrayObjectIndexOf($scope.ClaseVehiculo, parseInt($scope.Vehiculo.ClaseVehiculo), 'tvCodigo');
             $scope.ClaseSelect =$scope.ClaseVehiculo[pos];
-            
-        var pos1 = funcionService.arrayObjectIndexOf($scope.Marcas, parseInt($scope.Vehiculo.Marca), 'maCodigo');            
-            $scope.MarcaSelect =$scope.Marcas[pos1];            
+
+        var pos1 = funcionService.arrayObjectIndexOf($scope.Marcas, parseInt($scope.Vehiculo.Marca), 'maCodigo');
+            $scope.MarcaSelect =$scope.Marcas[pos1];
         $('#tabPanels a[href="#tabRegistro"]').tab('show');
     };
-    
+
     $scope.Nuevo = function (){
         init();
         $('#txtPlaca').focus();
         $scope.editMode = false;
         $scope.Titulo = "Nuevo ";
-    };       
-   
-    $scope.Guardar = function (){                                        
+    };
+
+    $scope.Guardar = function (){
         $scope.Vehiculo.Marca = $scope.MarcaSelect.maCodigo;
         $scope.Vehiculo.Placa = $scope.Vehiculo.Placa.toUpperCase();
-        
+        $scope.Vehiculo.ClaseVehiculo = $scope.ClaseSelect.tvCodigo;
+
         if($scope.valPlaca){
             toaster.pop('error','¡Error!', 'Placa ya se encuentra registrada.');
             return;
         }
-                
-        toaster.pop("wait", "Espere..", "Guardando información");      
+
+        toaster.pop("wait", "Espere..", "Guardando información");
         var promise;
-        if($scope.editMode){            
+        if($scope.editMode){
             promise = vehiculoService.put($scope.Vehiculo.IdVehiculo, $scope.Vehiculo);
         }else {
-            promise = vehiculoService.post($scope.Vehiculo);            
+            promise = vehiculoService.post($scope.Vehiculo);
         }
-        
-        promise.then(function(d) {     
+
+        promise.then(function(d) {
             toaster.clear();
             $scope.LoadVehiculo();
-            toaster.pop('success', "Control de Información", d.data.message);     
+            toaster.pop('success', "Control de Información", d.data.message);
             $scope.Nuevo();
             if($scope.editMode){
                 $('#tabPanels a[href="#tabListado"]').tab('show');
             }
-             
-        }, function(err) {          
-            toaster.pop('error', "¡Error!",  err.data, 0);                
+
+        }, function(err) {
+            toaster.pop('error', "¡Error!",  err.data, 0);
             console.log("Some Error Occured " + JSON.stringify(err));
-        });       
+        });
    };
- 
+
     init();
-    
-    // FUNCIONES CARGUE DE IMAGENES 
-    
+
+    // FUNCIONES CARGUE DE IMAGENES
+
     $scope.VerModalImagenes = function (){
-        $("#mdImagenes").modal("show");        
-        serverData.data = $scope.Vehiculo;   
+        $("#mdImagenes").modal("show");
+        serverData.data = $scope.Vehiculo;
         serverData.data.IdMantenimiento =  null;
-        $scope.$emit("ImagenVehiculo", "Cargue de documento Vehículo: ");             
+        $scope.$emit("ImagenVehiculo", "Cargue de documento Vehículo: ");
     };
-    
-    
-    // FUNCIONES PARA  NOVEDADES 
-    
-    $scope.VerModalNovedad = function (){        
+
+
+    // FUNCIONES PARA  NOVEDADES
+
+    $scope.VerModalNovedad = function (){
         $("#mdNovedades").modal("show");
         $scope.TituloNov = "Agregar Novedad ";
-        $scope.InitNovedad();        
+        $scope.InitNovedad();
     };
-    
+
     $scope.GetNovedad = function (item){
-        $scope.Novedad = angular.copy(item);                
-        $scope.TituloNov = "Editando Novedad "; 
+        $scope.Novedad = angular.copy(item);
+        $scope.TituloNov = "Editando Novedad ";
         $scope.Novedad.FechaInicioVigencia =  $scope.ConvertirFecha(item.FechaInicioVigencia);
-        $scope.Novedad.FechaExpedicion = $scope.ConvertirFecha(item.FechaExpedicion);        
-        $scope.Novedad.FechaVencimiento = $scope.ConvertirFecha(item.FechaVencimiento);        
+        $scope.Novedad.FechaExpedicion = $scope.ConvertirFecha(item.FechaExpedicion);
+        $scope.Novedad.FechaVencimiento = $scope.ConvertirFecha(item.FechaVencimiento);
         $scope.editNovedad = true;
         $("#mdNovedades").modal("show");
     };
-        
-    
-    
+
+
+
     function loadNovedad (id){
         var promise = vehiculoService.getNovedad(id);
-        promise.then(function(d) {                        
+        promise.then(function(d) {
             $scope.Novedades = d.data;
               $scope.TablaNovedad.reload();
-        }, function(err) {           
+        }, function(err) {
                 toaster.pop('error','Error','No se pudo procesar la solicitud');
                 console.log("Some Error Occured " + JSON.stringify(err));
-        }); 
+        });
     }
-    
+
     function getDocumentos(id){
         var promise = vehiculoService.getDocumentos(id);
-        promise.then(function(d) {                                                                  
-            $scope.Documentos = d.data;            
-        }, function(err) {           
+        promise.then(function(d) {
+            $scope.Documentos = d.data;
+        }, function(err) {
             toaster.pop('error','Error','Cargar documentos vehiculo');
             console.log("Some Error Occured " + JSON.stringify(err));
-        }); 
+        });
     }
-    
-    
-            
+
+
+
      function initTablaNovedad() {
         $scope.TablaNovedad = new ngTableParams({
             page: 1,
@@ -248,10 +249,10 @@ app.controller("vehiculoController", ["$scope", "vehiculoService", "marcaService
             sorting: undefined
         });
     };
-    
+
     initTablaNovedad();
-    
-    $scope.AgregarNovedad = function (){                
+
+    $scope.AgregarNovedad = function (){
         //$scope.Novedades.push($scope.Novedad);
         if(!$scope.Vehiculo.IdVehiculo){
             toaster.pop("warning",'Validación','No existe un vehículo seleccionado');
@@ -260,38 +261,38 @@ app.controller("vehiculoController", ["$scope", "vehiculoService", "marcaService
         $scope.Novedad.Entidad =$scope.Novedad.Entidad.toUpperCase();
         $scope.Novedad.Vehiculo =$scope.Vehiculo.IdVehiculo;
         var promise;
-        if($scope.editNovedad){            
+        if($scope.editNovedad){
             promise = novedadService.put($scope.Novedad.IdNovedad, $scope.Novedad);
         }else {
-            promise = novedadService.post($scope.Novedad);            
+            promise = novedadService.post($scope.Novedad);
         }
-        
-        promise.then(function(d) {                        
+
+        promise.then(function(d) {
             loadNovedad($scope.Vehiculo.IdVehiculo);
-            toaster.pop('success', "Control de Información", d.data.message);   
+            toaster.pop('success', "Control de Información", d.data.message);
             if($scope.editNovedad){
                 $("#mdNovedades").modal("hide");
             }
             $scope.InitNovedad();
-        }, function(err) {          
-            toaster.pop('error', "Error", err.data,0);                
+        }, function(err) {
+            toaster.pop('error', "Error", err.data,0);
             console.log("Some Error Occured " + JSON.stringify(err));
-        });                          
+        });
     };
-    
+
     $scope.CambiarFormato=function (variable){
         $scope.Vehiculo[variable] = moment($scope.Vehiculo[variable]).format('L');
     };
-        
+
     $scope.CambiarFormato2=function (variable){
         $scope.Novedad[variable] = moment($scope.Novedad[variable]).format('L');
-    };    
-    
+    };
+
     $scope.ConvertirFecha =  function (fecha){
-        var f = new Date(fecha);       
+        var f = new Date(fecha);
         return f.toLocaleDateString('en-GB');
     };
-    
+
     $scope.ValidarPlaca = function () {
         $scope.valPlaca = false;
         if (!$scope.Vehiculo.Placa || $scope.editMode) {
@@ -308,30 +309,30 @@ app.controller("vehiculoController", ["$scope", "vehiculoService", "marcaService
             console.log("Some Error Occured " + JSON.stringify(err));
         });
     };
-    
+
      $scope.VerDesactivar = function(id,  estado) {
         $scope.Estado =estado;
         $scope.IdVehiculoGlobal = id;
-        $('#mdConfirmacion').modal('show');         
+        $('#mdConfirmacion').modal('show');
     };
     $scope.Desactivar = function (){
          var objetc = {
                 estado : $scope.Estado
             };
-            $('#mdConfirmacion').modal('hide');   
+            $('#mdConfirmacion').modal('hide');
             var promisePut  = vehiculoService.updateEstado($scope.IdVehiculoGlobal, objetc);
                 promisePut.then(function (d) {
-                    toaster.pop('success', "Control de Información", d.data.message);                 
+                    toaster.pop('success', "Control de Información", d.data.message);
                     $scope.LoadVehiculo();
             }, function (err) {
-                    toaster.pop('error', "¡Error!", err.data.request); 
+                    toaster.pop('error', "¡Error!", err.data.request);
                     console.log("Some Error Occured "+ JSON.stringify(err));
             });
     };
-    
-    //FUNCIONES PARA CAMBIAR IMEI 
-    
-    
+
+    //FUNCIONES PARA CAMBIAR IMEI
+
+
     $scope.BuscarPlacaImei = function () {
         $scope.valPlaca = false;
         if (!$scope.Gps.Placa) {
@@ -342,7 +343,7 @@ app.controller("vehiculoController", ["$scope", "vehiculoService", "marcaService
         var promiseGet = vehiculoService.getGps($scope.Gps.Placa);
         promiseGet.then(function (d) {
             toaster.clear();
-            if (!d.data) {                
+            if (!d.data) {
                 toaster.pop('info', '¡Alerta!', 'Placa No se encuentra registrada.');
             }else{
                 $scope.valPlaca = true;
@@ -357,24 +358,24 @@ app.controller("vehiculoController", ["$scope", "vehiculoService", "marcaService
             console.log("Some Error Occured " + JSON.stringify(err));
         });
     };
-    
+
     $scope.buscar = function (event){
         if (event.keyCode === 13){
-            $scope.BuscarPlacaImei();          
+            $scope.BuscarPlacaImei();
         };
     };
-    
-    
+
+
     $scope.GuardarImei =  function (){
-        
+
         if(!$scope.Gps.IdVehiculo){
             toaster.pop("info", "¡Validación!", "Estimado Usuario(a), la placa no se encuentra registrada " +
                          " en el sistema. Por favor verifique.");
             return;
         }
-        
+
         if(!$scope.Gps.ImeiNuevo){
-            toaster.pop("info", "¡Validación!", "Estimado Usuario(a), por favor ingrese el nuevo número IMEI.");                         
+            toaster.pop("info", "¡Validación!", "Estimado Usuario(a), por favor ingrese el nuevo número IMEI.");
             return;
         }
         toaster.pop("wait", "Espere... procesando información.");
@@ -386,24 +387,19 @@ app.controller("vehiculoController", ["$scope", "vehiculoService", "marcaService
             toaster.pop('error', '¡Error guardar imei!', err.data, 0);
             console.log("Some Error Occured " + JSON.stringify(err));
         });
-    
+
     };
-    
+
     $scope.NuevoImei=  function (){
         $scope.Gps={};
         $scope.Gps = {
             ImeiActual : "",
-            Movil : ""            
+            Movil : ""
         };
     };
-    
+
     $scope.NuevoImei();
-    
-    
-   
+
+
+
 }]);
-
-
-
-
-
