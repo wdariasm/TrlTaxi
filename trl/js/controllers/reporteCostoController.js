@@ -122,17 +122,18 @@ app.controller('reporteCostoController', ['$scope', 'toaster',  'funcionService'
             vm.Filtro.FechaFin = valorF2 ==="" ? fechaActual : valorF2;
         }
         
-        
+        vm.Servicios = [];
         
         var promisePost = reporteService.centroCosto(vm.Filtro);
         promisePost.then(function (d) {            
             vm.Cargando = false;
-            vm.Servicios =d.data;
-            vm.TablaServicio.reload();   
+            vm.Servicios =d.data;               
         }, function (err) {
            toaster.pop('error', "Error", "Error al realizar consulta"); 
             console.log("Some Error Occured " + JSON.stringify(err));
         });
+
+        vm.TablaServicio.reload();
                 
     };
 

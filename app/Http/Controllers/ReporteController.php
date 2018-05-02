@@ -71,9 +71,12 @@ class ReporteController extends Controller
                                                 
             $sql = "SELECT s.IdServicio, s.ContratoId, s.ClienteId, s.NumeroContrato, s.Responsable,"
                     . " s.Telefono, s.TipoServicidoId, ts.svDescripcion, s.FechaServicio, s.Hora, s.Valor, s.Estado, "
-                    . " s.DescVehiculo, s.TipoVehiculoId, s.ValorTotal, s.ConductorId FROM servicio s INNER JOIN  tiposervicio "
-                    . " ts ON s.TipoServicidoId=ts.svCodigo WHERE ContratoId > 0  " . $condicion . $condFecha 
-                    . "  order by s.IdServicio desc";
+                    . " s.DescVehiculo, s.TipoVehiculoId, s.ValorTotal, s.Placa, s.ConductorId, s.Nota,  "
+                    . " IFNULL(c.Nombre, '') NombreConductor, s.DireccionOrigen, s.DireccionDestino " 
+                    . " FROM servicio s INNER JOIN  tiposervicio ts ON s.TipoServicidoId=ts.svCodigo "
+                    . " LEFT JOIN conductor c ON s.ConductorId= c.IdConductor "
+                    . " WHERE ContratoId > 0  " . $condicion . $condFecha 
+                    . "  order by s.IdServicio desc";            
                        
             $servicio = DB::select($sql);            
             return $servicio;                                                    

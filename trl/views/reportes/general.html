@@ -117,7 +117,7 @@
 		
 		<div class="col-md-2  text-center">       
 		    <br/>
-		    <button   class="btn btn-success btn-block btn-addon"   type="button"  title="Exportar" ng-click="rp.ExportarExcel('tbConsulta')"><i class="fa fa-file-excel-o"></i> Exportar</button>
+		    <button   ng-disabled="!rp.Servicios.length" class="btn btn-success btn-block btn-addon"   type="button"  title="Exportar" ng-click="rp.ExportarExcel('tbConsulta')"><i class="fa fa-file-excel-o"></i> Exportar</button>
 		</div>
 
 
@@ -139,14 +139,18 @@
 					    <th>ID</th>
 					    <th>CONTRATO</th>
 					    <th>RESPONSABLE</th>
-					    <th>TELEFONO</th>                                            
+						<th>TELEFONO</th> 
+						<th>CONDUCTOR</th>
+						<th class="hidden">PLACA</th>                                           
 					    <th>T.SERVICIO</th>
 					    <th>T.VEHICULO</th>
 					    <th>$ PRECIO</th>
 					    <th>FECHA</th>
-					    <th>HORA</th>
-					    <th>ESTADO</th>
-					    <th width="6%">ACCION</th>
+						<th>HORA</th>						
+						<th>ESTADO</th>					    
+						<th class="hidden">ORIGEN</th>
+						<th class="hidden">DESTINO</th>
+						<th class="hidden">NOTA</th>
 					</tr>
 				    </thead>
 
@@ -155,25 +159,26 @@
 					    <td>{{ item.IdServicio}}</td>
 					    <td>{{ item.NumeroContrato}}</td>
 					    <td>{{ item.Responsable}}</td>
-					    <td >{{ item.Telefono}}</td>
+						<td>{{ item.Telefono}}</td>
+						<td>{{ item.NombreConductor}}</td>
+						<td class="hidden">{{ item.Placa }}</td>
 					    <td>{{ item.svDescripcion}}</td>
 					    <td>{{ item.DescVehiculo}}</td>                                     
 					    <td >{{ item.ValorTotal | currency : "$" : 0}}</td>  
-					    <td>{{ item.FechaServicio}}</td>
-					    <td>{{ item.Hora}}</td>                                     
-					    <td>{{ item.Estado}}</td>
-					    <td>
-				    <center>
-					<a  style="float: left; margin-left: 3px;" href="javascript:;"  title="Asignar Servicio"><i class="fa fa-check fa-1x text-success"></i></a>					
-				    </center>
-				    </td>
+						<td>{{ item.FechaServicio}}</td>						
+						<td>{{ item.Hora}}</td>         						                           
+						<td>{{ item.Estado}}</td>
+						<th class="hidden">{{ item.DireccionOrigen}}</th>
+						<th class="hidden">{{ item.DireccionDestino}}</th> 
+						<th class="hidden">{{ item.Nota}}</th>
 				    </tr>
-				    <tr ng-hide="rp.Servicios.length > 0">
-					<td colspan="11" align="center"><h4 class="text-danger"> No se encontraron servicios solicitados.</h4></td>
-				    </tr> 
+				    
 				    </tbody>
-				</table>
-			    </div>
+				</table>				
+				</div>
+				<div class="col-md-12" ng-hide="rp.Servicios.length > 0">
+					<span  align="center"><h4 class="text-danger text-center"> No se encontraron servicios solicitados.</h4></span>
+				</div>
 			</div>
 			<div class="col-md-2" style="margin-top: 5px;">
 			    <label class="text-center text-primary" style="font-size: 18px;">Total: {{rp.Servicios.length}}</label>
