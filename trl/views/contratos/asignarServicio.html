@@ -1,740 +1,832 @@
 <style>
-    input{
-        text-transform: none;
-    }
+	input {
+		text-transform: none;
+	}
 </style>
-<div ng-controller="serviciosController"  class="container-fluid">
-    <div class="row">
-        <div class="col-xs-12">  
-            <div class="tabbable-line">
-                <ul class="nav nav-tabs nav-justified" id="tabPanels">
-                    <li class="active" > <a href="#tabListado" data-toggle="tab">Asignación de Servicios </a></li>                    
-                    <li><a href="#tabRegistro" data-toggle="tab">Nuevo Servicio</a></li>                    
-                    <li> <a href="#tabTodos" data-toggle="tab">Listado de Servicios </a></li>
-                </ul>
-            </div>
+<div ng-controller="serviciosController" class="container-fluid">
+	<div class="row">
+		<div class="col-xs-12">
+			<div class="tabbable-line">
+				<ul class="nav nav-tabs nav-justified" id="tabPanels">
+					<li class="active">
+						<a href="#tabListado" data-toggle="tab">Asignación de Servicios </a>
+					</li>
+					<li>
+						<a href="#tabRegistro" data-toggle="tab">Nuevo Servicio</a>
+					</li>
+					<li>
+						<a href="#tabTodos" data-toggle="tab">Listado de Servicios </a>
+					</li>
+				</ul>
+			</div>
 
-            <div class="tab-content">              
-                <div class="tab-pane active" id="tabListado">
-                    <br/>
-                    <div class="row">
-                        <div class="col-md-12">
-			    <div class="panel panel-default">
-				<div class="panel-heading">Servicios pendientes de asignar</div>
-				<div class="panel-body">
-				    <div class="row">
-					<div class="col-md-6">
-					    <div class="input-group">
-						<div class="input-group-addon"><i class="fa  fa-search text-primary"></i></div>
-						<input  class="form-control" id="search" type="search" placeholder="Buscar Servicio" ng-model="TablaServicio.filter()['busqueda']">
-					    </div>
-
-					</div>
-
-
-					<div class="col-md-2" style="margin-top: 5px;">
-					    <label class="text-center text-primary" style="font-size: 18px;">Total: {{Servicios.length}}</label>
-					</div>
-
-					<div class="col-md-2">
-					    <button type="button" class="btn btn-success btn-addon" ng-click="GetServicios()" ><i class="fa fa-refresh"></i> Actualizar</button>
-					</div>
+			<div class="tab-content">
+				<div class="tab-pane active" id="tabListado">
 					<br/>
-				    </div>
-				    <div class="row">
-					<div class="col-md-12">
-					    <table class="table table-striped table-condensed" ng-table="TablaServicio"  style="margin-top: 15px;">
-						<thead>
-						    <tr>
-							<th>ID</th>
-							<th>CONTRATO</th>
-							<th>RESPONSABLE</th>
-							<th>TELEFONO</th>                                            
-							<th>T.SERVICIO</th>
-							<th>T.VEHICULO</th>
-							<th>$ PRECIO</th>
-							<th>FECHA</th>
-							<th>HORA</th>
-							<th>ESTADO</th>
-							<th width="6%">ACCION</th>
-						    </tr>
-						</thead>
-
-						<tbody>
-						    <tr ng-repeat="item in $data"  ng-class="{'info': item.Estado == 'ASIGNADO', 'warning':  item.Estado == 'SOLICITADO' , 'success':  item.Estado != 'SOLICITADO' || item.Estado != 'ASIGNADO'  }">
-							<td>{{ item.IdServicio}}</td>
-							<td>{{ item.NumeroContrato}}</td>
-							<td>{{ item.Responsable}}</td>
-							<td >{{ item.Telefono}}</td>
-							<td>{{ item.svDescripcion}}</td>
-							<td>{{ item.DescVehiculo}}</td>                                     
-							<td >{{ item.ValorTotal | currency : "$" : 0}}</td>  
-							<td>{{ item.FechaServicio}}</td>
-							<td>{{ item.Hora}}</td>                                     
-							<td>{{ item.Estado}}</td>
-							<td>
-						<center>
-						    <a ng-click="VerAsignarServicio(item)" style="float: left; margin-left: 3px;" href="javascript:;"  title="Asignar Servicio"><i class="fa fa-check fa-1x text-success"></i></a>
-						    <a ng-click="CancelarServicio(item)"  style="float: left; margin-left: 7px;" href="javascript:;"  title="Cancelar"><i class="fa fa-power-off fa-1x text-warning"></i></a>                                            
-						</center>
-						</td>
-						</tr>
-						<tr ng-hide="Servicios.length">
-						    <td colspan="11" align="center"><h4 class="text-danger"> No se encontraron servicios solicitados.</h4></td>
-						</tr> 
-						</tbody>
-					    </table>
-					</div>
-				    </div>
-				</div>
-			    </div>
-                        </div>
-                    </div>
-
-                  <div class="modal fade bs-example-modal-sm" id="mdAsignar" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" style="margin-top: 1%;">
-			<div class="modal-dialog modal-lg" style="width: 70%" >                                   
-			    <div class="modal-content">
-
-				<div class="modal-header">
-				    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-				    <div class="modal-title"> <h3 class="panel-title">Asignación de Servicio N° {{AsigServicio.IdServicio}}  </h3></div>
-				</div>
-
-				<div class="modal-body modal-body-fixed">
-				    <div class="panel panel-default">
-					<div class="panel-body" style="padding-bottom:3px;">
-					    <div class="row">
-						<div class="col-md-3">
-						    <div class="form-group">
-							<label  for="txtServiceId" >N° Servicio </label>                                                                                        
-							<input  type="text" class="form-control" required="" ng-model="AsigServicio.IdServicio" maxlength="11"  id="txtServiceId" placeholder="N° Servicio" disabled >                                            
-						    </div>
-						</div>
-
-						<div class="col-md-3">
-						    <div class="form-group">
-							<label  for="txtCto" >Contrato </label>                                                                                            
-							<input  type="text" class="form-control" required="" ng-model="AsigServicio.NumeroContrato" maxlength="11"  id="txtCto" placeholder="N° Contrato" readonly="" >
-
-						    </div>
-						</div>
-
-						<div class="col-md-6">
-						    <div class="form-group">
-							<label  for="txtRespon" >Responsable Servicio </label>                                                                                        
-							<input  type="text" class="form-control" required="" ng-model="AsigServicio.Responsable" maxlength="11"  id="txtRespon" placeholder="Responsable Servcio" disabled >                                          
-						    </div>
-						</div>
-
-						<div class="col-md-3">
-						    <div class="form-group">
-							<label  for="txtServiceId" >Tipo: &nbsp; </label>                                                                                        
-							<label class="text-primary">{{AsigServicio.svDescripcion}}</label>                                                                                 
-						    </div>
-						</div>
-
-						<div class="col-md-3">
-						    <div class="form-group">
-							<label  for="txtServiceId" >Tipo Vehiculo : &nbsp; </label>                                                                                        
-							<label class="text-primary">{{AsigServicio.DescVehiculo}}</label>                                                                                   
-						    </div>
-						</div>
-
-						<div class="col-md-4">
-						    <div class="form-group">
-							<label  for="txtServiceId" >Fecha y Hora: &nbsp; </label>                                                                                        
-							<label class="text-primary">{{AsigServicio.FechaServicio}} {{AsigServicio.Hora}}</label> 
-						    </div>
-						</div>
-                                     
-                                     <div class="col-md-6">
-						    <div class="form-group">
-							<label  for="txtServiceId" >Dirección Origen: &nbsp; </label>                                                                                        
-							<label class="text-primary">{{AsigServicio.DireccionOrigen}}</label> 
-						    </div>
-						</div>
-                                     
-                                     
-                                     <div class="col-md-6">
-						    <div class="form-group">
-							<label  for="txtServiceId"> Dirección Destino: &nbsp; </label>                                                                                        
-							<label class="text-primary">{{AsigServicio.DireccionDestino}} </label> 
-						    </div>
-						</div>
-                                     
-                                     
-					    </div>
-					</div>
-				    </div> 
-                           
-                           <div class="row" ng-show="VerDetalle">
-					<div class="col-md-7">
-					    <div class="panel panel-default">
-						<div class="panel-heading">Responsables</div>
-						<table class="table table-striped table-condensed">
-						    <thead>
-							<tr>					    							    
-							    <th>RESPONSABLE</th>
-							    <th>TELÉFONO</th>
-							    <th>NOTA</th>					   
-							</tr>
-						    </thead>
-						    <tbody>
-							<tr ng-repeat="itemc in AsigServicio.Contactos">
-							    <td>{{itemc.scNombre}}</td>
-							    <td>{{itemc.scTelefono}}</td>
-							    <td>{{itemc.scNota}}</td>					    
-							</tr>					
-						    </tbody>
-						</table>
-					    </div>
-					</div>
-
-					<div class="col-md-5">
-					    <div class="panel panel-default">
-						<div class="panel-heading">Paradas</div>
-						<table class="table table-striped table-condensed">
-						    <thead>
-							<tr>							    
-							    <th>DIRECCIÓN</th>
-							    <th>VALOR</th>							    
-							</tr>
-						    </thead>
-						    <tbody>
-							<tr ng-repeat="items in AsigServicio.Paradas">							    
-							    <td>{{items.prDireccion}}</td>
-							    <td>{{items.prValorCliente | currency : "$ " : 0 }}</td>						    
-							</tr>
-							<tr>
-							    <td class="text-right">Total Paradas</td>
-							    <td class="text-danger"><strong>{{ AsigServicio.ValorParadas | currency : "$ " : 0}}</strong></td>							   
-							</tr>
-						    </tbody>
-						</table>
-					    </div>
-					</div>
-				    </div>
-
-				    <div class="panel panel-default">
-					<div class="panel-heading">
-					    <h4 class="panel-title">Seleccionar Conductor</h4>
-					</div>
-					<div class="panel-body modal-body-fixed" style="padding-bottom:3px;">
-					    <div class="row">
-						<div class="col-md-12">
-						    <table class="table table-striped table-condensed" >
-							<thead>
-							    <tr>                                                           
-								<th>CONDUCTOR</th>                                                            
-								<th>TELEFONO</th>                                                                                                        
-								<th>DISPOSICIÓN</th>
-								<th>PLACA</th>
-								<th width="3%">SEL.</th>
-							    </tr>
-							</thead>
-							<tbody>
-							    <tr ng-repeat="item in Conductores">
-								<td>{{item.Nombre}}</td>
-								<td>{{item.TelefonoPpal}}</td>
-								<td>{{item.Disposicion}}</td>
-								<td>{{item.Placa}}</td>
-								<td class="text-center">
-								    <div class="radio radio-success" style="margin-top: -1px;">                                        
-									<input id="cd{{item.IdConductor}}" type="radio" ng-model="AsigServicio.Conductor"  ng-value="item">
-									<label for="cd{{item.IdConductor}}"></label> 
-								    </div>
-								</td>
-							    </tr>
-							</tbody>
-						    </table>
-
-						</div>
-					    </div>
-					</div>
-				    </div> 				   
-				</div>
-
-				<div class="modal-footer">
-				    <button type="button" class="btn btn-warning btn-addon" title="Detalle de Servicio" ng-click="VerDetalleServicio()"> <i class="fa fa-info"></i>{{LabelDetalle}}</button>
-				    <button type="button" class="btn btn-danger btn-addon" data-dismiss="modal" title="Cancelar"> <i class="fa fa-ban"></i> Cancelar</button>
-				    <button type="button" class="btn btn-primary btn-addon" ng-click="AsignarServicio()" title="Asignar Servicio"><i class="fa fa-check"></i>Asignar</button>
-				</div>  
-
-			    </div>
-
-			</div>
-		    </div>
-
-                </div>
-               
-                <div class="tab-pane" id="tabRegistro">     
-                   <br/>
-                  <div ng-include="'../trl/views/contratos/nuevoServicio.html'"></div>
-               </div>
-
-                <div class="tab-pane" id="tabTodos">
-                    <div ng-controller="consultaServiciosController as cs">
-			<div class="row">
-			    <div class="col-md-12">
-				<div class="panel panel-default" style="margin-top: 10px;">
-				    <div class="panel-heading">Filtros</div>
-				    <div class="panel-body">
-					<div class="col-md-3">
-					    <div class="form-group">
-						<label class="control-label">Por Estado</label>                                       
-						<div class="input-group">                            
-						    <select ng-model="cs.Filtro.Estado" class="form-control" id="cboEstado"  ng-required="true">
-							<option value="TODOS" >TODOS</option>
-							<option value="SOLICITADO">SOLICITADO</option>                                    
-							<option value="ASIGNADO" >ASIGNADO</option>                                    
-							<option value="CANCELADO">CANCELADO</option>
-							<option value="CONFIRMADO" >CONFIRMADO</option>                                    
-							<option value="DESPLAZAMIENTO A SITIO" >DESPLAZAMIENTO A SITIO</option>
-							<option value="EN SITIO">EN SITIO</option>
-							<option value="EN RUTA" >EN RUTA</option>                                    
-							<option value="FINALIZADO">FINALIZADO</option>
-							<option value="RECHAZADO" >RECHAZADO</option>
-
-						    </select>
-						</div>   
-					    </div>
-					</div>                                
-
-					<input type="hidden" id="txtFechaI" ng-model="cs.Filtro.FechaInicial" >
-					<input type="hidden" id="txtFechaF" ng-model="cs.Filtro.FechaFin">
-
-					<div class="col-md-4">
-					    <div class="form-group">
-						<div class="checkbox checkbox-primary" style="margin-top: 0; margin-bottom: 3px;">                                        
-						    <input type="checkbox" id="chkFecha"  ng-model="cs.Filtro.FechaChk" ng-true-value="true" ng-false-value="false" >                                         
-						    <label for="chkFecha" ><strong>Rango de fechas</strong></label>
-						</div> 
-
-						<div class="input-group">                                                                          
-						    <div id="reportrange" ng-disabled="cs.Filtro.FechaChk" class="pull-right" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; height: 34px;">
-							<i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
-							<span></span> <b class="caret"></b>
-						    </div>  
-						</div>
-					    </div>
-					</div>   
-
-					<div class="col-md-2">
-					    <div class="form-group">
-						<label  for="cboTipoServicio">Tipo Servicio</label>
-						<div class="input-group">
-						    <select ng-model="cs.TipoSelect" class="form-control" id="cboTipoServicio" ng-options="item as item.svDescripcion for item in cs.TipoServicio track by item.svCodigo" ></select>
-						</div>
-					    </div>
-					</div>
-
-					<div class="col-md-2">
-					    <div class="form-group">
-						<label></label>
-						<div class="input-group">      
-						    <button type="button" class="btn btn-success btn-addon" ng-click="cs.GetServiciosTodos()" ><i class="fa fa-refresh"></i> Consultar</button>
-						</div>
-					    </div>
-
-					</div>
-				    </div>
-				</div>
-
-				<div class="panel panel-default">
-				    <div class="panel-heading">Datos</div>
-				    <div class="panel-body">
-					<div class="col-md-6">
-
-					    <div class="input-group">
-						<div class="input-group-addon"><i class="fa  fa-search text-primary"></i></div>
-						<input  class="form-control" id="txtsearch" type="text" placeholder="Buscar por N Servcio, Contrato, Nombre, Responsable, Estado" ng-model="cs.TablaTodos.filter()['buscadaAvanzada']">
-					    </div>                                                                        
-
-					</div>
-					<div class="col-md-3" style="margin-top: 5px;">
-					    <label class="text-center text-primary" style="font-size: 18px;">Total Registros: {{cs.ServicioTodos.length}}</label>
-					</div>
 					<div class="row">
-					    <div class="col-md-12">
-						<table class="table table-striped table-condensed" ng-table="cs.TablaTodos"  style="margin-top: 15px;">
-						    <thead>
-							<tr>
-							    <th>ID</th>
-							    <th>CONTRATO</th>
-							    <th>RESPONSABLE</th>
-							    <th>TELEFONO</th>                                            
-							    <th>T.SERVICIO</th>
-							    <th>T.VEHICULO</th>
-							    <th>$ VALOR</th>
-							    <th>FECHA</th>
-							    <th>HORA</th>
-							    <th>ESTADO</th>
-							    <th width="4%">ACCION</th>
-							</tr>
-						    </thead>                                            
-						    <tbody>
-							<tr ng-repeat="item in $data" ng-class="{'info': item.Estado == 'ASIGNADO' || item.Estado == 'CONFIRMADO', 'warning':  item.Estado == 'SOLICITADO', 'success' : item.Estado == 'FINALIZADO', 'danger': item.Estado == 'CANCELADO' } " >
-							    <td>{{ item.IdServicio}}</td>
-							    <td>{{ item.NumeroContrato}}</td>
-							    <td>{{ item.Responsable}}</td>
-							    <td >{{ item.Telefono}}</td>
-							    <td>{{ item.svDescripcion}}</td>
-							    <td>{{ item.DescVehiculo}}</td>                                     
-							    <td >{{ item.ValorTotal | currency : "$" : 0}}</td>  
-							    <td>{{ item.FechaServicio}}</td>
-							    <td>{{ item.Hora}}</td>                                     
-							    <td>{{ item.Estado}}</td>
-							    <td>
-                                                 <div class="text-center" ng-if="item.TipoServicidoId == 1 && (item.Estado == 'FINALIZADO' || item.Estado == 'EN SITIO' || item.Estado == 'EN RUTA')">                                                
-                                                   <a ng-click="cs.EditarServicio(item)"  style="float: left; margin-left: 3px;" href="javascript:;"  title="Agregar Disponibilidad"><i class="fa fa-plus fa-1x text-success"></i></a>
-                                                </div>
-                                             </td>
-						    </tr>
-						    <tr ng-hide="cs.ServicioTodos.length">
-							<td colspan="11" align="center"><h4 class="text-danger"> No se encontraron servicios con los criterios de busqueda seleccionados.</h4></td>
-						    </tr> 
-						    </tbody>
-						</table>
-					    </div>
-					</div>
-				    </div>
-				</div>                                                                       
-			    </div>
-			</div>
-                       
-                  <div class="modal fade bs-example-modal-sm" id="mdAsignarDisponibilidad" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" style="margin-top: 1%;">
-			<div class="modal-dialog modal-lg" >                                   
-			    <div class="modal-content">
+						<div class="col-md-12">
+							<div class="panel panel-default">
+								<div class="panel-heading">Servicios pendientes de asignar</div>
+								<div class="panel-body">
+									<div class="row">
+										<div class="col-md-6">
+											<div class="input-group">
+												<div class="input-group-addon">
+													<i class="fa  fa-search text-primary"></i>
+												</div>
+												<input class="form-control" id="search" type="search" placeholder="Buscar Servicio" ng-model="TablaServicio.filter()['busqueda']">
+											</div>
 
-				<div class="modal-header">
-				    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-				    <div class="modal-title"> <h3 class="panel-title">Asignación de  Disponibilidad Servicio N° {{cs.Servicio.IdServicio}}  </h3></div>
+										</div>
+
+
+										<div class="col-md-2" style="margin-top: 5px;">
+											<label class="text-center text-primary" style="font-size: 18px;">Total: {{Servicios.length}}</label>
+										</div>
+
+										<div class="col-md-2">
+											<button type="button" class="btn btn-success btn-addon" ng-click="GetServicios()">
+												<i class="fa fa-refresh"></i> Actualizar</button>
+										</div>
+										<br/>
+									</div>
+									<div class="row">
+										<div class="col-md-12">
+											<table class="table table-striped table-condensed" ng-table="TablaServicio" style="margin-top: 15px;">
+												<thead>
+													<tr>
+														<th>ID</th>
+														<th>CONTRATO</th>
+														<th>RESPONSABLE</th>
+														<th>TELEFONO</th>
+														<th>T.SERVICIO</th>
+														<th>T.VEHICULO</th>
+														<th>$ PRECIO</th>
+														<th>FECHA</th>
+														<th>HORA</th>
+														<th>ESTADO</th>
+														<th width="6%">ACCION</th>
+													</tr>
+												</thead>
+
+												<tbody>
+													<tr ng-repeat="item in $data" ng-class="{'info': item.Estado == 'ASIGNADO', 'warning':  item.Estado == 'SOLICITADO' , 'success':  item.Estado != 'SOLICITADO' || item.Estado != 'ASIGNADO'  }">
+														<td>{{ item.IdServicio}}</td>
+														<td>{{ item.NumeroContrato}}</td>
+														<td>{{ item.Responsable}}</td>
+														<td>{{ item.Telefono}}</td>
+														<td>{{ item.svDescripcion}}</td>
+														<td>{{ item.DescVehiculo}}</td>
+														<td>{{ item.ValorTotal | currency : "$" : 0}}</td>
+														<td>{{ item.FechaServicio}}</td>
+														<td>{{ item.Hora}}</td>
+														<td>{{ item.Estado}}</td>
+														<td>
+															<center>
+																<a ng-click="VerAsignarServicio(item)" style="float: left; margin-left: 3px;" href="javascript:;" title="Asignar Servicio">
+																	<i class="fa fa-check fa-1x text-success"></i>
+																</a>
+																<a ng-click="CancelarServicio(item)" style="float: left; margin-left: 7px;" href="javascript:;" title="Cancelar">
+																	<i class="fa fa-power-off fa-1x text-warning"></i>
+																</a>
+															</center>
+														</td>
+													</tr>
+													<tr ng-hide="Servicios.length">
+														<td colspan="11" align="center">
+															<h4 class="text-danger"> No se encontraron servicios solicitados.</h4>
+														</td>
+													</tr>
+												</tbody>
+											</table>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="modal fade bs-example-modal-sm" id="mdAsignar" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel"
+					 style="margin-top: 1%;">
+						<div class="modal-dialog modal-lg" style="width: 70%">
+							<div class="modal-content">
+
+								<div class="modal-header">
+									<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+										<span aria-hidden="true">&times;</span>
+									</button>
+									<div class="modal-title">
+										<h3 class="panel-title">Asignación de Servicio N° {{AsigServicio.IdServicio}} </h3>
+									</div>
+								</div>
+
+								<div class="modal-body modal-body-fixed">
+									<div class="panel panel-default">
+										<div class="panel-body" style="padding-bottom:3px;">
+											<div class="row">
+												<div class="col-md-3">
+													<div class="form-group">
+														<label for="txtServiceId">N° Servicio </label>
+														<input type="text" class="form-control" required="" ng-model="AsigServicio.IdServicio" maxlength="11" id="txtServiceId" placeholder="N° Servicio"
+														 disabled>
+													</div>
+												</div>
+
+												<div class="col-md-3">
+													<div class="form-group">
+														<label for="txtCto">Contrato </label>
+														<input type="text" class="form-control" required="" ng-model="AsigServicio.NumeroContrato" maxlength="11" id="txtCto" placeholder="N° Contrato"
+														 readonly="">
+
+													</div>
+												</div>
+
+												<div class="col-md-6">
+													<div class="form-group">
+														<label for="txtRespon">Responsable Servicio </label>
+														<input type="text" class="form-control" required="" ng-model="AsigServicio.Responsable" maxlength="11" id="txtRespon" placeholder="Responsable Servcio"
+														 disabled>
+													</div>
+												</div>
+
+												<div class="col-md-3">
+													<div class="form-group">
+														<label for="txtServiceId">Tipo: &nbsp; </label>
+														<label class="text-primary">{{AsigServicio.svDescripcion}}</label>
+													</div>
+												</div>
+
+												<div class="col-md-3">
+													<div class="form-group">
+														<label for="txtServiceId">Tipo Vehiculo : &nbsp; </label>
+														<label class="text-primary">{{AsigServicio.DescVehiculo}}</label>
+													</div>
+												</div>
+
+												<div class="col-md-4">
+													<div class="form-group">
+														<label for="txtServiceId">Fecha y Hora: &nbsp; </label>
+														<label class="text-primary">{{AsigServicio.FechaServicio}} {{AsigServicio.Hora}}</label>
+													</div>
+												</div>
+
+												<div class="col-md-6">
+													<div class="form-group">
+														<label for="txtServiceId">Dirección Origen: &nbsp; </label>
+														<label class="text-primary">{{AsigServicio.DireccionOrigen}}</label>
+													</div>
+												</div>
+
+
+												<div class="col-md-6">
+													<div class="form-group">
+														<label for="txtServiceId"> Dirección Destino: &nbsp; </label>
+														<label class="text-primary">{{AsigServicio.DireccionDestino}} </label>
+													</div>
+												</div>
+
+
+											</div>
+										</div>
+									</div>
+
+									<div class="row" ng-show="VerDetalle">
+										<div class="col-md-7">
+											<div class="panel panel-default">
+												<div class="panel-heading">Responsables</div>
+												<table class="table table-striped table-condensed">
+													<thead>
+														<tr>
+															<th>RESPONSABLE</th>
+															<th>TELÉFONO</th>
+															<th>NOTA</th>
+														</tr>
+													</thead>
+													<tbody>
+														<tr ng-repeat="itemc in AsigServicio.Contactos">
+															<td>{{itemc.scNombre}}</td>
+															<td>{{itemc.scTelefono}}</td>
+															<td>{{itemc.scNota}}</td>
+														</tr>
+													</tbody>
+												</table>
+											</div>
+										</div>
+
+										<div class="col-md-5">
+											<div class="panel panel-default">
+												<div class="panel-heading">Paradas</div>
+												<table class="table table-striped table-condensed">
+													<thead>
+														<tr>
+															<th>DIRECCIÓN</th>
+															<th>VALOR</th>
+														</tr>
+													</thead>
+													<tbody>
+														<tr ng-repeat="items in AsigServicio.Paradas">
+															<td>{{items.prDireccion}}</td>
+															<td>{{items.prValorCliente | currency : "$ " : 0 }}</td>
+														</tr>
+														<tr>
+															<td class="text-right">Total Paradas</td>
+															<td class="text-danger">
+																<strong>{{ AsigServicio.ValorParadas | currency : "$ " : 0}}</strong>
+															</td>
+														</tr>
+													</tbody>
+												</table>
+											</div>
+										</div>
+									</div>
+
+									<div class="panel panel-default">
+										<div class="panel-heading">
+											<h4 class="panel-title">Seleccionar Conductor</h4>
+										</div>
+										<div class="panel-body modal-body-fixed" style="padding-bottom:3px;">
+											<div class="row">
+												<div class="col-md-12">
+													<table class="table table-striped table-condensed">
+														<thead>
+															<tr>
+																<th>CONDUCTOR</th>
+																<th>TELEFONO</th>
+																<th>DISPOSICIÓN</th>
+																<th>PLACA</th>
+																<th width="3%">SEL.</th>
+															</tr>
+														</thead>
+														<tbody>
+															<tr ng-repeat="item in Conductores">
+																<td>{{item.Nombre}}</td>
+																<td>{{item.TelefonoPpal}}</td>
+																<td>{{item.Disposicion}}</td>
+																<td>{{item.Placa}}</td>
+																<td class="text-center">
+																	<div class="radio radio-success" style="margin-top: -1px;">
+																		<input id="cd{{item.IdConductor}}" type="radio" ng-model="AsigServicio.Conductor" ng-value="item">
+																		<label for="cd{{item.IdConductor}}"></label>
+																	</div>
+																</td>
+															</tr>
+														</tbody>
+													</table>
+
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="modal-footer">
+									<button type="button" class="btn btn-warning btn-addon" title="Detalle de Servicio" ng-click="VerDetalleServicio()">
+										<i class="fa fa-info"></i>{{LabelDetalle}}</button>
+									<button type="button" class="btn btn-danger btn-addon" data-dismiss="modal" title="Cancelar">
+										<i class="fa fa-ban"></i> Cancelar</button>
+									<button type="button" class="btn btn-primary btn-addon" ng-click="AsignarServicio()" title="Asignar Servicio">
+										<i class="fa fa-check"></i>Asignar</button>
+								</div>
+
+							</div>
+
+						</div>
+					</div>
+
 				</div>
 
-				<div class="modal-body modal-body-fixed">
-				    <div class="panel panel-default">
-                               <div class="panel-heading">Resumen Servicio</div>
-                               <div class="panel-body" style="padding-bottom:2px;">
-                                  <div class="row">
-						<div class="col-md-3">
-						    <div class="form-group">
-							<label  for="txtServiceId" >N° Servicio: &nbsp; </label>  
-                                          <label class="text-primary">{{cs.Servicio.IdServicio}}</label>							
-						    </div>
+				<div class="tab-pane" id="tabRegistro">
+					<br/>
+					<div ng-include="'../trl/views/contratos/nuevoServicio.html'"></div>
+				</div>
+
+				<div class="tab-pane" id="tabTodos">
+					<div ng-controller="consultaServiciosController as cs">
+						<div class="row">
+							<div class="col-md-12">
+								<div class="panel panel-default" style="margin-top: 10px;">
+									<div class="panel-heading">Filtros</div>
+									<div class="panel-body">
+										<div class="col-md-3">
+											<div class="form-group">
+												<label class="control-label">Por Estado</label>
+												<div class="input-group">
+													<select ng-model="cs.Filtro.Estado" class="form-control" id="cboEstado" ng-required="true">
+														<option value="TODOS">TODOS</option>
+														<option value="SOLICITADO">SOLICITADO</option>
+														<option value="ASIGNADO">ASIGNADO</option>
+														<option value="CANCELADO">CANCELADO</option>
+														<option value="CONFIRMADO">CONFIRMADO</option>
+														<option value="DESPLAZAMIENTO A SITIO">DESPLAZAMIENTO A SITIO</option>
+														<option value="EN SITIO">EN SITIO</option>
+														<option value="EN RUTA">EN RUTA</option>
+														<option value="FINALIZADO">FINALIZADO</option>
+														<option value="RECHAZADO">RECHAZADO</option>
+
+													</select>
+												</div>
+											</div>
+										</div>
+
+										<input type="hidden" id="txtFechaI" ng-model="cs.Filtro.FechaInicial">
+										<input type="hidden" id="txtFechaF" ng-model="cs.Filtro.FechaFin">
+
+										<div class="col-md-4">
+											<div class="form-group">
+												<div class="checkbox checkbox-primary" style="margin-top: 0; margin-bottom: 3px;">
+													<input type="checkbox" id="chkFecha" ng-model="cs.Filtro.FechaChk" ng-true-value="true" ng-false-value="false">
+													<label for="chkFecha">
+														<strong>Rango de fechas</strong>
+													</label>
+												</div>
+
+												<div class="input-group">
+													<div id="reportrange" ng-disabled="cs.Filtro.FechaChk" class="pull-right" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; height: 34px;">
+														<i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
+														<span></span>
+														<b class="caret"></b>
+													</div>
+												</div>
+											</div>
+										</div>
+
+										<div class="col-md-2">
+											<div class="form-group">
+												<label for="cboTipoServicio">Tipo Servicio</label>
+												<div class="input-group">
+													<select ng-model="cs.TipoSelect" class="form-control" id="cboTipoServicio" ng-options="item as item.svDescripcion for item in cs.TipoServicio track by item.svCodigo"></select>
+												</div>
+											</div>
+										</div>
+
+										<div class="col-md-2">
+											<div class="form-group">
+												<label></label>
+												<div class="input-group">
+													<button type="button" class="btn btn-success btn-addon" ng-click="cs.GetServiciosTodos()">
+														<i class="fa fa-refresh"></i> Consultar</button>
+												</div>
+											</div>
+
+										</div>
+									</div>
+								</div>
+
+								<div class="panel panel-default">
+									<div class="panel-heading">Datos</div>
+									<div class="panel-body">
+										<div class="col-md-6">
+
+											<div class="input-group">
+												<div class="input-group-addon">
+													<i class="fa  fa-search text-primary"></i>
+												</div>
+												<input class="form-control" id="txtsearch" type="text" placeholder="Buscar por N Servcio, Contrato, Nombre, Responsable, Estado"
+												 ng-model="cs.TablaTodos.filter()['buscadaAvanzada']">
+											</div>
+
+										</div>
+										<div class="col-md-3" style="margin-top: 5px;">
+											<label class="text-center text-primary" style="font-size: 18px;">Total Registros: {{cs.ServicioTodos.length}}</label>
+										</div>
+										<div class="row">
+											<div class="col-md-12">
+												<table class="table table-striped table-condensed" ng-table="cs.TablaTodos" style="margin-top: 15px;">
+													<thead>
+														<tr>
+															<th>ID</th>
+															<th>CONTRATO</th>
+															<th>RESPONSABLE</th>
+															<th>TELEFONO</th>
+															<th>T.SERVICIO</th>
+															<th>T.VEHICULO</th>
+															<th>$ VALOR</th>
+															<th>FECHA</th>
+															<th>HORA</th>
+															<th>ESTADO</th>
+															<th width="4%">ACCION</th>
+														</tr>
+													</thead>
+													<tbody>
+														<tr ng-repeat="item in $data" ng-class="{'info': item.Estado == 'ASIGNADO' || item.Estado == 'CONFIRMADO', 'warning':  item.Estado == 'SOLICITADO', 'success' : item.Estado == 'FINALIZADO', 'danger': item.Estado == 'CANCELADO' } ">
+															<td>{{ item.IdServicio}}</td>
+															<td>{{ item.NumeroContrato}}</td>
+															<td>{{ item.Responsable}}</td>
+															<td>{{ item.Telefono}}</td>
+															<td>{{ item.svDescripcion}}</td>
+															<td>{{ item.DescVehiculo}}</td>
+															<td>{{ item.ValorTotal | currency : "$" : 0}}</td>
+															<td>{{ item.FechaServicio}}</td>
+															<td>{{ item.Hora}}</td>
+															<td>{{ item.Estado}}</td>
+															<td>
+																<div class="text-center" ng-if="item.TipoServicidoId == 1 && (item.Estado == 'FINALIZADO' || item.Estado == 'EN SITIO' || item.Estado == 'EN RUTA')">
+																	<a ng-click="cs.EditarServicio(item)" style="float: left; margin-left: 3px;" href="javascript:;" title="Agregar Disponibilidad">
+																		<i class="fa fa-plus fa-1x text-success"></i>
+																	</a>
+																</div>
+															</td>
+														</tr>
+														<tr ng-hide="cs.ServicioTodos.length">
+															<td colspan="11" align="center">
+																<h4 class="text-danger"> No se encontraron servicios con los criterios de busqueda seleccionados.</h4>
+															</td>
+														</tr>
+													</tbody>
+												</table>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
 						</div>
 
-						<div class="col-md-3">
-						    <div class="form-group">
-							<label  for="txtCto" >Contrato: &nbsp; </label>        
-                                          <label class="text-primary">{{cs.Servicio.NumeroContrato}}</label>							
-						    </div>
+						<div class="modal fade bs-example-modal-sm" id="mdAsignarDisponibilidad" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel"
+						 style="margin-top: 1%;">
+							<div class="modal-dialog modal-lg">
+								<div class="modal-content">
+
+									<div class="modal-header">
+										<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+											<span aria-hidden="true">&times;</span>
+										</button>
+										<div class="modal-title">
+											<h3 class="panel-title">Asignación de Disponibilidad Servicio N° {{cs.Servicio.IdServicio}} </h3>
+										</div>
+									</div>
+
+									<div class="modal-body modal-body-fixed">
+										<div class="panel panel-default">
+											<div class="panel-heading">Resumen Servicio</div>
+											<div class="panel-body" style="padding-bottom:2px;">
+												<div class="row">
+													<div class="col-md-3">
+														<div class="form-group">
+															<label for="txtServiceId">N° Servicio: &nbsp; </label>
+															<label class="text-primary">{{cs.Servicio.IdServicio}}</label>
+														</div>
+													</div>
+
+													<div class="col-md-3">
+														<div class="form-group">
+															<label for="txtCto">Contrato: &nbsp; </label>
+															<label class="text-primary">{{cs.Servicio.NumeroContrato}}</label>
+														</div>
+													</div>
+
+													<div class="col-md-6">
+														<div class="form-group">
+															<label for="txtRespon">Responsable: &nbsp; </label>
+															<label class="text-primary">{{cs.Servicio.Responsable}}</label>
+														</div>
+													</div>
+
+													<div class="col-md-4">
+														<div class="form-group">
+															<label for="txtServiceId">Tipo: &nbsp; </label>
+															<label class="text-primary">{{cs.Servicio.svDescripcion}}</label>
+														</div>
+													</div>
+
+													<div class="col-md-4">
+														<div class="form-group">
+															<label for="txtServiceId">Tipo Vehiculo : &nbsp; </label>
+															<label class="text-primary">{{cs.Servicio.DescVehiculo}}</label>
+														</div>
+													</div>
+
+													<div class="col-md-4">
+														<div class="form-group">
+															<label for="txtServiceId">Fecha y Hora: &nbsp; </label>
+															<label class="text-primary">{{cs.Servicio.FechaServicio}} {{cs.Servicio.Hora}}</label>
+														</div>
+													</div>
+												</div>
+
+											</div>
+										</div>
+
+										<div class="panel panel-default">
+											<div class="panel-heading">Agregar Disponilidad</div>
+											<div class="panel-body" style="padding-bottom:7px;">
+												<form class="row col-md-12" name="frmDetalle" id="frmDetalle" novalidate>
+													<div class="row">
+														<div class="col-md-3">
+															<div class="form-group">
+																<label for="txtFechaInicio">Fecha Inicio
+																	<span>*</span>
+																</label>
+																<div class="input-group">
+																	<div class="input-group-addon">
+																		<i class="fa fa-calendar-check-o text-success"></i>
+																	</div>
+																	<input type="text" id="txtFechaInicio" ng-model="cs.Detalle.dtFechaInicio" name="txtFechaInicio" class="form-control" value=""
+																	 ng-change="CambiarFormato('dtFechaInicio')" required readonly>
+																</div>
+															</div>
+														</div>
+
+														<div class="col-md-3">
+															<div class="form-group">
+																<label for="txtHoraInicio">Hora Inicio
+																	<span>*</span>
+																</label>
+																<div class="input-group">
+																	<div class="input-group-addon">
+																		<i class="fa fa-clock-o text-success"></i>
+																	</div>
+																	<input type="text" id="txtHoraInicio" ng-model="cs.Detalle.dtHoraInicio" name="txtHoraInicio" class="form-control" value=""
+																	 required readonly>
+																</div>
+															</div>
+														</div>
+
+														<div class="col-md-3">
+															<div class="form-group">
+																<label for="txtFechafin">Fecha Fin
+																	<span>*</span>
+																</label>
+																<div class="input-group">
+																	<div class="input-group-addon">
+																		<i class="fa fa-calendar-check-o text-success"></i>
+																	</div>
+																	<input type="text" id="txtFechafin" ng-model="cs.Detalle.dtFechaFin" name="txtFechafin" class="form-control" value="" ng-change="CambiarFormato('dtFechaFin')"
+																	 required readonly>
+																</div>
+															</div>
+														</div>
+
+														<div class="col-md-3">
+															<div class="form-group">
+																<label for="txtHoraFin">Hora Fin
+																	<span>*</span>
+																</label>
+																<div class="input-group">
+																	<div class="input-group-addon">
+																		<i class="fa fa-clock-o text-success"></i>
+																	</div>
+																	<input type="text" id="txtHoraFin" ng-model="cs.Detalle.dtHoraFin" name="txtHoraFin" class="form-control" value="" required
+																	 readonly>
+																</div>
+															</div>
+														</div>
+													</div>
+
+													<div class="row">
+														<div class="col-md-3">
+															<div class="form-group">
+																<label for="txtHoraFin">Num. Horas
+																	<span>*</span>
+																</label>
+																<div class="input-group">
+																	<div class="input-group-addon">
+																		<i class="fa fa-list-ol"></i>
+																	</div>
+																	<input class="form-control" ng-model="cs.Detalle.dtNumHoras" solo-numeros id="txtNumPasajeros" type="text" required maxlength="3"
+																	 ng-change="cs.SubtoTotal()" placeholder="N° Horas">
+																</div>
+															</div>
+														</div>
+
+														<div class="col-md-3">
+															<div class="form-group">
+																<label for="txtHoraFin">Valor / Hora
+																	<span>*</span>
+																</label>
+																<div class="input-group">
+																	<div class="input-group-addon">
+																		<i class="fa fa-dollar"></i>
+																	</div>
+																	<input class="form-control" ng-model="cs.Detalle.dtValorHora" solo-numeros id="txtNumPasajeros" type="text" required maxlength="6"
+																	 ng-change="cs.SubtoTotal()" fcsa-number="{ min: 0,  maxDecimals: 0  }" placeholder="Valor Hora">
+																</div>
+															</div>
+														</div>
+
+														<div class="col-md-3">
+															<div class="form-group">
+																<label for="txtHoraFin">Valor Total
+																	<span>*</span>
+																</label>
+																<div class="input-group">
+																	<div class="input-group-addon">
+																		<i class="fa fa-money"></i>
+																	</div>
+																	<input class="form-control" ng-model="cs.Detalle.dtValorTotal" solo-numeros id="txtNumPasajeros" type="text" required maxlength="9"
+																	 fcsa-number="{ min: 0,  maxDecimals: 0  }" placeholder="V. Total">
+																</div>
+															</div>
+														</div>
+													</div>
+
+													<div class="row">
+
+														<div class="col-md-6">
+															<div class="form-group">
+																<label for="txtDetResponsable">Responsable
+																	<span>*</span>
+																</label>
+																<div class="input-group">
+																	<div class="input-group-addon">
+																		<i class="fa fa-user"></i>
+																	</div>
+																	<input class="form-control" ng-model="cs.Detalle.dtResponsable" id="txtDetResponsable" type="text" required placeholder="Responsable">
+																</div>
+															</div>
+														</div>
+
+														<div class="col-md-6">
+															<div class="form-group">
+																<label for="txtDetDescripcion">Observación</label>
+																<div class="input-group">
+																	<div class="input-group-addon">
+																		<i class="fa fa-edit"></i>
+																	</div>
+																	<textarea id="txtDetDescripcion" class="form-control" rows="2" ng-model="cs.Detalle.dtObservacion" placeholder="Observaciones"
+																	 maxlength="255"></textarea>
+																</div>
+															</div>
+														</div>
+
+													</div>
+
+													<div class="row">
+														<br/>
+														<div class="col-md-3 col-md-offset-6">
+															<button class="btn btn-success btn-block btn-addon" type="button" title="Nuevo / Cancelar" ng-click="cs.NuevoDetalle()">
+																<i class="fa fa-pencil"></i>
+																Nuevo
+															</button>
+														</div>
+
+														<div class="col-md-3">
+															<button ng-disabled="frmDetalle.$invalid" class="btn btn-primary btn-block btn-addon" type="button" title="Guardar" ng-click="cs.GuardarDetalle()">
+																<i class="fa fa-check"></i>Guardar
+															</button>
+														</div>
+													</div>
+												</form>
+
+											</div>
+										</div>
+
+										<div class="panel panel-default">
+											<div class="panel-heading">Detalle Disponilidad</div>
+											<div class="panel-body" style="padding-bottom:3px;">
+												<div class="row">
+													<table class="table table-striped table-condensed" style="margin-top: 15px;">
+														<thead>
+															<tr>
+																<th>RESPONSABLE</th>
+																<th>FECHA INICIO</th>
+																<th>FECHA FIN</th>
+																<th>N°.HORAS</th>
+																<th>V/HORA</th>
+																<th>V. TOTAL</th>
+																<th>OBSERVACIÓN</th>
+																<th>ACCIÓN</th>
+															</tr>
+														</thead>
+														<tbody>
+															<tr ng-repeat="item in cs.Detalles">
+																<td>{{ item.dtResponsable}}</td>
+																<td>{{ item.dtFechaInicio}} {{ item.dtHoraInicio}}</td>
+																<td>{{ item.dtHoraInicio}} {{item.dtHoraFin}}</td>
+																<td>{{ item.dtNumHoras}}</td>
+																<td>{{ item.dtValorHora | currency : "$" : 0}}</td>
+																<td>{{ item.dtValorTotal | currency : "$" : 0}}</td>
+																<td>{{ item.dtObservacion}}</td>
+																<td>
+																	<center>																		
+																		<a ng-click="cs.EliminarDisponibilidad(item)"  style="float: left; margin-left: 7px;" href="javascript:;"  title="Cancelar"><i class="fa fa-trash fa-1x text-danger"></i></a>                                            
+																	</center>
+																</td>
+															</tr>
+
+															<tr>
+																<td colspan="6" class="text-right">SubTotal</td>
+																<td class="text-danger">
+																	<strong>{{cs.CalcultarTotal() | currency : "$ " : 0}}</strong>
+																</td>
+																<td></td>
+															</tr>
+														</tbody>
+													</table>
+												</div>
+
+											</div>
+										</div>
+
+
+									</div>
+								</div>
+							</div>
 						</div>
-
-						<div class="col-md-6">
-						    <div class="form-group">
-							<label  for="txtRespon" >Responsable: &nbsp; </label>       
-                                          <label class="text-primary">{{cs.Servicio.Responsable}}</label>							
-						    </div>
-						</div>
-
-						<div class="col-md-4">
-						    <div class="form-group">
-							<label  for="txtServiceId" >Tipo: &nbsp; </label>                                                                                        
-							<label class="text-primary">{{cs.Servicio.svDescripcion}}</label>                                                                                 
-						    </div>
-						</div>
-
-						<div class="col-md-4">
-						    <div class="form-group">
-							<label  for="txtServiceId" >Tipo Vehiculo : &nbsp; </label>                                                                                        
-							<label class="text-primary">{{cs.Servicio.DescVehiculo}}</label>                                                                                   
-						    </div>
-						</div>
-
-						<div class="col-md-4">
-						    <div class="form-group">
-							<label  for="txtServiceId" >Fecha y Hora: &nbsp; </label>                                                                                        
-							<label class="text-primary">{{cs.Servicio.FechaServicio}} {{cs.Servicio.Hora}}</label> 
-						    </div>
-						</div>
-					    </div>
-                                  
-                               </div>
-                            </div>
-                           
-                           <div class="panel panel-default">
-                              <div class="panel-heading">Agregar Disponilidad</div>
-                              <div class="panel-body" style="padding-bottom:7px;">
-                                  <form class="row col-md-12" name="frmDetalle" id="frmDetalle" novalidate>
-                                 <div class="row">
-                                    <div class="col-md-3">
-                                       <div class="form-group">
-                                           <label  for="txtFechaInicio">Fecha Inicio <span>*</span></label>
-                                           <div class="input-group">
-                                             <div class="input-group-addon"><i class="fa fa-calendar-check-o text-success"></i></div>
-                                             <input type="text" id="txtFechaInicio"  ng-model="cs.Detalle.dtFechaInicio" name="txtFechaInicio" class="form-control" value="" ng-change="CambiarFormato('dtFechaInicio')" required readonly>                                                                                            
-                                           </div>
-                                       </div>
-                                     </div>
-
-                                    <div class="col-md-3">
-                                      <div class="form-group">
-                                          <label  for="txtHoraInicio">Hora Inicio <span>*</span></label>
-                                          <div class="input-group">
-                                            <div class="input-group-addon"><i class="fa fa-clock-o text-success"></i></div>
-                                            <input type="text" id="txtHoraInicio"  ng-model="cs.Detalle.dtHoraInicio" name="txtHoraInicio" class="form-control" value="" required readonly>
-                                          </div>
-                                      </div>
-                                    </div>
-                                    
-                                    <div class="col-md-3">
-                                       <div class="form-group">
-                                           <label  for="txtFechafin">Fecha Fin <span>*</span></label>
-                                           <div class="input-group">
-                                             <div class="input-group-addon"><i class="fa fa-calendar-check-o text-success"></i></div>
-                                             <input type="text" id="txtFechafin"  ng-model="cs.Detalle.dtFechaFin" name="txtFechafin" class="form-control" value="" ng-change="CambiarFormato('dtFechaFin')" required readonly>                                                                                            
-                                           </div>
-                                       </div>
-                                     </div>
-
-                                    <div class="col-md-3">
-                                      <div class="form-group">
-                                          <label  for="txtHoraFin">Hora Fin <span>*</span></label>
-                                          <div class="input-group">
-                                            <div class="input-group-addon"><i class="fa fa-clock-o text-success"></i></div>
-                                            <input type="text" id="txtHoraFin"  ng-model="cs.Detalle.dtHoraFin" name="txtHoraFin" class="form-control" value="" required readonly>
-                                          </div>
-                                      </div>
-                                    </div>                                                                                                                                                
-                                 </div>
-                                 
-                                 <div class="row">
-                                    <div class="col-md-3">
-                                       <div class="form-group">
-                                          <label  for="txtHoraFin">Num. Horas <span>*</span></label>
-                                          <div class="input-group">
-                                             <div class="input-group-addon"><i class="fa fa-list-ol"></i></div>
-                                             <input class="form-control" ng-model="cs.Detalle.dtNumHoras"  solo-numeros id="txtNumPasajeros" type="text" required maxlength="3" ng-change="cs.SubtoTotal()" placeholder="N° Horas">
-                                          </div>                                          
-                                       </div>                                       
-                                    </div>
-                                    
-                                    <div class="col-md-3">
-                                       <div class="form-group">
-                                          <label  for="txtHoraFin">Valor / Hora <span>*</span></label>
-                                          <div class="input-group">
-                                             <div class="input-group-addon"><i class="fa fa-dollar"></i></div>
-                                             <input class="form-control" ng-model="cs.Detalle.dtValorHora"  solo-numeros id="txtNumPasajeros" type="text" required maxlength="6" ng-change="cs.SubtoTotal()" fcsa-number="{ min: 0,  maxDecimals: 0  }"   placeholder="Valor Hora">
-                                          </div>                                          
-                                       </div>                                       
-                                    </div>
-                                    
-                                    <div class="col-md-3">
-                                       <div class="form-group">
-                                          <label  for="txtHoraFin">Valor Total <span>*</span></label>
-                                          <div class="input-group">
-                                             <div class="input-group-addon"><i class="fa fa-money"></i></div>
-                                             <input class="form-control" ng-model="cs.Detalle.dtValorTotal"  solo-numeros id="txtNumPasajeros" type="text" required maxlength="9" fcsa-number="{ min: 0,  maxDecimals: 0  }"   placeholder="V. Total">
-                                          </div>                                          
-                                       </div>                                       
-                                    </div>                                                                        
-                                 </div>
-                                 
-                                 <div class="row">
-                                    
-                                    <div class="col-md-6">
-                                       <div class="form-group">
-                                          <label  for="txtDetResponsable">Responsable <span>*</span></label>
-                                          <div class="input-group">
-                                             <div class="input-group-addon"><i class="fa fa-user"></i></div>
-                                             <input class="form-control" ng-model="cs.Detalle.dtResponsable"  id="txtDetResponsable" type="text" required  placeholder="Responsable">
-                                          </div>                                          
-                                       </div>                                       
-                                    </div> 
-                                    
-                                    <div class="col-md-6">
-                                       <div class="form-group">
-                                          <label  for="txtDetDescripcion">Observación</label>
-                                          <div class="input-group">
-                                             <div class="input-group-addon"><i class="fa fa-edit"></i></div>
-                                             <textarea id="txtDetDescripcion"  class="form-control" rows="2" ng-model="cs.Detalle.dtObservacion"  placeholder="Observaciones" maxlength="255"></textarea>
-                                          </div>                                          
-                                       </div>                                       
-                                    </div> 
-                                    
-                                 </div>
-                                 
-                                 <div class="row">                                    
-                                    <br/>
-                                    <div class="col-md-3 col-md-offset-6">
-                                      <button class="btn btn-success btn-block btn-addon" type="button" title="Nuevo / Cancelar" ng-click="cs.NuevoDetalle()"><i class="fa fa-pencil"></i>
-                                          Nuevo
-                                      </button>
-                                    </div>
-                                       
-                                    <div class="col-md-3">
-                                      <button ng-disabled="frmDetalle.$invalid"  class="btn btn-primary btn-block btn-addon" type="button"
-                                            title="Guardar" ng-click="cs.GuardarDetalle()"><i class="fa fa-check"></i>Guardar
-                                      </button>
-                                    </div>                                    
-                                 </div>
-                                 </form>
-                                 
-                              </div>                               
-                           </div>
-                           
-                           <div class="panel panel-default">
-                              <div class="panel-heading">Detalle Disponilidad</div>
-                              <div class="panel-body" style="padding-bottom:3px;">
-                                 <div class="row">
-                                    <table class="table table-striped table-condensed"  style="margin-top: 15px;">
-						    <thead>
-							<tr>
-                                             <th>RESPONSABLE</th>
-							   <th>FECHA INICIO</th>
-							   <th>FECHA FIN</th>
-							   <th>N°.HORAS</th>                                            
-							   <th>V/HORA</th>
-							   <th>V. TOTAL</th>							    							    
-                                             <th>OBSERVACIÓN</th>							    							   
-							</tr>
-						    </thead>                                            
-						    <tbody>
-							<tr ng-repeat="item in cs.Detalles"  >
-							    <td>{{ item.dtResponsable}}</td>
-							    <td>{{ item.dtFechaInicio}} {{ item.dtHoraInicio}}</td>
-							    <td>{{ item.dtHoraInicio}} {{item.dtHoraFin}}</td>
-							    <td >{{ item.dtNumHoras}}</td>							    
-							    <td>{{ item.dtValorHora | currency : "$" : 0}}</td>                                     
-							    <td >{{ item.dtValorTotal | currency : "$" : 0}}</td>  
-							    <td>{{ item.dtObservacion}}</td>							                                       							    							    
-                                          </tr>
-                                          
-                                          <tr>
-                                             <td colspan="5" class="text-right">SubTotal</td>
-                                             <td class="text-danger"><strong>{{cs.CalcultarTotal() | currency : "$ " : 0}}</strong></td>
-                                             <td></td>
-                                          </tr>                                                                                                                           
-						    </tbody>
-						</table>
-                                 </div>
-
-                              </div>                               
-                           </div>
-                           
-                           
-                        </div>
-                      </div>
-                  </div>
-                  </div>
-                       
-                       
-                       
-                    </div>
-                </div>                                                                
-            </div>            
-        </div>        
-    </div>                    
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
 
 <script type="text/javascript">
-      //$('#tabPanels a[href="#tabTodos"]').tab('show');
+	//$('#tabPanels a[href="#tabTodos"]').tab('show');
 
-            $('#tabPanels a').click(function (e) {
-               e.preventDefault();
-               $(this).tab('show');
-            });
-            
-            $(function () {
-            $('[data-toggle="tooltip"]').tooltip();
-                    var cb = function(start, end) {
-                    $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
-                            $('#txtFechaI').val(start.format('YYYY-MM-DD'));
-                            $('#txtFechaF').val(end.format('YYYY-MM-DD'));
-                    };
-                    var optionSet1 = {
-                    startDate: moment().subtract(29, 'days'),
-                            endDate: moment(),
-                            minDate: '01/01/2010',
-                            maxDate: '12/31/2030',
-                            showDropdowns: true,
-                            showWeekNumbers: true,
-                            timePicker: false,
-                            ranges: {
-                            'Hoy': [moment(), moment()],
-                                    'Ayer': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-                                    'Ultimos 7 dias': [moment().subtract(6, 'days'), moment()],
-                                    'Ultimos 30 dias': [moment().subtract(29, 'days'), moment()],
-                                    'Este Mes': [moment().startOf('month'), moment().endOf('month')],
-                                    'Ultimo Mes': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
-                            },
-                            opens: 'right',
-                            buttonClasses: ['btn btn-default'],
-                            applyClass: 'btn-sm btn-primary',
-                            cancelClass: 'btn-sm btn-warning',
-                            format: 'MM/DD/YYYY',
-                            separator: ' to ',
-                            locale: {
-                            applyLabel: 'Aplicar',
-                                    cancelLabel: 'Limpiar',
-                                    fromLabel: 'Desde',
-                                    toLabel: 'Hasta',
-                                    customRangeLabel: 'Rango',
-                                    daysOfWeek: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa'],
-                                    monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
-                                    firstDay: 1
-                            }
-                    };
-                    $('#reportrange span').html(moment().format('MMMM D, YYYY') + ' - ' + moment().format('MMMM D, YYYY'));
-                    $('#reportrange').daterangepicker(optionSet1, cb);
-            });
-            
-            
-    $(function () {
-        $('input[name="txtFechaInicio"]').daterangepicker({
-            singleDatePicker: true,
-            showDropdowns: true            
-        },
-        function (start, end, label) {
-            $('#txtFechaInicio').val(end.format('DD/MM/YYYY'));
-        });
-      
-      $('input[name="txtFechafin"]').daterangepicker({
-            singleDatePicker: true,
-            showDropdowns: true            
-        },
-        function (start, end, label) {
-            $('#txtFechafin').val(end.format('DD/MM/YYYY'));
-        });
-              
-      $('[data-toggle="tooltip"]').tooltip();    
+	$('#tabPanels a').click(function (e) {
+		e.preventDefault();
+		$(this).tab('show');
+	});
 
-      $('#txtHoraInicio').clockpicker({
-            placement: 'bottom',
-            align: 'left',
-            autoclose: true,
-            default: 'now'
-      });
+	$(function () {
+		$('[data-toggle="tooltip"]').tooltip();
+		var cb = function (start, end) {
+			$('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+			$('#txtFechaI').val(start.format('YYYY-MM-DD'));
+			$('#txtFechaF').val(end.format('YYYY-MM-DD'));
+		};
+		var optionSet1 = {
+			startDate: moment().subtract(29, 'days'),
+			endDate: moment(),
+			minDate: '01/01/2010',
+			maxDate: '12/31/2030',
+			showDropdowns: true,
+			showWeekNumbers: true,
+			timePicker: false,
+			ranges: {
+				'Hoy': [moment(), moment()],
+				'Ayer': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+				'Ultimos 7 dias': [moment().subtract(6, 'days'), moment()],
+				'Ultimos 30 dias': [moment().subtract(29, 'days'), moment()],
+				'Este Mes': [moment().startOf('month'), moment().endOf('month')],
+				'Ultimo Mes': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+			},
+			opens: 'right',
+			buttonClasses: ['btn btn-default'],
+			applyClass: 'btn-sm btn-primary',
+			cancelClass: 'btn-sm btn-warning',
+			format: 'MM/DD/YYYY',
+			separator: ' to ',
+			locale: {
+				applyLabel: 'Aplicar',
+				cancelLabel: 'Limpiar',
+				fromLabel: 'Desde',
+				toLabel: 'Hasta',
+				customRangeLabel: 'Rango',
+				daysOfWeek: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa'],
+				monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+				firstDay: 1
+			}
+		};
+		$('#reportrange span').html(moment().format('MMMM D, YYYY') + ' - ' + moment().format('MMMM D, YYYY'));
+		$('#reportrange').daterangepicker(optionSet1, cb);
+	});
 
-      var hora;
-      $('#txtHoraInicio').change(function () {
-          hora = moment(this.value, "h:mm a");
-          $('#txtHoraInicio').val(hora.format("h:mm a"));
-      });
-        
-      $('#txtHoraFin').clockpicker({
-          placement: 'bottom',
-          align: 'left',
-          autoclose: true,
-          default: 'now'
-      });
 
-      var hora2;
-      $('#txtHoraFin').change(function () {
-          hora2 = moment(this.value, "h:mm a");
-          $('#txtHoraFin').val(hora2.format("h:mm a"));
-      });
-      
-    });
+	$(function () {
+		$('input[name="txtFechaInicio"]').daterangepicker({
+			singleDatePicker: true,
+			showDropdowns: true
+		},
+			function (start, end, label) {
+				$('#txtFechaInicio').val(end.format('DD/MM/YYYY'));
+			});
+
+		$('input[name="txtFechafin"]').daterangepicker({
+			singleDatePicker: true,
+			showDropdowns: true
+		},
+			function (start, end, label) {
+				$('#txtFechafin').val(end.format('DD/MM/YYYY'));
+			});
+
+		$('[data-toggle="tooltip"]').tooltip();
+
+		$('#txtHoraInicio').clockpicker({
+			placement: 'bottom',
+			align: 'left',
+			autoclose: true,
+			default: 'now'
+		});
+
+		var hora;
+		$('#txtHoraInicio').change(function () {
+			hora = moment(this.value, "h:mm a");
+			$('#txtHoraInicio').val(hora.format("h:mm a"));
+		});
+
+		$('#txtHoraFin').clockpicker({
+			placement: 'bottom',
+			align: 'left',
+			autoclose: true,
+			default: 'now'
+		});
+
+		var hora2;
+		$('#txtHoraFin').change(function () {
+			hora2 = moment(this.value, "h:mm a");
+			$('#txtHoraFin').val(hora2.format("h:mm a"));
+		});
+
+	});
 
 </script>

@@ -174,6 +174,17 @@ function consultaServiciosController ($scope,  tiposervicioService, ngTableParam
         }
         return total;
     };
+
+    vm.EliminarDisponibilidad =  function (item){
+        var promise = detalleService.put(item.dtCodigo, item);        
+        promise.then(function(d) {                        
+            toaster.pop('success','¡Información!', d.data.message);    
+            consultarDetalle(vm.Servicio.IdServicio);       
+        }, function(err) {           
+                toaster.pop('error','¡Error al cargar servicios!',err.data);           
+                console.log("Some Error Occured " + JSON.stringify(err));
+        });
+    }
 };
  
 consultaServiciosController.$inject = ['$scope', 'tiposervicioService', 'ngTableParams', 'toaster',

@@ -1,4 +1,8 @@
 <?php
+
+    Route::get('api/reporte/admin/descarga/{buscarPorFecha}/' +
+            '{tipoServicio}'
+            ,'ReporteController@descargarReporteAdmin');
     
     Route::get("api/reporte","ReporteController@GenerarPDF");
 

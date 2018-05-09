@@ -28,6 +28,7 @@ class ReporteController extends Controller
             $ClienteId = $request->get('ClienteId');
             $NumeroContrato = $request->get('Contrato');
             $Placa = $request->get('Placa');
+            $exportar = $request->get('Exportar');
             
 //            if($estado !=="TODOS"){
 //                $condicion =  " AND Estado = '". $estado ."'";
@@ -72,18 +73,101 @@ class ReporteController extends Controller
             $sql = "SELECT s.IdServicio, s.ContratoId, s.ClienteId, s.NumeroContrato, s.Responsable,"
                     . " s.Telefono, s.TipoServicidoId, ts.svDescripcion, s.FechaServicio, s.Hora, s.Valor, s.Estado, "
                     . " s.DescVehiculo, s.TipoVehiculoId, s.ValorTotal, s.Placa, s.ConductorId, s.Nota,  "
-                    . " IFNULL(c.Nombre, '') NombreConductor, s.DireccionOrigen, s.DireccionDestino " 
+                    . " IFNULL(c.Nombre, '') NombreConductor, s.DireccionOrigen, s.DireccionDestino, scs.ParadasServicio" 
                     . " FROM servicio s INNER JOIN  tiposervicio ts ON s.TipoServicidoId=ts.svCodigo "
                     . " LEFT JOIN conductor c ON s.ConductorId= c.IdConductor "
+                    . " LEFT JOIN (SELECT p.prServicio, GROUP_CONCAT( p.prDireccion  SEPARATOR ' | ' ) AS ParadasServicio "
+                    . " FROM paradas p  GROUP BY p.prServicio) scs ON scs.prServicio = s.IdServicio "
                     . " WHERE ContratoId > 0  " . $condicion . $condFecha 
                     . "  order by s.IdServicio desc";            
                        
-            $servicio = DB::select($sql);            
-            return $servicio;                                                    
+            $servicio = DB::select($sql);                                      
+            return $servicio;                                   
             
         }catch (\Exception $exc) {
             return JsonResponse::create(array('file' => $exc->getFile(), "line"=> $exc->getLine(),  "message" =>json_encode($exc->getMessage())), 500);
         } 
+    }
+    
+    public function descargarReporteAdmin($buscarPorFecha,$tipoServicio ){
+              
+//            $TipoServicio = $request->get('TipoServicioId');            
+//            $TipoVehiculo = $request->get('TipoVehiculoId');
+//            $zona = $request->get('ZonaId');
+//            $valorServicio = $request->get('Valor');
+//            $ConductorId = $request->get('ConductorId');
+//            $ClienteId = $request->get('ClienteId');
+//            $NumeroContrato = $request->get('Contrato');
+//            $Placa = $request->get('Placa');
+//            $exportar = $request->get('Exportar');
+        
+        
+        try {
+            
+            $fecha =date("Ymd");
+                       
+            \Excel::create('ReporteServicios_Admin_'.$fecha, function($excel) {               
+                
+                $zonas= \App\Zona::select('znCodigo', 'znNombre')->where('znEstado', '<>','BORRADO')
+                                ->orderBy('znCodigo', 'asc')->get(); 
+                
+                $tipoVehiculos = \App\TipoVehiculo::where('tvEstado','<>','BORRADO')
+                        ->select("tvDescripcion", "tvNumPasajero")->get();
+                
+                $claseVehiculo= $tipoVehiculos[2];
+                
+                $color = "#e7e7e7";                
+                
+                $excel->sheet('Zonas', function($sheet) use($zonas, $color) {
+                                                                        
+                    $sheet->row(1, array( 'ID', 'Nombre Zona' ));
+                    
+                    $sheet->row(1, function($row) use($color) {   
+                        $row->setBackground($color);
+                    });
+                                 
+                    foreach($zonas as $index => $tipo) {
+                        $sheet->row($index+2, [
+                            $tipo->znCodigo, $tipo->znNombre
+                        ]); 
+                    }
+                });
+                                     
+                $excel->sheet('TipoVehiculo', function($sheet) use ($tipoVehiculos, $color) {                                           
+                    $sheet->row(1, array( 'Tipo Vehículo', 'N. Pasajeros' ));
+                    
+                    $sheet->row(1, function($row) use ($color) {   
+                        $row->setBackground($color);
+                    });
+                                 
+                    foreach($tipoVehiculos as $index => $tipo) {
+                        $sheet->row($index+2, [
+                            $tipo->tvDescripcion, $tipo->tvNumPasajero
+                        ]); 
+                    }
+                });   
+                
+                $excel->sheet('PlantillaTransfert', function($sheet) use($zonas, $color, $claseVehiculo) {
+                                                            
+                    $sheet->row(1, array( 'Descripcion', 'Zona Origen', "Zona Destino", "Tipo Vehículo", "Valor Cliente", "Valor Proveedor" ));                    
+                    $sheet->row(1, function($row) use($color) {   
+                        $row->setBackground($color);
+                    });
+                    
+                    $zona = $zonas[0];
+                    
+                    foreach($zonas as $index => $tipo) {
+                        $sheet->row($index+2, [
+                            "", $zona['znNombre'], $tipo->znNombre, $claseVehiculo['tvDescripcion'], "", ""
+                        ]); 
+                    }                                        
+                });
+                                
+            })->export('xlsx');
+            
+        } catch (\Exception $exc) {
+            return JsonResponse::create(array('file' => $exc->getFile(), "line"=> $exc->getLine(),  "message" =>json_encode($exc->getMessage())), 500);
+        }  
     }
     
     public function reporteCliente(Request $request){
@@ -126,12 +210,17 @@ class ReporteController extends Controller
             if(!empty($NumeroContrato)){
                 $condicion .= " AND NumeroContrato = '" .$NumeroContrato ."'";
             }
-                                                                    
+                                                                             
             $sql = "SELECT s.IdServicio, s.ContratoId, s.ClienteId, s.NumeroContrato, s.Responsable,"
-                    . " s.Telefono, s.TipoServicidoId, ts.svDescripcion, s.FechaServicio, s.Hora, s.Valor, s.Estado, "
-                    . " s.DescVehiculo, s.TipoVehiculoId, s.ValorTotal, s.ConductorId FROM servicio s INNER JOIN  tiposervicio "
-                    . " ts ON s.TipoServicidoId=ts.svCodigo WHERE ClienteId = $ClienteId   " . $condicion . $condFecha 
-                    . "  order by s.IdServicio desc";
+            . " s.Telefono, s.TipoServicidoId, ts.svDescripcion, s.FechaServicio, s.Hora, s.Valor, s.Estado, "
+            . " s.DescVehiculo, s.TipoVehiculoId, s.ValorTotal, s.Placa, s.ConductorId, s.Nota,  "
+            . " IFNULL(c.Nombre, '') NombreConductor, s.DireccionOrigen, s.DireccionDestino, scs.ParadasServicio" 
+            . " FROM servicio s INNER JOIN  tiposervicio ts ON s.TipoServicidoId=ts.svCodigo "
+            . " LEFT JOIN conductor c ON s.ConductorId= c.IdConductor "
+            . " LEFT JOIN (SELECT p.prServicio, GROUP_CONCAT( p.prDireccion  SEPARATOR ' | ' ) AS ParadasServicio "
+            . " FROM paradas p  GROUP BY p.prServicio) scs ON scs.prServicio = s.IdServicio "
+            . " WHERE ClienteId = $ClienteId   " . $condicion . $condFecha 
+            . "  order by s.IdServicio desc";            
                        
             $servicio = DB::select($sql);            
             return $servicio;                                                    

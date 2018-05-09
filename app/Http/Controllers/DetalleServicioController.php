@@ -74,7 +74,23 @@ class DetalleServicioController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        try{
+            $data = $request->all(); 
+            $detalle = DetalleServicio::find($id);
+            $detalle->dtEstado = 'INACTIVO';
+            $detalle->dtUserActualizacion = $data["dtUser"];
+            $detalle->dtFechaActualizacion =new \DateTime();
+
+            $valorTotal = $detalle->dtValorTotal;
+            $horas = $detalle->dtNumHoras;
+
+            $detalle->save();
+
+            DB::update("UPDATE servicio SET ValorTotal = ValorTotal - $valorTotal, NumHoras = NumHoras - $horas  WHERE IdServicio = ".$detalle->dtServicioId);
+            return JsonResponse::create(array('message' => "Disponibilidad eliminada correctamente", "request" =>json_encode($detalle->dtCodigo)), 200);
+        }catch (\Exception $exc) {
+            return JsonResponse::create(array('file' => $exc->getFile(), "line"=> $exc->getLine(),  "message" =>json_encode($exc->getMessage())), 500);
+        } 
     }
 
     /**

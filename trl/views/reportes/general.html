@@ -151,11 +151,12 @@
 						<th class="hidden">ORIGEN</th>
 						<th class="hidden">DESTINO</th>
 						<th class="hidden">NOTA</th>
+						<th class="hidden">PARADAS</th>
 					</tr>
 				    </thead>
 
 				    <tbody>
-					<tr ng-repeat="item in $data"  ng-class="{'info': item.Estado == 'ASIGNADO', 'warning':  item.Estado == 'SOLICITADO' , 'success':  item.Estado != 'SOLICITADO' || item.Estado != 'ASIGNADO'  }">
+					<tr ng-repeat="item in rp.Servicios"  ng-class="{'info': item.Estado == 'ASIGNADO', 'warning':  item.Estado == 'SOLICITADO' , 'success':  item.Estado != 'SOLICITADO' || item.Estado != 'ASIGNADO'  }">
 					    <td>{{ item.IdServicio}}</td>
 					    <td>{{ item.NumeroContrato}}</td>
 					    <td>{{ item.Responsable}}</td>
@@ -171,6 +172,7 @@
 						<th class="hidden">{{ item.DireccionOrigen}}</th>
 						<th class="hidden">{{ item.DireccionDestino}}</th> 
 						<th class="hidden">{{ item.Nota}}</th>
+						<th class="hidden">{{ item.ParadasServicio}}</th>
 				    </tr>
 				    
 				    </tbody>

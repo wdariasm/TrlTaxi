@@ -1,8 +1,9 @@
 app.controller('reporteController', ['$scope', 'toaster', '$rootScope', 'zonaService', 'funcionService',
     'clienteService', 'tiposervicioService', 'tipoVehiculoService', 'conductorService', 'reporteService',
-    'ngTableParams', 'excelService',
+    'ngTableParams', 'excelService', '$window',
     function ($scope, toaster, $rootScope, zonaService, funcionService, clienteService, 
-            tiposervicioService, tipoVehiculoService,  conductorService, reporteService, ngTableParams, excelService) {
+                tiposervicioService, tipoVehiculoService,  conductorService, reporteService, ngTableParams,
+                excelService, $window) {
 
     var vm = this;
 
@@ -46,7 +47,7 @@ app.controller('reporteController', ['$scope', 'toaster', '$rootScope', 'zonaSer
             Contrato : "",
             TipoServicioId : 0,
             TipoVehiculoId : 0,
-            ZonaId : 0
+            ZonaId : 0            
         };
     }
 
@@ -84,7 +85,7 @@ app.controller('reporteController', ['$scope', 'toaster', '$rootScope', 'zonaSer
     function initTabla() {
         vm.TablaServicio = new ngTableParams({
             page: 1,
-            count: 10,
+            count: 15,
             sorting: undefined
         }, {
             filterDelay: 50,
@@ -195,16 +196,16 @@ app.controller('reporteController', ['$scope', 'toaster', '$rootScope', 'zonaSer
         vm.Servicios = [];
         
         var promisePost = reporteService.postAdministrador(vm.Filtro);
-        promisePost.then(function (d) {
+        promisePost.then(function (d) {            
             vm.VerConsulta = true;
-            vm.Servicios =d.data;            
+            vm.Servicios =d.data;                 
         }, function (err) {
            toaster.pop('error', "Error", "Error al realizar consulta"); 
             console.log("Some Error Occured " + JSON.stringify(err));
         });
-        
+
         vm.TablaServicio.reload();   
-                
+                                
     };
 
     vm.Limpiar = function () {
@@ -217,8 +218,10 @@ app.controller('reporteController', ['$scope', 'toaster', '$rootScope', 'zonaSer
             toaster.pop('info', "¡Información!", "No se encontraron datos. Por favor realice una nueva busqueda. "); 
             return;
         }
+
+        var fecha  = new Date();
     
-         var tmpElemento = document.createElement('a');
+        var tmpElemento = document.createElement('a');
         // obtenemos la información desde el div que lo contiene en el html
         // Obtenemos la información de la tabla
         var data_type = 'data:application/vnd.ms-excel';
@@ -226,7 +229,7 @@ app.controller('reporteController', ['$scope', 'toaster', '$rootScope', 'zonaSer
         var tabla_html = tabla_div.outerHTML.replace(/ /g, '%20');
         tmpElemento.href = data_type + ', ' + tabla_html;
         //Asignamos el nombre a nuestro EXCEL
-        tmpElemento.download = 'reporteTrl.xls';
+        tmpElemento.download = 'ReporteTRL_' + fecha.toLocaleString() +'.xls';
         // Simulamos el click al elemento creado para descargarlo
         tmpElemento.click();
     };
