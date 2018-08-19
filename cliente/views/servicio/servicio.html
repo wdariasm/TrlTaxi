@@ -1,4 +1,4 @@
-   <style>
+<style>
     input{
         text-transform: none;
     }
@@ -50,8 +50,8 @@
                     <small class="texto">Guardar</small>
                 </div>
             </div>
-	    
-	    <div class="row" style="margin-bottom: 5px;" ng-show="Editar">
+
+            <div class="row" style="margin-bottom: 5px;" ng-show="Editar">
                 <div class="col-xs-12 text-center">
                     <button type="button" class="btn btn-floating  btn-large borrador" ng-disabled="frmServicio.$invalid"  ng-click="Validar()" title="Actualizar"><i class="fa fa-save"></i></button>
                     <small class="texto">Actualizar</small>
@@ -70,50 +70,29 @@
                     </div>
                     <div class="panel-body" style="padding-bottom: 0px">
 
-			<div class="col-md-3">
-			    <div class="form-group">
-				<label  for="txtNumero" >N° Contrato <span>*</span></label>
-				<div class="input-group">   
-				    <select ng-model="ContratoSelect" ng-disabled="Editar" class="form-control" ng-change="BuscarContrato('COMBO',true)" id="cboMarca" ng-options="item as item.ctNumeroContrato for item in Contratos track by item.IdContrato" required></select>
-				    <!--<input  type="text" class="form-control" required="" ng-model="Servicio.NumeroContrato" maxlength="11" solo-numeros id="txtNumero" placeholder="Seleccionar Contrato"  >-->
-				    <span class="input-group-btn" >
-					<button type="button"  class="btn btn-info btn-md "  ng-disabled="Editar"  ng-click="GetContratos()" data-toggle="tooltip" data-placement="right" title="Actualizar mis contratos"><i class=" fa fa-search"></i></button>
-				    </span>
-				</div> 
-			    </div>
-			</div>                                                                   
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label  for="txtNumero" >N° Contrato <span>*</span></label>
+                                <div class="input-group">   
+                                    <select ng-model="ContratoSelect" ng-disabled="Editar" class="form-control" ng-change="BuscarContrato('COMBO', true)" id="cboMarca" ng-options="item as item.ctNumeroContrato for item in Contratos track by item.IdContrato" required></select>
+                                    <!--<input  type="text" class="form-control" required="" ng-model="Servicio.NumeroContrato" maxlength="11" solo-numeros id="txtNumero" placeholder="Seleccionar Contrato"  >-->
+                                    <span class="input-group-btn" >
+                                        <button type="button"  class="btn btn-info btn-md "  ng-disabled="Editar"  ng-click="GetContratos()" data-toggle="tooltip" data-placement="right" title="Actualizar mis contratos"><i class=" fa fa-search"></i></button>
+                                    </span>
+                                </div> 
+                            </div>
+                        </div>                                                                   
 
-			<div class="col-md-6">
-			    <div class="form-group">
-				<label for="txtNombre">Nombre Completo </label>
-				<div class="input-group">    
-				    <div class="input-group-addon"><i class="fa fa-user text-success"></i></div>
-				    <input type="text"  class="form-control" required="" ng-model="Contrato.Nombre" maxlength="100" id="txtNombre" placeholder="Nombre Completo" disabled>
-				</div>
-			    </div>
-			</div> 
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="txtNombre">Nombre Completo </label>
+                                <div class="input-group">    
+                                    <div class="input-group-addon"><i class="fa fa-user text-success"></i></div>
+                                    <input type="text"  class="form-control" required="" ng-model="Contrato.Nombre" maxlength="100" id="txtNombre" placeholder="Nombre Completo" disabled>
+                                </div>
+                            </div>
+                        </div> 
 
-			<!--<div class="col-md-3">
-			    <div class="form-group">
-				<label for="txtFechaVen">Fecha Vencimiento</label>
-				<div class="input-group">    
-				    <div class="input-group-addon"><i class="fa fa-calendar-times-o text-success"></i></div>
-				    <input type="text" class="form-control" ng-model="Contrato.FechaFin"   maxlength="10"  id="txtFechaVen" placeholder="F. Final" disabled>
-				</div>
-			    </div>
-			</div>                                                       
-
-			 <div class="row">
-			     <div class="col-md-2 col-md-offset-7">                                        
-				 <br/>
-				 <button   class="btn btn-success btn-block btn-addon"   type="button"  title="Nuevo / Cancelar" ng-click="Nuevo()"><i class="fa fa-pencil"></i> Nuevo</button>
-			     </div>
-			     <div class="col-md-2">
-			<!-- ng-disabled="frmVehiculo.$invalid"
-			<br/>
-			<button ng-disabled="frmServicio.$invalid"   class="btn btn-primary btn-block btn-addon"   type="button"  title="Solicitar Servicio" ng-click="Guardar()"><i class="fa fa-check"></i> Guardar</button>
-		    </div>
-		</div> -->
 
                         <div class="col-md-12 text-justify">
                             <label>Recuerde que todos los campos marcados con (<span>*</span>) son obligatorios,
@@ -126,276 +105,276 @@
 
                 <div class="panel panel-default" ng-show="Contrato.TipoServicio.length">
                     <div class="panel-heading">
-			<h3 class="panel-title">Seleccionar Servicio</h3>
+                        <h3 class="panel-title">Seleccionar Servicio</h3>
                     </div>
                     <div class="panel-body">
-			<div class="row">
-			    <div class="col-md-12">
+                        <div class="row">
+                            <div class="col-md-12">
 
-				<div class="row">
+                                <div class="row">
 
-				    <div class="col-md-4">
-					<div class="form-group">
-					    <label  for="cboTipoServicio">Tipo Servicio <span>*</span></label>
-					    <div class="input-group">
-						<div class="input-group-addon"><i class="fa fa-check text-success"></i></div>
-						<select ng-model="Servicio.Tipo" ng-disabled="Editar" class="form-control" id="cboTipoServicio" ng-options="item as item.csDescripcion for item in Contrato.TipoServicio track by item.csCodigo" required ng-change="TipoServicioCheck()"></select>
-					    </div>
-					</div>
-				    </div>
-
-				    <div class="col-md-3">
-					<div class="form-group">
-					    <label  for="txtFechaServicio">Fecha Servicio <span>*</span></label>
-					    <div class="input-group">
-						<div class="input-group-addon"><i class="fa fa-calendar-check-o text-success"></i></div>
-						<input type="text" id="txtFechaServicio" ng-disabled="Editar" ng-model="Servicio.FechaServicio" name="txtFechaServicio" class="form-control" value="" ng-change="CambiarFormato('FechaServicio')" required readonly>                                                                                            
-					    </div>
-					</div>
-				    </div>
-
-				    <div class="col-md-2">
-					<div class="form-group">
-					    <label  for="txtHora">Hora Servicio <span>*</span></label>
-					    <div class="input-group">
-						<div class="input-group-addon"><i class="fa fa-clock-o text-success"></i></div>
-						<input type="text" id="txtHora" ng-disabled="Editar" ng-model="Servicio.Hora" name="txtHora" class="form-control" value="" required readonly>
-					    </div>
-					</div>
-				    </div> 
-
-
-
-				    <div class="col-md-3">
-					<h2 for="txtValor" class="text-success text-center" style=" margin-top: 11%; ">{{  Servicio.ValorCliente  | currency : "$" : 0}}</h2>
-				    </div>
-
-				    <div class="col-md-4">
-					<div class="form-group">
-					    <label  for="txtModo">Modo <span>*</span></label>
-					    <div class="input-group">
-						<div class="input-group-addon"><i class="fa fa-clock-o text-success"></i></div>
-						<select class="form-control" ng-model="Servicio.ModoServicio" id="txtModo" placeholder="Modo Servicio" ng-disabled="EditModoServicio && !Editar">
-						    <option value="PROGRAMADO">PROGRAMADO</option>
-						    <option value="INMEDIATO">INMEDIATO</option>                                               
-						</select>
-
-					    </div>
-					</div>
-				    </div> 
-				    
-				    <div class="col-md-3" ng-hide="Editar">
-					<div class="form-group">
-					    <label  for="cboNumPasajeros">N° Pasajeros <span>*</span></label>     
-					    <div class="input-group">  
-						<div class="input-group-addon"><i class="fa fa-users"></i></div>                                
-						<select  class="form-control" ng-model="Servicio.NumPasajeros"  name="cboNumPasajeros" id="cboNumPasajeros" placeholder="Número de pasajeros" required>                                                     
-						    <option ng-repeat="n in []| rango:40" value="{{n}}">{{n}}</option>
-						</select>						
-					    </div>    
-					</div> 
-				    </div>
-				    
-				    <div class="col-md-3" ng-show="Editar">
-					<div class="form-group">
-					    <label  for="cboNumPasajeros">N° Pasajeros <span>*</span></label>     
-					    <div class="input-group">  
-						<div class="input-group-addon"><i class="fa fa-users"></i></div>
-						<input class="form-control" ng-model="Servicio.NumPasajeros"  solo-numeros id="txtNumPasajeros" type="text" required maxlength="3"  placeholder="N° Pasajeros">
-					    </div>    
-					</div> 
-				    </div>
-                           
-                           <div class="col-md-2" ng-show="Servicio.Tipo.csTipoServicioId == 3">                              
-                              <div class="radio radio-success" style="margin-top: 25px;">
-                                 <input type="radio" id="rdIda" ng-model="Asignacion.Ruta" value="ida" ng-change="CambiarPrecioRuta()">
-                                 <label for="rdIda">Sólo Ida</label> 
-                              </div>                                                        
-                           </div>
-                           
-                           <div class="col-md-2" ng-show="Servicio.Tipo.csTipoServicioId == 3">                              
-                              <div class="radio radio-danger" style="margin-top: 25px;"> 
-                                 <input type="radio" id="rdVuelta" ng-model="Asignacion.Ruta" value="doble"  ng-change="CambiarPrecioRuta()">
-                                 <label for="rdVuelta">Ida y Vuelta</label> 
-                              </div>                                                        
-                           </div>
-
-				</div>
-
-				<div class="row" >
-
-				    <div class="col-md-5 col-sm-5">
-                               
-                              <div ng-show="Servicio.Tipo.csTipoServicioId == 4">
-                                 <div class="row">
-                                    <div class="col-md-12">
-                                       <div class="form-group">
-                                           <label  for="cboRutas" >Seleccionar Traslado <span>*</span></label>
-                                           <div class="input-group">   
-                                             <div class="input-group-addon"><i class="fa fa-road"></i></div>
-                                             <select ng-model="TrasladoSelect" ng-disabled="Editar" class="form-control" name="cboRutas" id="cboRutas" ng-options="item as item.tlNombre for item in LstTraslados track by item.tlCodigo" required ng-change="CambiarPrecioTraslado()"></select>
-                                           </div> 
-                                       </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label  for="cboTipoServicio">Tipo Servicio <span>*</span></label>
+                                            <div class="input-group">
+                                                <div class="input-group-addon"><i class="fa fa-check text-success"></i></div>
+                                                <select ng-model="Servicio.Tipo" ng-disabled="Editar" class="form-control" id="cboTipoServicio" ng-options="item as item.csDescripcion for item in Contrato.TipoServicio track by item.csCodigo" required ng-change="TipoServicioCheck()"></select>
+                                            </div>
+                                        </div>
                                     </div>
-                                    
-                                    <div class="col-md-12">
-                                       <div class="form-group">
-                                          <label  for="cboRutas" >Descripción Traslado </label>
-                                          <div class="input-group">
-                                             <div class="input-group-addon"><i class="fa fa-road text-success"></i></div>
-                                             <textarea id="txtDescripcion" disabled="true" class="form-control" rows="1" ng-model="TrasladoSelect.muNombre"  placeholder="Descripción" maxlength="255"></textarea>
-                                          </div>                                           
-                                       </div>
+
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label  for="txtFechaServicio">Fecha Servicio <span>*</span></label>
+                                            <div class="input-group">
+                                                <div class="input-group-addon"><i class="fa fa-calendar-check-o text-success"></i></div>
+                                                <input type="text" id="txtFechaServicio" ng-disabled="Editar" ng-model="Servicio.FechaServicio" name="txtFechaServicio" class="form-control" value="" ng-change="CambiarFormato('FechaServicio')" required readonly>                                                                                            
+                                            </div>
+                                        </div>
                                     </div>
-                                 </div>
-                              </div>
-                                                             
-					<div class="row">                                    
-					    					    
-					    <div class="col-md-8">    
-						<div class="form-group">
-						    <label  for="txtTipoVehiculo" >Tipo de Vehículo <span>*</span></label>
-						    <div class="input-group">   
-							<div class="input-group-addon"><i class="fa fa-gitlab"></i></div>
-							<select ng-model="TipoSelect" ng-disabled="EditTipoVehiculo" class="form-control" name="txtTipoVehiculo" id="txtTipoVehiculo" ng-options="item as item.tvDescripcion for item in Contrato.TipoVehiculo track by item.tvCodigo" required ng-change="CambiarPrecio()"></select>
-						    </div> 
-						</div>
-					    </div>
 
-                                 <div class="col-md-4" ng-show="Servicio.Tipo.csTipoServicioId == 1 || Servicio.Tipo.csTipoServicioId == 2">    
-						<div class="form-group">     
-						    <br>
-						    <button type="button" class="btn btn-primary btn-block btn-addon" style="margin-top: 4%; " ng-click="ConsultarPrecio()" title="Consultar valor del servicio"><i class="fa fa-usd" style="margin-right: 7px;"></i>Consultar</button>
-						</div>
-					    </div>
-
-					</div> 
-
-					<div class="row">
-
-					    <ul class="first col-md-offset-1">
-						<li>
-						    <img  src="{{TipoSelect.tvRuta}}" alt="Tipo Vehículo"   style="max-height: 220px; max-width:  220px;" title="Click, para ampliar imagen">
-						    <div class="text" style="font-size: 5px;">{{TipoSelect.tvDescripcion}}</div>
-						</li>
-					    </ul>                                                                                                                       
-					</div>
-
-				    </div>
-
-                           <div class="col-md-7 col-sm-7" >
-					<!-- "-->
-					<div ng-show="Servicio.Tipo.csTipoServicioId != 3">
-
-					    <div class="row">
-						<div class="col-md-4">
-						    <div class="checkbox checkbox-primary">
-							<input type="checkbox" id="chkAsignacion" ng-model="Asignacion.Manual" ng-true-value="true" ng-false-value="false">
-							<label for="chkAsignacion">Asignación Manual</label> 
-						    </div>
-						</div>
-
-						<div class="col-md-4" ng-show="Asignacion.Manual" data-toggle="tooltip" data-placement="top" title="Establecer mi posición de origen en el mapa.">
-						    <div class="radio radio-success">
-							<input type="radio" id="rdAsignacion1" ng-model="Asignacion.Marcador" value="Origen" >
-							<label for="rdAsignacion1">Posición Origen</label> 
-						    </div>
-						</div>
-
-						<div class="col-md-4" ng-show="Asignacion.Manual" data-toggle="tooltip" data-placement="top" title="Establecer mi posición de destino en el mapa.">
-						    <div class="radio radio-danger">
-							<input type="radio" id="rdAsignacion2" ng-model="Asignacion.Marcador" value="Destino" >
-							<label for="rdAsignacion2">Posición Destino</label> 
-						    </div>
-						</div>
-
-					    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-group">
+                                            <label  for="txtHora">Hora Servicio <span>*</span></label>
+                                            <div class="input-group">
+                                                <div class="input-group-addon"><i class="fa fa-clock-o text-success"></i></div>
+                                                <input type="text" id="txtHora" ng-disabled="Editar" ng-model="Servicio.Hora" name="txtHora" class="form-control" value="" required readonly>
+                                            </div>
+                                        </div>
+                                    </div> 
 
 
-					    <div class="row" ng-show="!Asignacion.Manual">                                    
-						<div class="col-md-6">
-						    <div class="form-group">
-							<label  for="txtOrigen">Dirección de origen <span>*</span></label>     
-							<div class="input-group">  
-							    <div class="input-group-addon"><i class="fa fa-street-view"></i></div>                                
-							    <input class="form-control" ng-model="Servicio.DireccionOrigen"  id="txtOrigen" type="text"  maxlength="255"  placeholder="Ingresa tu ubicación">                                              
-							</div>    
-						    </div>                                
-						</div>
 
-                                     <div class="col-md-6" ng-hide="Servicio.Tipo.csTipoServicioId == 2">
-						    <div class="form-group">
-							<label  for="txtDestino">Dirección de destino <span>*</span></label>     
-							<div class="input-group">  
-							    <div class="input-group-addon"><i class="fa fa-globe"></i></div>                                
-							    <input class="form-control" ng-model="Servicio.DireccionDestino"  id="txtDestino" type="text"  maxlength="255"  placeholder="Ingresa tu ubicación">                                              
-							</div>    
-						    </div>                                
-						</div>
-					    </div>
-
-					    <div class="row" ng-show="Asignacion.Manual">                                    
-						<div class="col-md-6">
-						    <div class="form-group">
-							<label  for="txtOrigenManual">Dirección de origen <span>*</span></label>     
-							<div class="input-group">  
-							    <div class="input-group-addon"><i class="fa fa-street-view"></i></div>                                
-							    <input class="form-control" ng-model="Servicio.DireccionOrigen"  id="txtOrigenManual" type="text"  maxlength="255"  placeholder="Ingresa tu Dirección de origen">                                              
-							</div>    
-						    </div>                                
-						</div>
-
-						<div class="col-md-6">
-						    <div class="form-group">
-							<label  for="txtDestinoManual">Dirección de destino <span>*</span></label>     
-							<div class="input-group">  
-							    <div class="input-group-addon"><i class="fa fa-globe"></i></div>                                
-							    <input class="form-control" ng-model="Servicio.DireccionDestino"  id="txtDestinoManual" type="text"  maxlength="255"  placeholder="Ingresa tu Dirección de destino">
-							</div>    
-						    </div>                                
-						</div>
-					    </div>
-
-
-					    <div class="row">
-						<div class="col-md-12">
-						    <div id="dvMapaServicio" style="width: 100%; height: 280px; margin-top: 10px; "  class="hidden">
-
-						    </div>
-						</div>
-					    </div>  
-
-					</div>    
-                              
-                              <div ng-show="Servicio.Tipo.csTipoServicioId == 3">
-                                 <div class="row">
-                                    <div class="col-md-12">
-                                       <div class="form-group">
-                                           <label  for="cboRutas" >Seleccionar Ruta <span>*</span></label>
-                                           <div class="input-group">   
-                                             <div class="input-group-addon"><i class="fa fa-road"></i></div>
-                                             <select ng-model="RutaSelect" ng-disabled="Editar" class="form-control" name="cboRutas" id="cboRutas" ng-options="item as item.rtNombre for item in LstRutas track by item.rtCodigo" required ng-change="CambiarPrecioRuta()"></select>
-                                           </div> 
-                                       </div>
+                                    <div class="col-md-3">
+                                        <h2 for="txtValor" class="text-success text-center" style=" margin-top: 11%; ">{{  Servicio.ValorCliente  | currency : "$" : 0}}</h2>
                                     </div>
-                                    
-                                    <div class="col-md-12">
-                                       <div class="form-group">
-                                          <label  for="cboRutas" >Descripción Ruta </label>
-                                          <div class="input-group">
-                                             <div class="input-group-addon"><i class="fa fa-road text-success"></i></div>
-                                             <textarea id="txtDescripcion" disabled="true" class="form-control" rows="3" ng-model="RutaSelect.rtDescripcion"  placeholder="Descripción" maxlength="255"></textarea>						                                                
-                                          </div>                                           
-                                       </div>
+
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label  for="txtModo">Modo <span>*</span></label>
+                                            <div class="input-group">
+                                                <div class="input-group-addon"><i class="fa fa-clock-o text-success"></i></div>
+                                                <select class="form-control" ng-model="Servicio.ModoServicio" id="txtModo" placeholder="Modo Servicio" ng-disabled="EditModoServicio && !Editar">
+                                                    <option value="PROGRAMADO">PROGRAMADO</option>
+                                                    <option value="INMEDIATO">INMEDIATO</option>                                               
+                                                </select>
+
+                                            </div>
+                                        </div>
+                                    </div> 
+
+                                    <div class="col-md-3" ng-hide="Editar">
+                                        <div class="form-group">
+                                            <label  for="cboNumPasajeros">N° Pasajeros <span>*</span></label>     
+                                            <div class="input-group">  
+                                                <div class="input-group-addon"><i class="fa fa-users"></i></div>                                
+                                                <select  class="form-control" ng-model="Servicio.NumPasajeros"  name="cboNumPasajeros" id="cboNumPasajeros" placeholder="Número de pasajeros" required>                                                     
+                                                    <option ng-repeat="n in []| rango:40" value="{{n}}">{{n}}</option>
+                                                </select>						
+                                            </div>    
+                                        </div> 
                                     </div>
-                                 </div>
-                              </div>
 
-				    </div>
-				</div>
+                                    <div class="col-md-3" ng-show="Editar">
+                                        <div class="form-group">
+                                            <label  for="cboNumPasajeros">N° Pasajeros <span>*</span></label>     
+                                            <div class="input-group">  
+                                                <div class="input-group-addon"><i class="fa fa-users"></i></div>
+                                                <input class="form-control" ng-model="Servicio.NumPasajeros"  solo-numeros id="txtNumPasajeros" type="text" required maxlength="3"  placeholder="N° Pasajeros">
+                                            </div>    
+                                        </div> 
+                                    </div>
 
-			    </div>                       
-			</div>                                  
+                                    <div class="col-md-2" ng-show="Servicio.Tipo.csTipoServicioId == 3">                              
+                                        <div class="radio radio-success" style="margin-top: 25px;">
+                                            <input type="radio" id="rdIda" ng-model="Asignacion.Ruta" value="ida" ng-change="CambiarPrecioRuta()">
+                                            <label for="rdIda">Solo Ida</label> 
+                                        </div>                                                        
+                                    </div>
+
+                                    <div class="col-md-2" ng-show="Servicio.Tipo.csTipoServicioId == 3">                              
+                                        <div class="radio radio-danger" style="margin-top: 25px;"> 
+                                            <input type="radio" id="rdVuelta" ng-model="Asignacion.Ruta" value="doble"  ng-change="CambiarPrecioRuta()">
+                                            <label for="rdVuelta">Ida y Vuelta</label> 
+                                        </div>                                                        
+                                    </div>
+
+                                </div>
+
+                                <div class="row" >
+
+                                    <div class="col-md-5 col-sm-5">
+
+                                        <div ng-show="Servicio.Tipo.csTipoServicioId == 4">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <div class="form-group">
+                                                        <label  for="cboRutas" >Seleccionar Traslado <span>*</span></label>
+                                                        <div class="input-group">   
+                                                            <div class="input-group-addon"><i class="fa fa-road"></i></div>
+                                                            <select ng-model="TrasladoSelect" ng-disabled="Editar" class="form-control" name="cboRutas" id="cboRutas" ng-options="item as item.tlNombre for item in LstTraslados track by item.tlCodigo" required ng-change="CambiarPrecioTraslado()"></select>
+                                                        </div> 
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-12">
+                                                    <div class="form-group">
+                                                        <label  for="cboRutas" >Descripción Traslado </label>
+                                                        <div class="input-group">
+                                                            <div class="input-group-addon"><i class="fa fa-road text-success"></i></div>
+                                                            <textarea id="txtDescripcion" disabled="true" class="form-control" rows="1" ng-model="TrasladoSelect.muNombre"  placeholder="Descripción" maxlength="255"></textarea>
+                                                        </div>                                           
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">                                    
+
+                                            <div class="col-md-8">    
+                                                <div class="form-group">
+                                                    <label  for="txtTipoVehiculo" >Tipo de Vehículo <span>*</span></label>
+                                                    <div class="input-group">   
+                                                        <div class="input-group-addon"><i class="fa fa-gitlab"></i></div>
+                                                        <select ng-model="TipoSelect" ng-disabled="EditTipoVehiculo" class="form-control" name="txtTipoVehiculo" id="txtTipoVehiculo" ng-options="item as item.tvDescripcion for item in Contrato.TipoVehiculo track by item.tvCodigo" required ng-change="CambiarPrecio()"></select>
+                                                    </div> 
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-4" ng-show="Servicio.Tipo.csTipoServicioId == 1 || Servicio.Tipo.csTipoServicioId == 2">    
+                                                <div class="form-group">     
+                                                    <br>
+                                                    <button type="button" class="btn btn-primary btn-block btn-addon" style="margin-top: 4%; " ng-click="ConsultarPrecio()" title="Consultar valor del servicio"><i class="fa fa-usd" style="margin-right: 7px;"></i>Consultar</button>
+                                                </div>
+                                            </div>
+
+                                        </div> 
+
+                                        <div class="row">
+
+                                            <ul class="first col-md-offset-1">
+                                                <li>
+                                                    <img  src="{{TipoSelect.tvRuta}}" alt="Tipo Vehículo"   style="max-height: 220px; max-width:  220px;" title="Click, para ampliar imagen">
+                                                    <div class="text" style="font-size: 5px;">{{TipoSelect.tvDescripcion}}</div>
+                                                </li>
+                                            </ul>                                                                                                                       
+                                        </div>
+
+                                    </div>
+
+                                    <div class="col-md-7 col-sm-7" >
+                                        <!-- "-->
+                                        <div ng-show="Servicio.Tipo.csTipoServicioId != 3">
+
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                    <div class="checkbox checkbox-primary">
+                                                        <input type="checkbox" id="chkAsignacion" ng-model="Asignacion.Manual" ng-true-value="true" ng-false-value="false">
+                                                        <label for="chkAsignacion">Asignación Manual</label> 
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-4" ng-show="Asignacion.Manual" data-toggle="tooltip" data-placement="top" title="Establecer mi posición de origen en el mapa.">
+                                                    <div class="radio radio-success">
+                                                        <input type="radio" id="rdAsignacion1" ng-model="Asignacion.Marcador" value="Origen" >
+                                                        <label for="rdAsignacion1">Posición Origen</label> 
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-4" ng-show="Asignacion.Manual" data-toggle="tooltip" data-placement="top" title="Establecer mi posición de destino en el mapa.">
+                                                    <div class="radio radio-danger">
+                                                        <input type="radio" id="rdAsignacion2" ng-model="Asignacion.Marcador" value="Destino" >
+                                                        <label for="rdAsignacion2">Posición Destino</label> 
+                                                    </div>
+                                                </div>
+
+                                            </div>
+
+
+                                            <div class="row" ng-show="!Asignacion.Manual">                                    
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label  for="txtOrigen">Dirección de origen <span>*</span></label>     
+                                                        <div class="input-group">  
+                                                            <div class="input-group-addon"><i class="fa fa-street-view"></i></div>                                
+                                                            <input class="form-control" ng-model="Servicio.DireccionOrigen"  id="txtOrigen" type="text"  maxlength="255"  placeholder="Ingresa tu ubicación">                                              
+                                                        </div>    
+                                                    </div>                                
+                                                </div>
+
+                                                <div class="col-md-6" ng-hide="Servicio.Tipo.csTipoServicioId == 2">
+                                                    <div class="form-group">
+                                                        <label  for="txtDestino">Dirección de destino <span>*</span></label>     
+                                                        <div class="input-group">  
+                                                            <div class="input-group-addon"><i class="fa fa-globe"></i></div>                                
+                                                            <input class="form-control" ng-model="Servicio.DireccionDestino"  id="txtDestino" type="text"  maxlength="255"  placeholder="Ingresa tu ubicación">                                              
+                                                        </div>    
+                                                    </div>                                
+                                                </div>
+                                            </div>
+
+                                            <div class="row" ng-show="Asignacion.Manual">                                    
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label  for="txtOrigenManual">Dirección de origen <span>*</span></label>     
+                                                        <div class="input-group">  
+                                                            <div class="input-group-addon"><i class="fa fa-street-view"></i></div>                                
+                                                            <input class="form-control" ng-model="Servicio.DireccionOrigen"  id="txtOrigenManual" type="text"  maxlength="255"  placeholder="Ingresa tu Dirección de origen">                                              
+                                                        </div>    
+                                                    </div>                                
+                                                </div>
+
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label  for="txtDestinoManual">Dirección de destino <span>*</span></label>     
+                                                        <div class="input-group">  
+                                                            <div class="input-group-addon"><i class="fa fa-globe"></i></div>                                
+                                                            <input class="form-control" ng-model="Servicio.DireccionDestino"  id="txtDestinoManual" type="text"  maxlength="255"  placeholder="Ingresa tu Dirección de destino">
+                                                        </div>    
+                                                    </div>                                
+                                                </div>
+                                            </div>
+
+
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <div id="dvMapaServicio" style="width: 100%; height: 280px; margin-top: 10px; "  class="hidden">
+
+                                                    </div>
+                                                </div>
+                                            </div>  
+
+                                        </div>    
+
+                                        <div ng-show="Servicio.Tipo.csTipoServicioId == 3">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <div class="form-group">
+                                                        <label  for="cboRutas" >Seleccionar Ruta <span>*</span></label>
+                                                        <div class="input-group">   
+                                                            <div class="input-group-addon"><i class="fa fa-road"></i></div>
+                                                            <select ng-model="RutaSelect" ng-disabled="Editar" class="form-control" name="cboRutas" id="cboRutas" ng-options="item as item.rtNombre for item in LstRutas track by item.rtCodigo" required ng-change="CambiarPrecioRuta()"></select>
+                                                        </div> 
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-12">
+                                                    <div class="form-group">
+                                                        <label  for="cboRutas" >Descripción Ruta </label>
+                                                        <div class="input-group">
+                                                            <div class="input-group-addon"><i class="fa fa-road text-success"></i></div>
+                                                            <textarea id="txtDescripcion" disabled="true" class="form-control" rows="3" ng-model="RutaSelect.rtDescripcion"  placeholder="Descripción" maxlength="255"></textarea>						                                                
+                                                        </div>                                           
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                            </div>                       
+                        </div>                                  
                     </div>
                 </div>
 
@@ -405,66 +384,66 @@
                     </div>
                     <div class="panel-body" style="padding-bottom: 0px">
                         <div class="row">                            
-			    <div class="col-md-4">
-				<div class="form-group">
-				    <label for="txtResponsable">Responsable del Servicio <span>*</span> </label>
-				    <div class="input-group">    
-					<div class="input-group-addon"><i class="fa fa-user text-success"></i></div>
-					<input type="text"  class="form-control"  ng-model="Contacto.scNombre" maxlength="60" id="txtResponsable" placeholder="Responsable del servicio" >
-				    </div>
-				</div>
-			    </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="txtResponsable">Responsable del Servicio <span>*</span> </label>
+                                    <div class="input-group">    
+                                        <div class="input-group-addon"><i class="fa fa-user text-success"></i></div>
+                                        <input type="text"  class="form-control"  ng-model="Contacto.scNombre" maxlength="60" id="txtResponsable" placeholder="Responsable del servicio" >
+                                    </div>
+                                </div>
+                            </div>
 
-			    <div class="col-md-2">
-				<div class="form-group">
-				    <label for="txtTelefonoPpal">Teléfono </label>
-				    <div class="input-group">    
-					<div class="input-group-addon"><i class="fa fa-mobile text-success"></i></div>
-					<input type="text"  class="form-control" ng-model="Contacto.scTelefono"  maxlength="15" solo-numeros id="txtTelefonoPpal" placeholder="Teléfono" >
-				    </div>
-				</div>
-			    </div>                                                               
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label for="txtTelefonoPpal">Teléfono </label>
+                                    <div class="input-group">    
+                                        <div class="input-group-addon"><i class="fa fa-mobile text-success"></i></div>
+                                        <input type="text"  class="form-control" ng-model="Contacto.scTelefono"  maxlength="15" solo-numeros id="txtTelefonoPpal" placeholder="Teléfono" >
+                                    </div>
+                                </div>
+                            </div>                                                               
 
-			    <div class="col-md-5">
-				<div class="form-group">
-				    <label for="txtNota">Nota Servicio / C.Costo </label>   
-				    <input type="text" id="txtNota" class="form-control"  ng-model="Contacto.scNota"  maxlength="200"  placeholder="Nota o Centro de Costo" >				    
-				</div>
-			    </div>
-			    
-			     <div class="col-md-1">                                        
-				<br/>
-				<button   class="btn btn-success btn-block btn-addon" style="margin-top: 4px;"  type="button"  title="Agregar Contacto" ng-click="AgregarContacto()"><i class="fa fa-plus"></i></button>
-			    </div>
+                            <div class="col-md-5">
+                                <div class="form-group">
+                                    <label for="txtNota">Nota Servicio / C.Costo </label>   
+                                    <input type="text" id="txtNota" class="form-control"  ng-model="Contacto.scNota"  maxlength="200"  placeholder="Nota o Centro de Costo" >				    
+                                </div>
+                            </div>
+
+                            <div class="col-md-1">                                        
+                                <br/>
+                                <button   class="btn btn-success btn-block btn-addon" style="margin-top: 4px;"  type="button"  title="Agregar Contacto" ng-click="AgregarContacto()"><i class="fa fa-plus"></i></button>
+                            </div>
                         </div>	
 
-			<div class="row" ng-show="Servicio.Contactos.length">
-			    <div class="col-md-12">
-				<table class="table table-striped table-condensed">
-				    <thead>
-					<tr>					    
-					    <th></th>
-					    <th>RESPONSABLE</th>
-					    <th>TELÉFONO</th>
-					    <th>NOTA</th>
-					    <th></th>
-					</tr>
-				    </thead>
-				    <tbody>
-					<tr ng-repeat="itemc in Servicio.Contactos">					    
-					    <td><span ng-if="$first" class="fa fa-star-o text-success" ></span></td>					    
-					    <td>{{itemc.scNombre}}</td>
-					    <td>{{itemc.scTelefono}}</td>
-					    <td>{{itemc.scNota}}</td>
-					    <td>
-						<a ng-click="QuitarContacto($index)" ng-hide="Editar" href="javascript:;"  title="Quitar Contacto"><i class="fa fa-lg fa-trash text-danger"></i></a>
-						<a ng-click="EliminarContacto(itemc)" ng-show="Editar" href="javascript:;"  title="Eliminar Contacto"><i class="fa fa-lg fa-trash text-danger"></i></a>
-					    </td>
-					</tr>					
-				    </tbody>
-				</table>
-			    </div>
-			</div> 
+                        <div class="row" ng-show="Servicio.Contactos.length">
+                            <div class="col-md-12">
+                                <table class="table table-striped table-condensed">
+                                    <thead>
+                                        <tr>					    
+                                            <th></th>
+                                            <th>RESPONSABLE</th>
+                                            <th>TELÉFONO</th>
+                                            <th>NOTA</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="itemc in Servicio.Contactos">					    
+                                            <td><span ng-if="$first" class="fa fa-star-o text-success" ></span></td>					    
+                                            <td>{{itemc.scNombre}}</td>
+                                            <td>{{itemc.scTelefono}}</td>
+                                            <td>{{itemc.scNota}}</td>
+                                            <td>
+                                                <a ng-click="QuitarContacto($index)" ng-hide="Editar" href="javascript:;"  title="Quitar Contacto"><i class="fa fa-lg fa-trash text-danger"></i></a>
+                                                <a ng-click="EliminarContacto(itemc)" ng-show="Editar" href="javascript:;"  title="Eliminar Contacto"><i class="fa fa-lg fa-trash text-danger"></i></a>
+                                            </td>
+                                        </tr>					
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div> 
 
                     </div>
                 </div>
@@ -472,111 +451,111 @@
                 <div class="row">
                     <div class="col-md-7" style="min-height: 306px;" ng-show="Servicio.Tipo.csTipoServicioId == 1">
 
-			<div class="panel panel-default" ng-show="Contrato.TipoServicio.length">
-			    <div class="panel-heading">
-				<h3 class="panel-title">Paradas</h3>
-			    </div>
-			    <div class="panel-body">                                   
-				<div class="row">
-				    <div class="col-md-8">
-					<div class="form-group">
-					    <label  for="txtParada">Dirección de parada </label>     
-					    <div class="input-group">  
-						<div class="input-group-addon"><i class="fa fa-map-marker"></i></div>                                
-						<input class="form-control" ng-model="Parada.prDireccion"  id="txtParada" type="text"  maxlength="255"  placeholder="Ingresar dirección de parada">                                              
-					    </div>    
-					</div>                                
-				    </div>
-				    <div class="col-md-4">                                        
-					<br/>
-					<button   class="btn btn-success btn-block btn-addon" style="margin-top: 4px;"  type="button"  title="Agregar Parada" ng-click="AgregarParada()"><i class="fa fa-plus"></i>Agregar</button>
-				    </div>
-				</div>
-				<div class="row">
-				    <div class="col-md-12">
-					<table class="table table-striped table-condensed">
-					    <thead>
-						<tr>
-						    <th>#</th>
-						    <th>DIRECCIÓN</th>
-						    <th>VALOR</th>
-						    <td></td>
-						</tr>
-					    </thead>
-					    <tbody>
-						<tr ng-repeat="items in Servicio.Paradas">
-						    <td>{{$index + 1}}</td>
-						    <td>{{items.prDireccion}}</td>
-						    <td>{{items.prValorCliente| currency : "$ " : 0 }}</td>
-						    <td>
-							<a ng-click="QuitarParada($index)" ng-hide="Editar"  href="javascript:;"  title="Quitar"><i class="fa fa-lg fa-trash text-danger"></i></a>
-							<a ng-click="EliminarParada(items)" ng-show="Editar"  href="javascript:;"  title="Eliminar"><i class="fa fa-lg fa-trash text-danger"></i></a>
-						    </td>
-						</tr>
-						<tr>
-						    <td colspan="2" class="text-right">SubTotal</td>
-						    <td class="text-danger"><strong>{{TotalParada() | currency : "$ " : 0}}</strong></td>
-						    <td></td>
-						</tr>
-					    </tbody>
-					</table>
-				    </div>
-				</div>                                                                            
-			    </div>
-			</div>
-		    </div>
+                        <div class="panel panel-default" ng-show="Contrato.TipoServicio.length">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">Paradas</h3>
+                            </div>
+                            <div class="panel-body">                                   
+                                <div class="row">
+                                    <div class="col-md-8">
+                                        <div class="form-group">
+                                            <label  for="txtParada">Dirección de parada </label>     
+                                            <div class="input-group">  
+                                                <div class="input-group-addon"><i class="fa fa-map-marker"></i></div>                                
+                                                <input class="form-control" ng-model="Parada.prDireccion"  id="txtParada" type="text"  maxlength="255"  placeholder="Ingresar dirección de parada">                                              
+                                            </div>    
+                                        </div>                                
+                                    </div>
+                                    <div class="col-md-4">                                        
+                                        <br/>
+                                        <button   class="btn btn-success btn-block btn-addon" style="margin-top: 4px;"  type="button"  title="Agregar Parada" ng-click="AgregarParada()"><i class="fa fa-plus"></i>Agregar</button>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <table class="table table-striped table-condensed">
+                                            <thead>
+                                                <tr>
+                                                    <th>#</th>
+                                                    <th>DIRECCIÓN</th>
+                                                    <th>VALOR</th>
+                                                    <td></td>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr ng-repeat="items in Servicio.Paradas">
+                                                    <td>{{$index + 1}}</td>
+                                                    <td>{{items.prDireccion}}</td>
+                                                    <td>{{items.prValorCliente| currency : "$ " : 0 }}</td>
+                                                    <td>
+                                                        <a ng-click="QuitarParada($index)" ng-hide="Editar"  href="javascript:;"  title="Quitar"><i class="fa fa-lg fa-trash text-danger"></i></a>
+                                                        <a ng-click="EliminarParada(items)" ng-show="Editar"  href="javascript:;"  title="Eliminar"><i class="fa fa-lg fa-trash text-danger"></i></a>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="2" class="text-right">SubTotal</td>
+                                                    <td class="text-danger"><strong>{{TotalParada() | currency : "$ " : 0}}</strong></td>
+                                                    <td></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>                                                                            
+                            </div>
+                        </div>
+                    </div>
 
-		    <div class="col-md-5">
-			<div class="panel panel-default" ng-show="Contrato.TipoServicio.length">
-			    <div class="panel-heading">
-				<h3 class="panel-title">Valor Total  / Pago</h3>
-			    </div>
-			    <div class="panel-body">                    
+                    <div class="col-md-5">
+                        <div class="panel panel-default" ng-show="Contrato.TipoServicio.length">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">Valor Total  / Pago</h3>
+                            </div>
+                            <div class="panel-body">                    
 
-				<div class="row">
-				    <div class="col-md-4">
-					<label  for="cboPago" style="margin-top: 10px;">Form de Pago <span>*</span></label>
-				    </div>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label  for="cboPago" style="margin-top: 10px;">Forma de Pago <span>*</span></label>
+                                    </div>
 
-				    <div class="col-md-8">                                                                                                    
-					<div class="input-group">
-					    <div class="input-group-addon"><i class="fa fa-check-circle-o text-success"></i></div>
-					    <select class="form-control" id="cboPago" ng-model="Servicio.FormaPago" required>
-						<option ng-repeat="fp in Contrato.FormaPago" value="{{fp}}">{{fp}}</option>
-					    </select>
-					</div>                                                                                                
-				    </div>                          
-				</div>
-				<div class="row" style="margin-top: 5px;">
-				    <div class="col-md-4 col-xs-5">                               
-					<label class="text-right" style="margin-top: 10px;" >Valor Servicio <span>*</span> </label>
-				    </div>
-				    <div class="col-md-8 col-xs-7">
-					<h3 for="txtValor" class="text-success text-right" style=" margin-top: 3px; ">{{  Servicio.ValorCliente  | currency : "$" : 0}}</h3>
-				    </div>
-				</div>
+                                    <div class="col-md-8">                                                                                                    
+                                        <div class="input-group">
+                                            <div class="input-group-addon"><i class="fa fa-check-circle-o text-success"></i></div>
+                                            <select class="form-control" id="cboPago" ng-model="Servicio.FormaPago" required>
+                                                <option ng-repeat="fp in Contrato.FormaPago" value="{{fp}}">{{fp}}</option>
+                                            </select>
+                                        </div>                                                                                                
+                                    </div>                          
+                                </div>
+                                <div class="row" style="margin-top: 5px;">
+                                    <div class="col-md-4 col-xs-5">                               
+                                        <label class="text-right" style="margin-top: 10px;" >Valor Servicio <span>*</span> </label>
+                                    </div>
+                                    <div class="col-md-8 col-xs-7">
+                                        <h3 for="txtValor" class="text-success text-right" style=" margin-top: 3px; ">{{  Servicio.ValorCliente  | currency : "$" : 0}}</h3>
+                                    </div>
+                                </div>
 
-				<div class="row">
-				    <div class="col-md-4 col-xs-5">                               
-					<label class="text-right" style="margin-top: 10px;" >Total Paradas <span>*</span> </label>
-				    </div>
-				    <div class="col-md-8 col-xs-7">
-					<h3 class="text-danger text-right" style=" margin-top: 3px; ">{{  Subtotal | currency : "$" : 0}}</h3>
-				    </div>
-				</div>
+                                <div class="row">
+                                    <div class="col-md-4 col-xs-5">                               
+                                        <label class="text-right" style="margin-top: 10px;" >Total Paradas <span>*</span> </label>
+                                    </div>
+                                    <div class="col-md-8 col-xs-7">
+                                        <h3 class="text-danger text-right" style=" margin-top: 3px; ">{{  Subtotal | currency : "$" : 0}}</h3>
+                                    </div>
+                                </div>
 
-				<div class="row">
-				    <div class="col-md-4 col-xs-5">                               
-					<label class="text-right" style="margin-top: 10px;" >Total Servicio <span>*</span> </label>
-				    </div>
-				    <div class="col-md-8 col-xs-7">
-					<h2 class="text-primary text-right" style=" margin-top: 3px; ">{{  Servicio.ValorTotal | currency : "$" : 0}}</h2>
-				    </div>
-				</div>
+                                <div class="row">
+                                    <div class="col-md-4 col-xs-5">                               
+                                        <label class="text-right" style="margin-top: 10px;" >Total Servicio <span>*</span> </label>
+                                    </div>
+                                    <div class="col-md-8 col-xs-7">
+                                        <h2 class="text-primary text-right" style=" margin-top: 3px; ">{{  Servicio.ValorTotal | currency : "$" : 0}}</h2>
+                                    </div>
+                                </div>
 
-			    </div>    
-			</div>
-		    </div>
+                            </div>    
+                        </div>
+                    </div>
                 </div>
             </form>
             <div class="modal fade bs-example-modal" id="mdConfirmacion" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" style="margin-top: 10%;">
@@ -591,8 +570,8 @@
                             <div class="row">
                                 <div class="col-md-12">
                                     <br/>
-				    <a target="_blank" href="">Ver condiciones de servicio</a>
-				    <br/>
+                                    <a target="_blank" href="">Ver condiciones de servicio</a>
+                                    <br/>
                                 </div>
                             </div>
                             <div class="row">

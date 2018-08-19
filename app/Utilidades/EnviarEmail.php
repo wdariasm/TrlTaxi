@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Utilidades;
+use Illuminate\Http\JsonResponse;
 
 /**
  * Description of EnviarEmail
