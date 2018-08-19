@@ -17,3 +17,7 @@ bootstrap/cache/
 .rocketeer/
 
 
+/cliente/dist/vendors.js
+/inicio/dist/vendors.js
+/conductor/dist/vendors.js
+/trl/dist/vendors.js
