@@ -290,7 +290,7 @@ class UsuarioController extends Controller
         } catch (JWTException $e) {
             return response()->json(['error' => 'No se pudo crear el token'.$e], 500);            
         } catch (\Exception $exc) {
-            return JsonResponse::create(array('error' => "No se puedo autenticar el usuario", "request" =>json_encode($exc->getMessage())), 500);
+            return JsonResponse::create(array('error' => "No se pudo autenticar el usuario", "request" =>json_encode($exc->getMessage())), 500);
         }
     }
     
@@ -343,7 +343,7 @@ class UsuarioController extends Controller
         } catch (JWTException $e) {
             return response()->json(['error' => 'No se pudo crear el token'.$e], 500);            
         } catch (\Exception $exc) {
-            return JsonResponse::create(array('error' => "No se puedo autenticar el usuario", "request" =>json_encode($exc->getMessage())), 500);
+            return JsonResponse::create(array('error' => "No se pudo autenticar el usuario", "request" =>json_encode($exc->getMessage())), 500);
         }
     }        
 
