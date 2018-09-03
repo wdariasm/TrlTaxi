@@ -98,7 +98,7 @@ class GpsController extends Controller
             $gps = Gps::where('gpImei', $imei)->first();            
             $gps->gpKey = $key;
             $gps->save();
-            return JsonResponse::create(array('message' => "Correcto", "request" =>"Imei Actualizado Correctamente"), 200);
+            return JsonResponse::create(array('message' => "Correcto", "request" =>"Key Actualizado Correctamente"), 200);
         }catch (\Exception $exc) {
             return JsonResponse::create(array('file' => $exc->getFile(), "line"=> $exc->getLine(),  "message" =>json_encode($exc->getMessage())), 500);
         }             
