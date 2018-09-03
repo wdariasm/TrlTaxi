@@ -252,7 +252,7 @@ class ServicioController extends Controller
                 $email = new EnviarEmail();
                 $email->EmailSolicitud($servicio->IdServicio, $data["NumeroContrato"], $data["Responsable"], $data["ParEmail"]);
                 unset($email);                
-            }
+            } 
             
             $mensaje = "Servicio guardado correctamente";
             //asignar conductor, cuando es tipo de servicio transfer o disponibilidad
@@ -556,7 +556,7 @@ class ServicioController extends Controller
         </head>
         <body>
          <img style='height:60px; width:200px;' src='http://".$_SERVER['HTTP_HOST']."/trl/images/logo.png' alt=''/>
-          <h1> ¡Asignacón de servicio!</h1>
+          <h1> ¡Asignación de servicio!</h1>
           
           <p>Estimado $conductor se le  ha asignado un servicio, por favor confirmar la aceptación del servicio.</p>
 
@@ -592,9 +592,9 @@ class ServicioController extends Controller
         </head>
         <body>
          <img style='height:60px; width:200px;' src='http://".$_SERVER['HTTP_HOST']."/trl/images/logo.png' alt=''/>
-          <h1> ¡Asignacón de servicio!</h1>
+          <h1> ¡Asignación de servicio!</h1>
           
-          <p>Estimado usuariio(a), su solicitud de servicio ha sido confirmada. Por favor ingrese a la plataforma
+          <p>Estimado usuario(a), su solicitud de servicio ha sido confirmada. Por favor ingrese a la plataforma
             para verificar los datos del conductor asignado.
             </p>
 
