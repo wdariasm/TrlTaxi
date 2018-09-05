@@ -260,19 +260,19 @@ class UsuarioController extends Controller
             
             $user = Usuario::select('Estado','Sesion','Clave', 'Nombre', 'IdUsuario', 'TipoAcceso', 'Modulo')->where("Login",$usuario)->first();
             if (empty($user)){
-                return JsonResponse::create(array('error' => "Usuario no existe en el Sistema"), 500);                
+                return JsonResponse::create(array('error' => "Usuario no existe en el Sistema"), 200);                
             }
             
             if($user->Estado != 'ACTIVO'){
-                return JsonResponse::create(array('error' => "Usuario bloqueado"), 500);                
+                return JsonResponse::create(array('error' => "Usuario bloqueado"), 200);                
             }
         
             if (!password_verify($password, $user->Clave)) {
-                return JsonResponse::create(array('error' => "Credenciales no validas"), 500);                
+                return JsonResponse::create(array('error' => "Credenciales no validas"), 200);                
             }
             
             if ($tipo === 'MOVIL' && ($user->TipoAcceso != 4 && $user->TipoAcceso !=5)){
-                return JsonResponse::create(array('error' => "Tipo de acceso No permitido"), 500);
+                return JsonResponse::create(array('error' => "Tipo de acceso No permitido"), 200);
             }
                                            
             if($user->Sesion == 'INICIADA' && $user->TipoAcceso != 1){
@@ -288,7 +288,7 @@ class UsuarioController extends Controller
             return response()->json(compact('token'));
 
         } catch (JWTException $e) {
-            return response()->json(['error' => 'No se pudo crear el token'.$e], 500);            
+            return response()->json(['error' => 'No se pudo crear el token'.$e], 200);            
         } catch (\Exception $exc) {
             return JsonResponse::create(array('error' => "No se pudo autenticar el usuario", "request" =>json_encode($exc->getMessage())), 500);
         }
@@ -309,19 +309,19 @@ class UsuarioController extends Controller
                     'Modulo', 'ConductorId')->where("Login",$usuario)->first();
             
             if (empty($user)){
-                return JsonResponse::create(array('error' => "Usuario no existe en el Sistema"), 500);                
+                return JsonResponse::create(array('error' => "Usuario no existe en el Sistema"), 200);                
             }
             
             if($user->Estado != 'ACTIVO'){
-                return JsonResponse::create(array('error' => "Usuario bloqueado"), 500);                
+                return JsonResponse::create(array('error' => "Usuario bloqueado"), 200);                
             }
             
             if($user->TipoAcceso != 3){
-                return JsonResponse::create(array('error' => "Tipo de acceso No permitido"), 500);     
+                return JsonResponse::create(array('error' => "Tipo de acceso No permitido"), 200);     
             }
         
             if (!password_verify($password, $user->Clave)) {
-                return JsonResponse::create(array('error' => "Credenciales no validas"), 500);                
+                return JsonResponse::create(array('error' => "Credenciales no validas"), 200);                
             }             
             
             $enviarnotifiacion = false;            
@@ -341,7 +341,7 @@ class UsuarioController extends Controller
             return response()->json(compact('token'));
 
         } catch (JWTException $e) {
-            return response()->json(['error' => 'No se pudo crear el token'.$e], 500);            
+            return response()->json(['error' => 'No se pudo crear el token'.$e], 200);            
         } catch (\Exception $exc) {
             return JsonResponse::create(array('error' => "No se pudo autenticar el usuario", "request" =>json_encode($exc->getMessage())), 500);
         }
