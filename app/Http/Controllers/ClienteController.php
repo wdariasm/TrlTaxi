@@ -119,6 +119,7 @@ class ClienteController extends Controller
             $key = $request->get("KeyNotificacion");           
             $cliente = Cliente::find($id);
             $cliente->KeyNotificacion = $key;
+            $cliente->FechaActualizacion = new \DateTime();
             $cliente->save();
             return JsonResponse::create(array('message' => "Correcto", "request" =>"Key Actualizado Correctamente"), 200);
         }catch (\Exception $exc) {
