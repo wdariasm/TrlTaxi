@@ -7,7 +7,7 @@
     Route::put('api/servicio/conductor/{id}','ServicioController@updateServConductor');
 
      //Obtener servicios de un cliente //
-    Route::get('api/cliente/{id}/servicios/{rol}/{usuario}','ServicioController@getServicioCliente');
+    Route::get('api/cliente/{id}/servicios/{rol}/{usuario}/{limite}','ServicioController@getServicioCliente');
     
      //Obtener servicios de un conductor //
     Route::get('api/conductor/{id}/servicios/{estado}','ServicioController@getServicioConductor');
