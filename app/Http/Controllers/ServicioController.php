@@ -11,7 +11,9 @@ use DB;
 use App\Cliente;
 use App\ServicioContactos;
 use App\Utilidades\EnviarEmail;
-
+use App\TipoServicio;
+use App\Conductor;
+use App\Ruta;
 
 class ServicioController extends Controller
 {  
@@ -40,20 +42,47 @@ class ServicioController extends Controller
             }            
             $servicio->Contactos = ServicioContactos::where('scIdServicio', $codigo)
                     ->where('scEstado', 'ACTIVO')->get();
+            
+            $servicio->svDescripcion = TipoServicio::where( 'svCodigo', $servicio->TipoServicidoId)
+                    ->first(['svDescripcion'])['svDescripcion'];
+            
+            if (!is_null($servicio->ConductorId)){
+                $servicio->Conductor = Conductor::where('IdConductor', $servicio->ConductorId)
+                        ->select("Nombre", "TelefonoPpal", "RutaImg")->first();
+            }
+            
+            if($servicio->TipoServicidoId == 3){
+                $servicio->Ruta = Ruta::select("rtNombre", "rtDescripcion", "rtValorCliente")
+                        ->where("rtCodigo", $servicio->DetallePlantillaId)->first();
+            } else if ($servicio->TipoServicidoId == 4){
+                $traslado =  $result = DB::select("SELECT  t.tlNombre,  t.tlCiudadDestino, "
+                . "  m.muNombre, t.tlDeptoDestino, t.tlDeptoOrigen,  t.tlCiudadOrigen "
+                . "  FROM traslados t INNER JOIN municipio m ON t.tlCiudadOrigen=m.muCodigo "
+                . "  WHERE t.tlCodigo=  $servicio->DetallePlantillaId ");
+                if(!empty($traslado)){
+                    $servicio->Traslado =  $traslado[0];
+                }
+            }
         }        
         return $servicio;
     }
         
-    public function getServicioCliente($id, $rol, $usuario)
+    public function getServicioCliente($id, $rol, $usuario, $limite=0)
     {
-        $condicion = " WHERE  s.ClienteId = ".$id;
+        $condicion = " WHERE s.ClienteId = ".$id;
         if($rol==="5"){
             $condicion = " WHERE  s.UserReg = '".$usuario ."'";
-        }        
+        }
+
+        $condicionLimite = "";
+        if ($limite > 0){
+            $condicionLimite = " LIMIT 20";
+        }
+            
         $servicio = DB::select("SELECT s.IdServicio, s.ContratoId, s.ClienteId, s.NumeroContrato, s.Responsable,"
                 . " s.Telefono, s.TipoServicidoId, ts.svDescripcion, s.FechaServicio, s.Hora, s.Valor, s.ValorCliente, s.Estado, "
-                . " s.DescVehiculo, s.ValorTotal,s.ConductorId FROM servicio s INNER JOIN  tiposervicio ts ON "
-                . " s.TipoServicidoId=ts.svCodigo ". $condicion ." order by s.IdServicio desc");
+                . " s.DescVehiculo, s.ValorTotal, s.ConductorId FROM servicio s INNER JOIN  tiposervicio ts ON "
+                . " s.TipoServicidoId=ts.svCodigo ". $condicion ."  order by s.IdServicio desc $condicionLimite");
         return $servicio;     
     }    
     
@@ -387,7 +416,7 @@ class ServicioController extends Controller
     public function updateServConductor(Request $request, $id){
         try {            
             $data = $request->all();
-            $estado = $data['Estado'];            
+            $estado = strtoupper($data['Estado']);            
             $servicio = Servicio::where('IdServicio', $id)->select('ClienteId', 'Estado', 'ConductorId')->first();
             if (!empty($servicio)) {
                 if($servicio->Estado != 'CANCELADO' && $servicio->Estado != 'FINALIZADO'){
@@ -402,7 +431,7 @@ class ServicioController extends Controller
                     
                     if($estado != 'RECHAZADO'){
                         $msjCliente = "Estimado Cliente. El estado de su servicio N° ". $id . " es : ".$estado;           
-                        $this->NotificacionCliente($servicio->ClienteId, $msjCliente);         
+                        $this->NotificacionCliente($servicio->ClienteId, $msjCliente, $id);         
                     }
             
                     DB::insert("INSERT INTO servicio_estados (stServicioId, stEstado, stFecha ) VALUES ($id, '".$estado."', sysdate())");            
@@ -507,7 +536,7 @@ class ServicioController extends Controller
             $this->NotificacionConductor($conductorId, $msjConductor);
 
             $msjCliente = "Estimado Cliente. Se ha asigando un conductor a su servicio N° ". $idServicio;           
-            $this->NotificacionCliente($clienteId, $msjCliente); 
+            $this->NotificacionCliente($clienteId, $msjCliente, $idServicio); 
         }
         
         return $result;
@@ -709,11 +738,13 @@ class ServicioController extends Controller
         $this->enviarNotificacion($idPushvec,$payload);    
     }
     
-    public function NotificacionCliente($idCliente, $mensaje){
+    public function NotificacionCliente($idCliente, $mensaje, $idServicio){
         $payload = array(
             'title'         => "TRL Servicio",
             'msg'           => $mensaje,
-            'std'           => 200,
+            'body'           => $mensaje,
+            'pagina'           => 1,
+            'codigo'        => $idServicio
         );
                                         
         $idPushvec = array();        
@@ -750,8 +781,9 @@ class ServicioController extends Controller
         }
     } 
 
+    
     private function enviarNotificacion($array,$payload) {
-        $apiKey = 'AAAAi3Qf2F8:APA91bG7JP2FtXjzsSTNTqJlYVrSeLRKLL0QxjZ-VnpJWlWiUEjvc5jw241Y0SJI-DrHCJeTgFyPnFhCAXOMC0dZdE71EnnA6H_5HPEQjuVBJBJDirxUhLdzdmG7fd39wZXutJTTeBTSs85nB9WE3bSWHmjyR8WLcw';
+        $apiKey = 'AAAAU12l6Gg:APA91bEGOfGpCMVZ5pdthZGiAKC7A6IfjYkpr1EJTxDjOnO7m9WZ4L68Ju3yDu5EJy6KyfYtvKT1Ccs_uQ8A_Eh4-MpJvJ86XY0vBKisfuZhBxtFA4I5uM4IX8i3eTjMHk0fJP_hcwo1';
         $headers = array('Content-Type:application/json',"Authorization:key=$apiKey");
 
         $data = array(
