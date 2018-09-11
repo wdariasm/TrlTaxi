@@ -13,7 +13,7 @@ class EnviarEmail {
     
     public function EmailSolicitud($idServicio, $contrato,  $responsable, $email){
         // título
-        $titulo = 'Solicitud de servicio [TRL]';
+        $titulo = 'Solicitud de servicio [TRL] ✔️✔️';
         // mensaje
         
         $mensaje = "
@@ -45,7 +45,7 @@ class EnviarEmail {
         $correo = new \PHPMailer(true); // notice the \  you have to use root namespace here
         try {
             $correo->isSMTP(); 
-            $correo->CharSet = "utf-8"; 
+            $correo->CharSet = "UTF-8"; 
             $correo->SMTPAuth = true;  
             $correo->SMTPSecure = "tls"; 
             $correo->Host = "smtp.gmail.com";

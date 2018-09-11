@@ -12,7 +12,6 @@ use App\Cliente;
 use App\ServicioContactos;
 use App\Utilidades\EnviarEmail;
 use App\TipoServicio;
-use App\Conductor;
 use App\Ruta;
 
 class ServicioController extends Controller
@@ -47,8 +46,13 @@ class ServicioController extends Controller
                     ->first(['svDescripcion'])['svDescripcion'];
             
             if (!is_null($servicio->ConductorId)){
-                $servicio->Conductor = Conductor::where('IdConductor', $servicio->ConductorId)
-                        ->select("Nombre", "TelefonoPpal", "RutaImg")->first();
+                $conductor =  DB::select ("SELECT c.Nombre, c.TelefonoPpal, c.TelefonoTres, c.Email, v.Placa, v.Movil, c.RutaImg 
+                        FROM conductor AS c INNER JOIN vehiculo  AS v ON c.VehiculoId =  v.IdVehiculo
+                        WHERE c.IdConductor =$servicio->ConductorId LIMIT 1");
+  
+                if(!empty($conductor)){
+                    $servicio->Conductor = $conductor[0];
+                }
             }
             
             if($servicio->TipoServicidoId == 3){
@@ -56,9 +60,10 @@ class ServicioController extends Controller
                         ->where("rtCodigo", $servicio->DetallePlantillaId)->first();
             } else if ($servicio->TipoServicidoId == 4){
                 $traslado =  $result = DB::select("SELECT  t.tlNombre,  t.tlCiudadDestino, "
-                . "  m.muNombre, t.tlDeptoDestino, t.tlDeptoOrigen,  t.tlCiudadOrigen "
-                . "  FROM traslados t INNER JOIN municipio m ON t.tlCiudadOrigen=m.muCodigo "
-                . "  WHERE t.tlCodigo=  $servicio->DetallePlantillaId ");
+                    . "  m.muNombre, t.tlDeptoDestino, t.tlDeptoOrigen,  t.tlCiudadOrigen "
+                    . "  FROM traslados t INNER JOIN municipio m ON t.tlCiudadOrigen=m.muCodigo "
+                    . "  WHERE t.tlCodigo=  $servicio->DetallePlantillaId ");
+                
                 if(!empty($traslado)){
                     $servicio->Traslado =  $traslado[0];
                 }
@@ -425,15 +430,19 @@ class ServicioController extends Controller
                     if($estado === "FINALIZADO"){
                         DB::update("UPDATE conductor SET Disposicion= 'LIBRE' WHERE IdConductor=$servicio->ConductorId ");
                         $this->EmailCalificacion($id);
+                        $msjCliente = "☺️ Estimado Cliente. Su servicio N° ". $id . " ha finalizado, le invitamos "
+                        . " a calificar el servicio prestado.  ✔️✔️";  
+                        $this->NotificacionCliente($servicio->ClienteId, $msjCliente, 2, $id);  
                     } else if($estado === "EN SITIO"){
                         DB::update("UPDATE conductor SET Disposicion= 'EN SERVICIO' WHERE IdConductor=$servicio->ConductorId ");
+                         $msjCliente = "☺️ Estimado Cliente. El estado de su servicio N° ". $id . " es : ".$estado;           
+                        $this->NotificacionCliente($servicio->ClienteId, $msjCliente, 1, $id); 
+                    }
+                    else if($estado != 'RECHAZADO'){
+                        $msjCliente = "☺️ Estimado Cliente. El estado de su servicio N° ". $id . " es : ".$estado;           
+                        $this->NotificacionCliente($servicio->ClienteId, $msjCliente, 1, $id);         
                     }
                     
-                    if($estado != 'RECHAZADO'){
-                        $msjCliente = "Estimado Cliente. El estado de su servicio N° ". $id . " es : ".$estado;           
-                        $this->NotificacionCliente($servicio->ClienteId, $msjCliente, $id);         
-                    }
-            
                     DB::insert("INSERT INTO servicio_estados (stServicioId, stEstado, stFecha ) VALUES ($id, '".$estado."', sysdate())");            
                     return JsonResponse::create(array('message' => "Servicio actualizado correctamente", "request" =>json_encode($result)), 200);
                 }
@@ -486,6 +495,7 @@ class ServicioController extends Controller
             if($scConductorId === null || $scConductorId ===""){
                 $scConductorId = "NULL";
             }
+            
             $update = DB::update("UPDATE servicio SET  Estado='$estado', ConductorId=NULL, Placa ='' WHERE IdServicio= $id");                     
             if ($update){                  
                 
@@ -494,11 +504,11 @@ class ServicioController extends Controller
                 
                 if ($scConductorId !== "NULL"){                   
                     DB::update("UPDATE conductor SET Disposicion='LIBRE' WHERE IdConductor=".$scConductorId."");
-                    $msjConductor = "Estimado usuario el servicio N° ". $id . " ha sido cancelado.";          
+                    $msjConductor = "Estimado usuario el servicio N° ". $id . " ha sido cancelado. 😟😟";          
                     $this->NotificacionConductor($scConductorId, $msjConductor);
                 }                               
             }	                        	    
-            return JsonResponse::create(array('bandera' => "Correcto", 'message' => "Servicio cancelado correctamente",), 200);
+            return JsonResponse::create(array('bandera' => "Correcto ", 'message' => "Servicio cancelado correctamente",), 200);
         } catch (\Exception $exc) {
             return JsonResponse::create(array('bandera' => "Error", 'file' => $exc->getFile(), "line"=> $exc->getLine(),  "message" =>json_encode($exc->getMessage())), 500);
         }
@@ -532,50 +542,20 @@ class ServicioController extends Controller
             $this->EnviarEmailAsignar($idServicio, $responsable, $emailConductor, $nombreConductor);
 
             $msjConductor = "Estimado usuario se le  ha asignado un servicio, por favor confirmar "
-                    . " la aceptación del servicio N° ". $idServicio;            
+                    . " la aceptación del servicio N° ". $idServicio . " ✔️✔️";            
             $this->NotificacionConductor($conductorId, $msjConductor);
 
-            $msjCliente = "Estimado Cliente. Se ha asigando un conductor a su servicio N° ". $idServicio;           
-            $this->NotificacionCliente($clienteId, $msjCliente, $idServicio); 
+            $msjCliente = "☺️ Estimado Cliente . Se ha asigando un conductor a su servicio N° ". $idServicio . " 🚘";           
+            $this->NotificacionCliente($clienteId, $msjCliente, 1, $idServicio); 
         }
         
         return $result;
     }
-       
-    
-    private function EnviarEmail($idServicio, $contrato,  $responsable, $email){
-        // título
-        $titulo = 'Solicitud de servicio [TRL]';
-        // mensaje
-        
-        $mensaje = "
-        <html>
-        <head>
-          <title>Solicitud de servicio</title>
-        </head>
-        <body>
-         <img style='height:60px; width:200px;' src='http://".$_SERVER['HTTP_HOST']."/trl/images/logo.png' alt=''/>
-          <h1> ¡Solicitud de servicio!</h1>
-         
-          <p> Datos del servicio:</p>          
-          <br/>    
-          <p>N° Servicio: $idServicio</p>
-          <p>N° Contrato : $contrato</p>
-          <p>Responsable : $responsable</p>
-           <br/>
-          <p>Atentamente</p>
-          <p>Tu equipo de Transporte Ruta Libre</p>
-        </body>
-        </html>
-        ";
-               
-        $this->SenEmail($email, $titulo, $mensaje);
-      //  mail($email, $título, $mensaje, $cabeceras);
-    }
+
     
     private function EnviarEmailAsignar($idServicio,  $responsable, $email, $conductor){
         // título
-        $titulo = 'Asignación de servicio [TRL]';
+        $titulo = 'Asignación de servicio [TRL] ✔️✔️';
         // mensaje
         
         $mensaje = "
@@ -611,7 +591,7 @@ class ServicioController extends Controller
     
     private function EmailConfirmacion($idServicio,  $responsable, $email){
         // título
-        $titulo = 'Asignación de servicio [TRL]';
+        $titulo = 'Asignación de servicio [TRL] ✔️✔️';
         // mensaje
         
         $mensaje = "
@@ -650,7 +630,7 @@ class ServicioController extends Controller
     
     private function EmailCalificacion($idServicio){
         // título
-        $titulo = utf8_encode('Calificación de servicio [TRL]');
+        $titulo = 'Calificación de servicio [TRL] ☺️ ☺️';
         // mensaje
         $servicio  =  $this->getCalificacion($idServicio);
         $user = \App\Usuario::select("Email", "IdUsuario")->where("Login", "=", $servicio->UserReg)->first();
@@ -659,11 +639,11 @@ class ServicioController extends Controller
         <html>
         <head>
           <meta http-equiv='Content-Type' content='text/html; charset=utf-8' /> 
-          <title>".utf8_encode('Calificación de servicio') ."</title>
+          <title> Calificación de servicio</title>
         </head>
         <body>
          <img style='height:60px; width:200px;' src='http://".$_SERVER['HTTP_HOST']."/trl/images/logo.png' alt=''/>
-          <h1> ¡".utf8_encode('Calificación de servicio') ."!</h1>
+          <h1> ¡ Calificación de servicio !</h1>
               
             <h1>Hola, ". $servicio->Responsable ."</h1><br/>
             <p>Su  servicio ha finalizado correctamente, por favor le invitamos a calificar el servicio prestado
@@ -738,12 +718,12 @@ class ServicioController extends Controller
         $this->enviarNotificacion($idPushvec,$payload);    
     }
     
-    public function NotificacionCliente($idCliente, $mensaje, $idServicio){
+    public function NotificacionCliente($idCliente, $mensaje, $idPagina, $idServicio){
         $payload = array(
             'title'         => "TRL Servicio",
             'msg'           => $mensaje,
             'body'           => $mensaje,
-            'pagina'           => 1,
+            'pagina'           => $idPagina,
             'codigo'        => $idServicio
         );
                                         

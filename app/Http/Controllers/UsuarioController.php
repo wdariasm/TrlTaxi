@@ -112,13 +112,13 @@ class UsuarioController extends Controller
         $para  = $data['Email'];
         $nombre = $data['Nombre'];
         // título
-        $titulo = 'Confirmacion Email [Transporte Ruta Libre]';
+        $titulo = 'Confirmacion Email [Transporte Ruta Libre] ✔️✔️';
         // mensaje
         
         $mensaje = "
         <html>
         <head>
-          <title>Confirmar Email y Datos de Usuario</title>
+          <title>Confirmar Email y Datos de Usuario ✔️</title>
         </head>
         <body>
          <img style='height:60px;' src='http://".$_SERVER['HTTP_HOST']."/trl/images/logo.png' alt=''/>
@@ -559,12 +559,12 @@ class UsuarioController extends Controller
     
     private function enviarEmailClave($user, $para, $nombre, $clave){
          // título
-            $titulo = utf8_encode("Cambio de Contraseña [TRL Transporte]");
+            $titulo = " 🔑🔑 Cambio de Contraseña [TRL Transporte]   🔄🔄";
             // mensaje
             $mensaje = "
             <html>
             <head>
-              <title>". utf8_encode("Cambio de Contraseña") ."</title>
+              <title> 🔑🔑 Cambio de Contraseña 🔄🔄 </title>
             </head>
             <body>          
               <h1>Hola, $nombre </h1><br/>
@@ -665,7 +665,7 @@ class UsuarioController extends Controller
         $correo = new \PHPMailer(true); // notice the \  you have to use root namespace here
         try {
             $correo->isSMTP(); 
-            $correo->CharSet = "utf-8"; 
+            $correo->CharSet = "UTF-8"; 
             $correo->SMTPAuth = true;  
             $correo->SMTPSecure = "tls"; 
             $correo->Host = "smtp.gmail.com";
