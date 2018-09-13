@@ -113,7 +113,8 @@ app.controller('serviciosController',['$scope', 'zonaService',  'toaster', "cont
             ValorParadaProveedor : 0,
             ValorParadaCliente : 0,
             ValorParadas : 0,
-            DetallePlantillaId : 0
+            DetallePlantillaId : 0,
+            IdUsuario : $scope.$parent.Login.IdUsuario
         };
         
         $scope.Parada = {

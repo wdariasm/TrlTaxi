@@ -1,8 +1,6 @@
 app.controller("clienteController", ["$scope", "clienteService", "toaster", "ngTableParams", "funcionService", 
 function ($scope, clienteService,toaster,ngTableParams, funcionService) {
    $scope.Cliente = {};
-   $scope.Clientes = [];
-   $scope.TablaCliente = {};
    $scope.TipoDocumentos=[];
    $scope.title="Nuevo Cliente";
    $scope.TipoSelect ={}; 
@@ -81,24 +79,6 @@ function ($scope, clienteService,toaster,ngTableParams, funcionService) {
             toaster.pop('error', "Error", "ERROR AL ACTUALIZAR DATOS");            
             console.log("Some Error Occured " + JSON.stringify(err));
         });       
-    };
-          
-    $scope.validarIdentificacion = function () {
-        $scope.valIdent = false;
-        if (!$scope.Cliente.Identificacion) {
-            return;
-        }        
-        $scope.Cliente.DigitoVerificacion = funcionService.DigitoVerificacion($scope.Cliente.Identificacion);
-        var promisePost = clienteService.validarIdentificacion($scope.Cliente.Identificacion);
-        promisePost.then(function (d) {
-            if (d.data.Identificacion) {
-                $scope.valIdent = true;
-                toaster.pop('info', "N° de Identificación ya existe"); 
-            }
-        }, function (err) {
-           toaster.pop('error', "Error", "Error al validar Identificación"); 
-            console.log("Some Error Occured " + JSON.stringify(err));
-        });
     };
    
 }]);

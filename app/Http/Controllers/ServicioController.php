@@ -270,6 +270,7 @@ class ServicioController extends Controller
             $servicio->Placa= "";            
             $servicio->UserReg= $data["UserReg"];
             $servicio->FechaMod = new \DateTime();
+            $servicio->IdUsuario= $data["IdUsuario"];
             $servicio->save();
             
             $paradas= $data["Paradas"];
