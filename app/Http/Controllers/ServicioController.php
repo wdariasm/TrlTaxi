@@ -299,7 +299,7 @@ class ServicioController extends Controller
                 if(!empty($resultado)){
                     $conductor = $resultado[0]; 
                     $numReg = $this->asignarServicio($servicio->IdServicio, $conductor->IdConductor, $conductor->CdPlaca,  
-                          $servicio->Responsable, $conductor->Email, $conductor->Nombre, $servicio->ClienteId);                    
+                          $servicio->Responsable, $conductor->Email, $conductor->Nombre);                    
                     if ($numReg != 0){
                         $mensaje = "Servicio guardado correctamente. Asignado al Vehículo : $conductor->CdPlaca";
                     }
@@ -345,7 +345,7 @@ class ServicioController extends Controller
             $data = $request->all();                                   
                         
             $result = $this->asignarServicio($data["IdServicio"], $data['ConductorId'], $data['Placa'],
-                    $data["Responsable"], $data["Email"], $data["Nombre"], $data['ClienteId']);                                    
+                    $data["Responsable"], $data["Email"], $data["Nombre"]);                                    
             
             if ($result !=0){
                 return JsonResponse::create(array('message' => "Servicio asignado correctamente", "request" =>json_encode($result)), 200);
@@ -437,6 +437,9 @@ class ServicioController extends Controller
                     } else if($estado === "EN SITIO"){
                         DB::update("UPDATE conductor SET Disposicion= 'EN SERVICIO' WHERE IdConductor=$servicio->ConductorId ");
                          $msjCliente = "☺️ Estimado Cliente. El estado de su servicio N° ". $id . " es : ".$estado;           
+                        $this->NotificacionCliente($servicio->ClienteId, $msjCliente, 1, $id); 
+                    } else if ($estado === "CONFIRMADO"){
+                        $msjCliente = "☺️ Estimado Cliente . Se ha asigando un conductor a su servicio N° ". $id . " 🚘";           
                         $this->NotificacionCliente($servicio->ClienteId, $msjCliente, 1, $id); 
                     }
                     else if($estado != 'RECHAZADO'){
@@ -534,7 +537,7 @@ class ServicioController extends Controller
     }
     
     /*Asignar servicio al conductor ya sea manual o automatico */
-    private function asignarServicio($idServicio, $conductorId, $placa, $responsable, $emailConductor, $nombreConductor, $clienteId){
+    private function asignarServicio($idServicio, $conductorId, $placa, $responsable, $emailConductor, $nombreConductor){
         
         $result = DB::update("UPDATE servicio SET  Estado='ASIGNADO', ConductorId=$conductorId, Placa ='$placa',"
                 . " FechaAsignacion = NOW() WHERE IdServicio= $idServicio");
@@ -546,8 +549,6 @@ class ServicioController extends Controller
                     . " la aceptación del servicio N° ". $idServicio . " ✔️✔️";            
             $this->NotificacionConductor($conductorId, $msjConductor);
 
-            $msjCliente = "☺️ Estimado Cliente . Se ha asigando un conductor a su servicio N° ". $idServicio . " 🚘";           
-            $this->NotificacionCliente($clienteId, $msjCliente, 1, $idServicio); 
         }
         
         return $result;
@@ -710,7 +711,7 @@ class ServicioController extends Controller
     public function NotificacionConductor ($idConductor, $mensaje){
         $payload = array(
             'title'         => "TRL Servicio",
-            'msg'           => $mensaje,
+            'body'           => $mensaje,
             'std'           => 1,
         );
                                         
@@ -769,7 +770,8 @@ class ServicioController extends Controller
 
         $data = array(
             'data' => $payload,
-            'registration_ids' => $array
+            'registration_ids' => $array,
+            'notification' => $payload
         );
 
         $ch = curl_init();
