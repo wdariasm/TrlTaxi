@@ -607,9 +607,15 @@ class UsuarioController extends Controller
         }
         try{
             $newToken = JWTAuth::refresh($token);
-        }catch(TokenInvalidException $e){
-            return response()->json(['error' => $e->getMessage()], 403);
-        }         
+        } catch (Tymon\JWTAuth\Exceptions\TokenExpiredException $e) {
+            return response()->json(['error' => $e->getMessage()], $e->getStatusCode());
+        }
+        catch(TokenInvalidException $e){
+            return response()->json(['error' => $e->getMessage()], $e->getStatusCode());
+        }   
+        catch (JWTException $e) {
+            return response()->json(['error' => $e->getMessage()], $e->getStatusCode());
+	}
         return response()->json(['token'=>$newToken]);
     }
     

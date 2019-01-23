@@ -202,4 +202,20 @@ class ContratoController extends Controller
         
     }
     
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy($id)
+    {
+        try {
+            DB::update("update contrato set ctEstado = 'CANCELADO',  ctFechaActualizacion = NOW()  WHERE IdContrato = $id ");
+             return JsonResponse::create(array('message' => 'Contrato cancelado correctamente'), 200);
+        }catch (\Exception $exc) {
+            return JsonResponse::create(array('file' => $exc->getFile(), "line"=> $exc->getLine(),  "message" =>json_encode($exc->getMessage())), 500);
+        }         
+    }
+    
 }

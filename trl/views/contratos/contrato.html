@@ -46,7 +46,7 @@
 			    </thead>
 
 			    <tbody>
-				<tr ng-repeat="item in $data">
+				<tr ng-repeat="item in $data" ng-class="{'warning':  item.ctEstado == 'CANCELADO'} ">
 				    <td>{{ item.ctNumeroContrato}}</td>
 				    <td>{{ item.ctNitCliente}}</td>
 				    <td >{{ item.ctContratante}}</td>
@@ -57,7 +57,7 @@
 				    <td>
 					<center>
 					    <a ng-click="get(item)" style="float: left; margin-left: 3px;" href="javascript:;"  title="Editar"><i class="fa fa-pencil fa-1x text-success"></i></a>
-					    <a ng-click="VerDesactivar(item.IdVehiculo, 'INACTIVO')"  style="float: left; margin-left: 10px;" href="javascript:;"  title="Cancelar Contrato"><i class="fa fa-power-off fa-1x text-warning"></i></a>
+                                            <a ng-if="item.ctEstado != 'CANCELADO'" ng-click="VerCancelarContrato(item)"  style="float: left; margin-left: 10px;" href="javascript:;"  title="Cancelar Contrato"><i class="fa fa-power-off fa-1x text-warning"></i></a>
 					</center>
 				    </td>
 				</tr>
@@ -66,6 +66,33 @@
 			<br/> <br/> <br/>
 			
 		    </div>
+                    
+                    <div class="modal fade bs-example-modal-sm" id="mdConfirmacion" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" style="margin-top: 10%;">
+                        <div class="modal-dialog modal-sm" style="width: 30%" >                                   
+                            <div class="modal-content">
+
+                                <div class="modal-header">
+                                    <div class="modal-title">Cancelar Contrato</div>
+                                </div>
+
+                                <div class="modal-body">
+                                    <div class="row">
+                                        <div class="col-xs-12">
+                                            <label>¿Está seguro que desea cancelar el Contrato N° {{NumeroCtoTemp}}? </label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                                    <button type="button" class="btn btn-primary" ng-click="CancelarCto()">Aceptar</button>
+                                </div>  
+
+                            </div>
+
+                        </div>
+                    </div>
+                    
                 </div>
 
                 <div class="tab-pane" id="tabRegistroCto">  

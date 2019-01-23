@@ -13,6 +13,8 @@ app.controller("contratoController", ["$scope", 'tipoVehiculoService', "toaster"
     $scope.PlantillaTipo = {}; 
     
     $scope.Boton = { Guardar:false, Imprimir : true};
+    $scope.IdContratoGlobal = "";
+    $scope.NumeroCtoTemp  = "";
     
     getServicios();
     getTipoContrato();
@@ -322,6 +324,23 @@ app.controller("contratoController", ["$scope", 'tipoVehiculoService', "toaster"
     
     $scope.GetAllContratos = function (){
         loadContratos();
+    };
+    
+    $scope.VerCancelarContrato = function(item) {
+        $scope.IdContratoGlobal = item.IdContrato;
+        $scope.NumeroCtoTemp = item.ctNumeroContrato;
+        $('#mdConfirmacion').modal('show');
+    };
+    $scope.CancelarCto = function (){
+            $('#mdConfirmacion').modal('hide');
+            var promisePut  = contratoService.delete($scope.IdContratoGlobal);
+                promisePut.then(function (d) {
+                    toaster.pop('success', "Control de Información", d.data.message);
+                    loadContratos();
+            }, function (err) {
+                    toaster.pop('error', "¡Error!", err.data.request);
+                    console.log("Some Error Occured "+ JSON.stringify(err));
+            });
     };
     
 }]);

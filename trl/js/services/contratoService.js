@@ -55,6 +55,11 @@ app.service("contratoService",[ '$http', function ($http) {
         return req;
     };
     
+    this.delete = function (id) {        
+        var req = $http.delete(uri+'/api/contrato/' + id);
+        return req;        
+    };  
+    
          
 }]);
 
